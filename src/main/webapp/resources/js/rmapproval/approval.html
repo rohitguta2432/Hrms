@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Approval</title>
+</head>
+<body class="no-skin">
+	<div class="main-container" id="main-container"
+		style="margin-top: 10px;">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('main-container', 'fixed')
+			} catch (e) {
+			}
+		</script>
+		<div class="main-content">
+
+			<div class="page-content" ng-contoller="acceptanceController"
+				ng-init="approvalInit()">
+				<div class="page-content-area">
+					<!-- /.page-header -->
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="col-xs-12 widget-container-col ui-sortable"
+										style="min-height: 200px;">
+										<div class="widget-box ui-sortable-handle"
+											style="opacity: 1; z-index: 0;">
+											<div class="widget-header">
+												<h5 class="widget-title">Resignations Pending for Approval</h5>
+
+											</div>
+											<div class="widget-body" style="display: block;">
+												<div class="widget-main">
+													<div class="table-responsive">
+														<table class="table">
+															<thead>
+																<tr>
+																	<th>S.No</th>
+																	<th>Firstname</th>
+																	<th>Lastname</th>
+																	<th>Employee Code</th>
+																	<th>Reason</th>
+																	<th>Comments</th>
+																	<th>Notice Period</th>
+																	<th>Expected Releiving Date</th>
+																	<th>Action</th>
+																</tr>
+															</thead>
+															<tbody ng-repeat="emp in approvalBody">
+																<tr>
+																	<td>{{emp.sno}}</td>
+																	<td>{{emp.first_name}}</td>
+																	<td>{{emp.last_name}}</td>
+																	<td>{{emp.empcode}}</td>
+																	<td>{{emp.leaving_reason}}</td>
+																	<td>{{emp.comments}}</td>
+																	<td>{{emp.noticePeriod}}</td>
+																	<td>{{emp.releivingDate}}</td>
+																	<td><button 
+																	ng-click="openAction(emp.empcode,emp.first_name,emp.last_name)">
+																	</button></td>
+																</tr>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- PAGE CONTENT ENDS -->
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.page-content-area -->
+			</div>
+			<!-- /.page-content -->
+		</div>
+		<a href="#" id="btn-scroll-up"
+			class="btn-scroll-up btn btn-sm btn-inverse"><i
+			class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
+	</div>
+	<!-- /.main-container -->
+
+</body>
+</html>

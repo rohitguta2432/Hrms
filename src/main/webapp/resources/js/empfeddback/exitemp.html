@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Exit Interview With Employee</title>
+</head>
+<body class="no-skin">
+	<div class="main-container" id="main-container"
+		style="margin-top: 10px;">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('main-container', 'fixed')
+			} catch (e) {
+			}
+		</script>
+		<div class="main-content" ng-controller="exitempjs" ng-init="init()">
+
+			<div class="page-content">
+				<div class="page-content-area">
+					<!-- /.page-header -->
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="col-xs-12 widget-container-col ui-sortable">
+										<div class="widget-box ui-sortable-handle"
+											style="opacity: 1; z-index: 0;">
+											<div class="widget-header">
+												<h5 class="widget-title">EMPLOYEE FEEDBACK</h5>
+
+											</div>
+											<form name="Exitemp" ng-submit=submit(Exitemp)  novalidate>
+												<div class="widget-body" style="display: block;">
+													<div class="widget-main form-horizontal">
+													<!-- <div class="clearfix"></div> -->
+													
+													
+
+
+                                       <div class="form-group row col-sm-6">
+															<label class="col-sm-3 control-label no-padding-right"
+																for="firstname">Employee First name </label>
+															<div class="col-sm-9">
+<input type="text"  class="col-xs-10 col-sm-12" name="firstname" ng-model="empfirstname" ng-disabled="true"/>
+				
+															</div>
+														</div>
+														
+														
+												<div class="form-group row col-sm-6">
+															<label class="col-sm-3 control-label no-padding-right"
+																for="lastname">Employee Last name </label>
+															<div class="col-sm-9">
+<input type="text" class="col-xs-10 col-sm-12" name="lastname"  ng-model="Emplastname" ng-disabled="true"/>
+					
+															</div>
+														</div>		
+														
+														
+<div class="clearfix"></div>
+														<div class="form-group col-sm-6">
+															<label class="col-sm-3 control-label no-padding-right"
+																for="department">Name of Department </label>
+
+															<div class="col-sm-9">
+<input type="text"  class="col-xs-10 col-sm-12" name="department" ng-model="empdepartment" ng-disabled="true"/>
+	
+															</div>
+														</div>
+
+														<div class="form-group col-sm-6">
+															<label class="col-sm-3 control-label no-padding-right"
+																for="emplocation">Location </label>
+
+															<div class="col-sm-9">
+				<input type="text"  class="col-xs-10 col-sm-12" name="emplocation" ng-model="Emplocation" ng-disabled="true"/>
+															</div>
+														</div>
+														
+														<div class="clearfix"></div>
+															
+															<div class="form-group col-sm-6">
+															<label class="col-sm-3 control-label no-padding-right"
+																for="designation">Designation:</label>
+
+															<div class="col-sm-9">
+
+	<input type="text"  class="col-xs-10 col-sm-12" name="designation" ng-model="empdesignation" ng-disabled="true"/>
+															</div>
+														</div>
+														
+														
+														
+											<div class="form-group col-sm-6">
+															<label class="col-sm-3 control-label no-padding-right"
+																for="empcode">Employee Code:</label>
+
+															<div class="col-sm-9">
+							<input type="text"  class="col-xs-10 col-sm-12" name="empcode" ng-model="Employeecode" ng-disabled="true"/>						
+													
+													</div>
+														</div>
+														
+						
+					
+													<div class="clearfix"></div>
+                                       <center><h3>YOUR VIEWS ON LEAVING</h3></center>
+                                       <div class="clearfix"></div>
+                                       <h4># ABOUT THE COMPANY</h4>
+                                       <div class="clearfix"></div>
+														<div class="form-group  col-sm-6">
+															<label class="col-sm-3 control-label no-padding-right"
+																for="general">In General </label>
+															<div class="col-sm-9">
+<textarea class="col-xs-10 col-sm-12" rows="3" cols="50" name="general" placeholder="In General ..." ng-model="Empgeneral" ng-maxlength="255" ng-minlength="10" required> </textarea>
+		<span ng-show="Exitemp.general.$dirty &&Exitemp.general.$error.required">Required!</span>
+        <span ng-show="Exitemp.general.$dirty &&Exitemp.general.$error.minlength">Too short!</span>
+        <span ng-show="Exitemp.general.$dirty &&Exitemp.general.$error.maxlength">Too long!</span> 													
+															</div>
+														</div>
+														
+														<div class="clearfix"></div>
+														<div class="form-group row col-sm-6">
+															<label class="col-sm-3 control-label no-padding-right"
+																for="environment">Environment And culture </label>
+															<div class="col-sm-9">
+<textarea class="col-xs-10 col-sm-12" rows="3" cols="50" name="environment" placeholder="Environment & culture ..." ng-model="Empenvironment" ng-maxlength="255" ng-minlength="10" required> </textarea>
+	      <span ng-show="Exitemp.environment.$dirty && Exitemp.environment.$error.required">Required!</span>
+          <span ng-show="Exitemp.environment.$dirty &&Exitemp.environment.$error.minlength">Too short!</span>
+          <span ng-show="Exitemp.environment.$dirty && Exitemp.environment.$error.maxlength">Too long!</span> 
+															</div>
+														</div>
+
+														<div class="form-group col-sm-6">
+															<label class="col-sm-3 control-label no-padding-right"
+																for="opportunity">Opportunity for Learning </label>
+															<div class="col-sm-9">
+<textarea class="col-xs-10 col-sm-12" rows="3" cols="50" name="opportunity" placeholder="Opportunity for Learning ..." ng-model="Empopportunity" ng-maxlength="255" ng-minlength="10" required> </textarea>
+			<span ng-show="Exitemp.opportunity.$dirty && Exitemp.opportunity.$error.required">Required!</span>
+            <span ng-show="Exitemp.opportunity.$dirty &&Exitemp.opportunity.$error.minlength">Too short!</span>
+            <span ng-show="Exitemp.opportunity.$dirty &&Exitemp.opportunity.$error.maxlength">Too long!</span> 
+															</div>
+														</div>
+														<div class="clearfix"></div>
+
+<h3># ABOUT THE JOB</h3>
+														<div class="form-group row col-sm-6">
+															<label class="col-sm-3 control-label no-padding-right"
+																for="description">JOB Description </label>
+															<div class="col-sm-9">
+<textarea class="col-xs-10 col-sm-12" rows="3" cols="50"  name="description" placeholder="Job Description..." ng-model="Empdescription" ng-maxlength="255" ng-minlength="10" required> </textarea>
+		<span ng-show="Exitemp.description.$dirty &&Exitemp.description.$error.required">Required!</span>
+        <span ng-show="Exitemp.description.$dirty &&Exitemp.description.$error.minlength">Too short!</span>
+        <span ng-show="Exitemp.description.$dirty && Exitemp.description.$error.maxlength">Too long!</span> 
+															</div>
+														</div>
+
+														<div class="form-group col-sm-6">
+															<label class="col-sm-3 control-label no-padding-right"
+																for="responsibility">JOB Responsibility </label>
+															<div class="col-sm-9">
+<textarea class="col-xs-10 col-sm-12" rows="3" cols="50" name="responsibility" placeholder="Job Responsibility..." ng-model="Empresponsibility" ng-maxlength="255" ng-minlength="10" required> </textarea>
+          <span ng-show="Exitemp.responsibility.$dirty && Exitemp.responsibility.$error.required">Required!</span>
+          <span ng-show="Exitemp.responsibility.$dirty &&Exitemp.responsibility.$error.minlength">Too short!</span>
+          <span ng-show="Exitemp.responsibility.$dirty && Exitemp.responsibility.$error.maxlength">Too long!</span>
+															</div>
+														</div>
+														<div class="clearfix"></div>
+
+														<div class="form-group row col-sm-6">
+															<label class="col-sm-3 control-label no-padding-right"
+																for="manager">Concerned Manager </label>
+															<div class="col-sm-9">
+<textarea class="col-xs-10 col-sm-12" rows="3" cols="50" name="manager" placeholder="Concerned Manager..." ng-model="Empmanager" ng-maxlength="255" ng-minlength="10" required> </textarea>
+			<span ng-show="Exitemp.manager.$dirty && Exitemp.manager.$error.required">Required!</span>
+            <span ng-show="Exitemp.manager.$dirty &&Exitemp.manager.$error.minlength">Too short!</span>
+            <span ng-show="Exitemp.manager.$dirty &&Exitemp.manager.$error.maxlength">Too long!</span>
+															</div>
+														</div>
+                                                     <div class="clearfix"></div>
+                                                     <center><h3>YOUR COMMENTS</h3></center>
+														<div class="form-group col-sm-6">
+															<label class="col-sm-3 control-label no-padding-right"
+																for="decision"># What majorly your decision to
+																moved on </label>
+															<div class="col-sm-9">
+<textarea class="col-xs-10 col-sm-12" rows="3" cols="50" name="decision" placeholder="What majorly your  decision  to moved on..." ng-model="Empdecision" ng-maxlength="255" ng-minlength="10" required> </textarea>
+          <span ng-show="Exitemp.decision.$dirty && Exitemp.decision.$error.required">Required!</span>
+          <span ng-show="Exitemp.decision.$dirty && Exitemp.decision.$error.minlength">Too short!</span>
+          <span ng-show="Exitemp.decision.$dirty && Exitemp.decision.$error.maxlength">Too long!</span>								
+															</div>
+														</div>
+
+
+														<div class="clearfix"></div>
+
+														<div class="form-group row col-sm-6">
+															<label class="col-sm-3 control-label no-padding-right"
+																for="expectation"># What expectation of your not
+																fullfilled by Organization </label>
+															<div class="col-sm-9">
+<textarea class="col-xs-10 col-sm-12" rows="3" cols="50" name="expectation" placeholder="What expectation of your not fullfilled by Organization..." ng-model="Empexpectation" ng-maxlength="255" ng-minlength="10" required> </textarea>
+			<span ng-show="Exitemp.expectation.$dirty && Exitemp.expectation.$error.required">Required!</span>
+            <span ng-show="Exitemp.expectation.$dirty && Exitemp.expectation.$error.minlength">Too short!</span>
+            <span ng-show="Exitemp.expectation.$dirty && Exitemp.expectation.$error.maxlength">Too long!</span> 
+															</div>
+														</div>
+
+														<div class="form-group col-sm-6">
+															<label class="col-sm-3 control-label no-padding-right"
+																for="identityfy"># Please identify three points
+																of softage information technology limited </label>
+															<div class="col-sm-9">
+	<textarea class="col-xs-10 col-sm-12" rows="3" cols="50" name="identityfy" placeholder="Please identify three points of softage information technology limited ..." ng-model="Empidentityfy" ng-maxlength="255"ng-minlength="10" required> </textarea>
+		<span ng-show="Exitemp.identityfy.$dirty && Exitemp.identityfy.$error.required">Required!</span>
+        <span ng-show="Exitemp.identityfy.$dirty && Exitemp.identityfy.$error.minlength">Too short!</span>
+        <span ng-show="Exitemp.identityfy.$dirty && Exitemp.identityfy.$error.maxlength">Too long!</span>				
+															</div>
+														</div>
+												<div class="clearfix"></div>
+
+														<div class="center">
+															<input type="submit" ng-disabled="Exitemp.$invalid"
+																value="submit">
+														</div>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+
+
+							</div>
+							<!-- /.row -->
+							<!-- PAGE CONTENT ENDS -->
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.page-content-area -->
+			</div>
+			<!-- /.page-content -->
+		</div>
+
+		<a href="#" id="btn-scroll-up"
+			class="btn-scroll-up btn btn-sm btn-inverse"><i
+			class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
+	</div>
+	</body>
+</html>

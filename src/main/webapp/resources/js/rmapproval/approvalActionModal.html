@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<div class="modal-header">
+    <h3 class="modal-title"></h3>
+</div>
+<!-- ng-init="approvalActionInit()" -->
+<div class="modal-body">
+    <form class="form-horizontal"  ng-controller="approvalController" ng-init="approvalActionInit()" name="rmApprovalForm" 
+    ng-submit="resignAction(rmApprovalForm)" >
+        <div class="form-group">
+
+ <!-- <label for="acceptRadio">Accept</label>
+                <input id="acceptRadio" type="radio" name="action" ng-change="RadioChange('Accept')" ng-model="resAction" value="Accept">
+                <label for="rejectRadio">Reject</label>
+                <input id="rejectRadio" type="radio" name="action" ng-change="RadioChange('Reject')" ng-model="resAction" value="Reject">
+ -->
+            <div class="form-group col-sm-6">
+                <label  class="col-sm-3 control-label no-padding-right">Action</label>
+                <div class="col-sm-9">
+                    <select  name="actionresignation" class="form-control" required>
+                        <option value="" selected="selected">Select</option>
+                        <option ng-repeat="actionlist in resignationaction" value="{{actionlist}}">{{actionlist}}</option>
+                        
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-sm-6">
+                <label  class="col-sm-3 control-label no-padding-right">Notice Period</label>
+                <div class="col-sm-9">
+
+
+                    <select  name="notice" class="form-control" required="required">
+                        <option value="" selected="selected">Select Notice Period</option>
+                        <option ng-repeat="noticetime in noticeperiod" value="{{noticetime}}">{{noticetime}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-sm-6">
+                <label  class="col-sm-3 control-label no-padding-right">Comments</label>
+                <div class="col-sm-9">
+                <textarea rows="3" cols="15" ng-model="comments"></textarea>
+                </div>
+
+            </div>
+            <div class="form-group col-sm-6">
+                <label  class="col-sm-3 control-label no-padding-right">Employee Code</label>
+                <div class="col-sm-9">
+                    <input type="text" ng-model="employee_code" ng-disabled="true">
+                </div>
+
+            </div>
+            
+            
+            
+       <div>
+
+       </div>
+
+
+                <input type="submit" value="SUBMIT">
+    </form>
+</div>
+
+
+</body>
+</html>
