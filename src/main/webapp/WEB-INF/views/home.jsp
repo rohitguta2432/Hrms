@@ -38,6 +38,8 @@
 	<script src="resources/js/hrapproval/hr_approval.js"></script>
 	<script src="resources/js/noduesit/noduesit.js"></script>
 	<script src="resources/js/noduesit/noduesitmodal.js"></script>
+	<script src="resources/js/noduesaccounts/noduesaccounts.js"></script>
+	<script src="resources/js/noduesaccounts/noduesaccountsmodal.js"></script>
 </head>
 <body class="no-skin" ng-controller="homeController" ng-init="getLinks()">
     <div id="navbar" class="navbar navbar-default navbar-collapse h-navbar">

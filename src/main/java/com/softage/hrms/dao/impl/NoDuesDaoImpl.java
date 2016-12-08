@@ -12,8 +12,10 @@ import org.hibernate.SessionFactory;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.w3c.dom.ls.LSInput;
 
 import com.softage.hrms.dao.NoDuesDao;
+import com.softage.hrms.model.MstAssests;
 
 @Repository
 public class NoDuesDaoImpl implements NoDuesDao {
@@ -37,37 +39,29 @@ public class NoDuesDaoImpl implements NoDuesDao {
 
 	@Override
 	@Transactional
-	public JSONObject getassetsdetails() {
+	public List<String> getassetsdetails() {
+	
+		/*ArrayList<JSONObject> arrayjson=new ArrayList<JSONObject>();*/
+		/*JSONObject listjson=new JSONObject();*/
 		
-		 JSONObject json=new JSONObject();
     org.hibernate.Session session=sessionfactory.getCurrentSession();
-      String sql="select assets_name from mst_assests where department_id=1";
-	  Query query=session.createSQLQuery(sql);	
-      List listassets=query.list();
-      
-String[] arraystring=new String[listassets.size()];
-      
-     for(int i=0;i<listassets.size();i++)
+    JSONObject json =new JSONObject();
+      String hql="from MstAssests"; 	 
+     Query query=session.createQuery(hql);	
+     List<String> stringlist=new ArrayList<String>();
+     List<MstAssests> listassets=query.list();
+     for(MstAssests assets:listassets)
      {
-    	
-    	 arraystring[0] = listassets.get(i).toString();
-    	 /*arraystring[1] = listassets.get(i).toString();
-    	 arraystring[2] = listassets.get(i).toString();*/
-    	 String laptop=arraystring[0];
-    	 String datacard=arraystring[1];
-    	 String pendrive=arraystring[2];
-    	 String itassets=arraystring[3];
-    	 System.out.println(laptop);
-    	 System.out.println(datacard);
-    	 System.out.println(pendrive);
-    	/* System.out.println(itassets);*/
-    	 json.put("laptop", laptop);
-    	
-     }
-     
-      
-      /*json.put("assets", listassets);*/
-      return json;
+    	 
+    	 stringlist.add(assets.getAssetsName());
+    	 
+/*System.out.println("dao "+ stringlist);*/
+  }
+    
+     /*json.put("listarray", arrayjson);*/
+   
+    
+      return stringlist;
 	}
 
 }

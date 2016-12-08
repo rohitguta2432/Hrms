@@ -39,6 +39,39 @@ application.config(function($stateProvider, $urlRouterProvider) {
 		url:'/hrApprovalModal',
 		templateUrl:'resources/js/hrapproval/hrApprovalModal.html',
 		controller:'hrApprovalController'
+	}).state('noduesit',{
+		url:'/IT_NODUES',
+		templateUrl:'resources/js/noduesit/noduesit.html',
+		controller:'homeController'
+	})
+	.state('noduesitmodal',{
+		url:'/IT_NODUES_MODAL',
+		templateUrl:'resources/js/noduesit/noduesitmodal.html',
+		controller:'homeController'
+	})
+	.state('noduesinfra',{
+		url:'/INFRA_NODUES',
+		templateUrl:'resources/js/noduesinfra/noduesinfra.html',
+		controller:'homeController'
+	})
+	.state('noduesaccounts',{
+		url:'/ACCOUNTS_NODUES',
+		templateUrl:'resources/js/noduesaccounts/noduesaccounts.html',
+		controller:'homeController'
+			})
+	.state('noduesaccountsmodal',{
+		url:'/IT_ACCOUNTS_MODAL',
+		templateUrl:'resources/js/noduesaccounts/noduesaccountsmodal.html',
+		controller:'homeController'
+	}).state('noduesrm',{
+		url:'/RM_NODUES',
+		templateUrl:'resources/js/noduesrm.html',
+		controller:'homeController'
+	})
+	.state('nodueshr',{
+		url:'/HR_NODUES',
+		templateUrl:'resources/js/nodueshr.html',
+		controller:'homeController'
 	});
 });
 application.controller('homeController', function($scope, $http) {

@@ -249,10 +249,84 @@ public class HomeController {
 	 
 	 
 	 /*itassetsmodal.put("assets", assets);*/
-	 itassetsmodal= noduesservice.listassetsdetails();
+	 /*itassetsmodal= noduesservice.listassetsdetails();*/
 	 
 	 System.out.println(itassetsmodal);
 		return itassetsmodal;
+	}
+	@RequestMapping(value = "/getnoduesaccounts", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getnoduesaccountinformation() {
+		ArrayList<JSONObject> listinformation=new ArrayList<JSONObject>();
+		JSONObject jsonobject=new JSONObject();
+		
+		
+		try{
+			JSONObject itjson = new JSONObject();
+			itjson.put("sno", 1);
+			itjson.put("empcode","ss0097");
+			itjson.put("firstname", "rohit");
+			itjson.put("lastname", "raj");
+			itjson.put("department", "it-software");
+			itjson.put("designation", "java developer");
+			itjson.put("location", "circle");
+			List<String> listempcoderesign=noduesservice.listrmacceptedempcode();
+			
+			listinformation.add(itjson);
+		
+		jsonobject.put("emplist", listinformation);
+		
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+}
+		
+		return jsonobject;
+
+}
+	@RequestMapping(value = "/getaccountmodalassets", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getaccountsmodalassets(HttpServletRequest request) {
+		
+		JSONObject accountassetsmodal = new JSONObject();
+	
+	 
+	 String emp_code=request.getParameter("employee_code");
+	 accountassetsmodal.put("empcode","ss0097");
+	 accountassetsmodal.put("firstname", "rohit");
+	 accountassetsmodal.put("lastname", "raj");
+	 accountassetsmodal.put("department", "it-software");
+	 accountassetsmodal.put("designation", "java developer");
+	 accountassetsmodal.put("location", "circle");
+	 
+	 
+	 
+	
+	
+	 
+	
+		return accountassetsmodal;
+	}
+	@RequestMapping(value = "/getAssets", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getassests() {
+		
+		JSONObject accountassets = new JSONObject();
+	
+	 List<String> value = noduesservice.listassetsdetails();
+	/*Iterator<String> i1=value.iterator();
+	 while(i1.hasNext())
+	 {
+		 System.out.println("controller "+i1.next());
+		 
+	 }*/
+	 
+	 
+	 accountassets.put("list", value);
+	 
+	 System.out.println("controller "+value);
+	
+		return accountassets;
 	}
 }
 

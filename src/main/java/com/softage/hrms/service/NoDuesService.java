@@ -8,5 +8,5 @@ public interface NoDuesService {
 
 	public List<String> listrmacceptedempcode();
 	
-	public JSONObject listassetsdetails();
+	public List<String> listassetsdetails();
 }

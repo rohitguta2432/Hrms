@@ -24,7 +24,7 @@ private NoDuesDao noduesdao;
 	}
 
 	@Override
-	public JSONObject listassetsdetails() {
+	public List<String> listassetsdetails() {
 		
 		return noduesdao.getassetsdetails();
 	}

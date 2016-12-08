@@ -4,7 +4,11 @@ package com.softage.hrms.model;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -15,11 +19,24 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "mst_assests")
 public class MstAssests implements java.io.Serializable {
-
+private MstDepartment mstdepartment;
 	private int assestsId;
 	private Integer departmentId;
 	private String assetsName;
 	private Date createdOn;
+	
+	
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "department_id",insertable=false,updatable=false)
+	public MstDepartment getMstdepartment() {
+		return mstdepartment;
+	}
+
+	public void setMstdepartment(MstDepartment mstdepartment) {
+		this.mstdepartment = mstdepartment;
+	}
+
 	private String createdBy;
 
 	public MstAssests() {
