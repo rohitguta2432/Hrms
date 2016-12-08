@@ -28,14 +28,14 @@
 	 <script src="resources/libs/jquery/dist/jquery-ui.min.js"></script> 
 	<script src="resources/libs/ui-bootstrap-tpls-0.14.3.min.js"></script>
 	<script src="resources/js/home.js"></script>
-	<script src="resources/js/approval.js"></script>
+	<script src="resources/js/rmapproval/approval.js"></script>
 	<!-- <script src="resources/js/approvalActionModal.js"></script> -->
-	<script src="resources/js/resignation.js"></script>
+	<script src="resources/js/resignation/resignation.js"></script>
 	<script src="resources/js/exitemprate.js"></script>
 	<script src="resources/js/exitrm.js"></script>
-	<script src="resources/js/exitemp.js"></script>
-	<script src="resources/js/exitemphr.js"></script> 
-	<script src="resources/js/hr_approval.js"></script>
+	<script src="resources/js/empfeddback/exitemp.js"></script>
+	<script src="resources/js/hrfeedback/exitemphr.js"></script> 
+	<script src="resources/js/hrapproval/hr_approval.js"></script>
 	<script src="resources/js/noduesit/noduesit.js"></script>
 	<script src="resources/js/noduesit/noduesitmodal.js"></script>
 </head>
@@ -60,7 +60,7 @@
                 <ul class="nav ace-nav">
                     <li class="light-blue"><a data-toggle="dropdown" href="#" class="dropdown-toggle">
                         <img class="nav-user-photo" src="resources/libs/images/avatar2.png" alt="user" />
-                        <span class="user-info"><small>Welcome,</small> <%= session.getAttribute( "empName" ) %> </span><i class="ace-icon fa fa-caret-down"></i></a>
+                        <span class="user-info"><small>Welcome,</small> <%= session.getAttribute( "firstname" ) %> </span><i class="ace-icon fa fa-caret-down"></i></a>
                         <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-blue dropdown-caret dropdown-close">
                             <li><a href="#" data-toggle="modal" data-target="#myModal1"><i class="ace-icon fa fa-user"></i>Change Password </a></li>
                             <li class="divider"></li>

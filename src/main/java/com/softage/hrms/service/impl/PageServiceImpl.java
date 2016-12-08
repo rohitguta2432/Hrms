@@ -11,11 +11,11 @@ import com.softage.hrms.service.PageService;
 public class PageServiceImpl implements PageService {
 	
 	@Autowired
-	private PageDao pagedao;/*int id*/
+	private PageDao pagedao;
 
 	@Override
-	public JSONObject getPagesLink() {
-		return pagedao.getPagesLinkDao();
+	public JSONObject getPagesLink(int id) {
+		return pagedao.getPagesLinkDao(id);
 	}
-	/*id*/
+
 }

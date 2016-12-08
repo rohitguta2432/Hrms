@@ -21,16 +21,15 @@ public class PageDaoImpl implements PageDao {
 
 	@Override
 	@Transactional
-	public JSONObject getPagesLinkDao() {
+	public JSONObject getPagesLinkDao(int role_id) {
 		JSONObject jsob=new JSONObject();
 		Session session=this.sessionfactory.getCurrentSession();
-		String sql="select page_name from mst_webpage";
+		String sql="select distinct(w.page_name) from mst_page_authority a join mst_webpage w on w.page_id=a.page_id where a.role_id="+role_id+" and w.active=1";
 		Query query=session.createSQLQuery(sql);
 		List list=query.list();
 		jsob.put("pages",list);
-		System.out.println(jsob);
+		//System.out.println(jsob);
 		return jsob;
 	}
-	/*int role_id*/
-	/*select distinct(w.page_name) from mst_page_authority a join mst_webpage w on w.page_id=a.page_id where a.role_id="+role_id+" and w.active=1"
-*/}
+
+}

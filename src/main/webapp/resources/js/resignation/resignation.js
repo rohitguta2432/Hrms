@@ -12,7 +12,8 @@ application.controller('resignationController',function($scope,$http){
 		})
 	}
 	$scope.submit=function(form){
-			var emp_data='emp_reason='+$scope.resignationReason+'&emp_comments='+$scope.comments;
+			var emp_data='emp_reason='+$scope.selReason+'&emp_comments='+$scope.comments;
+			//alert(JSON.stringify({data:$scope.selReasons}))
 			$http.get(domain+'/resignation?'+emp_data)
 			.success(function(data, status, headers, config){
 				//alert('success'+JSON.stringify({data: data}));
