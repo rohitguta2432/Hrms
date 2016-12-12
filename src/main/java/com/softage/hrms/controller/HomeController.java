@@ -1,5 +1,11 @@
 package com.softage.hrms.controller;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -11,8 +17,12 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -27,6 +37,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.tempuri.ISoftAgeEnterpriseProxy;
 import org.tempuri.SoftAgeEnterpriseServiceLocator;
 
@@ -34,8 +46,10 @@ import com.softage.hrms.dao.NoDuesDao;
 import com.softage.hrms.model.MstQuestions;
 import com.softage.hrms.model.MstReason;
 import com.softage.hrms.model.MstResignationStatus;
+import com.softage.hrms.model.MstUploadItem;
 import com.softage.hrms.model.TblUserResignation;
 import com.softage.hrms.service.ApprovalService;
+import com.softage.hrms.service.EmployeeDocumentService;
 import com.softage.hrms.service.NoDuesService;
 import com.softage.hrms.service.PageService;
 import com.softage.hrms.service.ResignationService;
@@ -66,6 +80,9 @@ public class HomeController {
 	
 	@Autowired
 	private NoDuesService noduesservice;
+	
+	@Autowired
+	private EmployeeDocumentService employeeDocumentService;
 
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -393,5 +410,109 @@ public class HomeController {
 	
 		return accountassets;
 	}
+	
+	@RequestMapping(value = "/getUploadItems", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONArray getUploadItems() {
+		
+		JSONArray list=new JSONArray();
+	  
+     List<MstUploadItem> itemList=employeeDocumentService.getUploadItems(1);
+     
+           for (MstUploadItem mstUploadItem : itemList) {
+        	   list.add(mstUploadItem.getItem());
+        	   
+			
+		}
+     
+     
+	 
+     return list;
+	}
+	
+	    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+	    @ResponseBody
+	    public JSONObject upload(MultipartHttpServletRequest request, HttpServletResponse response) {
+		 
+		 String fileLocation="D:/CSVFile/";
+		 
+		 try{
+			 logger.info("Uploading file ");
+		    Iterator<String> itr = request.getFileNames();   
+	        MultipartFile mpf = request.getFile(itr.next());
+	        byte[] bytes =mpf.getBytes();
+	        String filename = mpf.getOriginalFilename();
+	        File file=new File(fileLocation+filename);
+	        BufferedOutputStream stream = new BufferedOutputStream( new FileOutputStream(file));
+            stream.write(bytes);
+            stream.close();
+            
+            logger.info("Server File Location=" +file );
+	        
+	        
+		 
+		 }catch(Exception e){
+			 logger.error("",e);
+			 e.printStackTrace();
+		 }
+		 
+		 return null;
+		 
+	 }
+	
+	    
+	    public static String uploadDocumentFTPClient(String file, byte[] bytes){
+	    	
+	    	  String ftpHost = "122.15.90.140";
+	          String username = "administrator";
+	          String password = "softage@tchad";
+	          FileOutputStream fos=null;
+	          
+	          try{
+	        	  InputStream inputStream=new FileInputStream("");
+	        	  FTPClient ftpClient = new FTPClient();
+	        	  
+	        	  ftpClient.connect(ftpHost);
+	              boolean login = ftpClient.login(username, password);
+	              if (login) {
+	                  logger.info("Successfully Connected to FTP Server");
+	              } else {
+	                  System.out.println("Unable to Connected to Server..... ");
+	              }
+	              ftpClient.enterLocalPassiveMode();
+	              ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+	              ftpClient.changeWorkingDirectory("fptPath");
+	              
+	              
+	              System.out.println("Start uploading second file");
+	              OutputStream outputStream = ftpClient.storeFileStream("path of FTPServer");
+	              byte[] bytesIn = new byte[4096];
+	              int read = 0;
+	   
+	              while ((read = inputStream.read(bytesIn)) != -1) {
+	                  outputStream.write(bytes, 0, read);
+	              }
+	              inputStream.close();
+	              outputStream.close();
+	        	  
+	           }catch(Exception e){
+	        	  
+	        	      	  
+	          }
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	return null;
+	    }
+	    
+	
 }
 

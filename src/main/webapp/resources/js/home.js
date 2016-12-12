@@ -67,8 +67,11 @@ application.config(function($stateProvider, $urlRouterProvider) {
 		url:'/RM_NODUES',
 		templateUrl:'resources/js/noduesrm.html',
 		controller:'homeController'
-	})
-	.state('nodueshr',{
+	}).state('DocumentManagement',{
+		url:'/DocumentManagement',
+		templateUrl:'resources/js/document/upload.html',
+		controller:'documentManagement'
+	}).state('nodueshr',{
 		url:'/HR_NODUES',
 		templateUrl:'resources/js/nodueshr.html',
 		controller:'homeController'

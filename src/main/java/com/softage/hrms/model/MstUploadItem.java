@@ -22,7 +22,7 @@ public class MstUploadItem implements java.io.Serializable {
 
 	private int uploadId;
 	private String item;
-	private String departmentId;
+	private int departmentId;
 	private String createdBy;
 	private Date createdOn;
 	private Set<TblUploadedPath> tblUploadedPaths = new HashSet<TblUploadedPath>(0);
@@ -34,7 +34,7 @@ public class MstUploadItem implements java.io.Serializable {
 		this.uploadId = uploadId;
 	}
 
-	public MstUploadItem(int uploadId, String item, String departmentId, String createdBy, Date createdOn,
+	public MstUploadItem(int uploadId, String item, int departmentId, String createdBy, Date createdOn,
 			Set tblUploadedPaths) {
 		this.uploadId = uploadId;
 		this.item = item;
@@ -65,11 +65,11 @@ public class MstUploadItem implements java.io.Serializable {
 	}
 
 	@Column(name = "department_id", length = 15)
-	public String getDepartmentId() {
+	public int getDepartmentId() {
 		return this.departmentId;
 	}
 
-	public void setDepartmentId(String departmentId) {
+	public void setDepartmentId(int departmentId) {
 		this.departmentId = departmentId;
 	}
 
