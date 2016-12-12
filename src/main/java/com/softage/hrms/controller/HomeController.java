@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,7 @@ import org.tempuri.ISoftAgeEnterpriseProxy;
 import org.tempuri.SoftAgeEnterpriseServiceLocator;
 
 import com.softage.hrms.dao.NoDuesDao;
+import com.softage.hrms.model.MstQuestions;
 import com.softage.hrms.model.MstReason;
 import com.softage.hrms.model.MstResignationStatus;
 import com.softage.hrms.model.TblUserResignation;
@@ -71,9 +74,9 @@ public class HomeController {
 	public String home(HttpServletRequest request, Locale locale, Model model) {
 		logger.info("Welcome to the home page");
 		String first_Name=(String)request.getParameter("firstName");
-		System.out.println("Name is :"+first_Name);
 		String employee_code=(String)request.getParameter("emp_code");
 		int roleID=Integer.parseInt(request.getParameter("role_id"));
+		System.out.println("role_id is : "+roleID+" first_name is : "+first_Name);
 		int userID=Integer.parseInt(request.getParameter("user_id"));
 		int spokeID=Integer.parseInt(request.getParameter("spoke_id"));
 		int circleID=Integer.parseInt(request.getParameter("CircleID"));
@@ -200,6 +203,68 @@ public class HomeController {
 		System.out.println("JSONVALUE"+jsonApproval);
 		return jsonApproval;
 	}
+	
+	@RequestMapping(value = "/getResignationAction", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getResignationInitValues(HttpServletRequest request,HttpSession session) {
+		JSONObject jsonObject = new JSONObject();
+		int count=1;
+		List<JSONObject> quesList=new ArrayList<JSONObject>();
+		session=request.getSession();
+		int roleid=(Integer)session.getAttribute("roleid");
+		List<MstQuestions> questions=approvalservice.getQuestionService(roleid);
+		for(MstQuestions ques:questions){
+			JSONObject quesjson=new JSONObject();
+			String quesText=(String)ques.getQuestionText();
+			String questType=(String)ques.getQuestionType();
+			quesjson.put("qText", quesText);
+			quesjson.put("qType", questType);
+			quesjson.put("sno", count);
+			quesjson.put("qAns", "");
+			count=count+1;
+			quesList.add(quesjson);
+		}
+		jsonObject.put("questions", quesList);
+		//List<String> actionList = approvalservice.getResignationActionService();
+		//List noticeList = approvalservice.getResignationNoticeService();
+		//jsonObject.put("actionList", actionList);
+		//jsonObject.put("noticeList", noticeList);
+		return jsonObject;
+	}
+	
+	
+	
+	@RequestMapping(value="/insertRmFeedback",method=RequestMethod.POST)
+	@ResponseBody
+	public JSONObject submitRmFeedback(@RequestParam(value="answerList") String answerList,@RequestParam(value="resignAction") String resignAction){
+		System.out.println("The data is : "+answerList + " res"+ resignAction);
+		JSONParser parser=new JSONParser();
+		try {
+			JSONObject answerJson=(JSONObject)parser.parse(answerList);
+			List<JSONObject> listAnswers=(List<JSONObject>) answerJson.get("data");
+			for(JSONObject answer: listAnswers){
+				String sid=String.valueOf(answer.get("sno"));
+				String ans=(String)answer.get("qAns");
+				String ques=(String)answer.get("qText");
+				System.out.println("sno"+sid+" ans : "+ans+" ques"+ ques);
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+/*	@RequestMapping(value= "/hrapprovalInit",method=RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getHrApprovalInit(HttpServletRequest request,HttpSession session){
+		System.out.println("HR Initialisation");
+		session=request.getSession();
+		String empCode=(String)session.getAttribute("empCode");
+		return approvalservice.getHrApprovalInit(empCode);
+		
+	}*/
+	
+	
 	@RequestMapping(value = "/getnoduesit", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getnoduesitinformation() {

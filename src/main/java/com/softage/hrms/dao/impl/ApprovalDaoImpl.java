@@ -1,7 +1,10 @@
 package com.softage.hrms.dao.impl;
 
 import java.rmi.RemoteException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Repository;
 import org.tempuri.ISoftAgeEnterpriseProxy;
 
 import com.softage.hrms.dao.ApprovalDao;
+import com.softage.hrms.model.MstQuestions;
 
 @Repository
 public class ApprovalDaoImpl implements ApprovalDao {
@@ -38,8 +42,8 @@ public class ApprovalDaoImpl implements ApprovalDao {
 		String leaving_reason=null;
 		String comments=null;
 		String noticePeriod=null;;
-		String releivingDate=null;
-		String sql="select res.emp_code,res.comments,r.reason from tbl_user_resignation res join mst_reason r on res.leaving_reason=r.reason_id where res.rm_empcode='"+empcode+"' and res.status=1";
+		Date relievingDate=null;
+		String sql="select res.emp_code,res.comments,r.reason,res.releiving_date from tbl_user_resignation res join mst_reason r on res.leaving_reason=r.reason_id where res.rm_empcode='"+empcode+"' and res.status=1";
 		Query query=session.createSQLQuery(sql);
 		List<Object[]> emp_approval_list=query.list();
 		Iterator itr=emp_approval_list.iterator();
@@ -47,6 +51,10 @@ public class ApprovalDaoImpl implements ApprovalDao {
 			emp_code=(String)object[0];
 			comments=(String)object[1];
 			leaving_reason=(String)object[2];
+			relievingDate=(Date)object[3];
+			DateFormat df=new SimpleDateFormat("yyyy/MM/dd");
+			String reldate=df.format(relievingDate);
+			//Date lwd_date=new Date(reldate);
 			ISoftAgeEnterpriseProxy emp=new ISoftAgeEnterpriseProxy();
 			try {
 				first_name=emp.getUserDetail(emp_code).getFirstName();
@@ -74,7 +82,7 @@ public class ApprovalDaoImpl implements ApprovalDao {
 			jsonemp.put("comments", comments);
 			jsonemp.put("empcode", emp_code);
 			jsonemp.put("noticePeriod", noticePeriod);
-			jsonemp.put("releivingDate", releivingDate);
+			jsonemp.put("releivingDate", reldate);
 			jsonArray.add(jsonemp);
 			count=count+1;
 			
@@ -82,6 +90,17 @@ public class ApprovalDaoImpl implements ApprovalDao {
 		
 		jsob.put("jsonArray", jsonArray);
 		return jsob;
+	}
+
+	@Override
+	@Transactional
+	public List<MstQuestions> getQuestionDao(int roleID) {
+		Session session=this.sessionfactory.getCurrentSession();
+		String hql="select quesMast from MstQuestions quesMast where quesMast.roleId=:roleid and quesMast.isActive=1 and quesMast.stageId=1";
+		Query query=session.createQuery(hql);
+		query.setParameter("roleid", roleID);
+		List<MstQuestions> questionList=query.list();
+		return questionList;
 	}
 
 }

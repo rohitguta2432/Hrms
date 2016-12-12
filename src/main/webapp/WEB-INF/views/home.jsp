@@ -32,7 +32,7 @@
 	<!-- <script src="resources/js/approvalActionModal.js"></script> -->
 	<script src="resources/js/resignation/resignation.js"></script>
 	<script src="resources/js/exitemprate.js"></script>
-	<script src="resources/js/exitrm.js"></script>
+	<!-- <script src="resources/js/exitrm.js"></script> -->
 	<script src="resources/js/empfeddback/exitemp.js"></script>
 	<script src="resources/js/hrfeedback/exitemphr.js"></script> 
 	<script src="resources/js/hrapproval/hr_approval.js"></script>
