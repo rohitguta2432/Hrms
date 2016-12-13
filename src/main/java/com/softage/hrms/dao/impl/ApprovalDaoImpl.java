@@ -21,6 +21,7 @@ import org.tempuri.ISoftAgeEnterpriseProxy;
 
 import com.softage.hrms.dao.ApprovalDao;
 import com.softage.hrms.model.MstQuestions;
+import com.softage.hrms.model.TblUserResignation;
 
 @Repository
 public class ApprovalDaoImpl implements ApprovalDao {
@@ -101,6 +102,17 @@ public class ApprovalDaoImpl implements ApprovalDao {
 		query.setParameter("roleid", roleID);
 		List<MstQuestions> questionList=query.list();
 		return questionList;
+	}
+
+	@Override
+	@Transactional
+	public TblUserResignation getResignationUserDao(String emp_code) {
+		Session session=this.sessionfactory.getCurrentSession();
+		String hql="select resignation from TblUserResignation resignation where resignation.empCode=:employeecode";
+		Query query=session.createQuery(hql);
+		query.setParameter("employeecode",emp_code );
+		//List<TblUserResignation>
+		return null;
 	}
 
 }

@@ -15,12 +15,14 @@ $scope.approvalInit = function() {
 					//$scope.formData={}
 					//$scope.formData.rmfeedback=data.questions;
 					$scope.rmfeedback=data.questions;
+					$scope.employee_code=$scope.params.empcode;
+					$scope.emp_fname=$scope.params.emp_firstname;
+					$scope.emp_lname=$scope.params.emp_lastname;
+					//alert(JSON.stringify({data:$scope.employee_code}))
 				}).error(function(data, status, headers, config) {
 			alert('Error');
 		})
-		$scope.employee_code=$scope.params.empcode;
-		$scope.emp_fname=$scope.params.emp_firstname;
-		$scope.emp_lname=$scope.params.emp_lastname;
+	
 		
 		/*$scope.resignAction= function(formName) {
 			$scope.resAction='Accept';
@@ -31,7 +33,7 @@ $scope.approvalInit = function() {
 		
 	}
 	$scope.resignAction= function(formName) {
-		var data='answerList='+JSON.stringify({data:$scope.rmfeedback})+'&resignAction='+$scope.resAction;
+		var data='answerList='+JSON.stringify({data:$scope.rmfeedback})+'&resignAction='+$scope.resAction+'&feedbackon='+$scope.employee_code;
 		$http({
 			method:'POST',
 			url:domain+'/insertRmFeedback',

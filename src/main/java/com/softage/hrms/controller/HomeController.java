@@ -47,6 +47,7 @@ import com.softage.hrms.model.MstQuestions;
 import com.softage.hrms.model.MstReason;
 import com.softage.hrms.model.MstResignationStatus;
 import com.softage.hrms.model.MstUploadItem;
+import com.softage.hrms.model.TblFeedbacks;
 import com.softage.hrms.model.TblUserResignation;
 import com.softage.hrms.service.ApprovalService;
 import com.softage.hrms.service.EmployeeDocumentService;
@@ -234,6 +235,7 @@ public class HomeController {
 			JSONObject quesjson=new JSONObject();
 			String quesText=(String)ques.getQuestionText();
 			String questType=(String)ques.getQuestionType();
+			int qid=(Integer)ques.getQid();
 			quesjson.put("qText", quesText);
 			quesjson.put("qType", questType);
 			quesjson.put("sno", count);
@@ -253,7 +255,9 @@ public class HomeController {
 	
 	@RequestMapping(value="/insertRmFeedback",method=RequestMethod.POST)
 	@ResponseBody
-	public JSONObject submitRmFeedback(@RequestParam(value="answerList") String answerList,@RequestParam(value="resignAction") String resignAction){
+	public JSONObject submitRmFeedback(@RequestParam(value="answerList") String answerList,@RequestParam(value="resignAction") String resignAction,@RequestParam("feedbackon") String feedbackon,HttpServletRequest request,HttpSession session){
+		session=request.getSession();
+		String empcode=(String) session.getAttribute("employeecode");
 		System.out.println("The data is : "+answerList + " res"+ resignAction);
 		JSONParser parser=new JSONParser();
 		try {
@@ -263,6 +267,12 @@ public class HomeController {
 				String sid=String.valueOf(answer.get("sno"));
 				String ans=(String)answer.get("qAns");
 				String ques=(String)answer.get("qText");
+				String feedbackby="RM";
+				TblFeedbacks feedback=new TblFeedbacks();
+				feedback.setAnsText(ans);
+				feedback.setFeedbackBy(feedbackby);
+				feedback.setFeedbackFrom(empcode);
+				//feedback.
 				System.out.println("sno"+sid+" ans : "+ans+" ques"+ ques);
 			}
 		} catch (ParseException e) {

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.softage.hrms.dao.ApprovalDao;
 import com.softage.hrms.model.MstQuestions;
+import com.softage.hrms.model.TblUserResignation;
 import com.softage.hrms.service.ApprovalService;
 
 @Service
@@ -24,6 +25,11 @@ public class ApprovalServiceImpl implements ApprovalService {
 	@Override
 	public List<MstQuestions> getQuestionService(int roleID) {
 		return approvaldao.getQuestionDao(roleID);
+	}
+
+	@Override
+	public TblUserResignation getResignationUserService(String emp_code) {
+		return null;
 	}
 
 }
