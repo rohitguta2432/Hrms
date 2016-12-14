@@ -2,36 +2,34 @@ application.controller('hrApprovalController',['$scope','$http','$rootScope','$m
 	$scope.hr_approvalInit=function(){
 		$http.get(domain+'/hrapprovalInit')
 		.success(function(data,status,headers,config){
+			alert('in hr initialisation');
 			$scope.employeeInfo=data.empinfo;
+			alert($scope.employeeInfo);
 		})
 		.error(function(data,status,headers,config){
 			alert('error');
 		})
 	};
-	$scope.openHrAction=function(firstname,lastname,empcode,leaving_reason,remarks
-			,noticetime,resignDate,relDate,rm_fname,rm_lname,rm_empcode,rm_email,status,noticeByRm){
+	$scope.openHrAction=function(name,empcode,leaving_reason,remarks
+			,noticetime,resignDate,rm_empcode,rm_email){
 		var scope=$rootScope.$new();
-		scope.params={fname:firstname,lname:lastname,emp_code:empcode,leaveReason:leaving_reason,
-				comments:remarks,notice:noticetime,resDate:resignDate,releivingDate:relDate,
-				rmfname:rm_fname,rmlname:rm_lname,rm_ecode:rm_empcode,rmEmail:rm_email,rmStatus:status,rmNotice:noticeByRm};
+		scope.params={empname:name,emp_code:empcode,leaveReason:leaving_reason,
+				comments:remarks,notice:noticetime,resDate:resignDate,
+				rm_ecode:rm_empcode,rmEmail:rm_email};
 		var modalInstance=$modal.open({
 			scope:scope,
-			templateUrl:'resources/js/hrApprovalModal.html',
+			templateUrl:'resources/js/hrapproval/hrApprovalModal.html',
 			controller : 'hrApprovalController',
 		});
 		
 	}
 	$scope.hrApprovalActionInit=function(){
-		$scope.firstname=$scope.params.fname;
-		$scope.lastname=$scope.params.lname;
+		$scope.emp_name=$scope.params.empname;
 		$scope.empcode=$scope.params.emp_code;
 		$scope.resigndate=$scope.params.resDate;
 		$scope.noticeperiod=$scope.params.notice;
-		$scope.rm_fname=$scope.params.rmfname;
-		$scope.rm_lname=$scope.params.rmlname;
 		$scope.rmempcode=$scope.params.rm_ecode;
-		$scope.rmstatus=$scope.params.rmStatus;
-		$scope.rmnotice=$scope.params.rmNotice;
+		$scope.rmemail=$scope.params.rmEmail;
 		$http.get(domain+'/getHrNoticeTime')
 		.success(function(data,status,headers,config){
 			$scope.noticePeriod=data.noticeList;

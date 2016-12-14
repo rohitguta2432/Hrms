@@ -165,4 +165,30 @@ public class ResignationDaoImpl implements ResignationDao {
 		return statusmast;
 	}
 
+	@Override
+	@Transactional
+	public TblUserResignation getResignationUserDao(String emp_code, int status) {
+		Session session=this.sessionFactory.getCurrentSession();
+		String hql="select resignation from TblUserResignation resignation where resignation.empCode=:employeecode and resignation.mstResignationStatus="+status;
+		Query query=session.createQuery(hql);
+		query.setParameter("employeecode",emp_code );
+	//	query.setParameter("emp_status", status);
+		//List<TblUserResignation> resignedUser=query
+		TblUserResignation resignedUser=(TblUserResignation)query.uniqueResult();
+		return resignedUser;
+	}
+
+	@Override
+	@Transactional
+	public List<TblUserResignation> getHrApprovalInitDao(String empcode, int status) {
+		Session session=this.sessionFactory.getCurrentSession();
+		String hql="select resignUser from TblUserResignation resignUser join fetch resignUser.mstReason where resignUser.hrEmpcode=:hr_emp_code and resignUser.mstResignationStatus="+status;
+		Query query=session.createQuery(hql);
+		query.setParameter("hr_emp_code", empcode);
+		//query.setParameter("hr_emp_status", status);
+		List<TblUserResignation> approvedResignationList=query.list();
+		System.out.println("In approval daos hr init" + approvedResignationList);
+		return approvedResignationList;
+	}
+
 }

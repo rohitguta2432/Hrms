@@ -42,7 +42,8 @@ $scope.approvalInit = function() {
 				'Content-Type' : 'application/x-www-form-urlencoded'
 			}
 		}).success(function(data,status,headers,config){
-			alert('success');
+			alert(data.status);
+			//alert('success');
 		}).error(function(data,status,headers,config){
 			alert('error');
 		})

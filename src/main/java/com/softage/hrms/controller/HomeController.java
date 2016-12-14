@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPClient;
+/*import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;*/
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -238,7 +238,8 @@ public class HomeController {
 			int qid=(Integer)ques.getQid();
 			quesjson.put("qText", quesText);
 			quesjson.put("qType", questType);
-			quesjson.put("sno", count);
+			quesjson.put("sno", qid);
+			//quesjson.put("sno", count);
 			quesjson.put("qAns", "");
 			count=count+1;
 			quesList.add(quesjson);
@@ -258,13 +259,20 @@ public class HomeController {
 	public JSONObject submitRmFeedback(@RequestParam(value="answerList") String answerList,@RequestParam(value="resignAction") String resignAction,@RequestParam("feedbackon") String feedbackon,HttpServletRequest request,HttpSession session){
 		session=request.getSession();
 		String empcode=(String) session.getAttribute("employeecode");
-		System.out.println("The data is : "+answerList + " res"+ resignAction);
+		System.out.println("The data is : "+answerList + " res : "+ resignAction +" feedbackon : "+feedbackon );
+		int resignStatus=Integer.parseInt(resignAction);
+		JSONObject statusJson=new JSONObject();
 		JSONParser parser=new JSONParser();
 		try {
 			JSONObject answerJson=(JSONObject)parser.parse(answerList);
 			List<JSONObject> listAnswers=(List<JSONObject>) answerJson.get("data");
+			MstResignationStatus resignationStatus=new MstResignationStatus();
+			resignationStatus=resignationService.getStatus(resignStatus);
+			TblUserResignation resignedUser=resignationService.getResignationUserService(feedbackon, 1);
+			resignedUser.setMstResignationStatus(resignationStatus);
 			for(JSONObject answer: listAnswers){
-				String sid=String.valueOf(answer.get("sno"));
+				Long serialid=(Long) answer.get("sno");
+				int sid=serialid.intValue();
 				String ans=(String)answer.get("qAns");
 				String ques=(String)answer.get("qText");
 				String feedbackby="RM";
@@ -272,24 +280,69 @@ public class HomeController {
 				feedback.setAnsText(ans);
 				feedback.setFeedbackBy(feedbackby);
 				feedback.setFeedbackFrom(empcode);
-				//feedback.
+				MstQuestions question=approvalservice.getRmFeedbackQuestionService(sid);
+				feedback.setMstQuestions(question);
+				feedback.setTblUserResignation(resignedUser);
+				int status=approvalservice.saveRmFeedbackService(feedback);
 				System.out.println("sno"+sid+" ans : "+ans+" ques"+ ques);
 			}
+			approvalservice.updateResignationStatus(resignedUser);
+			statusJson.put("status", "Success");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return statusJson;
 	}
-	
-/*	@RequestMapping(value= "/hrapprovalInit",method=RequestMethod.GET)
+
+	@RequestMapping(value= "/hrapprovalInit",method=RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getHrApprovalInit(HttpServletRequest request,HttpSession session){
 		System.out.println("HR Initialisation");
+		JSONObject hrapprovaljson=new JSONObject();
+		int count=1;
+		DateFormat df=new SimpleDateFormat("yyyy/MM/dd");
+		List<JSONObject> acceptedResignedList=new ArrayList<JSONObject>();
 		session=request.getSession();
-		String empCode=(String)session.getAttribute("empCode");
-		return approvalservice.getHrApprovalInit(empCode);
-		
-	}*/
+		String empCode=(String)session.getAttribute("employeecode");
+		List<TblUserResignation> approvedResignationList=resignationService.getHrApprovalInitService(empCode, 2);
+		for(TblUserResignation resignedUser : approvedResignationList){
+			JSONObject acceptedResignation=new JSONObject();
+			String employee_code=resignedUser.getEmpCode();
+			ISoftAgeEnterpriseProxy emp=new ISoftAgeEnterpriseProxy();
+			try {
+				String firstname=emp.getUserDetail(employee_code).getFirstName();
+				String lastname=emp.getUserDetail(employee_code).getLastName();
+				String name=firstname+" "+lastname;
+				MstReason reason=resignedUser.getMstReason();
+				String reason_for_leaving=reason.getReason();
+				String remarks=resignedUser.getComments();
+				//int notice_period=emp.getUserDetail(employee_code).getNoticePeriod(); FROM ESF Service
+				int notice_period=60;
+				Date resDate=resignedUser.getResignationDate();
+				String resignDate=df.format(resDate);
+				String rmempcode=resignedUser.getRmEmpcode();
+				//String rm_email=emp.getUserDetail(rmempcode).getEmail(); FROM ESF SERVICE
+				String rm_email="arpan.mathur@softageindia.com";
+				acceptedResignation.put("sno", count);
+				acceptedResignation.put("empname", name);
+				acceptedResignation.put("empcode", employee_code);
+				acceptedResignation.put("leaving_reason", reason_for_leaving);
+				acceptedResignation.put("remarks", remarks);
+				acceptedResignation.put("noticetime", notice_period);
+				acceptedResignation.put("resignDate", resignDate);
+				acceptedResignation.put("rm_empcode", rmempcode);
+				acceptedResignation.put("rm_email", rm_email);
+				acceptedResignedList.add(acceptedResignation);
+				count=count+1;
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println(acceptedResignedList);
+		hrapprovaljson.put("empinfo", acceptedResignedList);
+		System.out.println(hrapprovaljson);
+		return hrapprovaljson;
+	}
 	
 	
 	@RequestMapping(value = "/getnoduesit", method = RequestMethod.GET)
@@ -473,7 +526,7 @@ public class HomeController {
 	    
 	    public static String uploadDocumentFTPClient(String file, byte[] bytes){
 	    	
-	    	  String ftpHost = "122.15.90.140";
+	    	 /* String ftpHost = "122.15.90.140";
 	          String username = "administrator";
 	          String password = "softage@tchad";
 	          FileOutputStream fos=null;
@@ -512,7 +565,7 @@ public class HomeController {
 	    	
 	    	
 	    	
-	    	
+	    	*/
 	    	
 	    	
 	    	

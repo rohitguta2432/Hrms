@@ -21,6 +21,7 @@ import org.tempuri.ISoftAgeEnterpriseProxy;
 
 import com.softage.hrms.dao.ApprovalDao;
 import com.softage.hrms.model.MstQuestions;
+import com.softage.hrms.model.TblFeedbacks;
 import com.softage.hrms.model.TblUserResignation;
 
 @Repository
@@ -104,15 +105,51 @@ public class ApprovalDaoImpl implements ApprovalDao {
 		return questionList;
 	}
 
-	@Override
+	/*@Override
 	@Transactional
 	public TblUserResignation getResignationUserDao(String emp_code) {
 		Session session=this.sessionfactory.getCurrentSession();
-		String hql="select resignation from TblUserResignation resignation where resignation.empCode=:employeecode";
+		String hql="select resignation from TblUserResignation resignation where resignation.empCode=:employeecode and resignation.mstResignationStatus=1";
 		Query query=session.createQuery(hql);
 		query.setParameter("employeecode",emp_code );
-		//List<TblUserResignation>
-		return null;
+		//List<TblUserResignation> resignedUser=query
+		TblUserResignation resignedUser=(TblUserResignation)query.uniqueResult();
+		return resignedUser;
+	}*/
+
+	@Override
+	@Transactional
+	public MstQuestions getRmFeedbackQuestionDao(int quesID) {
+		Session session=this.sessionfactory.getCurrentSession();
+		MstQuestions question=(MstQuestions)session.load(MstQuestions.class, new Integer(quesID));
+		return question;
 	}
 
+	@Override
+	@Transactional
+	public int saveRmFeedbackDao(TblFeedbacks feedback) {
+		Session session=this.sessionfactory.getCurrentSession();
+		int saveStatus=(Integer)session.save(feedback);
+		return saveStatus;
+	}
+
+	@Override
+	@Transactional
+	public void updateResignationStatusDao(TblUserResignation resBean) {
+		Session session=this.sessionfactory.getCurrentSession();
+		session.saveOrUpdate(resBean);
+	}
+
+/*	@Override
+	@Transactional
+	public List<TblUserResignation> getHrApprovalInitDao(String empcode) {
+		Session session=this.sessionfactory.getCurrentSession();
+		String hql="select resignUser from TblUserResignation resignUser join fetch resignUser.mstReason where resignUser.hrEmpcode=:hr_emp_code and resignUser.mstResignationStatus=2";
+		Query query=session.createQuery(hql);
+		query.setParameter("hr_emp_code", empcode);
+		List<TblUserResignation> approvedResignationList=query.list();
+		System.out.println("In approval daos hr init" + approvedResignationList);
+		return approvedResignationList;
+	}
+*/
 }

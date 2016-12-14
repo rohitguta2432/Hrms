@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.softage.hrms.dao.ApprovalDao;
 import com.softage.hrms.model.MstQuestions;
+import com.softage.hrms.model.TblFeedbacks;
 import com.softage.hrms.model.TblUserResignation;
 import com.softage.hrms.service.ApprovalService;
 
@@ -28,8 +29,29 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public TblUserResignation getResignationUserService(String emp_code) {
-		return null;
+	public MstQuestions getRmFeedbackQuestionService(int quesID) {
+		return approvaldao.getRmFeedbackQuestionDao(quesID);
 	}
+	
+	/*@Override
+	public TblUserResignation getResignationUserService(String emp_code) {
+		return approvaldao.getResignationUserDao(emp_code);
+	}*/
+
+	@Override
+	public int saveRmFeedbackService(TblFeedbacks feedback) {
+		return approvaldao.saveRmFeedbackDao(feedback);
+	}
+
+	@Override
+	public void updateResignationStatus(TblUserResignation resBean) {
+		approvaldao.updateResignationStatusDao(resBean);
+	}
+
+	/*@Override
+	public List<TblUserResignation> getHrApprovalInitService(String empcode) {
+		return approvaldao.getHrApprovalInitDao(empcode);
+	}
+*/
 
 }

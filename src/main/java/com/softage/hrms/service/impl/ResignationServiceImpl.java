@@ -1,5 +1,7 @@
 package com.softage.hrms.service.impl;
 
+import java.util.List;
+
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,4 +66,16 @@ public class ResignationServiceImpl implements ResignationService {
 		return resignationdao.getStatusMast(statusVal);
 	}
 
+	@Override
+	public TblUserResignation getResignationUserService(String emp_code, int status) {
+		return resignationdao.getResignationUserDao(emp_code,status);
+	}
+
+	@Override
+	public List<TblUserResignation> getHrApprovalInitService(String empcode, int status) {
+		// TODO Auto-generated method stub
+		return resignationdao.getHrApprovalInitDao(empcode,status);
+	}
+
+	
 }

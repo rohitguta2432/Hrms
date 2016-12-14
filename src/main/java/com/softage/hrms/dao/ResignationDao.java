@@ -1,5 +1,7 @@
 package com.softage.hrms.dao;
 
+import java.util.List;
+
 import org.json.simple.JSONObject;
 
 import com.softage.hrms.model.MstReason;
@@ -19,5 +21,7 @@ public interface ResignationDao {
 	public int getHrIdDao(String empcode);
 	public MstReason getReasonMast(int reasonValue);
 	public MstResignationStatus getStatusMast(int statusValue);
+	public TblUserResignation getResignationUserDao(String emp_code,int status);
+	public List<TblUserResignation> getHrApprovalInitDao(String empcode,int status);
 
 }

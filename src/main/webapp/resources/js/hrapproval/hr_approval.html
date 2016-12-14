@@ -38,46 +38,34 @@
 															<thead>
 																<tr>
 																	<th>S.No</th>
-																	<th>Firstname</th>
-																	<th>Lastname</th>
+																	<th>Name</th>
 																	<th>Employee Code</th>
 																	<th>Reason</th>
 																	<th>Comments</th>
 																	<th>Notice Period</th>
 																	<th>Resignation Date</th>
-																	<th>Releiving Date</th>
-																	<th>RM First Name</th>
-																	<th>RM Last Name</th>
 																	<th>RM Employee Code</th>
 																	<th>RM Email ID</th>
-																	<th>Status</th>
-																	<th>Notice Set By RM</th>
 																	<th>Action</th>
 																</tr>
 															</thead>
 															<tbody ng-repeat="emp in employeeInfo">
 																<tr>
 																	<td>{{emp.sno}}</td>
-																	<td>{{emp.firstname}}</td>
-																	<td>{{emp.lastname}}</td>
+																	<td>{{emp.empname}}</td>
 																	<td>{{emp.empcode}}</td>
 																	<td>{{emp.leaving_reason}}</td>
 																	<td>{{emp.remarks}}</td>
 																	<td>{{emp.noticetime}}</td>
 																	<td>{{emp.resignDate}}</td>
-																	<td>{{emp.relDate}}</td>
-																	<td>{{emp.rm_fname}}</td>
-																	<td>{{emp.rm_lname}}</td>
 																	<td>{{emp.rm_empcode}}</td>
 																	<td>{{emp.rm_email}}</td>
-																	<td>{{emp.status}}</td>
-																	<td>{{emp.noticeByRm}}</td>
 																	<td><button 
-																	ng-click="openHrAction(emp.firstname,emp.lastname,
+																	ng-click="openHrAction(emp.empname,
 																	emp.empcode,emp.leaving_reason,emp.remarks
-																	,emp.noticetime,emp.resignDate,emp.relDate,
-																	emp.rm_fname,emp.rm_lname,emp.rm_empcode,
-																	emp.rm_email,emp.emp.status,emp.noticeByRm)">
+																	,emp.noticetime,emp.resignDate,
+																	emp.rm_empcode,
+																	emp.rm_email)">
 																	</button></td>
 																</tr>
 															</tbody>

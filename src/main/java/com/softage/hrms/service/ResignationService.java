@@ -1,5 +1,7 @@
 package com.softage.hrms.service;
 
+import java.util.List;
+
 import org.json.simple.JSONObject;
 
 import com.softage.hrms.model.MstReason;
@@ -19,5 +21,7 @@ public interface ResignationService {
 	public int getHrID(String empcode);
 	public MstReason getReason(int reasonVal);
 	public MstResignationStatus getStatus(int statusVal);
+	public TblUserResignation getResignationUserService(String emp_code,int status);
+	public List<TblUserResignation> getHrApprovalInitService(String empcode,int status);
 
 }
