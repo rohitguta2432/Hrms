@@ -13,9 +13,12 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.softage.hrms.dao.EmployeeDocumentDao;
 import com.softage.hrms.dao.ResignationDao;
 //import com.softage.hrms.model.ResignationBean;
 import com.softage.hrms.model.MstReason;
@@ -24,6 +27,8 @@ import com.softage.hrms.model.TblUserResignation;
 
 @Repository
 public class ResignationDaoImpl implements ResignationDao {
+	private static final Logger logger = LoggerFactory.getLogger(ResignationDaoImpl.class);
+
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -190,5 +195,6 @@ public class ResignationDaoImpl implements ResignationDao {
 		System.out.println("In approval daos hr init" + approvedResignationList);
 		return approvedResignationList;
 	}
+
 
 }

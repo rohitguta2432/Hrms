@@ -3,6 +3,13 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Submit Resignation</title>
+
+<script type="text/javascript">
+
+
+
+
+</script>
 </head>
 <body class="no-skin">
 	<div class="main-container" id="main-container"
@@ -33,12 +40,14 @@
 											<div class="widget-body" style="display: block;">
 												<div class="widget-main form-horizontal">
 
-													<form  name="f1" ng-submit="SaveFile($event)"  accept-charset="UTF-8" enctype="multipart/form-data">
+													<form  name="f1"   accept-charset="UTF-8" enctype="multipart/form-data">
 
-														<div class="form-group col-sm-6"
-															ng-repeat="item in uploadItems">
+														<div class="form-group col-sm-6" ng-repeat="item in uploadItems">
+															
+													<!--  <div > -->
+												
 															<label class="col-sm-3 control-label no-padding-right"
-																style="margin-top: 10px; font-weight: bold">{{item}}</label>
+																style="margin-top: 10px; font-weight: bold">{{item.name}}</label>
 															<div class="col-sm-4" style="margin-top: 10px;">
 																<input type="file" name="file"
 																	onchange="angular.element(this).scope().selectedFileforUpload(this.files)"
@@ -49,9 +58,7 @@
 															</div>
 
 															<div class="col-sm-5" style="margin-top: 10px;">
-
-
-																<input type="submit" class="btn btn-azure shiny"
+																<input type="submit" ng-click="SaveFile($event,item.itemId)"  id="{{item.itemId}}" class="btn btn-azure shiny"
 																	value="Upload" style="float: left;" />
 
 															</div>

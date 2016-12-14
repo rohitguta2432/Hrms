@@ -22,6 +22,6 @@ public interface ResignationService {
 	public MstReason getReason(int reasonVal);
 	public MstResignationStatus getStatus(int statusVal);
 	public TblUserResignation getResignationUserService(String emp_code,int status);
-	public List<TblUserResignation> getHrApprovalInitService(String empcode,int status);
+	public JSONObject getHrApprovalInitService(String empcode,int status);
 
 }

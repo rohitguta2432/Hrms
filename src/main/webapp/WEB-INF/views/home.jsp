@@ -31,6 +31,7 @@
 	<script src="resources/js/rmapproval/approval.js"></script>
 	<!-- <script src="resources/js/approvalActionModal.js"></script> -->
 	<script src="resources/js/resignation/resignation.js"></script>
+	<script src="resources/js/dowmloadDocument/download.js"></script>
 	<script src="resources/js/document/upload.js"></script>
 	<script src="resources/js/exitemprate.js"></script>
 	<!-- <script src="resources/js/exitrm.js"></script> -->

@@ -5,18 +5,18 @@
 		.success(function(data,status,headers,config){
 			//alert('the data returned is : '+JSON.stringify({data : data}));
 			$scope.uploadItems=data;
-			
+
 			alert("List  "+$scope.uploadItems);
 		})
 		.error(function(data,status,headers,config){
 			alert('the error returned is : '+JSON.stringify({data : data}));
 		})
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 
 }]).factory('FileProductUploadService', function ($http, $q) {
    // alert("factory of agent");
@@ -46,7 +46,7 @@
     return fac;
 });
 
-*/
+ */
 
 
 
@@ -54,45 +54,48 @@
 
 
 
-application.controller('documentManagement', ['$scope', '$http', 'FileProductUploadService', function ($scope, $http, FileProductUploadService) {
+application.controller('documentManagement', ['$scope', '$http','$modal','FileProductUploadService','$location','$rootScope', function ($scope, $http,$modal,FileProductUploadService,$location,$rootScope) {
 
-    $scope.Message = '';
-    $scope.FileInvalidMessage = '';
-    $scope.SelectedFileForUpload = null;
-    $scope.FileDescription = '';
-    $scope.IsFormSubmitted = false;
-    $scope.IsFileValid = false;
-    $scope.IsFormValid = false;
-    $scope.selectedProduct = {};
-    $scope.$watch("f1.$valid", function (isValid) {
-        $scope.IsFormValid = isValid;
+	$scope.Message = '';
+	$scope.FileInvalidMessage = '';
+	$scope.SelectedFileForUpload = null;
+	$scope.FileDescription = '';
+	$scope.IsFormSubmitted = false;
+	$scope.IsFileValid = false;
+	$scope.IsFormValid = false;
+	$scope.selectedProduct = {};
+	$scope.uploadId="";
+	$scope.$watch("f1.$valid", function (isValid) {
+		$scope.IsFormValid = isValid;
 
-    });
-    $scope.checkFileValid = function (file) {
-        var isValid = true;
-        $scope.IsFileValid = isValid;
-    };
+	});
+	$scope.checkFileValid = function (file) {
+		var isValid = true;
+		$scope.IsFileValid = isValid;
+	};
 
-    $scope.selectedFileforUpload = function (file) {
-        $scope.SelectedFileForUpload = file[0];
-    };
+	$scope.selectedFileforUpload = function (file) {
+		$scope.SelectedFileForUpload = file[0];
+	};
 
-    $scope.SaveFile = function (ev) {
+	$scope.SaveFile = function (ev,item) {
 
-    	alert("file uploaded  >>>>>");
+		$scope.uploadId=item;
+		//	var uploadId=document.getElementById ('uploadId')).value;
+		//	alert("file uploaded Id >>>>>"+uploadId);
 
-        $scope.IsFormSubmitted = true;
-        $scope.Message = '';
-      
-        $scope.checkFileValid($scope.SelectedFileForUpload);
-        alert($scope.SelectedFileForUpload);
-        alert($scope.IsFormValid);
-        alert($scope.IsFileValid);
+		$scope.IsFormSubmitted = true;
+		$scope.Message = '';
 
-        if ($scope.IsFileValid) {
-            FileProductUploadService.UploadFile($scope.SelectedFileForUpload).then(function (d) {
+		$scope.checkFileValid($scope.SelectedFileForUpload);
+		alert($scope.SelectedFileForUpload);
+		alert($scope.IsFormValid);
+		alert($scope.IsFileValid);
 
-            /*    var confirm = $mdDialog.confirm()
+		if ($scope.IsFileValid) {
+			FileProductUploadService.UploadFile($scope.SelectedFileForUpload,$scope.uploadId).then(function (d) {
+
+				/*    var confirm = $mdDialog.confirm()
                     // .title('Would you like to delete your debt?')
                     .textContent(d.data.Message)
                     .ariaLabel('Lucky day')
@@ -110,11 +113,11 @@ application.controller('documentManagement', ['$scope', '$http', 'FileProductUpl
                 }, function() {
                     $scope.status = 'You decided to keep your debt.';
                 });*/
-                ClearForm();
+				ClearForm();
 
-            }, function (err) {
+			}, function (err) {
 
-/*
+				/*
                 var confirm = $mdDialog.confirm()
                     // .title('Would you like to delete your debt?')
                     .textContent(err)
@@ -128,51 +131,67 @@ application.controller('documentManagement', ['$scope', '$http', 'FileProductUpl
                     $scope.status = 'You decided to keep your debt.';
                 });*/
 
-            });
-        }
-        else
-        {
-            $scope.Message = 'all the fields are required';
-        }
-    };
+			});
+		}
+		else
+		{
+			$scope.Message = 'all the fields are required';
+		}
+	};
 
-    function ClearForm() {
-        $scope.FileDescription = '';
-        angular.forEach(angular.element("input[type='file']"), function (inputElem) {
-            angular.element(inputElem).val(null);
-        });
+	function ClearForm() {
+		$scope.FileDescription = '';
+		angular.forEach(angular.element("input[type='file']"), function (inputElem) {
+			angular.element(inputElem).val(null);
+		});
 
-        $scope.IsFormSubmitted = false;
-        $scope.description = '';
-        $scope.SelectedFileForUpload = null;
+		$scope.IsFormSubmitted = false;
+		$scope.description = '';
+		$scope.SelectedFileForUpload = null;
 
-    }
+	}
 
-    $scope.files = [];
+	$scope.files = [];
 
-    $scope.$on("fileSelected", function (event, args) {
-        $scope.$apply(function () {
-            //add the file object to the scope's files collection
-            $scope.files.push(args.file);
-        });
-    });
+	$scope.$on("fileSelected", function (event, args) {
+		$scope.$apply(function () {
+			//add the file object to the scope's files collection
+			$scope.files.push(args.file);
+		});
+	});
 
 
-/*    $scope.exportToExcel=function(){// ex: '#my-table'
+	/*    $scope.exportToExcel=function(){// ex: '#my-table'
         var blob = new Blob([document.getElementById('exportable').innerHTML], {
             type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
         });
         saveAs(blob, "Report.xls");
     }*/
 
-    
+	$scope.getUploadEmpList=function(){
+		alert(' geting Upload Items   ');
+
+		$http.get(domain+'/getEmpUploadList')
+		.success(function(data,status,headers,config){
+			//alert('the data returned is : '+JSON.stringify({data : data}));
+			$scope.uploadEmpList=data.empinfo;
+
+		})
+		.error(function(data,status,headers,config){
+			alert('the error returned is : '+JSON.stringify({data : data}));
+		})
+	}
+
+
+
 	$scope.getItems=function(){
 		alert(' geting Upload Items   ');
+
 		$http.get(domain+'/getUploadItems')
 		.success(function(data,status,headers,config){
 			//alert('the data returned is : '+JSON.stringify({data : data}));
 			$scope.uploadItems=data;
-			
+
 			alert("List  "+$scope.uploadItems);
 		})
 		.error(function(data,status,headers,config){
@@ -182,30 +201,48 @@ application.controller('documentManagement', ['$scope', '$http', 'FileProductUpl
 
 
 
+	$scope.actionUpload=function(empcode,resignId){
+		var scope=$rootScope.$new();
+		scope.params={empcode:empcode,resignId:resignId};
+
+		var modalInstance = $modal.open({
+			scope:scope,
+			templateUrl : 'resources/js/document/upload.html',
+			controller 	: 'documentManagement',
+			resolve:{
+				name: function(){
+					return name;
+				}
+			}
+		});
+	}
+
+
+
 }]).factory('FileProductUploadService', function ($http, $q) {
-   // alert("factory of agent");
-    var fac = {};
+	// alert("factory of agent");
+	var fac = {};
 
-    fac.UploadFile = function (file) {
+	fac.UploadFile = function (file,uploadId) {
+		alert("file UploadFile Id >>>>>"+uploadId);
 
-        alert("Agent Uplaod Data");
+		var formData = new FormData();
+		formData.append("file", file);
+		formData.append("uploadId", uploadId);
 
-        var formData = new FormData();
-        formData.append("file", file);
+		var defer = $q.defer();
+		$http.post(domain+"/upload", formData, {
+			withCredentials: true,
+			headers: { "Content-Type": undefined },
+			transformRequest: angular.identity
+		}).then(
+				function (d) {
+					defer.resolve(d);
+				},function (err) {
+					defer.reject("File Upload Failed");
+				});
+		return defer.promise;
+	}
 
-        var defer = $q.defer();
-        $http.post(domain+"/upload", formData, {
-            withCredentials: true,
-            headers: { "Content-Type": undefined },
-            transformRequest: angular.identity
-        }).then(
-            function (d) {
-                defer.resolve(d);
-            },function (err) {
-                defer.reject("File Upload Failed");
-            });
-        return defer.promise;
-    }
-
-    return fac;
+	return fac;
 });

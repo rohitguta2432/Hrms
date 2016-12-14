@@ -67,10 +67,14 @@ application.config(function($stateProvider, $urlRouterProvider) {
 		url:'/RM_NODUES',
 		templateUrl:'resources/js/noduesrm.html',
 		controller:'homeController'
-	}).state('DocumentManagement',{
-		url:'/DocumentManagement',
-		templateUrl:'resources/js/document/upload.html',
+	}).state('DocumentUpload',{
+		url:'/DocumentUpload',
+		templateUrl:'resources/js/document/userDetailUpload.html',
 		controller:'documentManagement'
+	}).state('DocumentDownload',{
+		url:'/DocumentDownload',
+		templateUrl:'resources/js/dowmloadDocument/download.html',
+		controller:'documentDownload'
 	}).state('nodueshr',{
 		url:'/HR_NODUES',
 		templateUrl:'resources/js/nodueshr.html',

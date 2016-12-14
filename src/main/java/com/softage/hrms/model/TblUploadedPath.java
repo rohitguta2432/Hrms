@@ -2,6 +2,8 @@ package com.softage.hrms.model;
 // Generated Dec 6, 2016 10:45:57 AM by Hibernate Tools 5.2.0.Beta1
 
 import java.util.Date;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -58,7 +60,7 @@ public class TblUploadedPath implements java.io.Serializable {
 		this.pathId = pathId;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinColumn(name = "item_id")
 	public MstUploadItem getMstUploadItem() {
 		return this.mstUploadItem;
@@ -68,7 +70,7 @@ public class TblUploadedPath implements java.io.Serializable {
 		this.mstUploadItem = mstUploadItem;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinColumn(name = "resign_id")
 	public TblUserResignation getTblUserResignation() {
 		return this.tblUserResignation;

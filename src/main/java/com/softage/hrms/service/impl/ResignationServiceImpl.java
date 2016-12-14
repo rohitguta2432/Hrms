@@ -1,10 +1,16 @@
 package com.softage.hrms.service.impl;
 
+import java.rmi.RemoteException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.tempuri.ISoftAgeEnterpriseProxy;
 
 import com.softage.hrms.dao.ResignationDao;
 import com.softage.hrms.model.MstReason;
@@ -15,7 +21,7 @@ import com.softage.hrms.service.ResignationService;
 
 @Service
 public class ResignationServiceImpl implements ResignationService {
-	
+
 	@Autowired
 	private ResignationDao resignationdao;
 
@@ -26,7 +32,7 @@ public class ResignationServiceImpl implements ResignationService {
 
 	@Override
 	public String getRmEmail(String emp_Code) {
-		
+
 		return resignationdao.getRmEmailDao(emp_Code);
 	}
 
@@ -37,7 +43,7 @@ public class ResignationServiceImpl implements ResignationService {
 
 	@Override
 	public int getNoticePeriodTime(String emp_code) {
-		
+
 		return resignationdao.getNoticeTime(emp_code);
 	}
 
@@ -72,10 +78,58 @@ public class ResignationServiceImpl implements ResignationService {
 	}
 
 	@Override
-	public List<TblUserResignation> getHrApprovalInitService(String empcode, int status) {
+	public JSONObject getHrApprovalInitService(String empcode, int status) {
 		// TODO Auto-generated method stub
-		return resignationdao.getHrApprovalInitDao(empcode,status);
-	}
+		int count=1;
+		JSONObject hrapprovaljson=new JSONObject();
 
-	
+		DateFormat df=new SimpleDateFormat("yyyy/MM/dd");
+		List<JSONObject> acceptedResignedList=new ArrayList<JSONObject>();
+		List<TblUserResignation> approvedResignationList= resignationdao.getHrApprovalInitDao(empcode,status);
+		try {
+		for(TblUserResignation resignedUser : approvedResignationList){
+			JSONObject acceptedResignation=new JSONObject();
+			String employee_code=resignedUser.getEmpCode();
+			ISoftAgeEnterpriseProxy emp=new ISoftAgeEnterpriseProxy();
+		
+				String firstname=emp.getUserDetail(employee_code).getFirstName();
+				String lastname=emp.getUserDetail(employee_code).getLastName();
+				String name=firstname+" "+lastname;
+				MstReason reason=resignedUser.getMstReason();
+				String reason_for_leaving=reason.getReason();
+				int resignId=resignedUser.getResignationId();
+				String remarks=resignedUser.getComments();
+				//int notice_period=emp.getUserDetail(employee_code).getNoticePeriod(); FROM ESF Service
+				int notice_period=60;
+				Date resDate=resignedUser.getResignationDate();
+				String resignDate=df.format(resDate);
+				String rmempcode=resignedUser.getRmEmpcode();
+				//String rm_email=emp.getUserDetail(rmempcode).getEmail(); FROM ESF SERVICE
+				String rm_email="arpan.mathur@softageindia.com";
+				acceptedResignation.put("sno", count);
+				acceptedResignation.put("empname", name);
+				acceptedResignation.put("empcode", employee_code);
+				acceptedResignation.put("leaving_reason", reason_for_leaving);
+				acceptedResignation.put("remarks", remarks);
+				acceptedResignation.put("noticetime", notice_period);
+				acceptedResignation.put("resignDate", resignDate);
+				acceptedResignation.put("rm_empcode", rmempcode);
+				acceptedResignation.put("resignId", resignId);
+				acceptedResignation.put("rm_email", rm_email);
+				acceptedResignedList.add(acceptedResignation);
+				count=count+1;
+			} 
+			}catch (RemoteException e) {
+				e.printStackTrace();
+			}
+			System.out.println(acceptedResignedList);
+			hrapprovaljson.put("empinfo", acceptedResignedList);
+			System.out.println(hrapprovaljson);
+
+
+
+
+		
+		return hrapprovaljson;
+	}
 }

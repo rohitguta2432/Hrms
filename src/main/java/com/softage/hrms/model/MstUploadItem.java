@@ -4,6 +4,8 @@ package com.softage.hrms.model;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -92,7 +94,7 @@ public class MstUploadItem implements java.io.Serializable {
 		this.createdOn = createdOn;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "mstUploadItem")
+	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "mstUploadItem")
 	public Set<TblUploadedPath> getTblUploadedPaths() {
 		return this.tblUploadedPaths;
 	}
