@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>NO DUES ASSETS</title>
+<title>Exit Interview With HR</title>
 </head>
 <body class="no-skin">
 	<div class="main-container" id="main-container"
@@ -12,7 +12,7 @@
 			} catch (e) {
 			}
 		</script>
-		<div class="main-content" ng-controller="noduesitmodaljscontroller" ng-init="init()">
+		<div class="main-content" ng-controller="feedbackmodalcontroller" ng-init="init()">
 
 			<div class="page-content">
 				<div class="page-content-area">
@@ -26,10 +26,10 @@
 										<div class="widget-box ui-sortable-handle"
 											style="opacity: 1; z-index: 0;">
 											<div class="widget-header">
-												<h5 class="widget-title"> NO DUES IT ASSETS</h5>
+												<h5 class="widget-title"> HR FEEDBACK</h5>
 
 											</div>
-											<form name="it" ng-submit=submit(it) novalidate>
+											<form name="hrfeedback" ng-submit=submit(hrfeedback) novalidate>
 												<div class="widget-body" style="display: block;">
 													<div class="widget-main form-horizontal">
 													
@@ -40,7 +40,7 @@
 															<label class="col-sm-3 control-label no-padding-right"
 																for="employeecode">Employee code </label>
 															<div class="col-sm-9">
-<input type="text"  class="col-xs-10 col-sm-12" name="employeecode"  ng-model="emplycode" ng-disabled="true"/>
+<input type="text"  class="col-xs-10 col-sm-12" name="employeecode"  ng-model="employeecode" ng-disabled="true"/>
 				</div>
 </div>
 <div class="clearfix"></div>
@@ -49,7 +49,7 @@
 															<label class="col-sm-3 control-label no-padding-right"
 																for="firstname"> First name </label>
 															<div class="col-sm-9">
-<input type="text"  class="col-xs-10 col-sm-12" name="firstname"  ng-model="empfirstname" ng-disabled="true"/>
+<input type="text"  class="col-xs-10 col-sm-12" name="firstname"  ng-model="employeefirstname" ng-disabled="true"/>
 				
 															</div>
 														</div>
@@ -59,7 +59,7 @@
 															<label class="col-sm-3 control-label no-padding-right"
 																for="lastname"> Last name </label>
 															<div class="col-sm-9">
-<input type="text" class="col-xs-10 col-sm-12" name="lastname"  ng-model="emplastname" ng-disabled="true"/>
+<input type="text" class="col-xs-10 col-sm-12" name="lastname"  ng-model="employeelastname" ng-disabled="true"/>
 					
 															</div>
 														</div>		
@@ -71,10 +71,8 @@
 																for="department">Department </label>
 
 															<div class="col-sm-9">
- <!-- <select class="form-control" id="department" ng-model="Empdepartment" required="required">
- <option ng-repeat="department in Empdepartment" value="{{department}}">{{department}}</option>  
- </select> -->
- <input type="text"  class="col-xs-10 col-sm-12" name="department" ng-model="empdepartment" ng-disabled="true"/>
+
+ <input type="text"  class="col-xs-10 col-sm-12" name="department" ng-model="employeedepartment" ng-disabled="true"/>
 	
 															</div>
 														</div>
@@ -89,59 +87,37 @@
 															<div class="col-sm-9">
 
 	<span ng-show="Exit.designation.$error.required">Select one designation!</span> -->
-	<input type="text"  class="col-xs-10 col-sm-12" name="designation" ng-model="empdesignation" ng-disabled="true"/>
+	<input type="text"  class="col-xs-10 col-sm-12" name="designation" ng-model="employeedesignation" ng-disabled="true"/>
 															</div>
 														</div>
 														
-
-
 <div class="clearfix"></div>
 
-														<div class="form-group col-sm-6">
+							<div class="form-group col-sm-6">
 															<label class="col-sm-3 control-label no-padding-right"
 																for="emplocation">Location </label>
 
 															<div class="col-sm-9">
-				<input type="text"  class="col-xs-10 col-sm-12" name="emplocation" ng-model="emplocation" ng-disabled="true"/>
+				<input type="text"  class="col-xs-10 col-sm-12" name="emplocation" ng-model="employeelocation" ng-disabled="true"/>
 															</div>
 														</div>
 														
 														
 														<div class="clearfix"></div>
-											 <div class="widget-body" style="display: block;">
-												<div class="widget-main">
-													<div class="table-responsive">
-														<table class="table">
-														 
-														 <thead>
-																<tr>
-																	<th>item</th>
-																	<th>issued</th>
-																	 <th>received</th> 
-																</tr>
-															</thead>
-													
-														  <tbody ng-repeat="emp in nodueitassets">      
-	<tr><td>{{emp.name}}</td><td><input type="checkbox" value="{{emp.name}}" ng-model="checked" ng-init="checked=true"/></td><td><input type="checkbox" value="{{emp.name}}" ng-model="emp.selected" required></td>
-								 </tr>
-							</tbody>
-						 </table>
-						</div>
-					</div>
-				</div> 
-				<div class="clearfix"></div>					
-					<label for="comment">COMMENTS:</label>
- <textarea    rows="1" cols="20" placeholder="comments..." ng-model="empcomments"  required></textarea>
- <span ng-show="accounts.comment.$dirty && accounts.comment.$error.required">This field is required</span>
-					<div class="modal-footer">
-                <button type="submit" value="submit" ng-disabled="accounts.$invalid" class="btn btn-primary">ACCEPT</button>
-                <button type="reset" class="btn btn-warning"  ng-disabled="comment.$invalid"  ng-click="reject()">REJECT</button>									
+											
+
 														
-														
+														<div class="clearfix"></div>
+														<center><h3>Exit Interview Feedback</h3></center>
+														<div class="clearfix"></div><!-- value={{feedback.question}} -->
+<div ng-repeat="feedback in hrquestion">
+<div ng-if="feedback.qtype=='textarea'">
+{{feedback.question}}<br/><textarea rows="1" cols="20"  ng-model="feedback.value"></textarea></div>
+								</div>						
 														<div class="clearfix"></div>
 
 														<div class="center">
-															<!-- <input type="submit" ng-disabled="Exit.$invalid" value="submit"> -->
+															<input type="submit"  value="submit">
 														</div>
 													</div>
 												</div>

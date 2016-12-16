@@ -13,7 +13,7 @@
 			} /* ng-init="init()" */
 		</script>
 		<div class="main-content"
-			ng-controller="noduesaccountsmodalcontroller" ng-init="init()">
+			ng-controller="nodueshrmodalcontroller" ng-init="init()">
 
 			<div class="page-content">
 				<div class="page-content-area">
@@ -27,7 +27,7 @@
 										<div class="widget-box ui-sortable-handle"
 											style="opacity: 1; z-index: 0;">
 											<div class="widget-header">
-												<h5 class="widget-title">NO DUES ACCOUNTS ASSETS</h5>
+												<h5 class="widget-title">NO DUES HR ASSETS</h5>
 
 											</div>
 											<form name="accounts" ng-submit=submit(accounts) novalidate>
@@ -78,7 +78,9 @@
 																for="department">Department </label>
 
 															<div class="col-sm-9">
-		
+																<!-- <select class="form-control" id="department" ng-model="Empdepartment" required="required">
+ <option ng-repeat="department in Empdepartment" value="{{department}}">{{department}}</option>  
+ </select> -->
 																<input type="text" class="col-xs-10 col-sm-12"
 																	name="department" ng-model="empdepartment"
 																	ng-disabled="true" />
@@ -131,29 +133,25 @@
 																</tr>
 															</thead>
 													
-														  <tbody ng-repeat="emp in nodueaccountassets">      
-				 <td>{{emp.name}}</td>  <td> <input type="checkbox" ng-model="emp.selected" value="{{emp.name}}" required/></td>  
-								            </tr>
+														  <tbody ng-repeat="emp in nodueshrassets">      
+														<tr>
+								<td>{{emp.name}}</td><td> <input type="checkbox"  ng-model="emp.selected" value="{{emp.name}}" required/></td>
+								 
+								 </tr>
 							</tbody>
 						 </table>
-						
 						</div>
 					</div>
 				</div> 
-				
-										
-		
-														</div>
+							</div>
 
-														<label for="comment">COMMENTS:</label>
-	<textarea rows="1" cols="20" name="comment" placeholder="comments..." ng-model="empcomments" required> </textarea>
+						<label for="comment">COMMENTS:</label>
+	<textarea rows="1" cols="20" name="comment"  placeholder="comments..." ng-model="empcomments"></textarea>
 	<span ng-show="accounts.comment.$dirty && accounts.comment.$error.required">This field is required</span>
-  
 														<div class="modal-footer">
 														<span ></span>
-														  
+														
 			<button type="submit" value="submit" ng-disabled="accounts.$invalid" class="btn btn-primary">ACCEPT</button> 
-			
 			<button type="reset" class="btn btn-warning" ng-disabled="comment.$invalid" ng-click="reject()">REJECT</button>
 
 

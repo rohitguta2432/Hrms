@@ -15,7 +15,10 @@ import org.springframework.stereotype.Repository;
 import org.w3c.dom.ls.LSInput;
 
 import com.softage.hrms.dao.NoDuesDao;
+
 import com.softage.hrms.model.MstAssests;
+import com.softage.hrms.model.TblAssetsManagement;
+import com.softage.hrms.model.TblNoDuesClearence;
 
 @Repository
 public class NoDuesDaoImpl implements NoDuesDao {
@@ -29,8 +32,8 @@ public class NoDuesDaoImpl implements NoDuesDao {
 	public List<String> getrmacceptedempcode() {
 
 		org.hibernate.Session session=sessionfactory.getCurrentSession();
-		String sql="select emp_code from tbl_user_resignation where status=2";
-		Query query=session.createSQLQuery(sql);
+		String hql="select empCode from TblUserResignation where status=2";
+		Query query=session.createQuery(hql);
 		List<String> listempcode=query.list();
 
 		return listempcode;
@@ -39,29 +42,53 @@ public class NoDuesDaoImpl implements NoDuesDao {
 
 	@Override
 	@Transactional
-	public List<String> getassetsdetails() {
+	public List<JSONObject> getassetsdetails(int departmentid) {
+	
+		
+    org.hibernate.Session session=sessionfactory.getCurrentSession();
+    JSONObject json =new JSONObject();
+      String hql="from MstAssests d where d.departmentId=:departmentid"; 	 
+     Query query=session.createQuery(hql);	
+     query.setParameter("departmentid", departmentid);
+     
+     List<JSONObject> stringlist=new ArrayList<JSONObject>();
+     List<MstAssests> listassets=query.list();
+     for(MstAssests assets:listassets)
+     {
+    	 JSONObject JSONObject=new JSONObject();
+    	 JSONObject.put("name", assets.getAssetsName());
+       	 stringlist.add(JSONObject);    	 
+      
+     }    
+      return stringlist;
 
-		/*ArrayList<JSONObject> arrayjson=new ArrayList<JSONObject>();*/
-		/*JSONObject listjson=new JSONObject();*/
-
-		Session session=sessionfactory.getCurrentSession();
-		JSONObject json =new JSONObject();
-		String hql="from MstAssests"; 	 
-		Query query=session.createQuery(hql);	
-		List<String> stringlist=new ArrayList<String>();
-		List<MstAssests> listassets=query.list();
-		for(MstAssests assets:listassets)
-		{
-
-			stringlist.add(assets.getAssetsName());
-
-			/*System.out.println("dao "+ stringlist);*/
-		}
-
-		/*json.put("listarray", arrayjson);*/
+	}
 
 
-		return stringlist;
+	@Override
+	@Transactional
+	public JSONObject insertnoduesassetsdetails(TblAssetsManagement accountbean) {
+		
+		JSONObject insertbean=new JSONObject();
+		org.hibernate.Session session=sessionfactory.getCurrentSession();
+	    
+		
+		
+		session.save(accountbean);
+		
+		
+		return insertbean;
+	}
+    
+	@Override
+	@Transactional
+	public JSONObject insertnoduesclearence(TblNoDuesClearence clearencebean) {
+		JSONObject insertclearence=new JSONObject();
+		
+		org.hibernate.Session session=sessionfactory.getCurrentSession();
+		session.save(clearencebean);
+		
+		return insertclearence;
 	}
 
 }

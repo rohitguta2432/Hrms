@@ -10,10 +10,9 @@
 			try {
 				ace.settings.check('main-container', 'fixed')
 			} catch (e) {
-			} /* ng-init="init()" */
+			}
 		</script>
-		<div class="main-content"
-			ng-controller="noduesaccountsmodalcontroller" ng-init="init()">
+		<div class="main-content" ng-controller="noduesinframodalcontroller" ng-init="init()">
 
 			<div class="page-content">
 				<div class="page-content-area">
@@ -27,99 +26,89 @@
 										<div class="widget-box ui-sortable-handle"
 											style="opacity: 1; z-index: 0;">
 											<div class="widget-header">
-												<h5 class="widget-title">NO DUES ACCOUNTS ASSETS</h5>
+												<h5 class="widget-title"> NO DUES INFRA ASSETS</h5>
 
 											</div>
-											<form name="accounts" ng-submit=submit(accounts) novalidate>
+											<form name="Exit" ng-submit=submit(Exit) novalidate>
 												<div class="widget-body" style="display: block;">
 													<div class="widget-main form-horizontal">
-
-														<div class="clearfix"></div>
-
-
-														<div class="form-group row col-sm-6">
+													
+												<div class="clearfix"></div>	
+													
+								
+<div class="form-group row col-sm-6">
 															<label class="col-sm-3 control-label no-padding-right"
 																for="employeecode">Employee code </label>
 															<div class="col-sm-9">
-																<input type="text" class="col-xs-10 col-sm-12"
-																	name="employeecode" ng-model="emplycode"
-																	ng-disabled="true" />
-															</div>
-														</div>
-														<div class="clearfix"></div>
+<input type="text"  class="col-xs-10 col-sm-12" name="employeecode"  ng-model="emplycode" ng-disabled="true"/>
+				</div>
+</div>
+<div class="clearfix"></div>
 
-														<div class="form-group row col-sm-6">
+                                                            <div class="form-group row col-sm-6">
 															<label class="col-sm-3 control-label no-padding-right"
 																for="firstname"> First name </label>
 															<div class="col-sm-9">
-																<input type="text" class="col-xs-10 col-sm-12"
-																	name="firstname" ng-model="empfirstname"
-																	ng-disabled="true" />
-
+<input type="text"  class="col-xs-10 col-sm-12" name="firstname"  ng-model="empfirstname" ng-disabled="true"/>
+				
 															</div>
 														</div>
-
-
-														<div class="form-group row col-sm-6">
+														
+														
+												<div class="form-group row col-sm-6">
 															<label class="col-sm-3 control-label no-padding-right"
 																for="lastname"> Last name </label>
 															<div class="col-sm-9">
-																<input type="text" class="col-xs-10 col-sm-12"
-																	name="lastname" ng-model="emplastname"
-																	ng-disabled="true" />
-
+<input type="text" class="col-xs-10 col-sm-12" name="lastname"  ng-model="emplastname" ng-disabled="true"/>
+					
 															</div>
-														</div>
-
-
-														<div class="clearfix"></div>
+														</div>		
+														
+														
+<div class="clearfix"></div>
 														<div class="form-group col-sm-6">
 															<label class="col-sm-3 control-label no-padding-right"
 																for="department">Department </label>
 
 															<div class="col-sm-9">
-		
-																<input type="text" class="col-xs-10 col-sm-12"
-																	name="department" ng-model="empdepartment"
-																	ng-disabled="true" />
-
+ <!-- <select class="form-control" id="department" ng-model="Empdepartment" required="required">
+ <option ng-repeat="department in Empdepartment" value="{{department}}">{{department}}</option>  
+ </select> -->
+ <input type="text"  class="col-xs-10 col-sm-12" name="department" ng-model="empdepartment" ng-disabled="true"/>
+	
 															</div>
 														</div>
+														
+<!-- <div class="clearfix"></div> -->
 
-														<!-- <div class="clearfix"></div> -->
 
-
-														<div class="form-group col-sm-6">
+															<div class="form-group col-sm-6">
 															<label class="col-sm-3 control-label no-padding-right"
 																for="designation">Designation:</label>
 
 															<div class="col-sm-9">
 
-																<span ng-show="Exit.designation.$error.required">Select
-																	one designation!</span> --> <input type="text"
-																	class="col-xs-10 col-sm-12" name="designation"
-																	ng-model="empdesignation" ng-disabled="true" />
+	<span ng-show="Exit.designation.$error.required">Select one designation!</span> -->
+	<input type="text"  class="col-xs-10 col-sm-12" name="designation" ng-model="empdesignation" ng-disabled="true"/>
 															</div>
 														</div>
+														
 
 
-
-														<div class="clearfix"></div>
+<div class="clearfix"></div>
 
 														<div class="form-group col-sm-6">
 															<label class="col-sm-3 control-label no-padding-right"
 																for="emplocation">Location </label>
 
 															<div class="col-sm-9">
-																<input type="text" class="col-xs-10 col-sm-12"
-																	name="emplocation" ng-model="emplocation"
-																	ng-disabled="true" />
+				<input type="text"  class="col-xs-10 col-sm-12" name="emplocation" ng-model="emplocation" ng-disabled="true"/>
 															</div>
 														</div>
-
-
+														
+														
 														<div class="clearfix"></div>
-														 <div class="widget-body" style="display: block;">
+											 <div class="widget-body" style="display: block;">
 												<div class="widget-main">
 													<div class="table-responsive">
 														<table class="table">
@@ -127,42 +116,37 @@
 														 <thead>
 																<tr>
 																	<th>item</th>
+																	<th>issued</th>
 																	<th>received</th>
 																</tr>
 															</thead>
 													
-														  <tbody ng-repeat="emp in nodueaccountassets">      
-				 <td>{{emp.name}}</td>  <td> <input type="checkbox" ng-model="emp.selected" value="{{emp.name}}" required/></td>  
-								            </tr>
+														  <tbody ng-repeat="emp in nodueinfraassets">      
+														<tr>
+	<td>{{emp.name}}</td>  <td> <input type="checkbox"   value="{{emp.name}}" ng-model="checked" ng-init="checked=true"/></td><td><input type="checkbox" value="{{emp.name}}" ng-model="emp.selected" required/></td>
+								 
+								 </tr>
 							</tbody>
 						 </table>
-						
 						</div>
 					</div>
 				</div> 
-				
-										
-		
-														</div>
+				<div class="clearfix"></div>					
+					<label for="comment">COMMENTS:</label>
+ <textarea    rows="1" cols="20"  placeholder="comments..." ng-model="empcomments" required> </textarea>
+ <span ng-show="accounts.comment.$dirty && accounts.comment.$error.required">This field is required</span>
+					<div class="modal-footer">
+                <button type="submit" value="submit"  ng-disabled="accounts.$invalid"  class="btn btn-primary" ng-click="ok()">ACCEPT</button>
+                <button type="reset" class="btn btn-warning" ng-disabled="comment.$invalid" ng-click="reject()">REJECT</button>									
+														
+														
+														<div class="clearfix"></div>
 
-														<label for="comment">COMMENTS:</label>
-	<textarea rows="1" cols="20" name="comment" placeholder="comments..." ng-model="empcomments" required> </textarea>
-	<span ng-show="accounts.comment.$dirty && accounts.comment.$error.required">This field is required</span>
-  
-														<div class="modal-footer">
-														<span ></span>
-														  
-			<button type="submit" value="submit" ng-disabled="accounts.$invalid" class="btn btn-primary">ACCEPT</button> 
-			
-			<button type="reset" class="btn btn-warning" ng-disabled="comment.$invalid" ng-click="reject()">REJECT</button>
-
-
-															<div class="clearfix"></div>
-								<!-- 			<div class="center">
-																  <input type="submit"  value="submit">  -->
-															</div>
+														<div class="center">
+															<!-- <input type="submit" ng-disabled="Exit.$invalid" value="submit"> -->
 														</div>
 													</div>
+												</div>
 											</form>
 										</div>
 									</div>

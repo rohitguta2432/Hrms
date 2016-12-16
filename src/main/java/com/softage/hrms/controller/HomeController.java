@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import javax.el.ArrayELResolver;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -26,6 +27,9 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 
 import org.json.simple.JSONArray;
+
+import org.apache.axis.transport.mail.MailSender;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -33,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -44,17 +49,30 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.tempuri.ISoftAgeEnterpriseProxy;
 import org.tempuri.SoftAgeEnterpriseServiceLocator;
-
+import org.w3c.dom.ls.LSInput;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softage.hrms.dao.NoDuesDao;
 import com.softage.hrms.model.MstQuestions;
+
+import com.softage.hrms.model.MailSend;
+
 import com.softage.hrms.model.MstReason;
 import com.softage.hrms.model.MstResignationStatus;
+
 import com.softage.hrms.model.MstUploadItem;
 import com.softage.hrms.model.TblFeedbacks;
 import com.softage.hrms.model.TblUploadedPath;
+
+import com.softage.hrms.model.TblAssetsManagement;
+import com.softage.hrms.model.TblFeedbacks;
+import com.softage.hrms.model.TblNoDuesClearence;
+
 import com.softage.hrms.model.TblUserResignation;
 import com.softage.hrms.service.ApprovalService;
 import com.softage.hrms.service.EmployeeDocumentService;
+import com.softage.hrms.service.ExitInterviewService;
 import com.softage.hrms.service.NoDuesService;
 import com.softage.hrms.service.PageService;
 import com.softage.hrms.service.ResignationService;
@@ -72,14 +90,18 @@ public class HomeController {
 
 
 	@Autowired
+	private ExitInterviewService exitinterviewservice;
+
+
+	@Autowired
 	private PageService pageService;
 
 	@Autowired
 	private ResignationService resignationService;
 
 	@Autowired
-	private MailServiceImpl mailService;
 
+	private MailServiceImpl mailService; 
 	@Autowired
 	private ApprovalService approvalservice;
 
@@ -377,7 +399,6 @@ public class HomeController {
 
 	}
 
-
 	@RequestMapping(value = "/getitmodalassets", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getitmodalassets(HttpServletRequest request) {
@@ -394,15 +415,116 @@ public class HomeController {
 		itassetsmodal.put("location", "circle");
 
 
-		/*itassetsmodal.put("assets", assets);*/
-		/*itassetsmodal= noduesservice.listassetsdetails();*/
+	/*	itassetsmodal.put("assets", assets);
+		itassetsmodal= noduesservice.listassetsdetails();
 
-		System.out.println(itassetsmodal);
+		System.out.println(itassetsmodal);*/
 		return itassetsmodal;
 	}
-	@RequestMapping(value = "/getnoduesaccounts", method = RequestMethod.GET)
+
+	@RequestMapping(value = "/getemployeemodalinfo", method = RequestMethod.GET)
 	@ResponseBody
-	public JSONObject getnoduesaccountinformation() {
+	public JSONObject getemployeeinformation(HttpServletRequest request) {
+
+		String emp_code=request.getParameter("employee_code");
+		JSONObject itassetsmodal = new JSONObject();
+
+
+		
+		itassetsmodal.put("empcode","ss0097");
+		itassetsmodal.put("firstname", "rohit");
+		itassetsmodal.put("lastname", "raj");
+		itassetsmodal.put("department", "it-software");
+		itassetsmodal.put("designation", "java developer");
+		itassetsmodal.put("location", "circle");
+
+
+		
+		
+		
+	return itassetsmodal;
+	}
+	
+	
+	
+	
+@RequestMapping(value = "/getitassets", method = RequestMethod.GET)
+	@ResponseBody
+
+public JSONObject getjsondata(HttpServletRequest request)
+{
+	
+		String emp_code=request.getParameter("employee_code");
+
+		JSONObject jsonObject=new JSONObject();
+
+		ArrayList<JSONObject> arrlist=new ArrayList<JSONObject>();
+
+
+		List<String> listvalue=new ArrayList<String>();
+
+		listvalue.add("laptop");
+		listvalue.add("datacard");
+		listvalue.add("pendrive");
+		listvalue.add("other it assets");
+
+		for(String str:listvalue)
+		{
+			JSONObject itassetsmodal = new JSONObject();
+			itassetsmodal.put("name", str);
+			arrlist.add(itassetsmodal);
+		}
+
+		jsonObject.put("itassets", arrlist);
+
+
+		return jsonObject;
+	}
+
+	@RequestMapping(value = "/insertitassets", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject insertitassets(@RequestParam("emp_assets") String assetsissued,
+			@RequestParam("comments") String comments) {
+
+		JSONObject insertitasserts = new JSONObject();
+		Date today=new Date();
+
+		TblAssetsManagement itasset=new TblAssetsManagement();
+
+
+		String[] assetsvalue=assetsissued.split(",");
+		for (String singleItem : assetsvalue) {
+
+			itasset.setAssetsIssue(singleItem);
+			itasset.setCreatedBy(" rohit raj");
+			itasset.setCreatedOn(today);
+			itasset.setDepartmentId(4);
+			itasset.setIssuedBy("pradeep attri");
+			itasset.setIssuedOn(today);
+			itasset.setItemStatus(2);
+			itasset.setReceivedBy("pradeep attri");
+			itasset.setReceivedOn(today);
+
+
+			insertitasserts=noduesservice.submitnoduesassets(itasset);
+
+		}
+
+		TblNoDuesClearence noduesclearence=new TblNoDuesClearence();
+
+		noduesclearence.setComments(comments);
+		noduesclearence.setDepartmentFinalStatus(2);
+
+		insertitasserts=noduesservice.submitNoduesclearence(noduesclearence);
+
+
+		return insertitasserts;
+
+
+	}
+	@RequestMapping(value = "/getnoduesinfra", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getnoduesinfrainformation() {
 		ArrayList<JSONObject> listinformation=new ArrayList<JSONObject>();
 		JSONObject jsonobject=new JSONObject();
 
@@ -420,24 +542,134 @@ public class HomeController {
 
 			listinformation.add(itjson);
 
-			jsonobject.put("emplist", listinformation);
-
+			jsonobject.put("empinfralist", listinformation);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return jsonobject;
+	}
+
+	@RequestMapping(value = "/getinframodalassets", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getinframodalassets(HttpServletRequest request) {
+
+		JSONObject jsoninfraassets=new JSONObject();
+
+		ArrayList<JSONObject> arrlist=new ArrayList<JSONObject>();
+
+
+		List<String> listvalue=new ArrayList<String>();
+
+		listvalue.add("ICARD");
+		listvalue.add("other infra assets");
+
+		for(String str:listvalue)
+		{
+			JSONObject infraassetsmodal = new JSONObject();
+			infraassetsmodal.put("name", str);
+			arrlist.add(infraassetsmodal);
+		}
+
+		jsoninfraassets.put("infraassets", arrlist);
+
+
+
+		return jsoninfraassets;
 
 	}
-	@RequestMapping(value = "/getaccountmodalassets", method = RequestMethod.GET)
+	@RequestMapping(value = "/insertinfraassets", method = RequestMethod.POST)
 	@ResponseBody
-	public JSONObject getaccountsmodalassets(HttpServletRequest request) {
+	public JSONObject insertinfraassets(@RequestParam("emp_assets") String asserts,
+			@RequestParam("comments") String comments) {
+
+		JSONObject insertasserts = new JSONObject();
+		Date today=new Date();
+
+		TblAssetsManagement infraasset=new TblAssetsManagement();
+
+
+		infraasset.setAssetsIssue(asserts);
+		infraasset.setCreatedBy("rohit raj");
+		infraasset.setCreatedOn(today);
+		infraasset.setDepartmentId(5);
+		infraasset.setIssuedBy("delip jha");
+		infraasset.setIssuedOn(today);
+		infraasset.setItemStatus(2);
+		infraasset.setReceivedBy("delip jha");
+		infraasset.setReceivedOn(today);
+
+
+		TblNoDuesClearence nodues=new TblNoDuesClearence();
+
+		nodues.setComments(comments);
+		nodues.setDepartmentFinalStatus(2);
+
+
+		insertasserts=noduesservice.submitnoduesassets(infraasset);
+
+		insertasserts=noduesservice.submitNoduesclearence(nodues);
+
+
+		return insertasserts;
+	}
+
+	@RequestMapping(value = "/getnoduesaccounts", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getnoduesaccountinformation(HttpSession session) {
+
+		ISoftAgeEnterpriseProxy emp_prxoy=new ISoftAgeEnterpriseProxy();
+
+		ArrayList<JSONObject> listinformation=new ArrayList<JSONObject>();
+		JSONObject jsonobject=new JSONObject();
+
+		try{
+			JSONObject itjson = new JSONObject();
+			itjson.put("sno", 1);
+			itjson.put("empcode","ss0097");
+			itjson.put("firstname", "rohit");
+			itjson.put("lastname", "raj");
+			itjson.put("department", "it-software");
+			itjson.put("designation", "java developer");
+			itjson.put("location", "circle");
+			/*List<String> listempcoderesign=noduesservice.listrmacceptedempcode();*/
+
+			listinformation.add(itjson);
+
+			jsonobject.put("emplist", listinformation);
+
+			List<String> empcode=noduesservice.listrmacceptedempcode();
+
+			/*
+	String firstname=emp_prxoy.getUserDetail("ss0078").getFirstName();
+		String lastname=emp_prxoy.getUserDetail("ss078").getLastName();
+		int department=emp_prxoy.getUserDetail("ss0078").getDepartmentId();
+		String designation=emp_prxoy.getUserDetail("ss0078").getl
+
+		System.out.println(firstname);
+			 */	
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return jsonobject;
+
+	}
+
+	@RequestMapping(value = "/getaccountmodalassets", method = RequestMethod.GET)
+	public JSONObject getaccountsmodalassets(@RequestParam("employee_code") String empcode) {
+
+		/*System.out.println("employee code "+empcode);*/
+
+
+
 
 		JSONObject accountassetsmodal = new JSONObject();
 
 
-		String emp_code=request.getParameter("employee_code");
+
+		/* String emp_code=request.getParameter("employee_code");*/
 		accountassetsmodal.put("empcode","ss0097");
 		accountassetsmodal.put("firstname", "rohit");
 		accountassetsmodal.put("lastname", "raj");
@@ -446,31 +678,23 @@ public class HomeController {
 		accountassetsmodal.put("location", "circle");
 
 
-
-
-
-
-
 		return accountassetsmodal;
 	}
-	@RequestMapping(value = "/getAssets", method = RequestMethod.GET)
+	@RequestMapping(value = "/getNoDuesAssets", method = RequestMethod.GET)
 	@ResponseBody
-	public JSONObject getassests() {
+	public JSONObject getassests(HttpServletRequest request) {
+
+		String empcode=request.getParameter("employee_code");
+
+		/*System.out.println("employee empcode "+empcode);
+		 */
+
+		int departmentid=2;
 
 		JSONObject accountassets = new JSONObject();
-
-		List<String> value = noduesservice.listassetsdetails();
-		/*Iterator<String> i1=value.iterator();
-	 while(i1.hasNext())
-	 {
-		 System.out.println("controller "+i1.next());
-
-	 }*/
-
+		List<JSONObject> value = noduesservice.listassetsdetails(departmentid);
 
 		accountassets.put("list", value);
-
-		System.out.println("controller "+value);
 
 		return accountassets;
 	}
@@ -820,6 +1044,305 @@ public class HomeController {
 		return resignations;
 	}
 
+	@RequestMapping(value = "/insertaccountassets", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject insertaccountassets(@RequestParam("emp_assets") String asserts,
+			@RequestParam("accounts_comments") String comments) {
 
+
+		JSONObject insertasserts = new JSONObject();
+
+		Date today=new Date();
+
+		TblAssetsManagement accountasset=new TblAssetsManagement();
+
+
+		accountasset.setAssetsIssue(asserts);
+		accountasset.setCreatedBy("rohit raj");
+		accountasset.setCreatedOn(today);
+		accountasset.setDepartmentId(1);
+		accountasset.setIssuedBy("ck jha");
+		accountasset.setIssuedOn(today);
+		accountasset.setItemStatus(2);
+		accountasset.setReceivedBy("ck jha");
+		accountasset.setReceivedOn(today);
+
+		TblNoDuesClearence nodues=new TblNoDuesClearence();
+		nodues.setComments(comments);
+		nodues.setDepartmentFinalStatus(2);
+
+		insertasserts=noduesservice.submitnoduesassets(accountasset);
+		insertasserts=noduesservice.submitNoduesclearence(nodues);
+
+
+		return insertasserts;
+	}
+
+
+	@RequestMapping(value = "/rejectempassets", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONObject rejectaccountassets(
+			@RequestParam("received_assets") String receivedassets,
+			@RequestParam("not_received") String notreceivedassets,
+			@RequestParam("comments") String comments,
+			@RequestParam("emp_code") String empcode,
+			@RequestParam("final_status") int status) {
+
+
+		Date today=new Date();
+		JSONObject rejectjson=new JSONObject();
+
+		TblAssetsManagement receiveditem=new TblAssetsManagement();
+		String[] assertsreceived=receivedassets.split(",");
+
+		String[] notreceived=notreceivedassets.split(",");
+		for (String remaingassets : notreceived) {
+
+			receiveditem.setAssetsIssue(remaingassets);
+			receiveditem.setCreatedBy("rohit raj");
+			receiveditem.setCreatedOn(today);
+			receiveditem.setDepartmentId(4);
+			receiveditem.setIssuedBy("pradeep attri");
+			receiveditem.setIssuedOn(today);
+			receiveditem.setItemStatus(1);
+			receiveditem.setReceivedOn(today);
+			rejectjson=noduesservice.submitnoduesassets(receiveditem);
+
+
+		}
+
+		if(receivedassets==null | receivedassets.length()==0)
+		{
+			System.out.println("value not found...");
+		}
+		else{
+
+			for (String assetsitem : assertsreceived) {
+				receiveditem.setAssetsIssue(receivedassets);
+				receiveditem.setCreatedBy("rohit raj");
+				receiveditem.setCreatedOn(today);
+				receiveditem.setDepartmentId(4);
+				receiveditem.setIssuedBy("pradeep attri");
+				receiveditem.setIssuedOn(today);
+				receiveditem.setItemStatus(2);
+				receiveditem.setReceivedOn(today);
+				rejectjson=noduesservice.submitnoduesassets(receiveditem);
+
+			}
+		}
+		TblNoDuesClearence clearence=new TblNoDuesClearence();
+
+		clearence.setComments(comments);
+		clearence.setDepartmentFinalStatus(status);
+
+		rejectjson=noduesservice.submitNoduesclearence(clearence);
+
+		/*mailService.sendEmail("ar", "rohit.raj@softageindia.com", "hi", "hrms");*/
+
+
+		return rejectjson;
+	}
+	@RequestMapping(value = "/getnodueshr", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getnodueshrinformation() {
+		ArrayList<JSONObject> listinformation=new ArrayList<JSONObject>();
+		JSONObject jsonobject=new JSONObject();
+
+
+		try{
+			JSONObject hrjson = new JSONObject();
+			hrjson.put("sno", 1);
+			hrjson.put("empcode","ss0097");
+			hrjson.put("firstname", "rohit");
+			hrjson.put("lastname", "raj");
+			hrjson.put("department", "it-software");
+			hrjson.put("designation", "java developer");
+			hrjson.put("location", "circle");
+			List<String> listempcoderesign=noduesservice.listrmacceptedempcode();
+
+			listinformation.add(hrjson);
+
+			jsonobject.put("emphrlist", listinformation);
+
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return jsonobject;
+
+	}
+
+	@RequestMapping(value = "/inserthrassets", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject inserthrassets(@RequestParam("emp_assets") String hrassets,
+			@RequestParam("hr_comments") String comments,
+			@RequestParam("emp_code") String empcode
+			) {
+
+		JSONObject inserthrasserts = new JSONObject();
+
+		Date today=new Date();
+
+		TblAssetsManagement hrasset=new TblAssetsManagement();
+		hrasset.setAssetsIssue(hrassets);
+		hrasset.setCreatedBy("rohit raj");
+		hrasset.setCreatedOn(today);
+		hrasset.setDepartmentId(2);
+		hrasset.setIssuedBy("thomas verges");
+		hrasset.setIssuedOn(today);
+		hrasset.setItemStatus(2);
+		hrasset.setReceivedBy("thomas verges");
+		hrasset.setReceivedOn(today);
+
+		TblNoDuesClearence nodues=new TblNoDuesClearence();
+		nodues.setDepartmentFinalStatus(2);
+		nodues.setComments(comments);
+
+
+		inserthrasserts=noduesservice.submitnoduesassets(hrasset);
+		inserthrasserts=noduesservice.submitNoduesclearence(nodues);
+
+		return inserthrasserts;
+	}
+
+	@RequestMapping(value = "/getnoduesrm", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getnoduesrminformation() {
+		ArrayList<JSONObject> listinformation=new ArrayList<JSONObject>();
+		JSONObject jsonobject=new JSONObject();
+
+		try{
+			JSONObject rmempjson = new JSONObject();
+			rmempjson.put("sno", 1);
+			rmempjson.put("empcode","ss0097");
+			rmempjson.put("firstname", "rohit");
+			rmempjson.put("lastname", "raj");
+			rmempjson.put("department", "it-software");
+			rmempjson.put("designation", "java developer");
+			rmempjson.put("location", "circle");
+			List<String> listempcoderesign=noduesservice.listrmacceptedempcode();
+
+			listinformation.add(rmempjson);
+
+			jsonobject.put("emprmlist", listinformation);
+
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return jsonobject;
+
+	}
+	@RequestMapping(value = "/insertrmassets", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject insertrmassets(@RequestParam("emp_assets") String rmassets,
+			@RequestParam("comments") String comments,
+			@RequestParam("emp_code") String empcode
+			) {
+
+		JSONObject insertrmasserts = new JSONObject();
+
+		Date today=new Date();
+
+		TblAssetsManagement rmasset=new TblAssetsManagement();
+		rmasset.setAssetsIssue(rmassets);
+		rmasset.setCreatedBy("rohit raj");
+		rmasset.setCreatedOn(today);
+		rmasset.setDepartmentId(3);
+		rmasset.setIssuedBy("sunil raizada");
+		rmasset.setIssuedOn(today);
+		rmasset.setItemStatus(2);
+		rmasset.setReceivedBy("sunil raizada");
+		rmasset.setReceivedOn(today);
+
+		TblNoDuesClearence nodues=new TblNoDuesClearence();
+		nodues.setDepartmentFinalStatus(2);
+		nodues.setComments(comments);
+
+
+		insertrmasserts=noduesservice.submitnoduesassets(rmasset);
+
+		insertrmasserts=noduesservice.submitNoduesclearence(nodues);
+
+
+
+		return insertrmasserts;
+	}
+
+	@RequestMapping(value = "/hrfeedbacklist", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getexitemphr() {
+		ArrayList<JSONObject> listinformation=new ArrayList<JSONObject>();
+		JSONObject jsonobject=new JSONObject();
+
+
+		try{
+			JSONObject exithrjson = new JSONObject();
+			exithrjson.put("sno", 1);
+			exithrjson.put("empcode","ss0097");
+			exithrjson.put("firstname", "rohit");
+			exithrjson.put("lastname", "raj");
+			exithrjson.put("department", "it-software");
+			exithrjson.put("designation", "java developer");
+			exithrjson.put("location", "circle");
+			List<String> listempcoderesign=noduesservice.listrmacceptedempcode();
+
+			listinformation.add(exithrjson);
+
+			jsonobject.put("feedbacklist", listinformation);
+
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return jsonobject;
+
+	}
+	@RequestMapping(value = "/gethrfeedbackquestions", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONObject gethrfeedbackquestion() {
+		JSONObject feedbackjson=new JSONObject();
+		try{
+			int roleid=8;
+			int stageid=3;
+			List<JSONObject> listhrquestion=exitinterviewservice.listHrQuestion(roleid,stageid);
+
+			/*System.out.println(listhrquestion);*/
+
+			feedbackjson.put("hrquestionslist", listhrquestion);
+
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return feedbackjson;
+
+	}
+	@RequestMapping(value = "/inserthrfeedback", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject inserthrfeedback(@RequestParam("hr_feedback") String feedback,
+			@RequestParam("emp_code") String empcode) {
+
+		JSONObject hranswers = new JSONObject();
+		try{
+			JSONParser parser = new JSONParser();
+			JSONObject json = (JSONObject) parser.parse(feedback);
+			System.out.println(json.get("value"));
+			TblFeedbacks feedbackhr=new TblFeedbacks();
+
+			feedbackhr.setAnsText("");
+			System.out.println("answer "+feedback);
+			System.out.println("employee code "+empcode);
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		/*hranswers=exitinterviewservice.submithrfeedback(feedbackhr);*/
+
+		return hranswers;
+
+	}
 }
-

@@ -1,12 +1,15 @@
 package com.softage.hrms.model;
 // Generated Dec 6, 2016 10:45:57 AM by Hibernate Tools 5.2.0.Beta1
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -60,7 +63,7 @@ public class TblAssetsManagement implements java.io.Serializable {
 	}
 
 	@Id
-
+	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "assets_id", unique = true, nullable = false)
 	public int getAssetsId() {
 		return this.assetsId;
@@ -173,4 +176,8 @@ public class TblAssetsManagement implements java.io.Serializable {
 		this.tblNoDuesClearences = tblNoDuesClearences;
 	}
 
-}
+	/*public static void main(String[] args) {
+		TblAssetsManagement*/
+	}
+
+

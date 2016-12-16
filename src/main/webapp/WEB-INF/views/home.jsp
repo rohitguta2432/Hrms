@@ -33,15 +33,23 @@
 	<script src="resources/js/resignation/resignation.js"></script>
 	<script src="resources/js/dowmloadDocument/download.js"></script>
 	<script src="resources/js/document/upload.js"></script>
-	<script src="resources/js/exitemprate.js"></script>
-	<!-- <script src="resources/js/exitrm.js"></script> -->
-	<script src="resources/js/empfeddback/exitemp.js"></script>
-	<script src="resources/js/hrfeedback/exitemphr.js"></script> 
+
+	<script src="resources/js/empfeedback/exitemprate.js"></script>
+	<script src="resources/js/exitrm.js"></script>
+	<script src="resources/js/empfeedback/exitemp.js"></script>
+	<script src="resources/js/hrfeedback/exitemphr.js"></script>
+	<script src="resources/js/hrfeedback/exithrmodal.js"></script>  
 	<script src="resources/js/hrapproval/hr_approval.js"></script>
 	<script src="resources/js/noduesit/noduesit.js"></script>
 	<script src="resources/js/noduesit/noduesitmodal.js"></script>
 	<script src="resources/js/noduesaccounts/noduesaccounts.js"></script>
 	<script src="resources/js/noduesaccounts/noduesaccountsmodal.js"></script>
+	<script src="resources/js/nodueshr/nodueshr.js"></script>
+	<script src="resources/js/nodueshr/nodueshrmodal.js"></script>
+	<script src="resources/js/noduesrm/noduesrm.js"></script>
+	<script src="resources/js/noduesrm/noduesrmmodal.js"></script>
+	<script src="resources/js/noduesinfra/noduesinfra.js"></script>
+	<script src="resources/js/noduesinfra/noduesinframodal.js"></script>
 </head>
 <body class="no-skin" ng-controller="homeController" ng-init="getLinks()">
     <div id="navbar" class="navbar navbar-default navbar-collapse h-navbar">

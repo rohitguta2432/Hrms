@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.softage.hrms.dao.NoDuesDao;
+
+import com.softage.hrms.model.TblAssetsManagement;
+import com.softage.hrms.model.TblNoDuesClearence;
 import com.softage.hrms.service.NoDuesService;
 
 
@@ -24,9 +27,28 @@ private NoDuesDao noduesdao;
 	}
 
 	@Override
-	public List<String> listassetsdetails() {
+	public List<JSONObject> listassetsdetails(int departmentid) {
 		
-		return noduesdao.getassetsdetails();
+		return noduesdao.getassetsdetails(departmentid);
 	}
 
+	@Override
+	public JSONObject submitnoduesassets(TblAssetsManagement accountassertsbeaan) {
+		
+		return noduesdao.insertnoduesassetsdetails(accountassertsbeaan);
+	}
+
+	/*@Override
+	public JSONObject submithrassets(TblAssetsManagement hrassetsbean) {
+		
+		return noduesdao.inserthrassertsdetails(hrassetsbean);
+	}*/
+
+	@Override
+	public JSONObject submitNoduesclearence(TblNoDuesClearence clearencebeanstatus) {
+		
+		return noduesdao.insertnoduesclearence(clearencebeanstatus);
+	}
+
+	
 }
