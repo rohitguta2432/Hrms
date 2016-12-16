@@ -2,12 +2,12 @@ var application = angular.module('home', [ 'ui.router', 'ui.bootstrap']);
 //var domain = 'http://localhost:8080/hrms';
 var domain = '/hrms';
 application.config(function($stateProvider, $urlRouterProvider) {
-	$stateProvider.state('resignation', {
-		url : '/resignation',
+	$stateProvider.state('Resignation', {
+		url : '/Resignation',
 		templateUrl : 'resources/js/resignation/resignation.html',
 		controller : 'homeController'
-	}).state('approval', {
-		url : '/approval',
+	}).state('ManagerApproval', {
+		url : '/ManagerApproval',
 		templateUrl : 'resources/js/rmapproval/approval.html',
 		controller : 'approvalController'
 	}).state('approvalAction', {
@@ -15,31 +15,31 @@ application.config(function($stateProvider, $urlRouterProvider) {
 		templateUrl : 'resources/js/rmapproval/approvalActionModal.html',
 		controller : 'approvalController'
 	
-	}).state('exitemp', {
-		url : '/exitemp',
+	}).state('EmployeeFeedback', {
+		url : '/EmployeeFeedback',
 		templateUrl : 'resources/js/empfeedback/exitemp.html',
 		controller : 'exitempcontroller'
-	}).state('exitemprate', {
-		url : '/exitemprate',
+	}).state('EmployeeRating', {
+		url : '/EmployeeRating',
 		templateUrl : 'resources/js/empfeedback/exitemprate.html',
 		controller : 'homeController'
-	}).state('exitemphr', {
-		url : '/exitemphr',
+	}).state('HRFeedback', {
+		url : '/HRFeedback',
 		templateUrl : 'resources/js/hrfeedback/exitemphr.html',
 		controller : 'homeController'
 	}).state('exithrmodal', {
 		url : '/exithrmodal',
 		templateUrl : 'resources/js/hrfeedback/exithrmodal.html',
 		controller : 'homeController'
-	}).state('hr_approval',{
-		url:'/hrapproval',
+	}).state('HRApproval',{
+		url:'/HRApproval',
 		templateUrl:'resources/js/hrapproval/hr_approval.html',
 		controller:'hrApprovalController'
 	}).state('hr_ApprovalModal',{
 		url:'/hrApprovalModal',
 		templateUrl:'resources/js/hrapproval/hrApprovalModal.html',
 		controller:'hrApprovalController'
-	}).state('noduesit',{
+	}).state('ITNodues',{
 		url:'/IT_NODUES',
 		templateUrl:'resources/js/noduesit/noduesit.html',
 		controller:'homeController'
@@ -49,7 +49,7 @@ application.config(function($stateProvider, $urlRouterProvider) {
 		templateUrl:'resources/js/noduesit/noduesitmodal.html',
 		controller:'homeController'
 	})
-	.state('noduesinfra',{
+	.state('InfraNodues',{
 		url:'/INFRA_NODUES',
 		templateUrl:'resources/js/noduesinfra/noduesinfra.html',
 		controller:'noduesinfracontroller'
@@ -59,7 +59,7 @@ application.config(function($stateProvider, $urlRouterProvider) {
 		templateUrl:'resources/js/noduesinfra/noduesinframodal.html',
 		controller:'noduesinframodalcontroller'					
 	})
-	.state('noduesaccounts',{
+	.state('AccountNodues',{
 		url:'/ACCOUNTS_NODUES',
 		templateUrl:'resources/js/noduesaccounts/noduesaccounts.html',
 		controller:'noduesaccountscontroller'
@@ -76,7 +76,7 @@ application.config(function($stateProvider, $urlRouterProvider) {
 		url:'/DocumentDownload',
 		templateUrl:'resources/js/dowmloadDocument/download.html',
 		controller:'documentDownload'
-	}).state('noduesrm',{
+	}).state('MangerNodues',{
 		url:'/RM_NODUES',
 		templateUrl:'resources/js/noduesrm/noduesrm.html',
 		controller:'noduesrmcontroller'
@@ -86,7 +86,7 @@ application.config(function($stateProvider, $urlRouterProvider) {
 		templateUrl:'resources/js/noduesrm/noduesrmmodal.html',
 		controller:'noduesrmmodalcontroller'
 	})
-	.state('nodueshr',{
+	.state('HRNodues',{
 		url:'/HR_NODUES',
 		templateUrl:'resources/js/nodueshr/nodueshr.html',
 		controller:'nodueshrcontroller'
@@ -103,9 +103,12 @@ application.config(function($stateProvider, $urlRouterProvider) {
 
 	});
 });
+
+
 application.controller('homeController', function($scope, $http) {
 	$scope.getLinks = function() {
 		$http.get(domain + '/getPages').success(
+				
 				function(data, status, headers, config) {
 					/*alert(JSON.stringify({
 						data : data

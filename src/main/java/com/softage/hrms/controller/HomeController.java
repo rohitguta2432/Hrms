@@ -781,6 +781,8 @@ public JSONObject getjsondata(HttpServletRequest request)
 		try{
 			logger.info("Uploading file ");
 			String itemId1= request.getParameter("uploadId");
+			String empCode= request.getParameter("empCode");
+			String resignId= request.getParameter("resignId");
 			int itemId= Integer.parseInt(itemId1);
 			Iterator<String> itr = request.getFileNames();   
 			MultipartFile mpf = request.getFile(itr.next());
@@ -794,7 +796,7 @@ public JSONObject getjsondata(HttpServletRequest request)
 			logger.info("Server File Location=" +file );
 			String FilePath=empId+"/"+filename;
 
-			String filePath  = uploadDocumentFTPClient(filename,empId,bytes);
+		//	String filePath  = uploadDocumentFTPClient(filename,empId,bytes);
 			MstUploadItem mstUploadItem= employeeDocumentService.entityById(itemId);
 			TblUserResignation resignation  =	resignationService.getResignationUserService(empId, 2);
 
@@ -802,18 +804,11 @@ public JSONObject getjsondata(HttpServletRequest request)
 
 			uploadPath.setUploadedBy("Afjal");
 			uploadPath.setEmpCode(empId);
-			uploadPath.setPath(filePath);
+		//	uploadPath.setPath(filePath);
 			uploadPath.setUploadedOn(new Date());
 			uploadPath.setTblUserResignation(resignation);
 			uploadPath.setMstUploadItem(mstUploadItem);
-			result= employeeDocumentService.save(uploadPath);
-
-
-
-
-
-
-
+	//		result= employeeDocumentService.save(uploadPath);
 
 		}catch(Exception e){
 			logger.error("",e);

@@ -1,58 +1,3 @@
-/*application.controller('documentManagement', ['$scope', '$http','FileProductUploadService', function ($scope, $http,FileProductUploadService){
-	$scope.getItems=function(){
-		alert(' geting Upload Items   ');
-		$http.get(domain+'/getUploadItems')
-		.success(function(data,status,headers,config){
-			//alert('the data returned is : '+JSON.stringify({data : data}));
-			$scope.uploadItems=data;
-
-			alert("List  "+$scope.uploadItems);
-		})
-		.error(function(data,status,headers,config){
-			alert('the error returned is : '+JSON.stringify({data : data}));
-		})
-	}
-
-
-
-
-
-
-}]).factory('FileProductUploadService', function ($http, $q) {
-   // alert("factory of agent");
-    var fac = {};
-
-    fac.UploadFile = function (file) {
-
-        alert("Agent Uplaod Data");
-
-        var formData = new FormData();
-        formData.append("file", file);
-
-        var defer = $q.defer();
-        $http.post(domain+"/upload", formData, {
-            withCredentials: true,
-            headers: { "Content-Type": undefined },
-            transformRequest: angular.identity
-        }).then(
-            function (d) {
-                defer.resolve(d);
-            },function (err) {
-                defer.reject("File Upload Failed");
-            });
-        return defer.promise;
-    }
-
-    return fac;
-});
-
- */
-
-
-
-
-
-
 
 application.controller('documentManagement', ['$scope', '$http','$modal','FileProductUploadService','$location','$rootScope', function ($scope, $http,$modal,FileProductUploadService,$location,$rootScope) {
 
@@ -81,6 +26,10 @@ application.controller('documentManagement', ['$scope', '$http','$modal','FilePr
 	$scope.SaveFile = function (ev,item) {
 
 		$scope.uploadId=item;
+		$scope.empCode=$scope.params.empcode;
+		$scope.ResignId=$scope.params.resignId;
+	
+		
 		//	var uploadId=document.getElementById ('uploadId')).value;
 		//	alert("file uploaded Id >>>>>"+uploadId);
 
@@ -93,7 +42,7 @@ application.controller('documentManagement', ['$scope', '$http','$modal','FilePr
 		alert($scope.IsFileValid);
 
 		if ($scope.IsFileValid) {
-			FileProductUploadService.UploadFile($scope.SelectedFileForUpload,$scope.uploadId).then(function (d) {
+			FileProductUploadService.UploadFile($scope.SelectedFileForUpload,$scope.uploadId,$scope.empCode,$scope.ResignId).then(function (d) {
 
 				/*    var confirm = $mdDialog.confirm()
                     // .title('Would you like to delete your debt?')
@@ -202,6 +151,8 @@ application.controller('documentManagement', ['$scope', '$http','$modal','FilePr
 
 
 	$scope.actionUpload=function(empcode,resignId){
+		
+		alert(" action Upload   "+empcode);
 		var scope=$rootScope.$new();
 		scope.params={empcode:empcode,resignId:resignId};
 
@@ -223,12 +174,14 @@ application.controller('documentManagement', ['$scope', '$http','$modal','FilePr
 	// alert("factory of agent");
 	var fac = {};
 
-	fac.UploadFile = function (file,uploadId) {
+	fac.UploadFile = function (file,uploadId,empCode,resignId) {
 		alert("file UploadFile Id >>>>>"+uploadId);
 
 		var formData = new FormData();
 		formData.append("file", file);
 		formData.append("uploadId", uploadId);
+		formData.append("empCode", empCode);
+		formData.append("resignId", resignId);
 
 		var defer = $q.defer();
 		$http.post(domain+"/upload", formData, {
