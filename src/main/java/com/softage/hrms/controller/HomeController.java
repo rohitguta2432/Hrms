@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.el.ArrayELResolver;
 import javax.servlet.http.HttpServletRequest;
@@ -200,7 +201,7 @@ public class HomeController {
 		MstResignationStatus status_mast=resignationService.getStatus(1);
 		String remarks = request.getParameter("emp_comments");
 		//emp.getUserDetail(empcode).getReportingManager(); GET RM USING ESF SERVICE
-		//emp.getUserDetail(empcode).getHrManager(); GET HR USING ESF SERVICE
+		//String hr_empcode=emp.getUserDetail(empcode).getHrManager(); GET HR USING ESF SERVICE
 		String rm_empcode="ss0078";
 		String hr_empcode="ss0053";
 		int noticeperiod=60; // Get Notice Period Using ESF Service
@@ -224,12 +225,25 @@ public class HomeController {
 		jsonObj = resignationService.submitResignationService(resignation);
 		//emp.getUserDetail(emp_code).getRMEmail(); RM email Using ESF service 
 		//emp.getUserDetail(emp_code).getHREmail(); HR email Using ESF service
+		//emp.getUserDetail(emp_code).getEmail(); EMployee Email
 		//String manager_email=resignationService.getRmEmail(employee_code);
+		String manager_email="arpan.mathur@softageindia.com";//ESF Service
+		String hr_email="rohit.raj@softageindia.com";
+		String emp_email="arpan.mathur@softageindia.com";
 		//System.out.println(manager_email);
-		//if (jsonObj.get("reason").equals("successful")) { have to apply some logic here
-		//	mailService.sendEmail(manager_email, "evm@softageindia.com", "test",
-		//			"exit module test");
-
+		String rm_message="Request for resignatin has been raised by "+empcode+" for RM";
+		String hr_message="Request for resignatin has been raised by "+empcode+" for HR" ;
+		String emp_message="Request for resignation has been raised by you";
+		if (jsonObj.get("reason").equals("successful")) { 
+			try{
+				mailService.sendEmail(manager_email, "evm@softageindia.com", "test",rm_message);
+				mailService.sendEmail(hr_email, "evm@softageindia.com", "test",hr_message);
+				mailService.sendEmail(emp_email, "evm@softageindia.com", "test",emp_message);
+				}catch(Exception e){
+					e.printStackTrace();
+					System.out.println("Problem is sending email");
+				}
+			}
 		//} catch (RemoteException e) {
 		//e.printStackTrace();
 		//}
@@ -413,7 +427,72 @@ public class HomeController {
 		return jsob;
 	}
 
+	@RequestMapping(value="/trackingStatusInit",method=RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getResignationStatus(HttpServletRequest request,HttpSession session){
+		session=request.getSession();
+		JSONObject resigneduser=new JSONObject();
+		String empcode=(String)session.getAttribute("employeecode");
+		DateFormat df=new SimpleDateFormat("yyyy/MM/dd");
+		TblUserResignation resignationModel=resignationService.getResignationUserService(empcode, 0);
+		int resID=resignationModel.getResignationId();
+		MstReason reasonBean=resignationModel.getMstReason();
+		int reasonid=resignationModel.getResignationId();
+		String reason=reasonBean.getReason();
+		MstResignationStatus statusBean= resignationModel.getMstResignationStatus();
+		int statusid=statusBean.getStatusId();
+		String resignation_status=statusBean.getStatus();
+		String res_empcode=resignationModel.getEmpCode();
+		String res_remarks=resignationModel.getComments();
+		Date res_date=resignationModel.getResignationDate();
+		String res_date_string=df.format(res_date);
+		//String res_date_string=df.format(res_date);
+		//System.out.println(res_date);
+		Date relieving_date=resignationModel.getReleivingDate();
+		String rel_date_string=df.format(relieving_date);
+		String res_rm_empcode=resignationModel.getRmEmpcode();
+		String res_hr_empcode=resignationModel.getHrEmpcode();
+		Date rm_approvaldate=resignationModel.getRmApprovalDate();
+		String approval_date_String=df.format(rm_approvaldate);
+		Date hr_approvaldate=resignationModel.getHrApprovalDate();
+		String approval_date_string=df.format(hr_approvaldate);
+		Date hr_lwd_date=resignationModel.getHrLwdDate();
+		String lwd_date_string=df.format(hr_lwd_date);
+		resigneduser.put("resID", resID);
+		resigneduser.put("resStatusId", statusid);
+		resigneduser.put("resreason", reason);
+		resigneduser.put("resStatus", resignation_status);
+		resigneduser.put("resEmpcode", res_empcode);
+		resigneduser.put("resRemarks", res_remarks);
+		resigneduser.put("resDate", res_date_string);
+		resigneduser.put("resRelievingDate", rel_date_string);
+		resigneduser.put("resRmEmpcode", res_rm_empcode);
+		resigneduser.put("resHrEmpcode", res_hr_empcode);
+		resigneduser.put("resRmApprovalDate", approval_date_String);
+		resigneduser.put("resHrApprovalDate", approval_date_string);
+		resigneduser.put("resLwdDate", lwd_date_string);
+		return resigneduser;
+	}
 	
+	@RequestMapping(value="/getNoDuesStatuses",method=RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getNoDuesPendingStatuses(HttpServletRequest request,HttpSession session){
+		String resignID=(String)request.getParameter("resignationID");
+		int resid=Integer.parseInt(resignID);
+		JSONObject pendingNoDues=new JSONObject();
+		pendingNoDues=noduesservice.getNoDuesPendingStatus(resid);
+		return pendingNoDues;
+	}
+	
+	@RequestMapping(value="/getDocUploadedStatuses",method=RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getDocumentUploadedPending(HttpServletRequest request,HttpSession session){
+		String resignID=(String)request.getParameter("resignationID");
+		int resid=Integer.parseInt(resignID);
+		JSONObject notUploadedDocuments=new JSONObject();
+		notUploadedDocuments=employeeDocumentService.getNotUploadedDocumentsById(resid);
+		return notUploadedDocuments;
+	}
 	
 	@RequestMapping(value = "/getnoduesit", method = RequestMethod.GET)
 	@ResponseBody

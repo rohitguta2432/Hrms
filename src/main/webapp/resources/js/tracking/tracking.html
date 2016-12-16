@@ -14,7 +14,7 @@
 			}
 		</script>
 		<div class="main-content" ng-controller="trackingController"
-			ng-init="">
+			ng-init="trackingInit()">
 			<div class="page-content">
 				<div class="page-content-area">
 					<!-- /.page-header -->
@@ -38,10 +38,12 @@
 
 														<div class="form-group col-sm-6">
 															<label class="col-sm-3 control-label no-padding-right"
-																for="comments">Status </label>
-
-															<div class="col-sm-9">
-															<input type="text" >
+																for="comments">Resignation Request Status </label>
+																<div class="col-sm-9">
+															<button class="btn btn-primary btn-sm" ng-click="openResignationStatus(res_user_id,res_user_status_id,res_user_reason,res_user_status
+															,res_user_empcode,res_user_remarks,res_user_resignation_date,res_user_relieving_date,res_user_rm_empcode,res_user_hr_empcode
+															,res_user_rm_approval_date,res_user_hr_approval_date,res_user_lwd_date)">
+															{{res_user_status}}</button>
 															</div>
 														</div>
 
@@ -50,9 +52,6 @@
 
 														<div class="clearfix"></div>
 
-														<div class="center">
-															<input type="submit" value="Submit" ng-disabled="resignationForm.$invalid"> 
-														</div>
 													<!-- </form> -->
 												</div>
 											</div>

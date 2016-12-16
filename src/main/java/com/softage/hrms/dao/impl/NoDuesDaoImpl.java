@@ -91,4 +91,16 @@ public class NoDuesDaoImpl implements NoDuesDao {
 		return insertclearence;
 	}
 
+	//DAOImpl created by Arpan to find the No Dues Pending Status
+	@Override
+	public JSONObject getNoDuesPendingStatus(int resignationID) {
+		Session session=this.sessionfactory.getCurrentSession();
+		JSONObject pendingNoDuesDeptJson=new JSONObject();
+		String sql="call usp_getNoDuesPendingDeptName(?)";
+		Query query=session.createSQLQuery(sql).setParameter(1, resignationID);
+		List<String> noDuesPendingDeptList=query.list();
+		pendingNoDuesDeptJson.put("noDuesPendingDept", noDuesPendingDeptList);
+		return pendingNoDuesDeptJson;
+	}
+
 }

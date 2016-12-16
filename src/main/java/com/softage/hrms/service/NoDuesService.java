@@ -20,4 +20,7 @@ public interface NoDuesService {
 public JSONObject submitNoduesclearence(TblNoDuesClearence clearencebeanstatus);
 
 JSONObject submitnoduesassets(TblAssetsManagement accountassertsbeaan);
+
+// Service created by Arpan to find the No Dues Pending Status
+public JSONObject getNoDuesPendingStatus(int resignationID);
 }

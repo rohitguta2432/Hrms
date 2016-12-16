@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>RM Approval</title>
 </head>
 <body>
 <div class="modal-header">
@@ -14,49 +14,36 @@
     ng-submit="resignAction(rmApprovalForm)" >
         <div class="form-group">
         
-
- <!-- <label for="acceptRadio">Accept</label>
-                <input id="acceptRadio" type="radio" name="action" ng-change="RadioChange('Accept')" ng-model="resAction" value="Accept">
-                <label for="rejectRadio">Reject</label>
-                <input id="rejectRadio" type="radio" name="action" ng-change="RadioChange('Reject')" ng-model="resAction" value="Reject">
- -->
-            <!-- <div class="form-group col-sm-6" ng-repeat="question in rmfeedback"> -->
-            <!-- <div class="form-group col-sm-6" ng-repeat="question in rmfeedback" > -->
-            
-            <div class="form-group col-sm-6" ng-repeat="question in rmfeedback" >
+           
+            <div class="form-group col-sm-12" ng-repeat="question in rmfeedback" >
                 <div ng-if="question.qType == 'textarea'">
-                <label  class="col-sm-3 control-label no-padding-right">{{question.qText}}</label>
-                <div class="col-sm-3">
-                 <!-- <textarea rows="3" cols="50" ng-model="rmfeedback[question.count]" placeholder="QUESTION"></textarea>  -->
-                  <textarea rows="3" cols="50" ng-model="question.qAns" ></textarea> 
-                <!-- <input type="text" ng-model="question.qAns" placeholder="Answer"> -->
+                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">{{question.qText}}</label>
+                <div class="col-sm-12">
+                 
+                  <textarea rows="2" cols="85" ng-model="question.qAns" ></textarea> 
+                
                 </div>
                 </div>
             </div>
-            <div class="form-group col-sm-6">
-                <label  class="col-sm-3 control-label no-padding-right">Decision</label>
-                <div class="col-sm-9">
+            
+            <div style="clear:both; height: 10px;"></div>
+            
+            <div class="form-group col-sm-12">
+                <label  class="col-sm-8 control-label" style="text-align: left;">Decision</label>
+                <div class="col-sm-4">
                 <label for="acceptRadio">Accept</label>
                 <input id="acceptRadio" type="radio" name="action" ng-model="resAction" value="2">
                 <label for="rejectRadio">Reject</label>
                 <input id="rejectRadio" type="radio" name="action" ng-model="resAction" value="3">
                 </div>
             </div> 
-            <!-- <div class="form-group col-sm-6">
-                <label  class="col-sm-3 control-label no-padding-right">Comments</label>
-                <div class="col-sm-9">
-                </div>
-
-            </div> -->
-           <!--  <div class="form-group col-sm-6">
-                <label  class="col-sm-3 control-label no-padding-right">Employee Code</label>
-                <div class="col-sm-9">
-                </div>
-
-            </div> -->
+            
+            <div style="clear:both; height: 5px;"></div>
+       <div class="col-sm-12" style=" text-align: center;">
+       <input type="submit" value="SUBMIT" class="btn btn-primary"> </div>
+         
        </div>
-
-                <input type="submit" value="SUBMIT">
+                       
     </form>
 </div>
 

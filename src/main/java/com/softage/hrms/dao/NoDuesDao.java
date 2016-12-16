@@ -21,4 +21,7 @@ public interface NoDuesDao {
     
     public JSONObject insertnoduesclearence(TblNoDuesClearence clearencebean);
 	
+    
+    //Dao created by Arpna to find the No Dues Pending Status
+    public JSONObject getNoDuesPendingStatus(int resignationID);
 }

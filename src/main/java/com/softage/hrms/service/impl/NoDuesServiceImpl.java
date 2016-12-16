@@ -49,6 +49,12 @@ private NoDuesDao noduesdao;
 		
 		return noduesdao.insertnoduesclearence(clearencebeanstatus);
 	}
+	
+	//Service to find the pending No Dues Status by Arpan
+	@Override
+	public JSONObject getNoDuesPendingStatus(int resignationID) {
+		return noduesdao.getNoDuesPendingStatus(resignationID);
+	}
 
 	
 }

@@ -38,15 +38,14 @@ public class ResignationDaoImpl implements ResignationDao {
 	public JSONObject insertResignationDao(TblUserResignation resignationBean) {
 		JSONObject jsonObject=new JSONObject();
 		Session session=this.sessionFactory.getCurrentSession();
-		int returned=(Integer)session.save(resignationBean);
+		//int returned=(Integer)session.save(resignationBean);
 		//System.out.println(returned);
-		if(returned<1){
+		try{
+		session.save(resignationBean);
+		jsonObject.put("result", "successful");
+		}catch(Exception e){
 			jsonObject.put("result", "unsuccessful");
 		}
-		else{
-			jsonObject.put("result", "successful");
-		}
-		
 		return jsonObject;
 	}
 
@@ -174,12 +173,21 @@ public class ResignationDaoImpl implements ResignationDao {
 	@Transactional
 	public TblUserResignation getResignationUserDao(String emp_code, int status) {
 		Session session=this.sessionFactory.getCurrentSession();
+		TblUserResignation resignedUser=new TblUserResignation();
+		if(status!=0){
 		String hql="select resignation from TblUserResignation resignation where resignation.empCode=:employeecode and resignation.mstResignationStatus="+status;
 		Query query=session.createQuery(hql);
 		query.setParameter("employeecode",emp_code );
 	//	query.setParameter("emp_status", status);
 		//List<TblUserResignation> resignedUser=query
-		TblUserResignation resignedUser=(TblUserResignation)query.uniqueResult();
+		resignedUser=(TblUserResignation)query.uniqueResult();
+		}
+		else{
+			String hql="select resignation from TblUserResignation resignation join fetch resignation.mstReason join fetch resignation.mstResignationStatus where resignation.empCode=:employeecode order by resignation.resignationDate desc";
+			Query query=session.createQuery(hql).setMaxResults(1);
+			query.setParameter("employeecode",emp_code );
+			resignedUser=(TblUserResignation)query.uniqueResult();
+		}
 		return resignedUser;
 	}
 

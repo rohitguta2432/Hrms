@@ -2,6 +2,7 @@ package com.softage.hrms.dao;
 
 import java.util.List;
 
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Repository;
 
 import com.softage.hrms.model.MstUploadItem;
@@ -14,4 +15,5 @@ public interface EmployeeDocumentDao {
 	public MstUploadItem entityById(int id);
 	public List<TblUploadedPath> getByEmpCode(String empcode);
 	public TblUploadedPath getByResignId(int resignId,int itemId);
+	public JSONObject getNotUploadedDocumentsById(int resignID);
 }

@@ -120,4 +120,15 @@ public class EmployeeDocumentDaoImp implements EmployeeDocumentDao{
 		return tblUploadedPath;
 	}
 
+	@Override
+	public JSONObject getNotUploadedDocumentsById(int resignID) {
+		JSONObject notUploadedDocsJson=new JSONObject();
+		Session session=this.sessionfactory.getCurrentSession();
+		String sql="call usp_getNotUploadedDocs(?)";
+		Query query=session.createSQLQuery(sql).setParameter(1, resignID);
+		List<String> notUploadedDocs=query.list();
+		notUploadedDocsJson.put("docList", notUploadedDocs);
+		return notUploadedDocsJson;
+	}
+
 }

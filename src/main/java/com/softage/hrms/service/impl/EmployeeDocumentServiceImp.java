@@ -2,6 +2,7 @@ package com.softage.hrms.service.impl;
 
 import java.util.List;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +44,11 @@ public class EmployeeDocumentServiceImp implements EmployeeDocumentService {
 	public TblUploadedPath getByResignId(int resignId,int itemId) {
 		// TODO Auto-generated method stub
 		return employeeDocumentDao.getByResignId(resignId,itemId);
+	}
+
+	@Override
+	public JSONObject getNotUploadedDocumentsById(int resignationID) {
+		return employeeDocumentDao.getNotUploadedDocumentsById(resignationID);
 	}
 
 }
