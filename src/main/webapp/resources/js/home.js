@@ -96,6 +96,11 @@ application.config(function($stateProvider, $urlRouterProvider) {
 		templateUrl:'resources/js/nodueshr/nodueshrmodal.html',
 		controller:'nodueshrmodalcontroller'
 			
+	}).state('tracking',{
+		url:'/tracking',
+		templateUrl:'resources/js/tracking/tracking.html',
+		controller:'trackingController'
+
 	});
 });
 application.controller('homeController', function($scope, $http) {
@@ -110,4 +115,28 @@ application.controller('homeController', function($scope, $http) {
 					alert('Error');
 		})
 	}
+});
+application.directive("datepicker1", function () {
+    return {
+        restrict: "A",
+        require: "ngModel",
+        link: function (scope, elem, attrs, ngModelCtrl) {
+            var updateModel = function (dateText) {
+                // call $apply to bring stuff to angular model
+                scope.$apply(function () {
+                    ngModelCtrl.$setViewValue(dateText);
+                });
+            };
+
+            var options = {
+                dateFormat: "yy/mm/dd",
+                // handle jquery date change
+                onSelect: function (dateText) {
+                    updateModel(dateText);
+                }
+
+            };
+            elem.datepicker(options);
+        }
+    }
 });

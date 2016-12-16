@@ -17,5 +17,7 @@ public interface ApprovalDao {
 	public int saveRmFeedbackDao(TblFeedbacks feedback);
 	public void updateResignationStatusDao(TblUserResignation resBean);
 	//public List<TblUserResignation> getHrApprovalInitDao(String empcode);
+	public String insertHrLwdDao(TblUserResignation resignation);
+	public String insertHrLwdCommentDao(TblFeedbacks feedbacks);
 
 }

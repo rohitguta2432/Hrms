@@ -48,6 +48,16 @@ public class ApprovalServiceImpl implements ApprovalService {
 		approvaldao.updateResignationStatusDao(resBean);
 	}
 
+	@Override
+	public String insertHrLwdService(TblUserResignation resignation) {
+		return approvaldao.insertHrLwdDao(resignation);
+	}
+
+	@Override
+	public String insertHrLwdCommentService(TblFeedbacks hr_lwd_feedback) {
+		return approvaldao.insertHrLwdCommentDao(hr_lwd_feedback);
+	}
+
 	/*@Override
 	public List<TblUserResignation> getHrApprovalInitService(String empcode) {
 		return approvaldao.getHrApprovalInitDao(empcode);

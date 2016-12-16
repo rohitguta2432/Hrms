@@ -152,4 +152,31 @@ public class ApprovalDaoImpl implements ApprovalDao {
 		return approvedResignationList;
 	}
 */
+	@Override
+	@Transactional
+	public String insertHrLwdDao(TblUserResignation resignation){
+		Session session=this.sessionfactory.getCurrentSession();
+		String status="";
+		try{
+		session.saveOrUpdate(resignation);
+		status="successful";
+		}catch(Exception e){
+			status="error";
+		}
+		return status;
+	}
+
+	@Override
+	@Transactional
+	public String insertHrLwdCommentDao(TblFeedbacks feedbacks) {
+		Session session=this.sessionfactory.getCurrentSession();
+		String lwdCommentFeedback="";
+		try{
+			session.saveOrUpdate(feedbacks);
+			lwdCommentFeedback="successful";
+		}catch(Exception e){
+			lwdCommentFeedback="error";
+		}
+		return lwdCommentFeedback;
+	}
 }

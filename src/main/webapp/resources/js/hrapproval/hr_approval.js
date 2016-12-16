@@ -2,9 +2,7 @@ application.controller('hrApprovalController',['$scope','$http','$rootScope','$m
 	$scope.hr_approvalInit=function(){
 		$http.get(domain+'/hrapprovalInit')
 		.success(function(data,status,headers,config){
-			alert('in hr initialisation');
 			$scope.employeeInfo=data.empinfo;
-			alert($scope.employeeInfo);
 		})
 		.error(function(data,status,headers,config){
 			alert('error');
@@ -30,23 +28,28 @@ application.controller('hrApprovalController',['$scope','$http','$rootScope','$m
 		$scope.noticeperiod=$scope.params.notice;
 		$scope.rmempcode=$scope.params.rm_ecode;
 		$scope.rmemail=$scope.params.rmEmail;
-		$http.get(domain+'/getHrNoticeTime')
-		.success(function(data,status,headers,config){
-			$scope.noticePeriod=data.noticeList;
-		})
-		.error(function(data,status,headers,config){
-			alert('Error');
-		});
+		$scope.date1='';
 	}
 	
 	$scope.hrApprovalAction=function(hrform){
-		var data='firstname='+$scope.firstname + '&lastname=' + $scope.resigndate + '&empCode=' + $scope.empcode
-		+ '&resignationDate'+$scope.resigndate + '&noticePeriod='+noticeperiod+'&rmfirstname='+$scope.rm_fname
-		+'&rmlastname='+$scope.rm_lname+'&rmempcode'+$scope.rmempcode+'&rmstatus='+$scope.rmstatus+
-		'&rmnotice='+$scope.rmnotice+'&hrnotice'+noticeTime;
+		
+		var data='empname='+$scope.emp_name +'&empCode=' + $scope.empcode
+		+ '&resignationDate'+$scope.resigndate + '&noticePeriod='+$scope.noticeperiod+
+		'&rmempcode'+$scope.rmempcode+'&rmemail='+$scope.rmemail+'&hrlwd='+$scope.date1
+		+'&hrcomments='+$scope.comments;
 		$http.get(domain+'/submitHrApproval?'+data)
 		.success(function(data,status,config,headers){
-			alert('successfuly inserted')
+			$scope.finalstatus=data.status;
+			if($scope.finalstatus=='successful'){
+				alert('success');
+			}
+			else if(data.status=='successful'){
+				alert('success');
+			}
+		else{
+			alert('maybe successful');
+		}
+			//alert($scope.finalstatus);
 		})
 		.error(function(data,status,headers,config){
 			alert('Error');

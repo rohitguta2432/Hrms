@@ -50,6 +50,8 @@
 	<script src="resources/js/noduesrm/noduesrmmodal.js"></script>
 	<script src="resources/js/noduesinfra/noduesinfra.js"></script>
 	<script src="resources/js/noduesinfra/noduesinframodal.js"></script>
+	<script src="resources/js/tracking/tracking.js"></script>
+
 </head>
 <body class="no-skin" ng-controller="homeController" ng-init="getLinks()">
     <div id="navbar" class="navbar navbar-default navbar-collapse h-navbar">
@@ -220,11 +222,81 @@
     <!-- page specific plugin scripts -->
     <script src="resources/libs/js/jquery-ui.custom.min.js"></script>
     <!--<script src="js/jquery.ui.touch-punch.min.js"></script>-->
+<!--      <script src="resources/libs/bootstrap-datepicker.js"></script>  -->
     <!-- ace scripts -->
-    <!--<script src="js/ace-elements.js"></script>-->
+    <!--<script src="resources/js/ace-elements.js"></script>-->
     <script src="resources/libs/js/ace.js"></script>
+    <script type="resources/libs/datetime-picker.js"></script>
     <!-- inline scripts related to this page -->
+    
+    <!-- <script>
+        if (top.location != location) {
+            top.location.href = document.location.href;
+        }
+        $(function () {
+            window.prettyPrint && prettyPrint();
+            $('#dp1').datepicker({
+                format: 'mm-dd-yyyy'
+            });
+            $('#dp2').datepicker();
+            $('#dp3').datepicker();
+            $('#dp3').datepicker();
+            $('#dpYears').datepicker();
+            $('#dpMonths').datepicker();
 
+
+            var startDate = new Date(2012, 1, 20);
+            var endDate = new Date(2012, 1, 25);
+            $('#dp4').datepicker()
+				.on('changeDate', function (ev) {
+				    if (ev.date.valueOf() > endDate.valueOf()) {
+				        $('#alert').show().find('strong').text('The start date can not be greater then the end date');
+				    } else {
+				        $('#alert').hide();
+				        startDate = new Date(ev.date);
+				        $('#startDate').text($('#dp4').data('date'));
+				    }
+				    $('#dp4').datepicker('hide');
+				});
+            $('#dp5').datepicker()
+				.on('changeDate', function (ev) {
+				    if (ev.date.valueOf() < startDate.valueOf()) {
+				        $('#alert').show().find('strong').text('The end date can not be less then the start date');
+				    } else {
+				        $('#alert').hide();
+				        endDate = new Date(ev.date);
+				        $('#endDate').text($('#dp5').data('date'));
+				    }
+				    $('#dp5').datepicker('hide');
+				});
+
+            // disabling dates
+            var nowTemp = new Date();
+            var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+            var checkin = $('#dpd1').datepicker({
+                onRender: function (date) {
+                    return date.valueOf() < now.valueOf() ? 'disabled' : '';
+                }
+            }).on('changeDate', function (ev) {
+                if (ev.date.valueOf() > checkout.date.valueOf()) {
+                    var newDate = new Date(ev.date)
+                    newDate.setDate(newDate.getDate() + 1);
+                    checkout.setValue(newDate);
+                }
+                checkin.hide();
+                $('#dpd2')[0].focus();
+            }).data('datepicker');
+            var checkout = $('#dpd2').datepicker({
+                onRender: function (date) {
+                    return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
+                }
+            }).on('changeDate', function (ev) {
+                checkout.hide();
+            }).data('datepicker');
+        });
+    </script>
+ -->
 
 </body>
 </html>

@@ -22,9 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.net.ftp.FTP;
+/*import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;
+import org.apache.commons.net.ftp.FTPFile;*/
 
 import org.json.simple.JSONArray;
 
@@ -294,8 +294,13 @@ public class HomeController {
 			List<JSONObject> listAnswers=(List<JSONObject>) answerJson.get("data");
 			MstResignationStatus resignationStatus=new MstResignationStatus();
 			resignationStatus=resignationService.getStatus(resignStatus);
+			DateFormat df=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			Date rmapprovaldate=new Date();
+			String rmappdate=df.format(rmapprovaldate);
+			Date rm_approval_date=new Date(rmappdate);
 			TblUserResignation resignedUser=resignationService.getResignationUserService(feedbackon, 1);
 			resignedUser.setMstResignationStatus(resignationStatus);
+			resignedUser.setRmApprovalDate(rm_approval_date);
 			for(JSONObject answer: listAnswers){
 				Long serialid=(Long) answer.get("sno");
 				int sid=serialid.intValue();
@@ -367,7 +372,49 @@ public class HomeController {
 		return hrapprovaljson;
 	}
 
+	
+	@RequestMapping(value="/submitHrApproval",method=RequestMethod.GET)
+	@ResponseBody
+	public JSONObject submitHrApproval(HttpServletRequest request,HttpSession session){
+		JSONObject jsob=new JSONObject();
+		String lwdCommentStatus="";
+		session=request.getSession();
+		String hrempcode=(String)session.getAttribute("employeecode");
+		String empname=(String)request.getParameter("empname");
+		String empcode=(String)request.getParameter("empCode");
+		String lastworkingdate=(String)request.getParameter("hrlwd");
+		System.out.println("lwd : "+lastworkingdate);
+		String rmempcode=(String)request.getParameter("rmempcode");
+		String hrcomments=(String)request.getParameter("hrcomments");
+		DateFormat df=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date hrapprovaldate=new Date();
+		String hr_app_date=df.format(hrapprovaldate);
+		Date hrappdate=new Date(hr_app_date);
+		Date lwd=new Date(lastworkingdate);
+		MstResignationStatus hrstatus=resignationService.getStatus(4);
+		TblUserResignation resignation=resignationService.getResignationUserService(empcode, 2);
+		MstQuestions hrcomment=approvalservice.getRmFeedbackQuestionService(9);
+		TblFeedbacks hr_lwd_comment=new TblFeedbacks();
+		resignation.setHrApprovalDate(hrappdate);
+		resignation.setHrLwdDate(lwd);
+		resignation.setMstResignationStatus(hrstatus);
+		hr_lwd_comment.setAnsText(hrcomments);
+		hr_lwd_comment.setFeedbackBy("HR");
+		hr_lwd_comment.setFeedbackFrom(hrempcode);
+		hr_lwd_comment.setMstQuestions(hrcomment);
+		hr_lwd_comment.setTblUserResignation(resignation);
+		String lwdStatus=approvalservice.insertHrLwdService(resignation);
+		if(lwdStatus.equalsIgnoreCase("successful")){
+			lwdCommentStatus=approvalservice.insertHrLwdCommentService(hr_lwd_comment);
+		}else{
+			lwdCommentStatus="Unable to update";
+		}
+		jsob.put("status", lwdCommentStatus);
+		return jsob;
+	}
 
+	
+	
 	@RequestMapping(value = "/getnoduesit", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getnoduesitinformation() {
@@ -900,7 +947,7 @@ public JSONObject getjsondata(HttpServletRequest request)
 
 
 	public static String uploadDocumentFTPClient(String file,String empId, byte[] bytes){
-
+/*
 		String ftpHost = "122.15.90.140";
 		String username = "administrator";
 		String password = "softage@tchad";
@@ -970,12 +1017,13 @@ public JSONObject getjsondata(HttpServletRequest request)
 		}
 
 
-		return ftpPath;
+		return ftpPath;*/
+		return null;
 	}
 
 	public static byte[] downloadDocumentFTPClient(String filePath,String filename){
 
-		String ftpHost = "122.15.90.140";
+		/*String ftpHost = "122.15.90.140";
 		String username = "administrator";
 		String password = "softage@tchad";
 		FileOutputStream fos=null;
@@ -1023,7 +1071,8 @@ public JSONObject getjsondata(HttpServletRequest request)
 		}
 
 
-		return bytes;
+		return bytes;*/
+		return null;
 	}
 	@RequestMapping(value = "/getEmpUploadList", method = RequestMethod.GET)
 	@ResponseBody

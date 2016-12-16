@@ -17,5 +17,7 @@ public interface ApprovalService {
 	public int saveRmFeedbackService(TblFeedbacks feedback);
 	public void updateResignationStatus(TblUserResignation resBean);
 	//public List<TblUserResignation> getHrApprovalInitService(String empcode);
+	public String insertHrLwdService(TblUserResignation resignation) ;
+	public String insertHrLwdCommentService(TblFeedbacks hr_lwd_feedback);
 
 }

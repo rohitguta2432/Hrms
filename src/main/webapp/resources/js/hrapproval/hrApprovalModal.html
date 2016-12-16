@@ -11,63 +11,55 @@
 	<!-- ng-init="hrApprovalActionInit()" -->
 	<div class="modal-body">
 		<form class="form-horizontal" ng-controller="hrApprovalController"
-			 ng-init="hrApprovalActionInit()" name="hrApprovalForm"
+			ng-init="hrApprovalActionInit()" name="hrApprovalForm"
 			ng-submit="hrApprovalAction(hrApprovalForm)">
 			<div class="form-group">
 				<div class="form-group col-sm-6">
-					<label class="col-sm-3 control-label no-padding-right">First
-						name</label>
-					<div class="col-sm-9">
-						<input type="text" name="firstName" ng-model="firstname" ng-disabled="true">
-					</div>
-				</div>
-				<div class="form-group col-sm-6">
-					<label class="col-sm-3 control-label no-padding-right">Last
+					<label class="col-sm-3 control-label no-padding-right">
 						Name</label>
 					<div class="col-sm-9">
-						<input type="text" name="lastName" ng-model="lastname" ng-disabled="true">
+						<input type="text" name="firstName" ng-model="emp_name"
+							ng-disabled="true">
 					</div>
 				</div>
 				<div class="form-group col-sm-6">
 					<label class="col-sm-3 control-label no-padding-right">Employee
 						Code</label>
 					<div class="col-sm-9">
-						<input type="text" name="empCode" ng-model="empcode" ng-disabled="true">
+						<input type="text" name="empCode" ng-model="empcode"
+							ng-disabled="true">
 					</div>
 				</div>
 				<div class="form-group col-sm-6">
 					<label class="col-sm-3 control-label no-padding-right">Resignation
 						Date</label>
 					<div class="col-sm-9">
-						<input type="text" name="resDate" ng-model="resigndate" ng-disabled="true">
+						<input type="text" name="resDate" ng-model="resigndate"
+							ng-disabled="true">
 					</div>
 				</div>
 				<div class="form-group col-sm-6">
 					<label class="col-sm-3 control-label no-padding-right">Notice
 						Period</label>
 					<div class="col-sm-9">
-						<input type="text" name="notice" ng-model=noticeperiod ng-disabled="true">
-					</div>
-				</div>
-				<div class="form-group col-sm-6">
-					<label class="col-sm-3 control-label no-padding-right">RM
-						First Name</label>
-					<div class="col-sm-9">
-						<input type="text" name="rm_firstName" ng-model="rm_fname" ng-disabled="true">
-					</div>
-				</div>
-				<div class="form-group col-sm-6">
-					<label class="col-sm-3 control-label no-padding-right">RM
-						Last Name</label>
-					<div class="col-sm-9">
-						<input type="text" name="rm_lastName" ng-model="rm_lname" ng-disabled="true">
+						<input type="text" name="notice" ng-model=noticeperiod
+							ng-disabled="true">
 					</div>
 				</div>
 				<div class="form-group col-sm-6">
 					<label class="col-sm-3 control-label no-padding-right">RM
 						Employee Code</label>
 					<div class="col-sm-9">
-						<input type="text" name="rm_empCode" ng-model="rmempcode" ng-disabled="true">
+						<input type="text" name="rm_empCode" ng-model="rmempcode"
+							ng-disabled="true">
+					</div>
+				</div>
+				<div class="form-group col-sm-6">
+					<label class="col-sm-3 control-label no-padding-right">
+					RM Email</label>
+					<div class="col-sm-9">
+						<input type="text" name="rm_empCode" ng-model="rmemail"
+							ng-disabled="true">
 					</div>
 				</div>
 				<div class="form-group col-sm-6">
@@ -77,26 +69,17 @@
 						<textarea rows="3" cols="15" ng-model="comments"></textarea>
 					</div>
 				</div>
-				<div class="form-group col-sm-6">
-					<label class="col-sm-3 control-label no-padding-right">Notice Set By RM
+				<div class="form-group row col-sm-6">
+					<label class="col-sm-3 control-label no-padding-right">Last Working Day
 						</label>
-					<div class="col-sm-9">
-						<input type="text" name="rm_notice" ng-model="rmnotice" ng-disabled="true">
-					</div>
-				</div>
-				<div class="form-group col-sm-6">
-					<label class="col-sm-3 control-label no-padding-right">Notice
-						Period</label>
-					<div class="col-sm-9">
-						<select name="noticePeriod" ng-model="noticeTime">
-							<option value="">Select</option>
-							<option ng-repeat="notice in noticePeriod" value="{{notice}}">{{notice}}</option>
-						</select>
-					</div>
+					<div class="col-sm-9"  >
+                                    <input type="text"  ng-model="date1" datepicker1 class="form-control" id="Text5" placeholder="Select from date" />
+                                   
+                                </div>
 				</div>
 				<div></div>
 				<input type="submit" value="SUBMIT">
-		</div>
+			</div>
 		</form>
 	</div>
 </body>
