@@ -11,4 +11,5 @@ public interface ExitInterviewDao {
 	public List<JSONObject> getHrQuestions(int roleid,int stageid);
 	
 	public JSONObject inserthrfeedback(TblFeedbacks feedbackbean);
+	
 }

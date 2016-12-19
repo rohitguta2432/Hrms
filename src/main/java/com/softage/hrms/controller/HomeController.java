@@ -58,7 +58,7 @@ import com.softage.hrms.dao.NoDuesDao;
 import com.softage.hrms.model.MstQuestions;
 
 import com.softage.hrms.model.MailSend;
-
+import com.softage.hrms.model.MstDepartment;
 import com.softage.hrms.model.MstReason;
 import com.softage.hrms.model.MstResignationStatus;
 
@@ -67,6 +67,7 @@ import com.softage.hrms.model.TblFeedbacks;
 import com.softage.hrms.model.TblUploadedPath;
 
 import com.softage.hrms.model.TblAssetsManagement;
+import com.softage.hrms.model.TblExEmployeeQuery;
 import com.softage.hrms.model.TblFeedbacks;
 import com.softage.hrms.model.TblNoDuesClearence;
 
@@ -76,6 +77,7 @@ import com.softage.hrms.service.EmployeeDocumentService;
 import com.softage.hrms.service.ExitInterviewService;
 import com.softage.hrms.service.NoDuesService;
 import com.softage.hrms.service.PageService;
+import com.softage.hrms.service.QueryService;
 import com.softage.hrms.service.ResignationService;
 import com.softage.hrms.service.impl.MailServiceImpl;
 
@@ -111,6 +113,9 @@ public class HomeController {
 
 	@Autowired
 	private EmployeeDocumentService employeeDocumentService;
+
+	@Autowired
+	private QueryService queryService;
 
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -386,7 +391,7 @@ public class HomeController {
 		return hrapprovaljson;
 	}
 
-	
+
 	@RequestMapping(value="/submitHrApproval",method=RequestMethod.GET)
 	@ResponseBody
 	public JSONObject submitHrApproval(HttpServletRequest request,HttpSession session){
@@ -426,6 +431,7 @@ public class HomeController {
 		jsob.put("status", lwdCommentStatus);
 		return jsob;
 	}
+
 
 	@RequestMapping(value="/trackingStatusInit",method=RequestMethod.GET)
 	@ResponseBody
@@ -541,7 +547,7 @@ public class HomeController {
 		itassetsmodal.put("location", "circle");
 
 
-	/*	itassetsmodal.put("assets", assets);
+		/*	itassetsmodal.put("assets", assets);
 		itassetsmodal= noduesservice.listassetsdetails();
 
 		System.out.println(itassetsmodal);*/
@@ -556,7 +562,7 @@ public class HomeController {
 		JSONObject itassetsmodal = new JSONObject();
 
 
-		
+
 		itassetsmodal.put("empcode","ss0097");
 		itassetsmodal.put("firstname", "rohit");
 		itassetsmodal.put("lastname", "raj");
@@ -565,21 +571,21 @@ public class HomeController {
 		itassetsmodal.put("location", "circle");
 
 
-		
-		
-		
-	return itassetsmodal;
+
+
+
+		return itassetsmodal;
 	}
-	
-	
-	
-	
-@RequestMapping(value = "/getitassets", method = RequestMethod.GET)
+
+
+
+
+	@RequestMapping(value = "/getitassets", method = RequestMethod.GET)
 	@ResponseBody
 
-public JSONObject getjsondata(HttpServletRequest request)
-{
-	
+	public JSONObject getjsondata(HttpServletRequest request)
+	{
+
 		String emp_code=request.getParameter("employee_code");
 
 		JSONObject jsonObject=new JSONObject();
@@ -875,7 +881,7 @@ public JSONObject getjsondata(HttpServletRequest request)
 			logger.info("Server File Location=" +file );
 			String FilePath=empId+"/"+filename;
 
-		//	String filePath  = uploadDocumentFTPClient(filename,empId,bytes);
+			//	String filePath  = uploadDocumentFTPClient(filename,empId,bytes);
 			MstUploadItem mstUploadItem= employeeDocumentService.entityById(itemId);
 			TblUserResignation resignation  =	resignationService.getResignationUserService(empId, 2);
 
@@ -883,11 +889,11 @@ public JSONObject getjsondata(HttpServletRequest request)
 
 			uploadPath.setUploadedBy("Afjal");
 			uploadPath.setEmpCode(empId);
-		//	uploadPath.setPath(filePath);
+			//	uploadPath.setPath(filePath);
 			uploadPath.setUploadedOn(new Date());
 			uploadPath.setTblUserResignation(resignation);
 			uploadPath.setMstUploadItem(mstUploadItem);
-	//		result= employeeDocumentService.save(uploadPath);
+			//		result= employeeDocumentService.save(uploadPath);
 
 		}catch(Exception e){
 			logger.error("",e);
@@ -1021,7 +1027,7 @@ public JSONObject getjsondata(HttpServletRequest request)
 
 
 	public static String uploadDocumentFTPClient(String file,String empId, byte[] bytes){
-/*
+		/*
 		String ftpHost = "122.15.90.140";
 		String username = "administrator";
 		String password = "softage@tchad";
@@ -1161,7 +1167,7 @@ public JSONObject getjsondata(HttpServletRequest request)
 			resignations= resignationService.getHrApprovalInitService(empcode, status);
 
 		}catch (Exception e) {
-                 e.printStackTrace();
+			e.printStackTrace();
 		}
 
 		return resignations;
@@ -1468,4 +1474,105 @@ public JSONObject getjsondata(HttpServletRequest request)
 		return hranswers;
 
 	}
+	@RequestMapping(value = "/employeefeedback", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getempfeedback(HttpServletRequest request,HttpSession session) {
+
+		session=request.getSession();
+		String empfeedback=(String) session.getAttribute("employeecode");
+
+
+		JSONObject empfeedbacklist=new JSONObject();		
+		try{
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return empfeedbacklist;
+	}
+
+	@RequestMapping(value = "/employeeQuery", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONObject employeeQuery(HttpServletRequest request,HttpSession session) {
+
+           String empcode="ss0062";
+           String empName="Rohit";
+
+	 try {
+		 
+		    session=request.getSession();
+		    empcode=(String) session.getAttribute("employeecode"); 
+			String deptId=  request.getParameter("deptId");	
+			int departmentId=Integer.parseInt(deptId);
+			// get Query Assigned Manager Employee Code
+			TblUserResignation tblUserResignation =resignationService.getResignationUserService(empcode, 0);
+			String assingToEmpcode="";			
+			String queryText=  request.getParameter("quertext");	
+			
+			TblExEmployeeQuery employeeQuery=new TblExEmployeeQuery();
+			
+			employeeQuery.setCreatedBy(empName);
+			employeeQuery.setCreatedOn(new Date());
+			employeeQuery.setDepartmentId(departmentId);
+			employeeQuery.setExEmpCode(empcode);
+			employeeQuery.setTblUserResignation(tblUserResignation);
+			employeeQuery.setQueryText(queryText);
+			employeeQuery.setQueryAssigned(assingToEmpcode);
+			
+			String result =queryService.save(employeeQuery);
+			
+			
+			
+			 
+			
+			      
+			            
+			  
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		 }
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@RequestMapping(value = "/getDepartments", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONArray getDepartment(HttpServletRequest request,HttpSession session) {
+		JSONArray jsonArrey=new JSONArray();
+
+		try{
+
+			List<MstDepartment> listDepartment=queryService.getDepartmentList();
+
+			for (MstDepartment mstDepartment : listDepartment) {
+				JSONObject jsonObject=new JSONObject();
+				int deptId= mstDepartment.getDepart_id();
+				String deptName  =mstDepartment.getDepartment_name();
+				jsonObject.put("deptId", deptId);
+				jsonObject.put("name", deptName);
+				jsonArrey.add(jsonObject);
+
+
+
+
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return jsonArrey;
+	}
+
+
+
 }

@@ -90,12 +90,15 @@ application.config(function($stateProvider, $urlRouterProvider) {
 		url:'/HR_NODUES',
 		templateUrl:'resources/js/nodueshr/nodueshr.html',
 		controller:'nodueshrcontroller'
-	})
-	.state('nodueshrmodal',{
+	}).state('nodueshrmodal',{
 		url:'/HR_NODUES_modal',
 		templateUrl:'resources/js/nodueshr/nodueshrmodal.html',
 		controller:'nodueshrmodalcontroller'
 			
+	}).state('Query',{
+		url:'/Query',
+		templateUrl:'resources/js/query/query.html',
+		controller:'queryController'
 	}).state('tracking',{
 		url:'/tracking',
 		templateUrl:'resources/js/tracking/tracking.html',

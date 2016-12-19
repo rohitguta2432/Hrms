@@ -28,6 +28,9 @@ public class TblExEmpCommunication implements java.io.Serializable {
 	private Integer queryStatus;
 	private Date createdOn;
 	private String createdBy;
+	private String queryReply;
+
+
 
 	public TblExEmpCommunication() {
 	}
@@ -80,6 +83,15 @@ public class TblExEmpCommunication implements java.io.Serializable {
 
 	public void setDepartrmentId(Integer departrmentId) {
 		this.departrmentId = departrmentId;
+	}
+	
+	@Column(name = "query_Reply")
+	public String getQueryReply() {
+		return queryReply;
+	}
+
+	public void setQueryReply(String queryReply) {
+		this.queryReply = queryReply;
 	}
 
 	@Column(name = "query_status")

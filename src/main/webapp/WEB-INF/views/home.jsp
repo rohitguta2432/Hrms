@@ -51,6 +51,7 @@
 	<script src="resources/js/noduesinfra/noduesinfra.js"></script>
 	<script src="resources/js/noduesinfra/noduesinframodal.js"></script>
 	<script src="resources/js/tracking/tracking.js"></script>
+	<script src="resources/js/query/query.js"></script>
 
 </head>
 <body class="no-skin" ng-controller="homeController" ng-init="getLinks()">

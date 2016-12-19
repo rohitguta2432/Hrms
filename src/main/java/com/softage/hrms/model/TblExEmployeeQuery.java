@@ -31,6 +31,9 @@ public class TblExEmployeeQuery implements java.io.Serializable {
 	private String queryText;
 	private Date createdOn;
 	private String createdBy;
+	private String queryAssigned;
+
+
 	private Set<TblExEmpCommunication> tblExEmpCommunications = new HashSet<TblExEmpCommunication>(0);
 
 	public TblExEmployeeQuery() {
@@ -95,7 +98,16 @@ public class TblExEmployeeQuery implements java.io.Serializable {
 	public void setQueryText(String queryText) {
 		this.queryText = queryText;
 	}
+	@Column(name = "query_assigned", length = 500)
+	public String getQueryAssigned() {
+		return queryAssigned;
+	}
 
+	public void setQueryAssigned(String queryAssigned) {
+		this.queryAssigned = queryAssigned;
+	}
+	
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_on", length = 19)
 	public Date getCreatedOn() {
