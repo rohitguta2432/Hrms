@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -157,6 +158,10 @@ public class HomeController {
 		session=request.getSession();
 		String empcode=(String)session.getAttribute("employeecode");
 		int roleid=(Integer)session.getAttribute("roleid");
+		DateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date currDatetime=new Date();
+		String current_date=df.format(currDatetime);
+		System.out.println("The current datetime is : "+current_date);
 		ISoftAgeEnterpriseProxy emp_prxoy=new ISoftAgeEnterpriseProxy();
 		//try {
 		//int id=emp_prxoy.getUserDetail("ss0077").getRoleId(); standalones id
@@ -247,7 +252,7 @@ public class HomeController {
 				mailService.sendEmail(emp_email, "evm@softageindia.com", "test",emp_message);
 				}catch(Exception e){
 					e.printStackTrace();
-					System.out.println("Problem is sending email");
+					System.out.println("Problem in sending email");
 				}
 			}
 		//} catch (RemoteException e) {
@@ -285,7 +290,7 @@ public class HomeController {
 			quesjson.put("qText", quesText);
 			quesjson.put("qType", questType);
 			quesjson.put("sno", qid);
-			//quesjson.put("sno", count);
+			quesjson.put("qCount", count);
 			quesjson.put("qAns", "");
 			count=count+1;
 			quesList.add(quesjson);
@@ -424,8 +429,13 @@ public class HomeController {
 		hr_lwd_comment.setMstQuestions(hrcomment);
 		hr_lwd_comment.setTblUserResignation(resignation);
 		String lwdStatus=approvalservice.insertHrLwdService(resignation);
+		/*We have to use ESF service to get emails*/
 		if(lwdStatus.equalsIgnoreCase("successful")){
 			lwdCommentStatus=approvalservice.insertHrLwdCommentService(hr_lwd_comment);
+			String messageToEmp="Hi your last working day has been set to - "+hrappdate;
+			//mailService.sendEmail("employee@softageindia.com", "evm@softageindia.com", "Last Working Day Set By HR", messageToEmp);
+			//mailService.sendEmail(RmManager@softageindia.com, "evm@softageindia.com", "Last Working Day Set By HR", messageToEmp);
+			//mailService.sendEmail(HrManager@softageindia.com, "evm@softageindia.com", "Last Working Day Set By HR", messageToEmp);
 		}else{
 			lwdCommentStatus="Unable to update";
 		}
@@ -1573,7 +1583,105 @@ public class HomeController {
 		}
 		return jsonArrey;
 	}
+	
+	@RequestMapping(value="/getRMApprovalInitFromService",method=RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getApprovalIntiFromService(HttpServletRequest request,HttpSession session){
+		session=request.getSession();
+		JSONObject jsonApproval=new JSONObject();
+		String emp_code=(String)session.getAttribute("employeecode");
+		List<String> rm_list=resignationService.getAllResignedUserRMs();
+		Set<String> to_show=new HashSet<String>();
+		for(String rm : rm_list){
+			String rm_rm1="ss0053";
+			String rm_rm2="ss0050";
+			ISoftAgeEnterpriseProxy emp=new ISoftAgeEnterpriseProxy();
+			/*String rm_rm1=emp.getUserDetail(rm).getRmManager(); USE ESF SERVICE
+			String rm_rm2=emp.getUserDetail(rm_rm1).getRmManager();*/
+			if((rm_rm1==null || rm_rm1=="" )&& emp_code.equals(rm)){
+				to_show.add(rm);
+				//continue;
+			}
+			else if((rm_rm1==null || rm_rm1=="")&& !emp_code.equals(rm) ){
+				continue;
+			}
+			else if(rm_rm2==null || rm_rm2==""){
+				if(emp_code.equals(rm)){
+					to_show.add(rm);
+				}
+				else if(emp_code.equals(rm_rm1)){
+					to_show.add(rm);
+				}
+				else{
+					continue;
+				}
+			}
+			else{
 
+			if(emp_code.equals(rm)){
+				to_show.add(rm);
+			}
+			else if(emp_code.equals(rm_rm1)){
+				to_show.add(rm);
+			}
+			else if(emp_code.equals(rm_rm2)){
+				to_show.add(rm);
+			}
+			else{
+				continue;
+			}
+			}
+		}
+		jsonApproval=resignationService.getAllResignedUsers(to_show);
+		return jsonApproval;
+		
+	}
+	
+	@RequestMapping(value="/getHrApprovalFromService",method=RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getHRApprovalInitFromService(HttpServletRequest request,HttpSession session){
+		JSONObject hrapprovaljson=new JSONObject();
+		session=request.getSession();
+		String emp_code=(String)session.getAttribute("employeecode");
+		List<String> resignedUsersHrList=resignationService.getAllResignedUsersHrs();
+		Set<String> hr_to_show=new HashSet<String>();
+		for(String hr : resignedUsersHrList){
+			String hr_hr1="ss0073";
+			String hr_hr2="ss0029";
+			ISoftAgeEnterpriseProxy emp=new ISoftAgeEnterpriseProxy();
+			//String hr_hr1=emp.getUserDetail(hr).getHrManager(); USE ESF SERVICE
+			//String hr_hr2=emp.getUserDetail(hr_hr1).getHrManager();
+			if((hr_hr1==null || hr_hr1=="") && emp_code.equals(hr)){
+				hr_to_show.add(hr);
+			}
+			else if((hr_hr1==null && hr_hr1=="") && !emp_code.equals(hr)){
+				continue;
+			}
+			else if(hr_hr2==null && hr_hr2==""){
+				if(emp_code.equals(hr)){
+					hr_to_show.add(hr);
+				}else if(emp_code.equals(hr_hr1)){
+					hr_to_show.add(hr);
+				}
+			}
+			else{
+				if(emp_code.equals(hr)){
+					hr_to_show.add(hr);
+				}
+				else if(emp_code.equals(hr_hr1)){
+					hr_to_show.add(hr);
+				}
+				else if(emp_code.equals(hr_hr2)){
+					hr_to_show.add(hr);
+				}
+				else{
+					continue;
+				}
+			}
+		}
+		hrapprovaljson=resignationService.getAllResignedUsersHR(hr_to_show);
+		return hrapprovaljson;
+	}
 
 
 }

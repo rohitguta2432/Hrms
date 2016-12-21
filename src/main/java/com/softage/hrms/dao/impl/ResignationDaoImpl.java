@@ -1,10 +1,13 @@
 package com.softage.hrms.dao.impl;
 
+import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
@@ -17,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.tempuri.ISoftAgeEnterpriseProxy;
 
 import com.softage.hrms.dao.EmployeeDocumentDao;
 import com.softage.hrms.dao.ResignationDao;
@@ -203,6 +207,103 @@ public class ResignationDaoImpl implements ResignationDao {
 		System.out.println("In approval daos hr init" + approvedResignationList);
 		return approvedResignationList;
 	}
+
+	@Override
+	@Transactional
+	public List<String> getAllResignedUserRMs() {
+		Session session=this.sessionFactory.getCurrentSession();
+		String sql="select rm_empcode from tbl_user_resignation";
+		Query query=session.createSQLQuery(sql);
+		List<String> list_of_rm=query.list();
+		return list_of_rm;
+	}
+
+	@Override
+	@Transactional
+	public JSONObject getAllResignedUsers(Set<String> setRMs) {
+		Session session=this.sessionFactory.getCurrentSession();
+		JSONObject jsonemp=new JSONObject();
+		ArrayList<JSONObject> jsonArray=new ArrayList<JSONObject>();
+		JSONObject jsob=new JSONObject();
+		int count=1;
+		String emp_code;
+		String first_name=null;
+		String last_name=null;
+		String leaving_reason=null;
+		String comments=null;
+		String noticePeriod=null;;
+		Date relievingDate=null;
+		if(setRMs.isEmpty()){
+			return jsob;
+		}
+		else{
+		for(String rm_empcode : setRMs){
+		String sql="select res.emp_code,res.comments,r.reason,res.releiving_date from tbl_user_resignation res join mst_reason r on res.leaving_reason=r.reason_id where res.rm_empcode='"+rm_empcode+"' and res.status=1";
+		Query query=session.createSQLQuery(sql);
+		List<Object[]> emp_approval_list=query.list();
+		Iterator itr=emp_approval_list.iterator();
+		for (Object object[] : emp_approval_list) {
+			emp_code=(String)object[0];
+			comments=(String)object[1];
+			leaving_reason=(String)object[2];
+			relievingDate=(Date)object[3];
+			DateFormat df=new SimpleDateFormat("yyyy/MM/dd");
+			String reldate=df.format(relievingDate);
+			//Date lwd_date=new Date(reldate);
+			ISoftAgeEnterpriseProxy emp=new ISoftAgeEnterpriseProxy();
+			try {
+				first_name=emp.getUserDetail(emp_code).getFirstName();
+				last_name=emp.getUserDetail(emp_code).getLastName();
+				//noticePeriod=emp.getUserDetail(emp_code).getNoticePeriod();
+				noticePeriod="60";//Using ESF service
+				
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}	
+			jsonemp.put("sno", count);
+			jsonemp.put("first_name", first_name);
+			jsonemp.put("last_name", last_name);
+			jsonemp.put("leaving_reason", leaving_reason);
+			jsonemp.put("comments", comments);
+			jsonemp.put("empcode", emp_code);
+			jsonemp.put("noticePeriod", noticePeriod);
+			jsonemp.put("releivingDate", reldate);
+			jsonArray.add(jsonemp);
+			count=count+1;
+			
+		}
+		}
+		}
+		jsob.put("jsonArray", jsonArray);
+		return jsob;
+	}
+
+	@Override
+	@Transactional
+	public List<String> getAllResignedUsersHrs() {
+		Session session=this.sessionFactory.getCurrentSession();
+		String sql="select hr_empcode from tbl_user_resignation where status=2";
+		Query query=session.createSQLQuery(sql);
+		List<String> list_of_hr=query.list();
+		return list_of_hr;
+	}
+
+	@Override
+	@Transactional
+	public List<ArrayList<TblUserResignation>> getAllResignedUsersHR(Set<String> setHRs) {
+		Session session=this.sessionFactory.getCurrentSession();
+		List<ArrayList<TblUserResignation>> resignedLists=new ArrayList<ArrayList<TblUserResignation>>();
+		for(String hrempcode : setHRs){
+			String hql="select resignUser from TblUserResignation resignUser join fetch resignUser.mstReason where resignUser.hrEmpcode=:hr_emp_code and resignUser.mstResignationStatus=2";
+	 		Query query=session.createQuery(hql);
+	 		ArrayList<TblUserResignation> list_resignedUsers_hr=(ArrayList<TblUserResignation>) query.list();
+	 		resignedLists.add(list_resignedUsers_hr);
+		}
+		return resignedLists;
+	}
+
+
+
 
 
 }

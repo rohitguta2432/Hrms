@@ -99,8 +99,8 @@ application.config(function($stateProvider, $urlRouterProvider) {
 		url:'/Query',
 		templateUrl:'resources/js/query/query.html',
 		controller:'queryController'
-	}).state('tracking',{
-		url:'/tracking',
+	}).state('Tracking',{
+		url:'/Tracking',
 		templateUrl:'resources/js/tracking/tracking.html',
 		controller:'trackingController'
 

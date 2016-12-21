@@ -17,7 +17,7 @@
            
             <div class="form-group col-sm-12" ng-repeat="question in rmfeedback" >
                 <div ng-if="question.qType == 'textarea'">
-                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">{{question.qText}}</label>
+                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;"> <span>{{question.qCount}}. </span> {{question.qText}}</label>
                 <div class="col-sm-12">
                  
                   <textarea rows="2" cols="85" ng-model="question.qAns" ></textarea> 

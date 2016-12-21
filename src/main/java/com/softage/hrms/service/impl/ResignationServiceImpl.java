@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,6 +131,70 @@ public class ResignationServiceImpl implements ResignationService {
 
 
 		
+		return hrapprovaljson;
+	}
+
+	@Override
+	public List<String> getAllResignedUserRMs() {
+		return resignationdao.getAllResignedUserRMs();
+	}
+
+	@Override
+	public JSONObject getAllResignedUsers(Set<String> setRM) {
+		return null;
+	}
+
+	@Override
+	public List<String> getAllResignedUsersHrs() {
+		return resignationdao.getAllResignedUsersHrs();
+	}
+
+	@Override
+	public JSONObject getAllResignedUsersHR(Set<String> setHR) {
+		JSONObject hrapprovaljson=new JSONObject();
+		List<ArrayList<TblUserResignation>> list=resignationdao.getAllResignedUsersHR(setHR);
+		DateFormat df=new SimpleDateFormat("yyyy/MM/dd");
+		List<JSONObject> acceptedResignedList=new ArrayList<JSONObject>();
+		for(ArrayList<TblUserResignation> alist : list){
+			try {
+			for(TblUserResignation resignedUser : alist){
+				int count=1;
+				JSONObject acceptedResignation=new JSONObject();
+				String employee_code=resignedUser.getEmpCode();
+				ISoftAgeEnterpriseProxy emp=new ISoftAgeEnterpriseProxy();
+			
+					String firstname=emp.getUserDetail(employee_code).getFirstName();
+					String lastname=emp.getUserDetail(employee_code).getLastName();
+					String name=firstname+" "+lastname;
+					MstReason reason=resignedUser.getMstReason();
+					String reason_for_leaving=reason.getReason();
+					int resignId=resignedUser.getResignationId();
+					String remarks=resignedUser.getComments();
+					//int notice_period=emp.getUserDetail(employee_code).getNoticePeriod(); FROM ESF Service
+					int notice_period=60;
+					Date resDate=resignedUser.getResignationDate();
+					String resignDate=df.format(resDate);
+					String rmempcode=resignedUser.getRmEmpcode();
+					//String rm_email=emp.getUserDetail(rmempcode).getEmail(); FROM ESF SERVICE
+					String rm_email="arpan.mathur@softageindia.com";
+					acceptedResignation.put("sno", count);
+					acceptedResignation.put("empname", name);
+					acceptedResignation.put("empcode", employee_code);
+					acceptedResignation.put("leaving_reason", reason_for_leaving);
+					acceptedResignation.put("remarks", remarks);
+					acceptedResignation.put("noticetime", notice_period);
+					acceptedResignation.put("resignDate", resignDate);
+					acceptedResignation.put("rm_empcode", rmempcode);
+					acceptedResignation.put("resignId", resignId);
+					acceptedResignation.put("rm_email", rm_email);
+					acceptedResignedList.add(acceptedResignation);
+					count=count+1;
+				} 
+				}catch (RemoteException e) {
+					e.printStackTrace();
+				}
+		}
+		hrapprovaljson.put("empinfo", acceptedResignedList);
 		return hrapprovaljson;
 	}
 }

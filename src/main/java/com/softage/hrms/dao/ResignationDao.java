@@ -1,6 +1,8 @@
 package com.softage.hrms.dao;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.json.simple.JSONObject;
 
@@ -23,5 +25,9 @@ public interface ResignationDao {
 	public MstResignationStatus getStatusMast(int statusValue);
 	public TblUserResignation getResignationUserDao(String emp_code,int status);
 	public List<TblUserResignation> getHrApprovalInitDao(String empcode,int status);
+	public List<String> getAllResignedUserRMs();
+	public JSONObject getAllResignedUsers(Set<String> setRMs);
+	public List<String> getAllResignedUsersHrs();
+	public List<ArrayList<TblUserResignation>> getAllResignedUsersHR(Set<String> setHRs);
 
 }

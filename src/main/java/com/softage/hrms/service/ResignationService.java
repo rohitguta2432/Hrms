@@ -1,6 +1,7 @@
 package com.softage.hrms.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.json.simple.JSONObject;
 
@@ -23,5 +24,8 @@ public interface ResignationService {
 	public MstResignationStatus getStatus(int statusVal);
 	public TblUserResignation getResignationUserService(String emp_code,int status);
 	public JSONObject getHrApprovalInitService(String empcode,int status);
-
+	public List<String> getAllResignedUserRMs();
+	public JSONObject getAllResignedUsers(Set<String> setRM);
+	public List<String> getAllResignedUsersHrs();
+	public JSONObject getAllResignedUsersHR(Set<String> setHR);
 }
