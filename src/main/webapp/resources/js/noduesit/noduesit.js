@@ -3,7 +3,7 @@ application.controller('noduesitcontroller',function($scope,$http,$modal,$rootSc
 		
 	$scope.init=function(){
 /*Employee grid information*/
-			$http.get(domain+'/getnoduesit')
+			$http.get(domain+'/getnoduesemplist')
 			.success(function(data,status,headers,config){
 			$scope.nodueitjs=data.emplist;
 			/*alert($scope.nodueitjs);*/

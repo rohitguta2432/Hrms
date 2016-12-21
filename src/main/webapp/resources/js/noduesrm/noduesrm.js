@@ -3,10 +3,10 @@ application.controller('noduesrmcontroller',function($scope,$http,$modal,$rootSc
 		
 	$scope.init=function(){
 /*Employee grid information*/
-			$http.get(domain+'/getnoduesrm')
+			$http.get(domain+'/getnoduesemplist')
 			.success(function(data,status,headers,config){
 			$scope.noduesrmsystem=data.emprmlist;
-			/*alert($scope.nodueitjs);*/
+			alert($scope.noduesrmsystem);
 })
 		
 			error(function(data,status,headers,config){

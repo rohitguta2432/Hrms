@@ -32,7 +32,7 @@ public class NoDuesDaoImpl implements NoDuesDao {
 	public List<String> getrmacceptedempcode() {
 
 		org.hibernate.Session session=sessionfactory.getCurrentSession();
-		String hql="select empCode from TblUserResignation where status=2";
+		String hql="select empCode from TblUserResignation where status=4";
 		Query query=session.createQuery(hql);
 		List<String> listempcode=query.list();
 

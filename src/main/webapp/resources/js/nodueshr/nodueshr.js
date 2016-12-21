@@ -2,7 +2,7 @@ application.controller('nodueshrcontroller',function($scope,$http,$modal,$rootSc
 	
 	$scope.init=function(){
 /*Employee grid information*/
-			$http.get(domain+'/getnodueshr')
+			$http.get(domain+'/getnoduesemplist')
 			.success(function(data,status,headers,config){
 			$scope.nodueshrtjs=data.emphrlist;
 			/*alert($scope.nodueshrtjs);*/

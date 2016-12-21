@@ -3,7 +3,7 @@ application.controller('noduesaccountscontroller',function($scope,$http,$modal,$
 		
 	$scope.init=function(){
 /*Employee grid information*/
-			$http.get(domain+'/getnoduesaccounts')
+			$http.get(domain+'/getnoduesemplist')
 			.success(function(data,status,headers,config){
 			$scope.noduesaccountjs=data.emplist;
 			/*alert($scope.nodueitjs);*/

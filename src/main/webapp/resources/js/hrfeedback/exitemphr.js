@@ -3,7 +3,7 @@ application.controller('hrfeedbackcontroller',function($scope,$http,$modal,$root
 	
 	$scope.init=function(){
 /*Employee grid information*/
-			$http.get(domain+'/hrfeedbacklist')
+			$http.get(domain+'/getnoduesemplist')
 			.success(function(data,status,headers,config){
 			$scope.hrfeedback=data.feedbacklist;
 			/*alert($scope.hrfeedback);*/

@@ -512,24 +512,42 @@ public class HomeController {
 		return notUploadedDocuments;
 	}
 
-	@RequestMapping(value = "/getnoduesit", method = RequestMethod.GET)
+	@RequestMapping(value = "/getnoduesemplist", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getnoduesitinformation() {
 		ArrayList<JSONObject> listinformation=new ArrayList<JSONObject>();
 		JSONObject jsonobject=new JSONObject();
-
-
+		ISoftAgeEnterpriseProxy emp_prxoy=new ISoftAgeEnterpriseProxy();
+int count=1;
 		try{
 			JSONObject itjson = new JSONObject();
-			itjson.put("sno", 1);
+			/*itjson.put("sno", 1);
 			itjson.put("empcode","ss0097");
 			itjson.put("firstname", "rohit");
 			itjson.put("lastname", "raj");
 			itjson.put("department", "it-software");
 			itjson.put("designation", "java developer");
-			itjson.put("location", "circle");
+			itjson.put("location", "circle");*/
+			
 			List<String> listempcoderesign=noduesservice.listrmacceptedempcode();
-
+			
+			for(String code:listempcoderesign ){
+				
+				/*emp_prxoy.getUserDetail(code);*/
+				
+				itjson.put("sno", count);
+				itjson.put("empcode",emp_prxoy.getUserDetail(code).getEmpCode());
+				itjson.put("firstname", emp_prxoy.getUserDetail(code).getFirstName());
+				itjson.put("lastname", emp_prxoy.getUserDetail(code).getLastName());
+				itjson.put("department", emp_prxoy.getUserDetail(code).getDepartmentId());
+				itjson.put("designation", emp_prxoy.getUserDetail(code).getRoleName());
+				itjson.put("location", emp_prxoy.getUserDetail(code).getCompanyId());
+				
+				count++;
+			}
+			
+			/*System.out.println("list of code "+listempcoderesign);*/
+			
 			listinformation.add(itjson);
 
 			jsonobject.put("emplist", listinformation);
@@ -1435,10 +1453,7 @@ public class HomeController {
 
 		for(String assetssplit:asserts)
 		{
-
-
-
-			rmasset.setAssetsIssue(assetssplit);
+          rmasset.setAssetsIssue(assetssplit);
 			rmasset.setCreatedBy("system");
 			rmasset.setCreatedOn(today);
 			rmasset.setDepartmentId(3);
