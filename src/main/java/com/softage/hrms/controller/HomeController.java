@@ -68,6 +68,7 @@ import com.softage.hrms.model.TblFeedbacks;
 import com.softage.hrms.model.TblUploadedPath;
 
 import com.softage.hrms.model.TblAssetsManagement;
+import com.softage.hrms.model.TblExEmpCommunication;
 import com.softage.hrms.model.TblExEmployeeQuery;
 import com.softage.hrms.model.TblFeedbacks;
 import com.softage.hrms.model.TblNoDuesClearence;
@@ -145,7 +146,7 @@ public class HomeController {
 		} catch (Exception e) {
 			model.addAttribute("msg", "NULL Values");
 		}
-		
+
 		return "home";
 
 	}
@@ -250,14 +251,12 @@ public class HomeController {
 				mailService.sendEmail(manager_email, "evm@softageindia.com", "test",rm_message);
 				mailService.sendEmail(hr_email, "evm@softageindia.com", "test",hr_message);
 				mailService.sendEmail(emp_email, "evm@softageindia.com", "test",emp_message);
-				}catch(Exception e){
-					e.printStackTrace();
-					System.out.println("Problem in sending email");
-				}
+			}catch(Exception e){
+				e.printStackTrace();
+				System.out.println("Problem is sending email");
 			}
-		//} catch (RemoteException e) {
-		//e.printStackTrace();
-		//}
+		}
+
 		return jsonObj;
 	}
 
@@ -490,7 +489,7 @@ public class HomeController {
 		resigneduser.put("resLwdDate", lwd_date_string);
 		return resigneduser;
 	}
-	
+
 	@RequestMapping(value="/getNoDuesStatuses",method=RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getNoDuesPendingStatuses(HttpServletRequest request,HttpSession session){
@@ -500,7 +499,7 @@ public class HomeController {
 		pendingNoDues=noduesservice.getNoDuesPendingStatus(resid);
 		return pendingNoDues;
 	}
-	
+
 	@RequestMapping(value="/getDocUploadedStatuses",method=RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getDocumentUploadedPending(HttpServletRequest request,HttpSession session){
@@ -510,7 +509,7 @@ public class HomeController {
 		notUploadedDocuments=employeeDocumentService.getNotUploadedDocumentsById(resid);
 		return notUploadedDocuments;
 	}
-	
+
 	@RequestMapping(value = "/getnoduesit", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getnoduesitinformation() {
@@ -1502,26 +1501,35 @@ public class HomeController {
 		return empfeedbacklist;
 	}
 
+
+
+
+
+
+
+
+
 	@RequestMapping(value = "/employeeQuery", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject employeeQuery(HttpServletRequest request,HttpSession session) {
 
-           String empcode="ss0062";
-           String empName="Rohit";
+		String empcode="ss0062";
+		String empName="Rohit";
+		String rmEmpCode="ss0078";
 
-	 try {
-		 
-		    session=request.getSession();
-		    empcode=(String) session.getAttribute("employeecode"); 
+		try {
+
+			session=request.getSession();
+			empcode=(String) session.getAttribute("employeecode"); 
 			String deptId=  request.getParameter("deptId");	
 			int departmentId=Integer.parseInt(deptId);
 			// get Query Assigned Manager Employee Code
 			TblUserResignation tblUserResignation =resignationService.getResignationUserService(empcode, 0);
-			String assingToEmpcode="";			
+			String assingToEmpcode="ss0078";			
 			String queryText=  request.getParameter("quertext");	
-			
+
 			TblExEmployeeQuery employeeQuery=new TblExEmployeeQuery();
-			
+
 			employeeQuery.setCreatedBy(empName);
 			employeeQuery.setCreatedOn(new Date());
 			employeeQuery.setDepartmentId(departmentId);
@@ -1529,32 +1537,144 @@ public class HomeController {
 			employeeQuery.setTblUserResignation(tblUserResignation);
 			employeeQuery.setQueryText(queryText);
 			employeeQuery.setQueryAssigned(assingToEmpcode);
-			
-			String result =queryService.save(employeeQuery);
-			
-			
-			
-			 
-			
-			      
-			            
-			  
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-		 }
+
+			int id =queryService.save(employeeQuery);
+
+			if(id>0){
+				TblExEmployeeQuery employeeQuery1 = queryService.getById(id);
+				TblExEmpCommunication empCommunication=new TblExEmpCommunication();
+				empCommunication.setTblExEmployeeQuery(employeeQuery1);
+				empCommunication.setDepartrmentId(departmentId);
+				empCommunication.setQueryFrom(empcode);
+				empCommunication.setCreatedOn(new Date());
+				empCommunication.setQueryStatus(1);
+				empCommunication.setQueryText(queryText);
+				empCommunication.setReplyFrom(assingToEmpcode);
+
+				String result1 =queryService.save(empCommunication);	
+
+			}
+
+
+
+
+
+		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
+
+	@RequestMapping(value = "/saveQueryManger", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONArray saveQueryManger(HttpServletRequest request,HttpSession session) {
+
+		String empcode="ss0062";
+		String empName="Rohit";
+		String rmEmpCode="";
+		JSONArray array=new JSONArray();
+
+		try {
+
+			session=request.getSession();
+			rmEmpCode=(String) session.getAttribute("employeecode"); 
+			String queryId=  request.getParameter("queryId");
+			String replyText=  request.getParameter("queryReply");
+
+			int id=Integer.parseInt(queryId);
+
+
+			TblExEmployeeQuery employeeQuery = queryService.getById(id);
+
+			TblExEmpCommunication empCommunication=new TblExEmpCommunication();
+			empCommunication.setTblExEmployeeQuery(employeeQuery);
+			empCommunication.setReplyText(replyText);
+			empCommunication.setCreatedOn(new Date());
+			empCommunication.setQueryStatus(1);
+			empCommunication.setReplyFrom(rmEmpCode);
+
+			String result =queryService.save(empCommunication);	
+
+			System.out.println("Result "+result);
+
+			// get Query Assigned Manager Employee Code
+			//	TblUserResignation tblUserResignation =resignationService.getResignationUserService(empcode, 0);
+
+
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return array;
+	}
+
+
+
+
+
+	@RequestMapping(value = "/getMessages", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONArray getMessages(HttpServletRequest request,HttpSession session) {
+
+		String empcode="ss0062";
+		String empName="Rohit";
+		String rmEmpCode="";
+		JSONArray array=new JSONArray();
+
+		try {
+
+			session=request.getSession();
+			rmEmpCode=(String) session.getAttribute("employeecode"); 
+			String queryId=  request.getParameter("queryId");	
+			int id=Integer.parseInt(queryId);
+
+
+			List<TblExEmpCommunication> tblExEmpCommunications =queryService.getByQueryId(id);
+
+			for (TblExEmpCommunication tblExEmpCommunication : tblExEmpCommunications) {
+				JSONObject jsonObject=new JSONObject();
+				jsonObject.put("queryId",id);
+				String queryText  =tblExEmpCommunication.getQueryText();
+				String queryFrom=tblExEmpCommunication.getQueryFrom();
+				if(queryText==null){
+					queryText=tblExEmpCommunication.getReplyText();
+					queryFrom=tblExEmpCommunication.getReplyFrom();
+				}
+				jsonObject.put("query",queryText);
+				jsonObject.put("massageFrom",queryFrom);
+
+				array.add(jsonObject);
+
+			}
+
+			TblExEmpCommunication empCommunication=new TblExEmpCommunication();
+			/*	empCommunication.setTblExEmployeeQuery(employeeQuery);
+			empCommunication.setDepartrmentId(deptId);
+			empCommunication.setCreatedBy("manager");
+			empCommunication.setCreatedOn(new Date());
+			empCommunication.setQueryReply(queryReply);
+			empCommunication.setQueryStatus(1);
+			empCommunication.setEmpCode(rmEmpCode);*/
+
+			/*String result =queryService.save(empCommunication);	
+
+			System.out.println("Result "+result);*/
+
+			// get Query Assigned Manager Employee Code
+			//	TblUserResignation tblUserResignation =resignationService.getResignationUserService(empcode, 0);
+
+
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return array;
+	}
+
+
+
+
 
 	@RequestMapping(value = "/getDepartments", method = RequestMethod.GET)
 	@ResponseBody
@@ -1583,7 +1703,7 @@ public class HomeController {
 		}
 		return jsonArrey;
 	}
-	
+
 	@RequestMapping(value="/getRMApprovalInitFromService",method=RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getApprovalIntiFromService(HttpServletRequest request,HttpSession session){
@@ -1618,25 +1738,25 @@ public class HomeController {
 			}
 			else{
 
-			if(emp_code.equals(rm)){
-				to_show.add(rm);
-			}
-			else if(emp_code.equals(rm_rm1)){
-				to_show.add(rm);
-			}
-			else if(emp_code.equals(rm_rm2)){
-				to_show.add(rm);
-			}
-			else{
-				continue;
-			}
+				if(emp_code.equals(rm)){
+					to_show.add(rm);
+				}
+				else if(emp_code.equals(rm_rm1)){
+					to_show.add(rm);
+				}
+				else if(emp_code.equals(rm_rm2)){
+					to_show.add(rm);
+				}
+				else{
+					continue;
+				}
 			}
 		}
 		jsonApproval=resignationService.getAllResignedUsers(to_show);
 		return jsonApproval;
-		
+
 	}
-	
+
 	@RequestMapping(value="/getHrApprovalFromService",method=RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getHRApprovalInitFromService(HttpServletRequest request,HttpSession session){
@@ -1681,6 +1801,84 @@ public class HomeController {
 		}
 		hrapprovaljson=resignationService.getAllResignedUsersHR(hr_to_show);
 		return hrapprovaljson;
+	}
+
+	@RequestMapping(value = "/getEmpQueryList", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONArray getEmpQueryList(HttpServletRequest request,HttpSession session) {
+		JSONArray jsonArrey=new JSONArray();
+		String empcode="";
+		try{
+
+			session=request.getSession();
+			empcode=(String) session.getAttribute("employeecode"); 
+
+
+			List<TblExEmployeeQuery> listDepartment=queryService.getQueryList(empcode);
+			int count=0;
+
+			for (TblExEmployeeQuery tblExEmployeeQuery : listDepartment) {
+				String deptName="";
+
+				JSONObject jsonObject=new JSONObject();
+				int queryId= tblExEmployeeQuery.getQueryId();
+				int deptId=tblExEmployeeQuery.getDepartmentId();
+				MstDepartment department  =queryService.getDepartmentById(deptId);
+				if(department!=null){
+					deptName=department.getDepartment_name();
+				}
+
+				count++;
+				jsonObject.put("id", count);
+				jsonObject.put("department",deptName);
+				jsonObject.put("queryId",tblExEmployeeQuery.getQueryId());
+				jsonObject.put("queryText",tblExEmployeeQuery.getQueryText());
+				jsonObject.put("date",tblExEmployeeQuery.getCreatedOn().toString());
+				jsonArrey.add(jsonObject);
+
+
+			}
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return jsonArrey;
+	}
+
+	@RequestMapping(value = "/getQueryList", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONArray getQueryList(HttpServletRequest request,HttpSession session) {
+		JSONArray jsonArrey=new JSONArray();
+		String empcode="";
+		try{
+
+			session=request.getSession();
+			empcode=(String) session.getAttribute("employeecode"); 
+
+
+			List<TblExEmployeeQuery> listDepartment=queryService.getQueryList(empcode);
+			int count=0;
+
+			for (TblExEmployeeQuery tblExEmployeeQuery : listDepartment) {
+
+				JSONObject jsonObject=new JSONObject();
+				int queryId= tblExEmployeeQuery.getQueryId();
+				count++;
+				jsonObject.put("id", count);
+				jsonObject.put("queryfrom",tblExEmployeeQuery.getExEmpCode());
+				jsonObject.put("name", tblExEmployeeQuery.getCreatedBy());
+				jsonObject.put("queryId",tblExEmployeeQuery.getQueryId());
+				jsonObject.put("queryText",tblExEmployeeQuery.getQueryText());
+				jsonObject.put("queryDate",tblExEmployeeQuery.getCreatedOn().toString());
+				jsonArrey.add(jsonObject);
+
+
+			}
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return jsonArrey;
 	}
 
 

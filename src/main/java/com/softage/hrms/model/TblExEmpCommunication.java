@@ -23,27 +23,30 @@ public class TblExEmpCommunication implements java.io.Serializable {
 
 	private Integer communicationId;
 	private TblExEmployeeQuery tblExEmployeeQuery;
-	private String empCode;
+	private String queryFrom;
 	private Integer departrmentId;
 	private Integer queryStatus;
 	private Date createdOn;
-	private String createdBy;
-	private String queryReply;
+	private String replyFrom;
+	private String queryText;
+	private String replyText;
 
 
 
 	public TblExEmpCommunication() {
 	}
 
-	public TblExEmpCommunication(TblExEmployeeQuery tblExEmployeeQuery, String empCode, Integer departrmentId,
-			Integer queryStatus, Date createdOn, String createdBy) {
+	public TblExEmpCommunication(TblExEmployeeQuery tblExEmployeeQuery, String queryFrom, Integer departrmentId,
+			Integer queryStatus, Date createdOn, String replyFrom) {
 		this.tblExEmployeeQuery = tblExEmployeeQuery;
-		this.empCode = empCode;
+		this.queryFrom = queryFrom;
 		this.departrmentId = departrmentId;
 		this.queryStatus = queryStatus;
 		this.createdOn = createdOn;
-		this.createdBy = createdBy;
+		this.replyFrom = replyFrom;
 	}
+
+
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -67,13 +70,13 @@ public class TblExEmpCommunication implements java.io.Serializable {
 		this.tblExEmployeeQuery = tblExEmployeeQuery;
 	}
 
-	@Column(name = "emp_code", length = 15)
-	public String getEmpCode() {
-		return this.empCode;
+	@Column(name = "query_From", length = 15)
+	public String getQueryFrom() {
+		return this.queryFrom;
 	}
 
-	public void setEmpCode(String empCode) {
-		this.empCode = empCode;
+	public void setQueryFrom(String queryFrom) {
+		this.queryFrom = queryFrom;
 	}
 
 	@Column(name = "departrment_id")
@@ -84,14 +87,22 @@ public class TblExEmpCommunication implements java.io.Serializable {
 	public void setDepartrmentId(Integer departrmentId) {
 		this.departrmentId = departrmentId;
 	}
-	
-	@Column(name = "query_Reply")
-	public String getQueryReply() {
-		return queryReply;
+	@Column(name = "query_text")
+	public String getQueryText() {
+		return queryText;
 	}
 
-	public void setQueryReply(String queryReply) {
-		this.queryReply = queryReply;
+	public void setQueryText(String queryText) {
+		this.queryText = queryText;
+	}
+	
+	@Column(name = "reply_text")
+	public String getReplyText() {
+		return replyText;
+	}
+
+	public void setReplyText(String replyText) {
+		this.replyText = replyText;
 	}
 
 	@Column(name = "query_status")
@@ -113,13 +124,13 @@ public class TblExEmpCommunication implements java.io.Serializable {
 		this.createdOn = createdOn;
 	}
 
-	@Column(name = "created_by", length = 15)
-	public String getCreatedBy() {
-		return this.createdBy;
+	@Column(name = "reply_from", length = 15)
+	public String getReplyFrom() {
+		return this.replyFrom;
 	}
 
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
+	public void setReplyFrom(String replyFrom) {
+		this.replyFrom = replyFrom;
 	}
 
 }

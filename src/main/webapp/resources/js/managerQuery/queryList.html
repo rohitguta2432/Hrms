@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,8 +14,8 @@
 		</script>
 		<div class="main-content">
 
-			<div class="page-content" ng-contoller="queryController"
-				ng-init="getEmpQueryList()">
+			<div class="page-content" ng-contoller="MangerQueryController"
+				ng-init="getQueryList()">
 				<div class="page-content-area">
 					<!-- /.page-header -->
 					<div class="row">
@@ -40,30 +39,28 @@
 															<thead>
 																<tr>
 																	<th>S.No</th>
-																	<th>Department</th>
+																	<th>EmplyeeCode</th>
+																	<th>Name</th>
 																	<th>Query Date</th>
 																	<th>Query</th>
 																	<th>Action</th>
 																
 																</tr>
 															</thead>
-															<tbody ng-repeat="emp in empQuerys">
+															<tbody ng-repeat="emp in empQueryList">
 																<tr>
 																	<td>{{emp.id}}</td>
-																	<td>{{emp.department}}</td>
-																	<td>{{emp.date}}</td>
-																	<td>{{emp.queryText}}</td>																	
+																	<td>{{emp.queryfrom}}</td>
+																	<td>{{emp.name}}</td>
+																	<td>{{emp.queryDate}}</td>
+																	<td>{{emp.queryText}}</td>
+																	
 																	<td><button  class="btn btn-primary btn-sm"
-																	ng-click="openQueryView(emp.queryId)">
-																	Response </button></td>
+																	ng-click="openQueryView(emp.queryfrom,emp.queryText,emp.queryId)">
+																	Reply </button></td>
 																</tr>
 															</tbody>
 														</table>
-														
-															<td><button  class="btn btn-primary btn-sm"
-																	ng-click="createQuery()">
-																	createQuery </button></td>
-														
 													</div>
 												</div>
 											</div>
@@ -89,17 +86,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="ISO-8859-1">
+<title>Query Status</title>
+
+<script type="text/javascript">
+
+
+
+
+</script>
+</head>
+<body class="no-skin">
+	<div class="main-container" id="main-container"
+		style="margin-top: 10px;">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('main-container', 'fixed')
+			} catch (e) {
+			}
+		</script>
+		<div class="main-content" ng-contoller="queryController"
+			ng-init="getMessage()">
+			<div class="page-content">
+				<div class="page-content-area">
+					<!-- /.page-header -->
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="col-xs-12 widget-container-col ui-sortable">
+										<div class="widget-box ui-sortable-handle"
+											style="opacity: 1; z-index: 0;">
+											<div class="widget-header">
+												<h5 class="widget-title">Query Status</h5>
+
+											</div>
+											<div class="widget-body" style="display: block;">
+												<div class="widget-main form-horizontal">
+
+													<form name="f1" accept-charset="UTF-8">
+
+														<div class="form-group col-sm-12" ng-repeat="emp in queryMssages">
+
+
+															<label class="col-sm-3 control-label no-padding-left"
+																style="margin-top: 10px; font-weight: normal">from: {{emp.massageFrom}}</label>
+
+															<div class="col-sm-9" style="margin-top: 8px;">
+															
+															<div class="alert alert-success" >
+															   {{emp.query}}
+															</div>
+																
+															</div>
+														</div>
+														<div class="form-group col-sm-12">
+														
+														
+														<div class="col-sm-12" style="margin-top: 8px;">
+															<textarea rows="2" cols="70" ng-model="queryReply"></textarea>
+
+														</div>
+														</div>
+
+
+														<div class="col-sm-12" style="text-align: center;">
+															<input type="submit" ng-click="saveQueryManger()"
+																class="btn btn-primary" value="Reply" />
+
+														</div>
+
+
+
+
+
+
+														<div style="clear: both; height: 20px;"></div>
+
+
+													</form>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+							</div>
+							<!-- /.row -->
+							<!-- PAGE CONTENT ENDS -->
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.page-content-area -->
+			</div>
+			<!-- /.page-content -->
+		</div>
+		<!-- /.main-content -->
+		<a href="#" id="btn-scroll-up"
+			class="btn-scroll-up btn btn-sm btn-inverse"><i
+			class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
+	</div>
+	<!-- /.main-container -->
+</body>
+</html>
