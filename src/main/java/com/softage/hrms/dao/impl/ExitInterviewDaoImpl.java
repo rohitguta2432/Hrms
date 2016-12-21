@@ -11,6 +11,7 @@ import org.hibernate.SessionFactory;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.w3c.dom.ls.LSInput;
 
 import com.softage.hrms.dao.ExitInterviewDao;
 import com.softage.hrms.model.MstQuestions;
@@ -26,7 +27,9 @@ public class ExitInterviewDaoImpl implements ExitInterviewDao {
 	@Transactional
 	public List<JSONObject> getHrQuestions(int roleid,int stageid) {
 		List<JSONObject> questionslist=new ArrayList<JSONObject>();
+		int count=1;
 		try{
+			
 		Session session=sessionfactory.getCurrentSession();
 	    String hql="from MstQuestions q where q.roleId=:roleid and q.stageId=:stageid";
 	    
@@ -38,16 +41,18 @@ public class ExitInterviewDaoImpl implements ExitInterviewDao {
 	    List<MstQuestions> hrqueslist=query.list();
 	    for(MstQuestions question:hrqueslist)
 	    {
+	    	
 	    	JSONObject jsonObject=new JSONObject();
+	    	/*jsonObject.put("sno", count);*/
 	    	jsonObject.put("question", question.getQuestionText());
 	        jsonObject.put("qtype", question.getQuestionType());
 	        jsonObject.put("qid",question.getQid());
 	        jsonObject.put("value", "");
-	    	
-	    	
+	      
 	    	questionslist.add(jsonObject);
+	    	count=count+1;
 	    }
-		}
+	  }
 		
 		catch (Exception e) {
 			e.printStackTrace();

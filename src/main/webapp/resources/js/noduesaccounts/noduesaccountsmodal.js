@@ -1,7 +1,7 @@
 application.controller('noduesaccountsmodalcontroller',function($scope,$http,$window,$modal) {
 	
 
-   $scope.emp_code = $window.sessionStorage.getItem("Mydata");
+  /* $scope.emp_code = $window.sessionStorage.getItem("Mydata");*/
 /*$scope.$on("Mydata",function(event, emp_code){*/
    
    
@@ -10,12 +10,12 @@ application.controller('noduesaccountsmodalcontroller',function($scope,$http,$wi
 
 /*var store=$scope.emp_code;*/
 	
-	var selectedempcode='employee_code='+$scope.emp_code;
+	/*var selectedempcode='employee_code='+$scope.emp_code;*/
 		
-	
+	alert("account modal "+$scope.emp_code);
 	/*alert(selectedempcode)*/
 	
-	$http.get(domain+'/getemployeemodalinfo?'+selectedempcode)
+	$http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 			.success(function(data, status, headers, config){
 			/*alert('data are found '+ data);*/
 				
@@ -28,7 +28,7 @@ application.controller('noduesaccountsmodalcontroller',function($scope,$http,$wi
 				
 			
 				
-	                   $http.get(domain+'/getNoDuesAssets?'+selectedempcode)
+	                   $http.get(domain+'/getNoDuesAssets?employee_code='+$scope.emp_code)
 			.success(function(data,status,headers,config){
 					/*alert('the data returned is : '+JSON.stringify({data : data}));*/
 					/*alert("not coming "+data)*/
@@ -49,8 +49,8 @@ $scope.submit=function(form){
 	            	$scope.selectedItems.push(emp.name);
 	            }
 	            })
-	   var emp_data='emp_assets='+$scope.selectedItems+'&accounts_comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&final_status='+$scope.accepted_status;
-	            	/*alert(emp_data)*/
+	   var emp_data='emp_assets='+$scope.selectedItems+'&accounts_comments='+$scope.empcomments+'&emp_code='+$scope.emp_code+'&final_status='+$scope.accepted_status;
+	            	alert(emp_data)
 	            	
 	$http({
         method: 'POST',

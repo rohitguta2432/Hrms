@@ -1,46 +1,58 @@
 application.controller('exitratedJs',function($scope,$http) {
+	
+	/*alert("hii");*/
+	
 	$scope.headerText='# How Would You Rate the following Aspect of Softage..';
 	
 	
 
-	$scope.submit=function(form)
+	$http.get(domain+'/empratingfeedback')
+	.success(function(data, status, headers, config){
+	/*alert('data are found');*/
+		
+	$scope.empratingquestion=data.empratingfeedbackquestion;
+
+	/*alert($scope.empratingquestion)*/
+})
+	$scope.selectedItems=[];
+	
+	$scope.getRadioValue=function(feedback){
+		   	
+       $scope.selectedItems.push(feedback);
+            	  
+		/*alert($scope.selectedItems);*/
+		
+}
+$scope.submit=function(form)
 	{
 		
-		/*alert($scope.emp.trainingValue);
-		
-		alert($scope.emp.NatureValue);
-		
-		alert($scope.emp.AttentionValue);
-		
-		alert($scope.emp.growth);
-		
-		alert($scope.emp.skills);
-		
-		alert($scope.emp.salary);
-		
-		alert($scope.emp.increment);
-		
-		alert($scope.emp.promotion);
-		
-		alert($scope.emp.information);
-		
-		alert($scope.emp.satisfaction);
-		
-		alert($scope.emp.balance);*/
+      /*      
+			if(feedback.value.selected){
+            	
+            	$scope.selectedItems.push(feedback.value);
+            	
+            }
+            })*/
 		
 		
-		var emp_data='emp_training='+$scope.emp.trainingValue+'&emp_nature='+$scope.emp.NatureValue+'&emp_attention='+$scope.emp.AttentionValue+'&emp_growth='+$scope.emp.growth+'&emp_skills='+$scope.emp.skills+'&emp_salary='+$scope.emp.salary+'&emp_increment='+$scope.emp.increment+'&emp_promotion='+$scope.emp.promotion+'&emp_information='+$scope.emp.information+'&emp_satisfaction='+$scope.emp.satisfaction+'&emp_balance='+$scope.emp.balance;
+		/*alert($scope.selectedItems)*/
 		
-		/*alert("data are "+emp_data);*/
-		
-		$http.get(domain+'/emprate?'+emp_data)
-		.success(function(data, status, headers, config){
-		alert('submit successfully');
-					})
-				.error(function(data, status, headers, config){
-				/*alert(data);*/
-				})
-
+		/*alert($scope.feedback)*/
+var emp_data='emprating_feedback='+JSON.stringify({data:$scope.selectedItems});
+    	alert(emp_data)
+$http({
+method: 'POST',
+url: domain+'/insertempratingfeedback',
+data:emp_data,
+headers:
+{
+'Content-Type':'application/x-www-form-urlencoded'
+}
+}).success(function(data){
+alert("submitted emprating feedback")
+}).error(function(){
+alert("errors")
+})
 	}
 	
 

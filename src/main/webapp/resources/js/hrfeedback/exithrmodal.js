@@ -1,17 +1,19 @@
 application.controller('feedbackmodalcontroller',function($scope,$http,$window,$modal) {
 	
 
-   $scope.emp_code = $window.sessionStorage.getItem("Mydata");
+  /* $scope.emp_code = $window.sessionStorage.getItem("Mydata");*/
 /*$scope.$on("Mydata",function(event, emp_code){*/
    
    /*var store=$scope.emp_code;*/
 	
-	var selectedempcode='employee_code='+$scope.emp_code;
+	/*var selectedempcode='employee_code='+$scope.emp_code;*/
 		
 	
 	/*alert(selectedempcode)*/
 	
-	$http.get(domain+'/getemployeemodalinfo?'+selectedempcode)
+	alert("hr feedback "+$scope.emp_code)
+	
+	$http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 			.success(function(data, status, headers, config){
 			/*alert('data are found '+ data);*/
 				
@@ -22,7 +24,7 @@ application.controller('feedbackmodalcontroller',function($scope,$http,$window,$
 				$scope.employeedesignation=data.designation;
 				$scope.employeelocation=data.location;
 				
-		$http.get(domain+'/gethrfeedbackquestions?'+selectedempcode)
+		$http.get(domain+'/gethrfeedbackquestions?employee_code='+$scope.emp_code)
 			.success(function(data,status,headers,config){
 				/*	alert('the data returned is : '+JSON.stringify({data : data}));*/
 					

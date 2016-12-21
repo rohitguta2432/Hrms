@@ -52,7 +52,7 @@ table tr:nth-child(even) {
 														<table>
 
 															<tr>
-																<th>S.No</th>
+																<!-- <th>S.No</th> -->
 																<br />
 
 																<th>Factors</th>
@@ -63,282 +63,23 @@ table tr:nth-child(even) {
 																<th>Excellent</th>
 
 															</tr>
-
-
-															<tr>
-																<td>1</td>
-																<td>Training</td>
-																<div ng-repeat="emp in tables">
-																	<td><INPUT TYPE="Radio" Name="{{emp.training}}"
-																		ng-model="emp.trainingValue" value="Training poor"
-																		ng-change="radioChanged(emp)"></td>
-																	<td><INPUT TYPE="Radio" Name="{{emp.training}}"
-																		ng-model="emp.trainingValue" value="Training average"
-																		ng-change="radioChanged(emp)"></td>
-																	<td><INPUT TYPE="Radio" Name="{{emp.training}}"
-																		ng-model="emp.trainingValue"
-																		value="Training above average"
-																		ng-change="radioChanged(emp)"></td>
-																	<td><INPUT TYPE="Radio" Name="{{emp.training}}"
-																		ng-model="emp.trainingValue" value="Training  good"
-																		ng-change="radioChanged(emp)"></td>
-																	<td><INPUT TYPE="Radio" Name="{{emp.training}}"
-																		ng-model="emp.trainingValue"
-																		value="Training  excellent"
-																		ng-change="radioChanged(emp)"></td>
-															</tr>
-															<!--  <div>currently selected:{{radioValue}}</div> -->
-															<!--  ng-value="empvalue" -->
-
-															<tr>
-																<td>2</td>
-																<td>Nature Of Work</td>
-																<td><INPUT TYPE="Radio" Name="{{emp.nature}}"
-																	ng-model="emp.NatureValue" value=" Nature Of Work poor"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.nature}}"
-																	ng-model="emp.NatureValue"
-																	value="Nature Of Work average"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.nature}}"
-																	ng-model="emp.NatureValue"
-																	value=" Nature Of Work above average"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.nature}}"
-																	ng-model="emp.NatureValue" value="Nature Of Work good"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.nature}}"
-																	ng-model="emp.NatureValue"
-																	value="Nature Of Work excellent"
-																	ng-change="radioChanged(emp)"></td>
-															</tr>
-
-															<tr>
-																<td>3</td>
-																<td>Attention By Superior</td>
-																<td><INPUT TYPE="Radio" Name="{{emp.attention}}"
-																	ng-model="emp.AttentionValue"
-																	value=" Superior attention poor"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.attention}}"
-																	ng-model="emp.AttentionValue"
-																	value=" Superior attention average"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.attention}}"
-																	ng-model="emp.AttentionValue"
-																	value=" Superior attention above average"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.attention}}"
-																	ng-model="emp.AttentionValue"
-																	value=" Superior attention good"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.attention}}"
-																	ng-model="emp.AttentionValue"
-																	value=" Superior attention excellent"
-																	ng-change="radioChanged(emp)"></td>
-															</tr>
-
-															<tr>
-																<td>4</td>
-																<td>Opportunity for growth</td>
-																<td><INPUT TYPE="Radio" Name="{{emp.growth}}"
-																	ng-model="emp.growth"
-																	value=" Opportunity for growth poor"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.growth}}"
-																	ng-model="emp.growth"
-																	value=" Opportunity for growth average"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.growth}}"
-																	ng-model="emp.growth"
-																	value=" Opportunity for growth above average"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.growth}}"
-																	ng-model="emp.growth"
-																	value=" Opportunity for growth good"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.growth}}"
-																	ng-model="emp.growth"
-																	value=" Opportunity for growth excellent"
-																	ng-change="radioChanged(emp)"></td>
-															</tr>
-
-															<tr>
-																<td>5</td>
-																<td>Opportunity to Develop new Skills</td>
-																<td><INPUT TYPE="Radio" Name="{{emp.skills}}"
-																	ng-model="emp.skills"
-																	value=" Opportunity to Develop new Skills poor"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="emp.skills}}"
-																	ng-model="emp.skills"
-																	value=" Opportunity to Develop new Skills average"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.skills}}"
-																	ng-model="emp.skills"
-																	value=" Opportunity to Develop new Skills above average"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.skills}}"
-																	ng-model="emp.skills"
-																	value=" Opportunity to Develop new Skills good"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.skills}}"
-																	ng-model="emp.skills"
-																	value=" Opportunity to Develop new Skills excellent"
-																	ng-change="radioChanged(emp)"></td>
-															</tr>
-
-
-															<tr>
-																<td>6</td>
-																<td>Salary</td>
-																<td><INPUT TYPE="Radio" Name="{{emp.salary}}"
-																	ng-model="emp.salary" value=" Salary poor"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.salary}}"
-																	ng-model="emp.salary" value=" Salary average"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.salary}}"
-																	ng-model="emp.salary" value=" Salary above average"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.salary}}"
-																	ng-model="emp.salary" value=" Salary good"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.salary}}"
-																	ng-model="emp.salary" value=" Salary excellent"
-																	ng-change="radioChanged(emp)"></td>
-															</tr>
-
-
-															<tr>
-																<td>7</td>
-																<td>Rate of increment</td>
-																<td><INPUT TYPE="Radio" Name="{{emp.increment}}"
-																	ng-model="emp.increment"
-																	value=" Rate of increment poor"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.increment}}"
-																	ng-model="emp.increment"
-																	value=" Rate of increment average"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.increment}}"
-																	ng-model="emp.increment"
-																	value=" Rate of increment above average"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.increment}}"
-																	ng-model="emp.increment"
-																	value=" Rate of increment good"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.increment}}"
-																	ng-model="emp.increment"
-																	value=" Rate of increment excellent"
-																	ng-change="radioChanged(emp)"></td>
-															</tr>
-
-
-															<tr>
-																<td>8</td>
-																<td>Rate of Promotion</td>
-																<td><INPUT TYPE="Radio" Name="{{emp.promotion}}"
-																	ng-model="emp.promotion" value="Rate of Promotion poor"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.promotion}}"
-																	ng-model="emp.promotion"
-																	value=" Rate of Promotion average"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.promotion}}"
-																	ng-model="emp.promotion"
-																	value=" Rate of Promotion above average"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.promotion}}"
-																	ng-model="emp.promotion"
-																	value=" Rate of Promotion good"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.promotion}}"
-																	ng-model="emp.promotion"
-																	value=" Rate of Promotion excellent"
-																	ng-change="radioChanged(emp)"></td>
-															</tr>
-
-
-															<tr>
-																<td>9</td>
-																<td>Sharing of information</td>
-																<td><INPUT TYPE="Radio" Name="{{emp.information}}"
-																	ng-model="emp.information"
-																	value="Sharing of information poor"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.information}}"
-																	ng-model="emp.information"
-																	value="Sharing of information average"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.information}}"
-																	ng-model="emp.information"
-																	value="Sharing of information above average"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.information}}"
-																	ng-model="emp.information"
-																	value="Sharing of information good"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.information}}"
-																	ng-model="emp.information"
-																	value="Sharing of information excellent"
-																	ng-change="radioChanged(emp)"></td>
-															</tr>
-
-
-															<tr>
-																<td>10</td>
-																<td>Job satisfaction</td>
-																<td><INPUT TYPE="Radio" Name="{{emp.satisfaction}}"
-																	ng-model="emp.satisfaction"
-																	value="Job satisfaction poor"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.satisfaction}}"
-																	ng-model="emp.satisfaction"
-																	value="Job satisfaction average"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.satisfaction}}"
-																	ng-model="emp.satisfaction"
-																	value="Job satisfaction above average"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.satisfaction}}"
-																	ng-model="emp.satisfaction"
-																	value="Job satisfaction good"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.satisfaction}}"
-																	ng-model="emp.satisfaction"
-																	value="Job satisfaction excellent"
-																	ng-change="radioChanged(emp)"></td>
-															</tr>
-
-
-
-															<tr>
-																<td>11</td>
-																<td>Work life Balance</td>
-																<td><INPUT TYPE="Radio" Name="{{emp.balance}}"
-																	ng-model="emp.balance" value="Work life Balance poor"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.balance}}"
-																	ng-model="emp.balance"
-																	value="Work life Balance average"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.balance}}"
-																	ng-model="emp.balance"
-																	value="Work life Balance above average"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.balance}}"
-																	ng-model="emp.balance" value="Work life Balance good"
-																	ng-change="radioChanged(emp)"></td>
-																<td><INPUT TYPE="Radio" Name="{{emp.balance}}"
-																	ng-model="emp.balance"
-																	value="Work life Balance excellent"
-																	ng-change="radioChanged(emp)"></td>
-															</tr>
-
+<div >
+		<div>
+				<tr ng-if="feedback.qtype=='radio'" ng-repeat="feedback in empratingquestion">
+																 
+																		<!-- <td>{{feedback.sno}}</td> -->
+																		<td>{{feedback.question}}</td>
+										                              	<td><input type="radio"  value="{{feedback.qid}} poor" ng-model="feedback.value" ng-change=getRadioValue(feedback)></td>
+																		<td><input type="radio" value="{{feedback.qid}} average" ng-model="feedback.value" ng-change=getRadioValue(feedback)></td>
+																		<td><input type="radio" value="{{feedback.qid}} Above Average" ng-model="feedback.value" ng-change=getRadioValue(feedback)></td>
+																		<td><input type="radio" value="{{feedback.qid}} Good" ng-model="feedback.value" ng-change=getRadioValue(feedback)> </td>
+																		<td><input type="radio" value="{{feedback.qid}} Excellent" ng-model="feedback.value" ng-change=getRadioValue(feedback)></td>
+																	
+																	</tr>
+																	
 															</div>
-
+															</div>
+															</div>
 
 														</table>
 
@@ -347,7 +88,7 @@ table tr:nth-child(even) {
 														<div class="clearfix"></div>
 
 														<div class="center">
-															<input type="submit" value="submit"  ng-disabled="exitEmp.$invalid" >
+															<input type="submit" value="submit">
 														</div>
 													</form>
 												</div>

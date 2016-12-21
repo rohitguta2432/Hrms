@@ -1,21 +1,22 @@
 application.controller('noduesinframodalcontroller',function($scope,$http,$window) {
 	
 	
-   $scope.emp_code = $window.sessionStorage.getItem("Mydata");
-/*$scope.$on("Mydata",function(event, emp_code){*/
+  /* $scope.emp_code = $window.sessionStorage.getItem("Mydata");
+$scope.$on("Mydata",function(event, emp_code){
 	
 
 
 var store=$scope.emp_code;
 	
-	var selectedempcode='employee_code='+$scope.emp_code;
+	var selectedempcode='employee_code='+$scope.emp_code;*/
 		
 	/*alert(' selected code are '+selectedempcode);*/
-		
+		alert("infra modal "+$scope.emp_code)
 	
-	$http.get(domain+'/getemployeemodalinfo?'+selectedempcode)
+	$http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 			.success(function(data, status, headers, config){
 			/*alert('data are found');*/
+				
 				$scope.emplycode=data.empcode;
 				$scope.empfirstname=data.firstname;
 				$scope.emplastname=data.lastname;
@@ -45,7 +46,7 @@ var store=$scope.emp_code;
 	            }
 	            })
 	         
-var emp_data='emp_assets='+$scope.selectedItems+'&comments='+$scope.empcomments;
+var emp_data='emp_assets='+$scope.selectedItems+'&comments='+$scope.empcomments+'&emp_code='+$scope.emp_code;
 		 alert("accept "+emp_data)
 		 $http({
 		        method: 'POST',

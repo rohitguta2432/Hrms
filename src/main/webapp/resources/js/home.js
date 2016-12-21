@@ -107,6 +107,11 @@ application.config(function($stateProvider, $urlRouterProvider) {
 		url:'/Tracking',
 		templateUrl:'resources/js/tracking/tracking.html',
 		controller:'trackingController'
+			
+	}).state('ExEmployeeRegister',{
+		url:'/ExEmployeeRegister',
+		templateUrl:'resources/js/exemployee/register.html',
+		controller:'registercontroller'
 
 	});
 });

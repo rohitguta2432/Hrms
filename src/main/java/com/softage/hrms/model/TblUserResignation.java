@@ -36,12 +36,23 @@ public class TblUserResignation implements java.io.Serializable {
 	private Date releivingDate;
 	private String rmEmpcode;
 	private String hrEmpcode;
+	
+	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "tbluserresignation")
+	public Set<TblNoDuesClearence> getTblnoduesclearence() {
+		return tblnoduesclearence;
+	}
+
+	public void setTblnoduesclearence(Set<TblNoDuesClearence> tblnoduesclearence) {
+		this.tblnoduesclearence = tblnoduesclearence;
+	}
+
 	private String exEmpUserid;
 	private String exEmpPassword;
 	private String exEmpEmail;
 	private Date rmApprovalDate;
 	private Date hrApprovalDate;
 	private Date hrLwdDate;
+	private Set<TblNoDuesClearence> tblnoduesclearence=new HashSet<TblNoDuesClearence>(0);
 	private Set<TblUploadedPath> tblUploadedPaths = new HashSet<TblUploadedPath>(0);
 	private Set<TblFeedbacks> tblFeedbackses = new HashSet<TblFeedbacks>(0);
 	private Set<TblAssetsManagement> tblAssetsManagements = new HashSet<TblAssetsManagement>(0);
@@ -58,7 +69,7 @@ public class TblUserResignation implements java.io.Serializable {
 			String comments, Date resignationDate, Date releivingDate, String rmEmpcode, String hrEmpcode,
 			String exEmpUserid, String exEmpPassword, String exEmpEmail, Date rmApprovalDate, Date hrApprovalDate,
 			Date hrLwdDate, Set tblUploadedPaths, Set tblFeedbackses, Set tblAssetsManagements,
-			Set tblExEmployeeQueries) {
+			Set tblExEmployeeQueries,Set tblnoduesclearence) {
 		this.mstReason = mstReason;
 		this.mstResignationStatus = mstResignationStatus;
 		this.empCode = empCode;
@@ -77,6 +88,7 @@ public class TblUserResignation implements java.io.Serializable {
 		this.tblFeedbackses = tblFeedbackses;
 		this.tblAssetsManagements = tblAssetsManagements;
 		this.tblExEmployeeQueries = tblExEmployeeQueries;
+		this.tblnoduesclearence=tblnoduesclearence;
 	}
 
 	@Id
@@ -260,4 +272,4 @@ public class TblUserResignation implements java.io.Serializable {
 		this.tblExEmployeeQueries = tblExEmployeeQueries;
 	}
 
-}
+	}

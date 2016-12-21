@@ -6,6 +6,8 @@ import static javax.persistence.GenerationType.IDENTITY;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -36,7 +38,8 @@ public class TblAssetsManagement implements java.io.Serializable {
 	private String receivedBy;
 	private Date receivedOn;
 	private Integer itemStatus;
-	private Set<TblNoDuesClearence> tblNoDuesClearences = new HashSet<TblNoDuesClearence>(0);
+	
+	/*private Set<TblNoDuesClearence> tblNoDuesClearences = new HashSet<TblNoDuesClearence>(0);*/
 
 	public TblAssetsManagement() {
 	}
@@ -47,7 +50,7 @@ public class TblAssetsManagement implements java.io.Serializable {
 
 	public TblAssetsManagement(int assetsId, TblUserResignation tblUserResignation, Integer departmentId,
 			String assetsIssue, String issuedBy, Date issuedOn, Date createdOn, String createdBy, String receivedBy,
-			Date receivedOn, Integer itemStatus, Set tblNoDuesClearences) {
+			Date receivedOn, Integer itemStatus) { /*Set tblNoDuesClearences*/
 		this.assetsId = assetsId;
 		this.tblUserResignation = tblUserResignation;
 		this.departmentId = departmentId;
@@ -59,7 +62,7 @@ public class TblAssetsManagement implements java.io.Serializable {
 		this.receivedBy = receivedBy;
 		this.receivedOn = receivedOn;
 		this.itemStatus = itemStatus;
-		this.tblNoDuesClearences = tblNoDuesClearences;
+		/*this.tblNoDuesClearences = tblNoDuesClearences;*/
 	}
 
 	@Id
@@ -167,14 +170,14 @@ public class TblAssetsManagement implements java.io.Serializable {
 		this.itemStatus = itemStatus;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tblAssetsManagement")
+	/*@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "tblAssetsManagement")
 	public Set<TblNoDuesClearence> getTblNoDuesClearences() {
 		return this.tblNoDuesClearences;
-	}
+	}*/
 
-	public void setTblNoDuesClearences(Set<TblNoDuesClearence> tblNoDuesClearences) {
+	/*public void setTblNoDuesClearences(Set<TblNoDuesClearence> tblNoDuesClearences) {
 		this.tblNoDuesClearences = tblNoDuesClearences;
-	}
+	}*/
 
 	/*public static void main(String[] args) {
 		TblAssetsManagement*/

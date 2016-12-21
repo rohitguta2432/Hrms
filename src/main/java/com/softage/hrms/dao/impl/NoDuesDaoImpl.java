@@ -85,7 +85,7 @@ public class NoDuesDaoImpl implements NoDuesDao {
 	public JSONObject insertnoduesclearence(TblNoDuesClearence clearencebean) {
 		JSONObject insertclearence=new JSONObject();
 		
-		org.hibernate.Session session=sessionfactory.getCurrentSession();
+		Session session=sessionfactory.getCurrentSession();
 		session.save(clearencebean);
 		
 		return insertclearence;

@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,17 +21,41 @@ import javax.persistence.Table;
 public class TblNoDuesClearence implements java.io.Serializable {
 
 	private Integer clearenceId;
-	private TblAssetsManagement tblAssetsManagement;
+	private TblUserResignation tbluserresignation;
+	
+	
+	@ManyToOne(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
+	@JoinColumn(name = "resignation_id")
+	public TblUserResignation getTbluserresignation() {
+		return tbluserresignation;
+	}
+
+	public void setTbluserresignation(TblUserResignation tbluserresignation) {
+		this.tbluserresignation = tbluserresignation;
+	}
+
+	/*private TblAssetsManagement tblAssetsManagement;*/
 	private Integer departmentFinalStatus;
 	private String comments;
+	private Integer departmentId;
+
+	@Column(name = "department_id")
+	public Integer getDepartmentId() {
+		return departmentId;
+	}
+
+	public void setDepartmentId(Integer departmentId) {
+		this.departmentId = departmentId;
+	}
 
 	public TblNoDuesClearence() {
 	}
 
-	public TblNoDuesClearence(TblAssetsManagement tblAssetsManagement, Integer departmentFinalStatus, String comments) {
-		this.tblAssetsManagement = tblAssetsManagement;
+	public TblNoDuesClearence( Integer departmentFinalStatus, String comments,TblUserResignation tbluserresignation) {/*TblAssetsManagement tblAssetsManagement,*/
+		/*this.tblAssetsManagement = tblAssetsManagement;*/
 		this.departmentFinalStatus = departmentFinalStatus;
 		this.comments = comments;
+		this.tbluserresignation=tbluserresignation;
 	}
 
 	@Id
@@ -44,16 +70,16 @@ public class TblNoDuesClearence implements java.io.Serializable {
 		this.clearenceId = clearenceId;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	/*@ManyToOne(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinColumn(name = "resignation_id")
 	public TblAssetsManagement getTblAssetsManagement() {
 		return this.tblAssetsManagement;
-	}
+	}*/
 
-	public void setTblAssetsManagement(TblAssetsManagement tblAssetsManagement) {
+	/*public void setTblAssetsManagement(TblAssetsManagement tblAssetsManagement) {
 		this.tblAssetsManagement = tblAssetsManagement;
 	}
-
+*/
 	@Column(name = "department_final_status")
 	public Integer getDepartmentFinalStatus() {
 		return this.departmentFinalStatus;

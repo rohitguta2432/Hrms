@@ -1,19 +1,23 @@
 application.controller('noduesitmodaljscontroller',function($scope,$http,$window) {
 	
 	
-   $scope.emp_code = $window.sessionStorage.getItem("Mydata");
+   /*$scope.emp_code = $window.sessionStorage.getItem("Mydata");*/
 /*$scope.$on("Mydata",function(event, emp_code){*/
 	
 
 
-var store=$scope.emp_code;
+/*var store=$scope.emp_code;
 	
-	var selectedempcode='employee_code='+$scope.emp_code;
+	var selectedempcode='employee_code='+$scope.emp_code;*/
 		
+	/*alert("it assets "+$scope.emp_code)*/
 	
-	$http.get(domain+'/getemployeemodalinfo?'+selectedempcode)
-			.success(function(data, status, headers, config){
-			/*alert('data are found');*/
+$http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
+			
+.success(function(data, status, headers, config){
+			
+				/*alert('data are found');*/
+				
 				$scope.emplycode=data.empcode;
 				$scope.empfirstname=data.firstname;
 				$scope.emplastname=data.lastname;
@@ -44,8 +48,8 @@ var store=$scope.emp_code;
 	            })
 	           /* alert("store item "+$scope.selectedItems)*/
 	            
-	  var emp_data='emp_assets='+$scope.selectedItems+'&comments='+$scope.empcomments;
-		/*alert("accepted "+emp_data)*/
+	  var emp_data='emp_assets='+$scope.selectedItems+'&comments='+$scope.empcomments+'&emp_code='+$scope.emp_code;
+		alert("accepted "+emp_data)
 		 $http({
 		        method: 'POST',
 		       url: domain+'/insertitassets',
