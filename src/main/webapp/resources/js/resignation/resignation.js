@@ -1,4 +1,4 @@
-application.controller('resignationController',function($scope,$http){
+application.controller('resignationController',function($scope,$http,$location){
 	$scope.init=function(){
 		//alert('initializing')
 		$http.get(domain+'/resignationIni')
@@ -8,7 +8,7 @@ application.controller('resignationController',function($scope,$http){
 			$scope.reldate=data.reldate.releaseDate;
 		})
 		.error(function(data,status,headers,config){
-			alert('the error returned is : '+JSON.stringify({data : data}));
+			alert('Error ');
 		})
 	}
 	$scope.submit=function(form){
@@ -18,10 +18,14 @@ application.controller('resignationController',function($scope,$http){
 			.success(function(data, status, headers, config){
 				//alert('success'+JSON.stringify({data: data}));
 				//alert(data.result);
+				$scope.resignationResult=data.result;
+		
+				alert($scope.resignationResult);
+				location.relaod();
 			})
 			.error(function(data, status, headers, config){
-				alert('error'+JSON.stringify({data: data}));
+				alert('error');
 			})
-			alert('successfully submitted');
+			
 	}
 });

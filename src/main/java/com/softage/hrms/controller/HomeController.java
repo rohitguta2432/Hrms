@@ -239,19 +239,19 @@ public class HomeController {
 		//emp.getUserDetail(emp_code).getEmail(); EMployee Email
 		//String manager_email=resignationService.getRmEmail(employee_code);
 		String manager_email="arpan.mathur@softageindia.com";//ESF Service
-		String hr_email="rohit.raj@softageindia.com";
+		String hr_email="arpan.mathur@softageindia.com";
 		String emp_email="arpan.mathur@softageindia.com";
 		//System.out.println(manager_email);
 		String rm_message="Request for resignatin has been raised by "+empcode+" for RM";
 		String hr_message="Request for resignatin has been raised by "+empcode+" for HR" ;
 		String emp_message="Request for resignation has been raised by you";
-		if (jsonObj.get("reason").equals("successful")) { 
+		if (jsonObj.get("result").equals("successful")) { 
 			try{
 				mailService.sendEmail(manager_email, "evm@softageindia.com", "test",rm_message);
 				mailService.sendEmail(hr_email, "evm@softageindia.com", "test",hr_message);
 				mailService.sendEmail(emp_email, "evm@softageindia.com", "test",emp_message);
 			}catch(Exception e){
-				e.printStackTrace();
+				//e.printStackTrace();
 				System.out.println("Problem is sending email");
 			}
 		}
@@ -353,7 +353,7 @@ public class HomeController {
 
 
 	@RequestMapping(value= "/hrapprovalInit",method=RequestMethod.GET)
-
+	@ResponseBody
 	public JSONObject getHrApprovalInit(HttpServletRequest request,HttpSession session){
 
 		session=request.getSession();
@@ -434,9 +434,9 @@ public class HomeController {
 		if(lwdStatus.equalsIgnoreCase("successful")){
 			lwdCommentStatus=approvalservice.insertHrLwdCommentService(hr_lwd_comment);
 			String messageToEmp="Hi your last working day has been set to - "+hrappdate;
-			//mailService.sendEmail("employee@softageindia.com", "evm@softageindia.com", "Last Working Day Set By HR", messageToEmp);
-			//mailService.sendEmail(RmManager@softageindia.com, "evm@softageindia.com", "Last Working Day Set By HR", messageToEmp);
-			//mailService.sendEmail(HrManager@softageindia.com, "evm@softageindia.com", "Last Working Day Set By HR", messageToEmp);
+			mailService.sendEmail("arpan.mathur@softageindia.com", "evm@softageindia.com", "Last Working Day Set By HR", messageToEmp);
+			mailService.sendEmail("arpan.mathur@softageindia.com", "evm@softageindia.com", "Last Working Day Set By HR", messageToEmp);
+			mailService.sendEmail("arpan.mathur@softageindia.com", "evm@softageindia.com", "Last Working Day Set By HR", messageToEmp);
 		}else{
 			lwdCommentStatus="Unable to update";
 		}
@@ -463,19 +463,19 @@ public class HomeController {
 		String res_empcode=resignationModel.getEmpCode();
 		String res_remarks=resignationModel.getComments();
 		Date res_date=resignationModel.getResignationDate();
-		String res_date_string=df.format(res_date);
+		String res_date_string=(res_date!=null?df.format(res_date):null);
 		//String res_date_string=df.format(res_date);
 		//System.out.println(res_date);
 		Date relieving_date=resignationModel.getReleivingDate();
-		String rel_date_string=df.format(relieving_date);
+		String rel_date_string=(relieving_date!=null?df.format(relieving_date):null);
 		String res_rm_empcode=resignationModel.getRmEmpcode();
 		String res_hr_empcode=resignationModel.getHrEmpcode();
 		Date rm_approvaldate=resignationModel.getRmApprovalDate();
-		String approval_date_String=df.format(rm_approvaldate);
+		String approval_date_String=(rm_approvaldate!=null?df.format(rm_approvaldate):null);
 		Date hr_approvaldate=resignationModel.getHrApprovalDate();
-		String approval_date_string=df.format(hr_approvaldate);
+		String approval_date_string=(hr_approvaldate!=null?df.format(hr_approvaldate):null);
 		Date hr_lwd_date=resignationModel.getHrLwdDate();
-		String lwd_date_string=df.format(hr_lwd_date);
+		String lwd_date_string=(hr_lwd_date!=null?df.format(hr_lwd_date):null);
 		resigneduser.put("resID", resID);
 		resigneduser.put("resStatusId", statusid);
 		resigneduser.put("resreason", reason);
@@ -1895,82 +1895,6 @@ public class HomeController {
 		JSONArray jsonArrey=new JSONArray();
 		String empcode="";
 		try{
-/*<<<<<<< Upstream, based on origin/master
-
-			session=request.getSession();
-			empcode=(String) session.getAttribute("employeecode"); 
-
-
-			List<TblExEmployeeQuery> listDepartment=queryService.getQueryList(empcode);
-			int count=0;
-
-			for (TblExEmployeeQuery tblExEmployeeQuery : listDepartment) {
-				String deptName="";
-
-				JSONObject jsonObject=new JSONObject();
-				int queryId= tblExEmployeeQuery.getQueryId();
-				int deptId=tblExEmployeeQuery.getDepartmentId();
-				MstDepartment department  =queryService.getDepartmentById(deptId);
-				if(department!=null){
-					deptName=department.getDepartment_name();
-				}
-
-				count++;
-				jsonObject.put("id", count);
-				jsonObject.put("department",deptName);
-				jsonObject.put("queryId",tblExEmployeeQuery.getQueryId());
-				jsonObject.put("queryText",tblExEmployeeQuery.getQueryText());
-				jsonObject.put("date",tblExEmployeeQuery.getCreatedOn().toString());
-				jsonArrey.add(jsonObject);
-
-
-			}
-		} 
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return jsonArrey;
-	}
-
-	@RequestMapping(value = "/getQueryList", method = RequestMethod.GET)
-	@ResponseBody
-	public JSONArray getQueryList(HttpServletRequest request,HttpSession session) {
-		JSONArray jsonArrey=new JSONArray();
-		String empcode="";
-		try{
-
-			session=request.getSession();
-			empcode=(String) session.getAttribute("employeecode"); 
-
-
-			List<TblExEmployeeQuery> listDepartment=queryService.getQueryList(empcode);
-			int count=0;
-
-			for (TblExEmployeeQuery tblExEmployeeQuery : listDepartment) {
-
-				JSONObject jsonObject=new JSONObject();
-				int queryId= tblExEmployeeQuery.getQueryId();
-				count++;
-				jsonObject.put("id", count);
-				jsonObject.put("queryfrom",tblExEmployeeQuery.getExEmpCode());
-				jsonObject.put("name", tblExEmployeeQuery.getCreatedBy());
-				jsonObject.put("queryId",tblExEmployeeQuery.getQueryId());
-				jsonObject.put("queryText",tblExEmployeeQuery.getQueryText());
-				jsonObject.put("queryDate",tblExEmployeeQuery.getCreatedOn().toString());
-				jsonArrey.add(jsonObject);
-
-
-			}
-		} 
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return jsonArrey;
-	}
-
-=======
->>>>>>> ef72132 commit for EmployeeQuery
-*/
 			session=request.getSession();
 			empcode=(String) session.getAttribute("employeecode"); 
 

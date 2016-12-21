@@ -40,7 +40,7 @@
 																for="reason">REASON </label>
 
 															<div class="col-sm-9"> 
-																<select class="form-control" id="form-field-select-1" name="reason" required="required" ng-model="selReason">
+																<select class="form-control" id="form-field-select-1" name="reason" ng-required="true" ng-model="selReason">
 																<option value="" selected="selected" >Select Reason</option>
 																	<option ng-repeat="reasons in resignationReason" value="{{reasons.id}}">{{reasons.reason}}</option>
 																	
@@ -56,7 +56,7 @@
 															<div class="col-sm-9">
 																<input type="text"  ng-model="comments" name="comments"
 																	class="col-xs-10 col-sm-12" 
-																	required="required" placeholder="Enter your comments for leaving" ng-minlength="10"/>
+																	 placeholder="Enter your comments for leaving" ng-required="true" ng-minlength="10"/>
 															</div>
 														</div>
 
