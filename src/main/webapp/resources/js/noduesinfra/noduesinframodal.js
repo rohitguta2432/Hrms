@@ -11,7 +11,7 @@ var store=$scope.emp_code;
 	var selectedempcode='employee_code='+$scope.emp_code;*/
 		
 	/*alert(' selected code are '+selectedempcode);*/
-		alert("infra modal "+$scope.emp_code)
+		/*alert("infra modal "+$scope.emp_code)*/
 	
 	$http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 			.success(function(data, status, headers, config){
@@ -33,7 +33,7 @@ var store=$scope.emp_code;
 				
 				})
 				
-				$scope.selectedItems=[];
+	 $scope.selectedItems=[];
 	 $scope.itemnotselected=[];
      $scope.rejected_final_status=[3];
      $scope.accepted_status=[2];
@@ -70,16 +70,16 @@ $scope.reject=function()
 	            $scope.selectedItems.push(emp.name);
 	       }
 	          })
-	          alert("selected  item "+$scope.selectedItems)
+	         /* alert("selected  item "+$scope.selectedItems)*/
 	          angular.forEach($scope.nodueinfraassets,function(emp){
 	          if(!emp.selected)
 	          	{
 	          	$scope.itemnotselected.push(emp.name)
 	          	}
 	          	})
-	      	alert("not received  item "+$scope.itemnotselected)
+	      	/*alert("not received  item "+$scope.itemnotselected)*/
 	      var emp_data='comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&not_received='+$scope.itemnotselected+'&received_assets='+$scope.selectedItems+'&final_status='+$scope.rejected_final_status;
-	      		alert(emp_data)
+	      		/*alert(emp_data)*/
 	      		$http.get(domain+'/rejectempassets?'+emp_data)
 	      		alert(success)
 	      				

@@ -76,7 +76,7 @@ public class TblAssetsManagement implements java.io.Serializable {
 		this.assetsId = assetsId;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinColumn(name = "resignation_id")
 	public TblUserResignation getTblUserResignation() {
 		return this.tblUserResignation;
@@ -170,17 +170,7 @@ public class TblAssetsManagement implements java.io.Serializable {
 		this.itemStatus = itemStatus;
 	}
 
-	/*@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "tblAssetsManagement")
-	public Set<TblNoDuesClearence> getTblNoDuesClearences() {
-		return this.tblNoDuesClearences;
-	}*/
-
-	/*public void setTblNoDuesClearences(Set<TblNoDuesClearence> tblNoDuesClearences) {
-		this.tblNoDuesClearences = tblNoDuesClearences;
-	}*/
-
-	/*public static void main(String[] args) {
-		TblAssetsManagement*/
+	
 	}
 
 

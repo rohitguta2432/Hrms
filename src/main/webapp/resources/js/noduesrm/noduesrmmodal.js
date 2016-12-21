@@ -10,8 +10,8 @@ var store=$scope.emp_code;
 	
 	var selectedempcode='employee_code='+$scope.emp_code;*/
 	
-	alert("rm code modal "+$scope.emp_code)
-	
+/*	alert("rm code modal "+$scope.emp_code)
+*/	
 		
 	$http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 			.success(function(data, status, headers, config){

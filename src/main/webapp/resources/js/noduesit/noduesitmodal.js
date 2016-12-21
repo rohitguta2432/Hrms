@@ -72,14 +72,14 @@ $scope.reject=function()
       $scope.selectedItems.push(emp.name);
  }
     })
-    alert("selected  item "+$scope.selectedItems)
+    /*alert("selected  item "+$scope.selectedItems)*/
     angular.forEach($scope.nodueitassets,function(emp){
     if(!emp.selected)
     	{
     	$scope.itemnotselected.push(emp.name)
     	}
     	})
-	alert("not received  item "+$scope.itemnotselected)
+	/*alert("not received  item "+$scope.itemnotselected)*/
 var emp_data='comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&not_received='+$scope.itemnotselected+'&received_assets='+$scope.selectedItems+'&final_status='+$scope.rejected_final_status;
 		alert(emp_data)
 		$http.get(domain+'/rejectempassets?'+emp_data)

@@ -640,7 +640,7 @@ public class HomeController {
 		for (String singleItem : assetsvalue) {
 
 			itasset.setAssetsIssue(singleItem);
-			itasset.setCreatedBy(" rohit raj");
+			itasset.setCreatedBy("System");
 			itasset.setCreatedOn(today);
 			itasset.setDepartmentId(4);
 			itasset.setIssuedBy("pradeep attri");
@@ -653,12 +653,11 @@ public class HomeController {
 			insertitasserts=noduesservice.submitnoduesassets(itasset);
 
 		}
-
-		TblNoDuesClearence noduesclearence=new TblNoDuesClearence();
+        TblNoDuesClearence noduesclearence=new TblNoDuesClearence();
 
 		noduesclearence.setComments(comments);
 		noduesclearence.setDepartmentFinalStatus(2);
-
+        noduesclearence.setDepartmentId(4);
 		noduesclearence.setTbluserresignation(resignedUser);
 
 		insertitasserts=noduesservice.submitNoduesclearence(noduesclearence);
@@ -743,7 +742,7 @@ public class HomeController {
 		{
 
 			infraasset.setAssetsIssue(assetssplit);
-			infraasset.setCreatedBy("rohit raj");
+			infraasset.setCreatedBy("System");
 			infraasset.setCreatedOn(today);
 			infraasset.setDepartmentId(5);
 			infraasset.setIssuedBy("delip jha");
@@ -760,7 +759,7 @@ public class HomeController {
 		nodues.setComments(comments);
 		nodues.setDepartmentFinalStatus(2);
 		nodues.setTbluserresignation(resignedUser);
-
+        nodues.setDepartmentId(5);
 		insertasserts=noduesservice.submitNoduesclearence(nodues);
 
 
@@ -1258,12 +1257,13 @@ public class HomeController {
 		for (String remaingassets : notreceived) {
 
 			receiveditem.setAssetsIssue(remaingassets);
-			receiveditem.setCreatedBy("rohit raj");
+			receiveditem.setCreatedBy("system");
 			receiveditem.setCreatedOn(today);
 			receiveditem.setDepartmentId(4);
 			receiveditem.setIssuedBy("pradeep attri");
 			receiveditem.setIssuedOn(today);
 			receiveditem.setItemStatus(1);
+			receiveditem.setReceivedBy("pradeep attri");
 			receiveditem.setReceivedOn(today);
 
 			TblUserResignation resignedUser=resignationService.getResignationUserService(empcode, 2);
@@ -1272,22 +1272,23 @@ public class HomeController {
 
 			rejectjson=noduesservice.submitnoduesassets(receiveditem);
 		}
-
-		if(receivedassets==null | receivedassets.length()==0)
+		
+		if(receivedassets==null |receivedassets.length()==0)
 		{
 			System.out.println("value not found...");
 		}
 		else{
 
 			for (String assetsitem : assertsreceived) {
-				receiveditem.setAssetsIssue(receivedassets);
-				receiveditem.setCreatedBy("rohit raj");
+				receiveditem.setAssetsIssue(assetsitem);
+				receiveditem.setCreatedBy("system");
 				receiveditem.setCreatedOn(today);
 				receiveditem.setDepartmentId(4);
 				receiveditem.setIssuedBy("pradeep attri");
 				receiveditem.setIssuedOn(today);
 				receiveditem.setItemStatus(2);
 				receiveditem.setReceivedOn(today);
+				receiveditem.setReceivedBy("pradeep attri");
 				rejectjson=noduesservice.submitnoduesassets(receiveditem);
 
 			}
@@ -1296,7 +1297,7 @@ public class HomeController {
 
 		clearence.setComments(comments);
 		clearence.setDepartmentFinalStatus(status);
-		clearence.setDepartmentId(1);
+		clearence.setDepartmentId(4);
 
 		TblUserResignation resignedUser=resignationService.getResignationUserService(empcode, 2);
 
@@ -1438,7 +1439,7 @@ public class HomeController {
 
 
 			rmasset.setAssetsIssue(assetssplit);
-			rmasset.setCreatedBy("rohit raj");
+			rmasset.setCreatedBy("system");
 			rmasset.setCreatedOn(today);
 			rmasset.setDepartmentId(3);
 			rmasset.setIssuedBy("sunil raizada");
@@ -1457,7 +1458,7 @@ public class HomeController {
 		nodues.setDepartmentFinalStatus(2);
 		nodues.setComments(comments);
 		nodues.setTbluserresignation(resignedUser);
-
+        nodues.setDepartmentId(3);
 		insertrmasserts=noduesservice.submitNoduesclearence(nodues);
 
 
@@ -2254,7 +2255,7 @@ public class HomeController {
 			System.out.println(email);
 			System.out.println(password);
 
-			TblUserResignation resignedUser=resignationService.getResignationUserService(userid, 2);
+			TblUserResignation resignedUser=resignationService.getResignationUserService(empcode, 7);
 
 			System.out.println("resignation id "+resignedUser);
 

@@ -118,7 +118,8 @@
 															</thead>
 													
 														  <tbody ng-repeat="emp in nodueitassets">      
-	<tr><td>{{emp.name}}</td><td><input type="checkbox" value="{{emp.name}}" ng-model="checked" ng-init="checked=true"/></td><td><input type="checkbox" value="{{emp.name}}" ng-model="emp.selected" required></td>
+	<tr><td>{{emp.name}}</td><td><input type="checkbox" value="{{emp.name}}" ng-model="checked" ng-init="checked=true"/></td><td><input type="checkbox" value="{{emp.name}}" id="check" name="check" ng-model="emp.selected" required></td>
+						<span ng-show="it.check.$dirty && it.check.$error.required">This field is required</span>		 
 								 </tr>
 							</tbody>
 						 </table>
@@ -130,7 +131,7 @@
 				<div class="form-group col-sm-12">				
 					<label for="comment" class="col-sm-3 control-label no-padding-right" style="font-size: 13px; font-weight: normal;text-align: left;">COMMENTS:</label>
  <div class="col-sm-9">
- <textarea    rows="1" cols="45" placeholder="comments..." ng-model="empcomments"  required></textarea>
+ <textarea    rows="1" cols="45" id="comment" name="comment" placeholder="comments..." ng-model="empcomments"  required></textarea>
  <span ng-show="it.comment.$dirty && it.comment.$error.required">This field is required</span>
  
  </div>
@@ -141,13 +142,14 @@
 					<div class="modal-footer">
 					
                 <button type="submit" value="submit" ng-disabled="it.$invalid" class="btn btn-primary">ACCEPT</button>
-                <button type="reset" class="btn btn-warning"  ng-disabled="it.comment.required.$invalid"  ng-click="reject()">REJECT</button>									
+               
+                <button type="reset" class="btn btn-warning"  ng-disabled="it.comment.$error.required"  ng-click="reject()">REJECT</button>									
 														
-														
+														<!-- || !it.check.$error.required -->
 														<div class="clearfix"></div>
 
 														<div class="center">
-															<!-- <input type="submit" ng-disabled="Exit.$invalid" value="submit"> -->
+															
 														</div>
 													</div>
 												</div>

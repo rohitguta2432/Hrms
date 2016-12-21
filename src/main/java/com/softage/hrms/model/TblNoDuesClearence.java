@@ -33,9 +33,7 @@ public class TblNoDuesClearence implements java.io.Serializable {
 	public void setTbluserresignation(TblUserResignation tbluserresignation) {
 		this.tbluserresignation = tbluserresignation;
 	}
-
-	/*private TblAssetsManagement tblAssetsManagement;*/
-	private Integer departmentFinalStatus;
+    private Integer departmentFinalStatus;
 	private String comments;
 	private Integer departmentId;
 
@@ -69,18 +67,7 @@ public class TblNoDuesClearence implements java.io.Serializable {
 	public void setClearenceId(Integer clearenceId) {
 		this.clearenceId = clearenceId;
 	}
-
-	/*@ManyToOne(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
-	@JoinColumn(name = "resignation_id")
-	public TblAssetsManagement getTblAssetsManagement() {
-		return this.tblAssetsManagement;
-	}*/
-
-	/*public void setTblAssetsManagement(TblAssetsManagement tblAssetsManagement) {
-		this.tblAssetsManagement = tblAssetsManagement;
-	}
-*/
-	@Column(name = "department_final_status")
+@Column(name = "department_final_status")
 	public Integer getDepartmentFinalStatus() {
 		return this.departmentFinalStatus;
 	}

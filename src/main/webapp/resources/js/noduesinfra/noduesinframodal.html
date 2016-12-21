@@ -29,15 +29,15 @@
 												<h5 class="widget-title"> NO DUES INFRA ASSETS</h5>
 
 											</div>
-											<form name="Exit" ng-submit=submit(Exit) novalidate>
+											<form name="infra" ng-submit=submit(infra) novalidate>
 												<div class="widget-body" style="display: block;">
 													<div class="widget-main form-horizontal">
 													
 												<div class="clearfix"></div>	
 													
 								
-<div class="form-group row col-sm-6">
-															<label class="col-sm-3 control-label no-padding-right"
+<div class="form-group row col-sm-12">
+															<label class="col-sm-3 control-label no-padding-right" style="font-size: 13px; font-weight: normal;text-align: left;"
 																for="employeecode">Employee code </label>
 															<div class="col-sm-9">
 <input type="text"  class="col-xs-10 col-sm-12" name="employeecode"  ng-model="emplycode" ng-disabled="true"/>
@@ -45,8 +45,8 @@
 </div>
 <div class="clearfix"></div>
 
-                                                            <div class="form-group row col-sm-6">
-															<label class="col-sm-3 control-label no-padding-right"
+                                                            <div class="form-group row col-sm-12">
+															<label class="col-sm-3 control-label no-padding-right" style="font-size: 13px; font-weight: normal;text-align: left;"
 																for="firstname"> First name </label>
 															<div class="col-sm-9">
 <input type="text"  class="col-xs-10 col-sm-12" name="firstname"  ng-model="empfirstname" ng-disabled="true"/>
@@ -55,8 +55,8 @@
 														</div>
 														
 														
-												<div class="form-group row col-sm-6">
-															<label class="col-sm-3 control-label no-padding-right"
+												<div class="form-group row col-sm-12">
+															<label class="col-sm-3 control-label no-padding-right" style="font-size: 13px; font-weight: normal;text-align: left;"
 																for="lastname"> Last name </label>
 															<div class="col-sm-9">
 <input type="text" class="col-xs-10 col-sm-12" name="lastname"  ng-model="emplastname" ng-disabled="true"/>
@@ -66,14 +66,12 @@
 														
 														
 <div class="clearfix"></div>
-														<div class="form-group col-sm-6">
-															<label class="col-sm-3 control-label no-padding-right"
+														<div class="form-group col-sm-12">
+															<label class="col-sm-3 control-label no-padding-right" style="font-size: 13px; font-weight: normal;text-align: left;"
 																for="department">Department </label>
 
 															<div class="col-sm-9">
- <!-- <select class="form-control" id="department" ng-model="Empdepartment" required="required">
- <option ng-repeat="department in Empdepartment" value="{{department}}">{{department}}</option>  
- </select> -->
+
  <input type="text"  class="col-xs-10 col-sm-12" name="department" ng-model="empdepartment" ng-disabled="true"/>
 	
 															</div>
@@ -82,13 +80,13 @@
 <!-- <div class="clearfix"></div> -->
 
 
-															<div class="form-group col-sm-6">
-															<label class="col-sm-3 control-label no-padding-right"
+															<div class="form-group col-sm-12">
+															<label class="col-sm-3 control-label no-padding-right" style="font-size: 13px; font-weight: normal;text-align: left;"
 																for="designation">Designation:</label>
 
 															<div class="col-sm-9">
 
-	<span ng-show="Exit.designation.$error.required">Select one designation!</span> -->
+	<span ng-show="Exit.designation.$error.required">Select one designation!</span> 
 	<input type="text"  class="col-xs-10 col-sm-12" name="designation" ng-model="empdesignation" ng-disabled="true"/>
 															</div>
 														</div>
@@ -97,8 +95,8 @@
 
 <div class="clearfix"></div>
 
-														<div class="form-group col-sm-6">
-															<label class="col-sm-3 control-label no-padding-right"
+														<div class="form-group col-sm-12">
+															<label class="col-sm-3 control-label no-padding-right" style="font-size: 13px; font-weight: normal;text-align: left;"
 																for="emplocation">Location </label>
 
 															<div class="col-sm-9">
@@ -123,7 +121,8 @@
 													
 														  <tbody ng-repeat="emp in nodueinfraassets">      
 														<tr>
-	<td>{{emp.name}}</td>  <td> <input type="checkbox"   value="{{emp.name}}" ng-model="checked" ng-init="checked=true"/></td><td><input type="checkbox" value="{{emp.name}}" ng-model="emp.selected" required/></td>
+	<td>{{emp.name}}</td>  <td> <input type="checkbox"   value="{{emp.name}}" ng-model="checked" ng-init="checked=true"/></td><td><input type="checkbox" value="{{emp.name}}" id="check" name="check" ng-model="emp.selected" required/></td>
+								 <span ng-show="infra.check.$dirty && infra.check.$error.required">This field is required</span>
 								 
 								 </tr>
 							</tbody>
@@ -131,19 +130,27 @@
 						</div>
 					</div>
 				</div> 
-				<div class="clearfix"></div>					
-					<label for="comment">COMMENTS:</label>
- <textarea    rows="1" cols="20"  placeholder="comments..." ng-model="empcomments" required> </textarea>
- <span ng-show="accounts.comment.$dirty && accounts.comment.$error.required">This field is required</span>
+				<div class="clearfix"></div>
+									<div class="form-group col-sm-12">	
+					<label for="comment" class="col-sm-3 control-label no-padding-right"  style="font-size: 13px; font-weight: normal;text-align: left;">COMMENTS:</label>
+					<div class="col-sm-9">
+ <textarea    rows="1" cols="45" id="comment" name="comment" placeholder="comments..." ng-model="empcomments" required> </textarea>
+ <span ng-show="infra.comment.$dirty && infra.comment.$error.required">This field is required</span>
+					</div>
+					</div>
+					<!-- </div> -->
+					
+					<div class="clearfix"></div>
+					
 					<div class="modal-footer">
-                <button type="submit" value="submit"  ng-disabled="accounts.$invalid"  class="btn btn-primary" ng-click="ok()">ACCEPT</button>
-                <button type="reset" class="btn btn-warning" ng-disabled="comment.$invalid" ng-click="reject()">REJECT</button>									
+                <button type="submit" value="submit"  ng-disabled="infra.$invalid"  class="btn btn-primary" ng-click="ok()">ACCEPT</button>
+                <button type="reset" class="btn btn-warning" ng-disabled="infra.comment.$error.required" ng-click="reject()">REJECT</button>									
 														
 														
 														<div class="clearfix"></div>
 
 														<div class="center">
-															<!-- <input type="submit" ng-disabled="Exit.$invalid" value="submit"> -->
+															
 														</div>
 													</div>
 												</div>
