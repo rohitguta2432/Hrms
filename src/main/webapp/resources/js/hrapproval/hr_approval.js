@@ -1,4 +1,4 @@
-application.controller('hrApprovalController',['$scope','$http','$rootScope','$modal',function($scope,$http,$rootScope,$modal){
+application.controller('hrApprovalController',['$scope','$http','$rootScope','$modal','$location',function($scope,$http,$rootScope,$modal,$location){
 	$scope.hr_approvalInit=function(){
 		$http.get(domain+'/hrapprovalInit')
 		.success(function(data,status,headers,config){
@@ -43,12 +43,7 @@ application.controller('hrApprovalController',['$scope','$http','$rootScope','$m
 			if($scope.finalstatus=='successful'){
 				alert('success');
 			}
-			else if(data.status=='successful'){
-				alert('success');
-			}
-		else{
-			alert('maybe successful');
-		}
+			location.reload();
 			//alert($scope.finalstatus);
 		})
 		.error(function(data,status,headers,config){

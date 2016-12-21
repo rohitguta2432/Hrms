@@ -21,7 +21,7 @@ application.controller('resignationController',function($scope,$http,$location){
 				$scope.resignationResult=data.result;
 		
 				alert($scope.resignationResult);
-				location.relaod();
+				location.reload();
 			})
 			.error(function(data, status, headers, config){
 				alert('error');

@@ -36,7 +36,17 @@ public class TblUserResignation implements java.io.Serializable {
 	private Date releivingDate;
 	private String rmEmpcode;
 	private String hrEmpcode;
+	private int circleId;
 	
+	@Column(name="circle_id")
+	public int getCircleId() {
+		return circleId;
+	}
+
+	public void setCircleId(int circleId) {
+		this.circleId = circleId;
+	}
+
 	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "tbluserresignation")
 	public Set<TblNoDuesClearence> getTblnoduesclearence() {
 		return tblnoduesclearence;

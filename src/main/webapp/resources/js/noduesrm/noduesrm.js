@@ -6,7 +6,11 @@ application.controller('noduesrmcontroller',function($scope,$http,$modal,$rootSc
 			$http.get(domain+'/getnoduesemplist')
 			.success(function(data,status,headers,config){
 			$scope.noduesrmsystem=data.emplist;
+
 			/*alert($scope.noduesrmsystem);*/
+
+			
+
 })
 		
 			error(function(data,status,headers,config){

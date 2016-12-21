@@ -43,6 +43,7 @@ $scope.approvalInit = function() {
 			}
 		}).success(function(data,status,headers,config){
 			alert(data.status);
+			location.reload();
 			//alert('success');
 		}).error(function(data,status,headers,config){
 			alert('error');

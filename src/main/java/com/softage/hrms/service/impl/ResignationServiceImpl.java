@@ -79,14 +79,14 @@ public class ResignationServiceImpl implements ResignationService {
 	}
 
 	@Override
-	public JSONObject getHrApprovalInitService(String empcode, int status) {
+	public JSONObject getHrApprovalInitService(String empcode, int status,int circode) {
 		// TODO Auto-generated method stub
 		int count=1;
 		JSONObject hrapprovaljson=new JSONObject();
 
 		DateFormat df=new SimpleDateFormat("yyyy/MM/dd");
 		List<JSONObject> acceptedResignedList=new ArrayList<JSONObject>();
-		List<TblUserResignation> approvedResignationList= resignationdao.getHrApprovalInitDao(empcode,status);
+		List<TblUserResignation> approvedResignationList= resignationdao.getHrApprovalInitDao(empcode,status,circode);
 		try {
 		for(TblUserResignation resignedUser : approvedResignationList){
 			JSONObject acceptedResignation=new JSONObject();

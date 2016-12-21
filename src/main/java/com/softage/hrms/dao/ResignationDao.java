@@ -24,7 +24,7 @@ public interface ResignationDao {
 	public MstReason getReasonMast(int reasonValue);
 	public MstResignationStatus getStatusMast(int statusValue);
 	public TblUserResignation getResignationUserDao(String emp_code,int status);
-	public List<TblUserResignation> getHrApprovalInitDao(String empcode,int status);
+	public List<TblUserResignation> getHrApprovalInitDao(String empcode,int status,int circode);
 	public List<String> getAllResignedUserRMs();
 	public JSONObject getAllResignedUsers(Set<String> setRMs);
 	public List<String> getAllResignedUsersHrs();

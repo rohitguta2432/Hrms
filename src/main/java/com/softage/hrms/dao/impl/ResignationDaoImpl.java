@@ -197,9 +197,9 @@ public class ResignationDaoImpl implements ResignationDao {
 
 	@Override
 	@Transactional
-	public List<TblUserResignation> getHrApprovalInitDao(String empcode, int status) {
+	public List<TblUserResignation> getHrApprovalInitDao(String empcode, int status,int circode) {
 		Session session=this.sessionFactory.getCurrentSession();
-		String hql="select resignUser from TblUserResignation resignUser join fetch resignUser.mstReason where resignUser.hrEmpcode=:hr_emp_code and resignUser.mstResignationStatus="+status;
+		String hql="select resignUser from TblUserResignation resignUser join fetch resignUser.mstReason where resignUser.hrEmpcode=:hr_emp_code and resignUser.mstResignationStatus="+status+" and resignUser.circleId="+circode;
 		Query query=session.createQuery(hql);
 		query.setParameter("hr_emp_code", empcode);
 		//query.setParameter("hr_emp_status", status);

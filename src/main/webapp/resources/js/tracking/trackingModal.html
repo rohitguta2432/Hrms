@@ -14,107 +14,39 @@
         <div class="form-group">
         
          <div class="form-group col-sm-12" >
-                <div ng-if="resStatusid == '1'">
-                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Resignation Status :</label>
+                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Employee Code :</label>
                 <div class="col-sm-12">
-                 <input type="text" ng-disabled="true" ng-model="resstatus">
-                </div>
+                 <input type="text" ng-disabled="true" ng-model="resempcode">
                 </div>
             </div>
             <div class="form-group col-sm-12" >
-                <div ng-if="resStatusid == '2'">
-                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Resignation Status :</label>
+                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Resignation Date :</label>
                 <div class="col-sm-12">
-                 <input type="text" ng-disabled="true" ng-model="resstatus">
-                </div>
-                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">RM Acceptance Date : </label>
-                <div class="col-sm-12">
-                 <input type="text" ng-disabled="true" ng-model="resapprovaldate">
-                </div>
-                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">RM Employee code : </label>
-                <div class="col-sm-12">
-                 <input type="text" ng-disabled="true" ng-model="resrmcode">
-                </div>
-                </div>
-            </div>
-           <div class="form-group col-sm-12" >
-                <div ng-if="resStatusid == '3'">
-                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Resignation Status :</label>
-                <div class="col-sm-12">
-                 <input type="text" ng-disabled="true" ng-model="resstatus">
-                </div>
-                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">RM Rejection Date :</label>
-                <div class="col-sm-12">
-                 <input type="text" ng-disabled="true" ng-model="resapprovaldate">
-                </div>
-                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">RM Employee Code :</label>
-                <div class="col-sm-12">
-                 <input type="text" ng-disabled="true" ng-model="resrmcode">
-                </div>
+                 <input type="text" ng-disabled="true" ng-model="resdate">
                 </div>
             </div>
             <div class="form-group col-sm-12" >
-                <div ng-if="resStatusid == '4'">
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Resignation Status :</label>
                 <div class="col-sm-12">
                  <input type="text" ng-disabled="true" ng-model="resstatus">
                 </div>
-                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Last Working Day :</label>
+            </div>
+            <div class="form-group col-sm-12" >
+                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">RM Approval Date :</label>
+                <div class="col-sm-12">
+                 <input type="text" ng-disabled="true" ng-model="resapprovaldate">
+                </div>
+            </div>
+            <div class="form-group col-sm-12" >
+                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">HR Approval Date :</label>
+                <div class="col-sm-12">
+                 <input type="text" ng-disabled="true" ng-model="reshrapprovaldate">
+                </div>
+            </div>
+            <div class="form-group col-sm-12" >
+                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Last Working Date Decided :</label>
                 <div class="col-sm-12">
                  <input type="text" ng-disabled="true" ng-model="reslwddate">
-                </div>
-                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">HR Employee Code :</label>
-                <div class="col-sm-12">
-                 <input type="text" ng-disabled="true" ng-model="reshrcode">
-                </div>
-                </div>
-            </div>
-             <div class="form-group col-sm-12" >
-                <div ng-if="resStatusid == '5'" >
-                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Resignation Status :</label>
-                <div class="col-sm-12" >
-                 <input type="text" ng-disabled="true" ng-model="resstatus">
-                </div>
-                </div>
-            </div>
-            <div class="form-group col-sm-12" >
-                <div ng-if="resStatusid == '6'" ng-init="noduesstatusinit(resid)">
-                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Resignation Status :</label>
-                <div class="col-sm-12" >
-                 <input type="text" ng-disabled="true" ng-model="resstatus">
-                </div>
-                <label ng-repeat="pending in pendingNoDuesDeptList" class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">NoDues Pending From :</label>
-                <div class="col-sm-12" >
-                 <input type="text" ng-disabled="true" ng-model="pending">
-                </div>
-                </div>
-            </div>
-              <div class="form-group col-sm-12" >
-                <div ng-if="resStatusid == '7'">
-                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Resignation Status :</label>
-                <div class="col-sm-12">
-                 <input type="text" ng-disabled="true" ng-model="resstatus">
-                </div>
-                </div>
-            </div>
-            <div class="form-group col-sm-12" >
-                <div ng-if="resStatusid == '8'" >
-                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Resignation Status :</label>
-                <div class="col-sm-12">
-                 <input type="text" ng-disabled="true" ng-model="resstatus">
-                </div>
-                </div>
-            </div>
-            <div class="form-group col-sm-12" >
-                <div ng-if="resStatusid == '9'" ng-init="getDocUploadedStatus(resid)">
-                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Resignation Status :</label>
-                <div class="col-sm-12">
-                 <input type="text" ng-disabled="true" ng-model="resstatus">
-                </div>
-                <label ng-repeat=" doc in notUploadedDocs" class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Document Pending :</label>
-                <div class="col-sm-12">
-                 <input type="text" ng-disabled="true" ng-model="doc">
-                </div>
                 </div>
             </div>
             <div style="clear:both; height: 10px;"></div>          
