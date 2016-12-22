@@ -4,7 +4,7 @@ application.controller('noduesinfracontroller',function($scope,$http,$modal,$roo
 /*Employee grid information*/
 			$http.get(domain+'/getnoduesemplist')
 			.success(function(data,status,headers,config){
-			$scope.noduesinfrasystem=data.empinfralist;
+			$scope.noduesinfrasystem=data.emplist;
 			/*alert($scope.nodueshrtjs);*/
 })
 		

@@ -21,7 +21,7 @@ application.controller('noduesaccountscontroller',function($scope,$http,$modal,$
            var scope = $rootScope.$new();
    		scope.emp_code = emp_code;
     /*$rootScope.$broadcast("Mydata",emp_code);*/
-    alert("account empcode "+emp_code);
+   /* alert("account empcode "+emp_code);*/
 		
 var modalInstance = $modal.open({
 	  scope:scope,

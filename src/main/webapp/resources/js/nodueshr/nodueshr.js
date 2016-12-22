@@ -4,7 +4,7 @@ application.controller('nodueshrcontroller',function($scope,$http,$modal,$rootSc
 /*Employee grid information*/
 			$http.get(domain+'/getnoduesemplist')
 			.success(function(data,status,headers,config){
-			$scope.nodueshrtjs=data.emphrlist;
+			$scope.nodueshrtjs=data.emplist;
 			/*alert($scope.nodueshrtjs);*/
 })
 		

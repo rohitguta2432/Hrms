@@ -11,7 +11,7 @@ application.controller('feedbackmodalcontroller',function($scope,$http,$window,$
 	
 	/*alert(selectedempcode)*/
 	
-	alert("hr feedback "+$scope.emp_code)
+	/*alert("hr feedback "+$scope.emp_code)*/
 	
 	$http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 			.success(function(data, status, headers, config){

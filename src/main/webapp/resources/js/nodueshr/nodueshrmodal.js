@@ -10,7 +10,7 @@ alert("hii")
 var selectedempcode='employee_code='+$scope.emp_code;
 		
 });*/
-	alert("hr modal "+$scope.emp_code);
+	/*alert("hr modal "+$scope.emp_code);*/
 	$http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 			.success(function(data, status, headers, config){
 			/*alert('data are found');*/

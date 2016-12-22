@@ -32,7 +32,7 @@ public class NoDuesDaoImpl implements NoDuesDao {
 	public List<String> getrmacceptedempcode() {
 
 		org.hibernate.Session session=sessionfactory.getCurrentSession();
-		String hql="select empCode from TblUserResignation where status=4";
+		String hql="select empCode from TblUserResignation where status=5";
 		Query query=session.createQuery(hql);
 		List<String> listempcode=query.list();
 
@@ -72,9 +72,7 @@ public class NoDuesDaoImpl implements NoDuesDao {
 		JSONObject insertbean=new JSONObject();
 		org.hibernate.Session session=sessionfactory.getCurrentSession();
 	    
-		
-		
-		session.save(accountbean);
+session.saveOrUpdate(accountbean);
 		
 		
 		return insertbean;

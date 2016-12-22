@@ -12,7 +12,7 @@ application.controller('noduesaccountsmodalcontroller',function($scope,$http,$wi
 	
 	/*var selectedempcode='employee_code='+$scope.emp_code;*/
 		
-	alert("account modal "+$scope.emp_code);
+	/*alert("account modal "+$scope.emp_code);*/
 	/*alert(selectedempcode)*/
 	
 	$http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)

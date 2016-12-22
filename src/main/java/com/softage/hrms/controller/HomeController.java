@@ -531,6 +531,8 @@ int count=1;
 			
 			List<String> listempcoderesign=noduesservice.listrmacceptedempcode();
 			
+			System.out.println("emp code "+listempcoderesign);
+			
 			for(String code:listempcoderesign ){
 				
 				/*emp_prxoy.getUserDetail(code);*/
@@ -539,9 +541,9 @@ int count=1;
 				itjson.put("empcode",emp_prxoy.getUserDetail(code).getEmpCode());
 				itjson.put("firstname", emp_prxoy.getUserDetail(code).getFirstName());
 				itjson.put("lastname", emp_prxoy.getUserDetail(code).getLastName());
-				itjson.put("department", emp_prxoy.getUserDetail(code).getDepartmentId());
+				itjson.put("department", "it-software");
 				itjson.put("designation", emp_prxoy.getUserDetail(code).getRoleName());
-				itjson.put("location", emp_prxoy.getUserDetail(code).getCompanyId());
+				itjson.put("location", "gurgaon");
 				
 				count++;
 			}
@@ -587,20 +589,27 @@ int count=1;
 	@RequestMapping(value = "/getemployeemodalinfo", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getemployeeinformation(HttpServletRequest request) {
-
+		ISoftAgeEnterpriseProxy emp_prxoy=new ISoftAgeEnterpriseProxy();
 		String emp_code=request.getParameter("employee_code");
 		JSONObject itassetsmodal = new JSONObject();
+		/*emp_prxoy.getUserDetail(emp_code);*/
 
-
-
-		itassetsmodal.put("empcode","ss0097");
-		itassetsmodal.put("firstname", "rohit");
-		itassetsmodal.put("lastname", "raj");
+try{
+	
+          /*for(String empcode:emp_prxoy)
+          {*/
+		itassetsmodal.put("empcode",emp_code);
+		itassetsmodal.put("firstname", emp_prxoy.getUserDetail(emp_code).getFirstName());
+		itassetsmodal.put("lastname", emp_prxoy.getUserDetail(emp_code).getLastName());
 		itassetsmodal.put("department", "it-software");
-		itassetsmodal.put("designation", "java developer");
-		itassetsmodal.put("location", "circle");
+		itassetsmodal.put("designation", emp_prxoy.getUserDetail(emp_code).getRoleName());
+		itassetsmodal.put("location", "gurgaon");
+          /*}*/
 
-
+}
+catch (Exception e) {
+	e.printStackTrace();
+}
 
 
 
@@ -1284,7 +1293,7 @@ int count=1;
 			receiveditem.setReceivedBy("pradeep attri");
 			receiveditem.setReceivedOn(today);
 
-			TblUserResignation resignedUser=resignationService.getResignationUserService(empcode, 2);
+			TblUserResignation resignedUser=resignationService.getResignationUserService(empcode, 5);
 
 			receiveditem.setTblUserResignation(resignedUser);
 
@@ -1307,6 +1316,12 @@ int count=1;
 				receiveditem.setItemStatus(2);
 				receiveditem.setReceivedOn(today);
 				receiveditem.setReceivedBy("pradeep attri");
+				
+				
+				TblUserResignation resignedUser=resignationService.getResignationUserService(empcode, 5);
+				
+				receiveditem.setTblUserResignation(resignedUser);
+				
 				rejectjson=noduesservice.submitnoduesassets(receiveditem);
 
 			}
@@ -1317,7 +1332,7 @@ int count=1;
 		clearence.setDepartmentFinalStatus(status);
 		clearence.setDepartmentId(4);
 
-		TblUserResignation resignedUser=resignationService.getResignationUserService(empcode, 2);
+		TblUserResignation resignedUser=resignationService.getResignationUserService(empcode, 5);
 
 		clearence.setTbluserresignation(resignedUser);
 
@@ -1366,14 +1381,14 @@ int count=1;
 			@RequestParam("hr_comments") String comments,
 			@RequestParam("emp_code") String empcode
 			) {
-
+		
+		TblUserResignation resignedUser=resignationService.getResignationUserService(empcode, 5);
+		
 		JSONObject inserthrasserts = new JSONObject();
 
 		Date today=new Date();
 
 		TblAssetsManagement hrasset=new TblAssetsManagement();
-
-		TblUserResignation resignedUser=resignationService.getResignationUserService(empcode, 2);
 
 		String[] asserts=hrassets.split(",");
 
@@ -1382,7 +1397,7 @@ int count=1;
 
 
 			hrasset.setAssetsIssue(assetssplit);
-			hrasset.setCreatedBy("rohit raj");
+			hrasset.setCreatedBy("system");
 			hrasset.setCreatedOn(today);
 			hrasset.setDepartmentId(2);
 			hrasset.setIssuedBy("thomas verges");
@@ -1393,6 +1408,9 @@ int count=1;
 			hrasset.setTblUserResignation(resignedUser);
 
 			inserthrasserts=noduesservice.submitnoduesassets(hrasset);
+			
+			
+			
 		}
 
 		TblNoDuesClearence nodues=new TblNoDuesClearence();
@@ -1402,6 +1420,13 @@ int count=1;
 
 		inserthrasserts=noduesservice.submitNoduesclearence(nodues);
 
+        MstResignationStatus status_mast=resignationService.getStatus(7);
+		
+		resignedUser.setMstResignationStatus(status_mast);
+		
+		approvalservice.updateResignationStatus(resignedUser);
+		
+		
 		return inserthrasserts;
 	}
 
@@ -1550,7 +1575,7 @@ int count=1;
 			/*List<String> resignationId=resignationidservice.listresignationid(empcode);*/
 
 
-
+			TblUserResignation resignedUser=resignationService.getResignationUserService(empcode, 5);
 			for(JSONObject hranswer:listAnswers)
 			{
 				Long serialid=(Long) hranswer.get("qid");
@@ -1567,14 +1592,21 @@ int count=1;
 				feedbackhr.setAnsText(ans);
 				feedbackhr.setFeedbackBy(feedbackby);
 				feedbackhr.setFeedbackFrom(hrempcode);
-				TblUserResignation resignedUser=resignationService.getResignationUserService(empcode, 2);
+				
 				MstQuestions question=approvalservice.getRmFeedbackQuestionService(sid);
 
 				feedbackhr.setMstQuestions(question);
 				feedbackhr.setTblUserResignation(resignedUser);
 
 				hranswers=exitinterviewservice.submithrfeedback(feedbackhr);
-			}
+				
+		}
+			
+			MstResignationStatus status_mast=resignationService.getStatus(7);
+			
+			resignedUser.setMstResignationStatus(status_mast);
+			approvalservice.updateResignationStatus(resignedUser);
+			
 
 		}
 		catch (Exception e) {
