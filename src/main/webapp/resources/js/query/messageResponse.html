@@ -16,9 +16,9 @@
 		style="margin-top: 10px;">
 		<script type="text/javascript">
 			try {
-				 ace.settings.check('main-container', 'fixed')
-			      }catch (e) {
-			    }
+				ace.settings.check('main-container', 'fixed')
+			} catch (e) {
+			}
 		</script>
 		<div class="main-content" ng-contoller="queryController"
 			ng-init="getMessage()">
@@ -49,13 +49,12 @@
 																style="margin-top: 10px; font-weight: normal">from: {{emp.massageFrom}}</label>
 
 															<div class="col-sm-9" style="margin-top: 8px;">
-						
-															<div ng-if="emp.classType=='success'" class="alert alert-success">
+															
+															<!-- <div class="alert alert-success" > -->
+															<div class="alert alert-emp.classType" >
 															   {{emp.query}}
 															</div>
-															 <div ng-if="emp.classType=='info'" class="alert alert-info">
-															   {{emp.query}}
-															</div>
+																
 															</div>
 														</div>
 														<div class="form-group col-sm-12">

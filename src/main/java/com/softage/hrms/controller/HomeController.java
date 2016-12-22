@@ -23,10 +23,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-//import org.apache.commons.io.IOUtils;
-/*import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;*/
+import org.apache.commons.net.ftp.FTPFile;
 
 import org.json.simple.JSONArray;
 
@@ -948,98 +948,134 @@ public class HomeController {
 		return;
 	}
 
-	public static String uploadDocumentFTPClient(String file, String empId, byte[] bytes) {
-		/*
-		 * String ftpHost = "122.15.90.140"; String username = "administrator";
-		 * String password = "softage@tchad"; FileOutputStream fos=null; String
-		 * ftpPath=""; FTPClient ftpClient = new FTPClient();
-		 * 
-		 * try{ // InputStream inputStream=new FileInputStream("");
-		 * 
-		 * 
-		 * ftpClient.connect(ftpHost); boolean login = ftpClient.login(username,
-		 * password); if (login) { logger.info(
-		 * "Successfully Connected to FTP Server"); } else { System.out.println(
-		 * "Unable to Connected to Server..... "); }
-		 * 
-		 * // FTPFile[] files =ftpClient.listDirectories(ftpPath);
-		 * if(!ftpClient.changeWorkingDirectory("HRMS")){ boolean result =
-		 * ftpClient.makeDirectory("HRMS");
-		 * ftpClient.changeWorkingDirectory("HRMS"); System.out.println(result);
-		 * 
-		 * } if(!ftpClient.changeWorkingDirectory("Documents")){ boolean result
-		 * = ftpClient.makeDirectory("Documents");
-		 * ftpClient.changeWorkingDirectory("Documents");
-		 * System.out.println(result);
-		 * 
-		 * } ftpPath="HRMS/Documents";
-		 * if(!ftpClient.changeWorkingDirectory(empId)){ boolean result =
-		 * ftpClient.makeDirectory(empId);
-		 * ftpClient.changeWorkingDirectory(empId); System.out.println(result);
-		 * 
-		 * } ftpPath=ftpPath+"/"+empId+"/"+file;
-		 * ftpClient.enterLocalPassiveMode();
-		 * ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-		 * 
-		 * // ftpClient.changeWorkingDirectory("fptPath");
-		 * 
-		 * 
-		 * System.out.println("Start uploading second file"); OutputStream
-		 * outputStream = ftpClient.storeFileStream(file); byte[] bytesIn = new
-		 * byte[4096]; int read = 0;
-		 * 
-		 * outputStream.write(bytes); // inputStream.close();
-		 * outputStream.close();
-		 * 
-		 * } catch (Exception e) { e.printStackTrace();
-		 * 
-		 * } finally { try { ftpClient.disconnect();
-		 * 
-		 * } catch (Exception e) { e.printStackTrace(); logger.error("", e); } }
-		 * 
-		 * 
-		 * return ftpPath;
-		 */
-		return null;
+
+	public static String uploadDocumentFTPClient(String file,String empId, byte[] bytes){
+		
+		String ftpHost = "122.15.90.140";
+		String username = "administrator";
+		String password = "softage@tchad";
+		FileOutputStream fos=null;
+		String ftpPath="";
+		FTPClient ftpClient = new FTPClient();
+
+		try{
+			//	  InputStream inputStream=new FileInputStream("");
+
+
+			ftpClient.connect(ftpHost);
+			boolean login = ftpClient.login(username, password);
+			if (login) {
+				logger.info("Successfully Connected to FTP Server");
+			} else {
+				System.out.println("Unable to Connected to Server..... ");
+			}
+
+			//   FTPFile[] files   =ftpClient.listDirectories(ftpPath);
+			if(!ftpClient.changeWorkingDirectory("HRMS")){
+				boolean result = ftpClient.makeDirectory("HRMS");
+				ftpClient.changeWorkingDirectory("HRMS");
+				System.out.println(result);
+
+			}
+			if(!ftpClient.changeWorkingDirectory("Documents")){
+				boolean result = ftpClient.makeDirectory("Documents");
+				ftpClient.changeWorkingDirectory("Documents");
+				System.out.println(result);
+
+			}
+			ftpPath="HRMS/Documents";
+			if(!ftpClient.changeWorkingDirectory(empId)){
+				boolean result = ftpClient.makeDirectory(empId);
+				ftpClient.changeWorkingDirectory(empId);
+				System.out.println(result);
+
+			}
+			ftpPath=ftpPath+"/"+empId+"/"+file;
+			ftpClient.enterLocalPassiveMode();
+			ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+
+			//   ftpClient.changeWorkingDirectory("fptPath");
+
+
+			System.out.println("Start uploading second file");
+			OutputStream outputStream = ftpClient.storeFileStream(file);
+			byte[] bytesIn = new byte[4096];
+			int read = 0;
+
+			outputStream.write(bytes);
+			//    inputStream.close();
+			outputStream.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				ftpClient.disconnect();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("", e);
+			}
+		}
+
+
+		return ftpPath;
+
 	}
 
 	public static byte[] downloadDocumentFTPClient(String filePath, String filename) {
 
-		/*
-		 * String ftpHost = "122.15.90.140"; String username = "administrator";
-		 * String password = "softage@tchad"; FileOutputStream fos=null; String
-		 * ftpPath=""; FTPClient ftpClient = new FTPClient(); byte[] bytes=null;
-		 * InputStream inputStream=null;
-		 * 
-		 * try{ // InputStream inputStream=new FileInputStream("");
-		 * 
-		 * 
-		 * ftpClient.connect(ftpHost); boolean login = ftpClient.login(username,
-		 * password); if (login) { logger.info(
-		 * "Successfully Connected to FTP Server"); } else { System.out.println(
-		 * "Unable to Connected to Server..... "); }
-		 * 
-		 * // FTPFile[] files =ftpClient.listDirectories(ftpPath);
-		 * 
-		 * ftpClient.enterLocalPassiveMode();
-		 * ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-		 * 
-		 * ftpClient.changeWorkingDirectory(filePath);
-		 * 
-		 * 
-		 * System.out.println("Start uploading second file"); inputStream =
-		 * ftpClient.retrieveFileStream(filename); int read =
-		 * inputStream.read(); bytes =IOUtils.toByteArray(inputStream);
-		 * 
-		 * } catch (Exception e) { e.printStackTrace();
-		 * 
-		 * } finally { try { ftpClient.disconnect(); inputStream.close(); }
-		 * catch (Exception e) { e.printStackTrace(); logger.error("", e); } }
-		 * 
-		 * 
-		 * return bytes;
-		 */
-		return null;
+		String ftpHost = "122.15.90.140";
+		String username = "administrator";
+		String password = "softage@tchad";
+		FileOutputStream fos=null;
+		String ftpPath="";
+		FTPClient ftpClient = new FTPClient();
+		byte[]  bytes=null;
+		InputStream inputStream=null;
+
+		try{
+			//	  InputStream inputStream=new FileInputStream("");
+
+
+			ftpClient.connect(ftpHost);
+			boolean login = ftpClient.login(username, password);
+			if (login) {
+				logger.info("Successfully Connected to FTP Server");
+			} else {
+				System.out.println("Unable to Connected to Server..... ");
+			}
+
+			//   FTPFile[] files   =ftpClient.listDirectories(ftpPath);
+
+			ftpClient.enterLocalPassiveMode();
+			ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+
+			ftpClient.changeWorkingDirectory(filePath);
+
+
+			System.out.println("Start uploading second file");
+			inputStream = ftpClient.retrieveFileStream(filename);
+			int read  = inputStream.read();
+			bytes =IOUtils.toByteArray(inputStream);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				ftpClient.disconnect();
+				inputStream.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("", e);
+			}
+		}
+
+
+		return bytes;
+
 	}
 
 	@RequestMapping(value = "/getEmpUploadList", method = RequestMethod.GET)
@@ -1376,14 +1412,11 @@ public class HomeController {
 				TblExEmployeeQuery employeeQuery1 = queryService.getById(id);
 				TblExEmpCommunication empCommunication = new TblExEmpCommunication();
 				empCommunication.setTblExEmployeeQuery(employeeQuery1);
-				empCommunication.setDepartrmentId(departmentId);
 				empCommunication.setQueryFrom(empcode);
 				empCommunication.setCreatedOn(new Date());
-				empCommunication.setQueryStatus(1);
 				empCommunication.setQueryText(queryText);
-				empCommunication.setReplyFrom(assingToEmpcode);
 
-				String result1 = queryService.save(empCommunication);
+				String result1 =queryService.save(empCommunication);	
 
 			}
 
@@ -1415,10 +1448,9 @@ public class HomeController {
 
 			TblExEmpCommunication empCommunication = new TblExEmpCommunication();
 			empCommunication.setTblExEmployeeQuery(employeeQuery);
-			empCommunication.setReplyText(replyText);
+			empCommunication.setQueryText(replyText);
 			empCommunication.setCreatedOn(new Date());
-			empCommunication.setQueryStatus(1);
-			empCommunication.setReplyFrom(rmEmpCode);
+			empCommunication.setQueryFrom(rmEmpCode);
 
 			String result = queryService.save(empCommunication);
 
@@ -1450,44 +1482,27 @@ public class HomeController {
 			String queryId = request.getParameter("queryId");
 			int id = Integer.parseInt(queryId);
 
-			List<TblExEmpCommunication> tblExEmpCommunications = queryService.getByQueryId(id);
-
+			List<TblExEmpCommunication> tblExEmpCommunications =queryService.getByQueryId(id);
+             int count=0;
 			for (TblExEmpCommunication tblExEmpCommunication : tblExEmpCommunications) {
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("queryId", id);
-				String queryText = tblExEmpCommunication.getQueryText();
-				String queryFrom = tblExEmpCommunication.getQueryFrom();
-				if (queryText == null) {
-					queryText = tblExEmpCommunication.getReplyText();
-					queryFrom = tblExEmpCommunication.getReplyFrom();
+				count++;
+				JSONObject jsonObject=new JSONObject();
+				jsonObject.put("queryId",id);
+				String queryText  =tblExEmpCommunication.getQueryText();
+				String queryFrom=tblExEmpCommunication.getQueryFrom();
+				jsonObject.put("query",queryText);
+				jsonObject.put("massageFrom",queryFrom);
+				if(count%2==0){
+				jsonObject.put("classType","info");
+				}else{
+				jsonObject.put("classType","success");
 				}
-				jsonObject.put("query", queryText);
-				jsonObject.put("massageFrom", queryFrom);
 
 				array.add(jsonObject);
 
 			}
 
-			TblExEmpCommunication empCommunication = new TblExEmpCommunication();
-			/*
-			 * empCommunication.setTblExEmployeeQuery(employeeQuery);
-			 * empCommunication.setDepartrmentId(deptId);
-			 * empCommunication.setCreatedBy("manager");
-			 * empCommunication.setCreatedOn(new Date());
-			 * empCommunication.setQueryReply(queryReply);
-			 * empCommunication.setQueryStatus(1);
-			 * empCommunication.setEmpCode(rmEmpCode);
-			 */
 
-			/*
-			 * String result =queryService.save(empCommunication);
-			 * 
-			 * System.out.println("Result "+result);
-			 */
-
-			// get Query Assigned Manager Employee Code
-			// TblUserResignation tblUserResignation
-			// =resignationService.getResignationUserService(empcode, 0);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1606,7 +1621,7 @@ public class HomeController {
 		hrapprovaljson = resignationService.getAllResignedUsersHR(hr_to_show);
 		return hrapprovaljson;
 	}
-
+	
 	@RequestMapping(value = "/getEmpQueryList", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONArray getEmpQueryList(HttpServletRequest request, HttpSession session) {
@@ -1615,7 +1630,6 @@ public class HomeController {
 		try {
 			session = request.getSession();
 			empcode = (String) session.getAttribute("employeecode");
-
 			List<TblExEmployeeQuery> listDepartment = queryService.getQueryList(empcode);
 			int count = 0;
 
@@ -1655,28 +1669,73 @@ public class HomeController {
 			session = request.getSession();
 			empcode = (String) session.getAttribute("employeecode");
 
-			List<TblExEmployeeQuery> listDepartment = queryService.getQueryList(empcode);
-			int count = 0;
+			List<TblExEmployeeQuery> listDepartment=queryService.getQueryList(empcode);
+			int count=0;
 
 			for (TblExEmployeeQuery tblExEmployeeQuery : listDepartment) {
+				String deptName="";
 
-				JSONObject jsonObject = new JSONObject();
-				int queryId = tblExEmployeeQuery.getQueryId();
+				JSONObject jsonObject=new JSONObject();
+				int queryId= tblExEmployeeQuery.getQueryId();
+				int deptId=tblExEmployeeQuery.getDepartmentId();
+				MstDepartment department  =queryService.getDepartmentById(deptId);
+				if(department!=null){
+					deptName=department.getDepartment_name();
+				}
+
 				count++;
 				jsonObject.put("id", count);
-				jsonObject.put("queryfrom", tblExEmployeeQuery.getExEmpCode());
-				jsonObject.put("name", tblExEmployeeQuery.getCreatedBy());
-				jsonObject.put("queryId", tblExEmployeeQuery.getQueryId());
-				jsonObject.put("queryText", tblExEmployeeQuery.getQueryText());
-				jsonObject.put("queryDate", tblExEmployeeQuery.getCreatedOn().toString());
+				jsonObject.put("department",deptName);
+				jsonObject.put("queryId",tblExEmployeeQuery.getQueryId());
+				jsonObject.put("queryText",tblExEmployeeQuery.getQueryText());
+				jsonObject.put("date",tblExEmployeeQuery.getCreatedOn().toString());
 				jsonArrey.add(jsonObject);
 
+
 			}
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		return jsonArrey;
 	}
+
+/*	@RequestMapping(value = "/getQueryList", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONArray getQueryList(HttpServletRequest request,HttpSession session) {
+		JSONArray jsonArrey=new JSONArray();
+		String empcode="";
+		try{
+
+			session=request.getSession();
+			empcode=(String) session.getAttribute("employeecode"); 
+
+
+			List<TblExEmployeeQuery> listDepartment=queryService.getQueryList(empcode);
+			int count=0;
+
+			for (TblExEmployeeQuery tblExEmployeeQuery : listDepartment) {
+
+				JSONObject jsonObject=new JSONObject();
+				int queryId= tblExEmployeeQuery.getQueryId();
+				count++;
+				jsonObject.put("id", count);
+				jsonObject.put("queryfrom",tblExEmployeeQuery.getExEmpCode());
+				jsonObject.put("name", tblExEmployeeQuery.getCreatedBy());
+				jsonObject.put("queryId",tblExEmployeeQuery.getQueryId());
+				jsonObject.put("queryText",tblExEmployeeQuery.getQueryText());
+				jsonObject.put("queryDate",tblExEmployeeQuery.getCreatedOn().toString());
+				jsonArrey.add(jsonObject);
+
+
+			}
+		} 
+		catch (Exception e) {
+>>>>>>> 8d68558 commit for queryChat
+			e.printStackTrace();
+		}
+		return jsonArrey;
+	}*/
 
 	@RequestMapping(value = "/empfeedback", method = RequestMethod.GET)
 	@ResponseBody

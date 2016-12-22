@@ -17,6 +17,8 @@ application.controller('MangerQueryController', ['$scope', '$http','$modal','$lo
 		$http.get(domain+'/saveQueryManger?'+queryData)
 		.success(function(data,status,headers,config){		
 			$scope.empQueryList=data;
+			alert("Query Save Successfully   ");
+			location.reload();
 		})
 		.error(function(data,status,headers,config){
 			alert('the error returned is : '+JSON.stringify({data : data}));

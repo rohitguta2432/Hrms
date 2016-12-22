@@ -24,26 +24,19 @@ public class TblExEmpCommunication implements java.io.Serializable {
 	private Integer communicationId;
 	private TblExEmployeeQuery tblExEmployeeQuery;
 	private String queryFrom;
-	private Integer departrmentId;
-	private Integer queryStatus;
 	private Date createdOn;
-	private String replyFrom;
 	private String queryText;
-	private String replyText;
 
 
 
 	public TblExEmpCommunication() {
 	}
 
-	public TblExEmpCommunication(TblExEmployeeQuery tblExEmployeeQuery, String queryFrom, Integer departrmentId,
-			Integer queryStatus, Date createdOn, String replyFrom) {
+	public TblExEmpCommunication(TblExEmployeeQuery tblExEmployeeQuery, String queryFrom,Date createdOn) {
 		this.tblExEmployeeQuery = tblExEmployeeQuery;
 		this.queryFrom = queryFrom;
-		this.departrmentId = departrmentId;
-		this.queryStatus = queryStatus;
 		this.createdOn = createdOn;
-		this.replyFrom = replyFrom;
+		
 	}
 
 
@@ -79,14 +72,6 @@ public class TblExEmpCommunication implements java.io.Serializable {
 		this.queryFrom = queryFrom;
 	}
 
-	@Column(name = "departrment_id")
-	public Integer getDepartrmentId() {
-		return this.departrmentId;
-	}
-
-	public void setDepartrmentId(Integer departrmentId) {
-		this.departrmentId = departrmentId;
-	}
 	@Column(name = "query_text")
 	public String getQueryText() {
 		return queryText;
@@ -96,23 +81,7 @@ public class TblExEmpCommunication implements java.io.Serializable {
 		this.queryText = queryText;
 	}
 	
-	@Column(name = "reply_text")
-	public String getReplyText() {
-		return replyText;
-	}
 
-	public void setReplyText(String replyText) {
-		this.replyText = replyText;
-	}
-
-	@Column(name = "query_status")
-	public Integer getQueryStatus() {
-		return this.queryStatus;
-	}
-
-	public void setQueryStatus(Integer queryStatus) {
-		this.queryStatus = queryStatus;
-	}
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_on", length = 19)
@@ -124,13 +93,5 @@ public class TblExEmpCommunication implements java.io.Serializable {
 		this.createdOn = createdOn;
 	}
 
-	@Column(name = "reply_from", length = 15)
-	public String getReplyFrom() {
-		return this.replyFrom;
-	}
-
-	public void setReplyFrom(String replyFrom) {
-		this.replyFrom = replyFrom;
-	}
 
 }

@@ -32,6 +32,7 @@ public class TblExEmployeeQuery implements java.io.Serializable {
 	private Date createdOn;
 	private String createdBy;
 	private String queryAssigned;
+	private int queryStatus;
 
 
 	private Set<TblExEmpCommunication> tblExEmpCommunications = new HashSet<TblExEmpCommunication>(0);
@@ -88,6 +89,14 @@ public class TblExEmployeeQuery implements java.io.Serializable {
 
 	public void setDepartmentId(Integer departmentId) {
 		this.departmentId = departmentId;
+	}
+	@Column(name = "status")
+	public int getQueryStatus() {
+		return queryStatus;
+	}
+
+	public void setQueryStatus(int queryStatus) {
+		this.queryStatus = queryStatus;
 	}
 
 	@Column(name = "query_text", length = 500)
