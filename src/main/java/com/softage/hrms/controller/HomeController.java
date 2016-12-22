@@ -514,7 +514,13 @@ public class HomeController {
 
 	@RequestMapping(value = "/getnoduesemplist", method = RequestMethod.GET)
 	@ResponseBody
-	public JSONObject getnoduesitinformation() {
+	public JSONObject getnoduesitinformation(HttpServletRequest request,HttpSession session) {
+		
+		session=request.getSession();
+		int circleId=(Integer) session.getAttribute("circleid");
+		
+		System.out.println("circle id "+circleId);
+		
 		ArrayList<JSONObject> listinformation=new ArrayList<JSONObject>();
 		JSONObject jsonobject=new JSONObject();
 		ISoftAgeEnterpriseProxy emp_prxoy=new ISoftAgeEnterpriseProxy();
