@@ -95,11 +95,12 @@ session.save(accountbean);
 
 	//DAOImpl created by Arpan to find the No Dues Pending Status
 	@Override
+	@Transactional
 	public JSONObject getNoDuesPendingStatus(int resignationID) {
 		Session session=this.sessionfactory.getCurrentSession();
 		JSONObject pendingNoDuesDeptJson=new JSONObject();
 		String sql="call usp_getNoDuesPendingDeptName(?)";
-		Query query=session.createSQLQuery(sql).setParameter(1, resignationID);
+		Query query=session.createSQLQuery(sql).setParameter(0, resignationID);
 		List<String> noDuesPendingDeptList=query.list();
 		pendingNoDuesDeptJson.put("noDuesPendingDept", noDuesPendingDeptList);
 		return pendingNoDuesDeptJson;

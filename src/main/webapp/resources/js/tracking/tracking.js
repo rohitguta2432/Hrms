@@ -52,7 +52,7 @@ application.controller('trackingController', function($scope,$http,$modal,$rootS
 	}
 	$scope.noduesstatusinit=function(resignationID){
 		var data='resignationID='+resignationID;
-		$http.get(domain + '/getNoDuesStatuses'+data)
+		$http.get(domain + '/getNoDuesStatuses?'+data)
 		.success(function(data, status, headers, config){
 			$scope.pendingNoDuesDeptList=data.noDuesPendingDept;
 			//alert('Success');
