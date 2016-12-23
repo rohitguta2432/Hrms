@@ -358,9 +358,9 @@ public class HomeController {
 
 		session = request.getSession();
 		String empCode = (String) session.getAttribute("employeecode");
-		int circle_code=(Integer) session.getAttribute("circleid");
-		
-		JSONObject hrapprovaljson = resignationService.getHrApprovalInitService(empCode, 2,circle_code);
+		int circle_code = (Integer) session.getAttribute("circleid");
+
+		JSONObject hrapprovaljson = resignationService.getHrApprovalInitService(empCode, 2, circle_code);
 		/*
 		 * for(TblUserResignation resignedUser : approvedResignationList){
 		 * JSONObject acceptedResignation=new JSONObject(); String
@@ -415,7 +415,13 @@ public class HomeController {
 		String hr_app_date = df.format(hrapprovaldate);
 		Date hrappdate = new Date(hr_app_date);
 		Date lwd = new Date(lastworkingdate);
-		MstResignationStatus hrstatus = resignationService.getStatus(5); //Changed to 5 after changing status table
+		MstResignationStatus hrstatus = resignationService.getStatus(5); // Changed
+																			// to
+																			// 5
+																			// after
+																			// changing
+																			// status
+																			// table
 		TblUserResignation resignation = resignationService.getResignationUserService(empcode, 2);
 		MstQuestions hrcomment = approvalservice.getRmFeedbackQuestionService(9);
 		TblFeedbacks hr_lwd_comment = new TblFeedbacks();
@@ -519,65 +525,29 @@ public class HomeController {
 	@RequestMapping(value = "/getnoduesemplist", method = RequestMethod.GET)
 	@ResponseBody
 
-	public JSONObject getnoduesitinformation(HttpServletRequest request,HttpSession session) {
-		
-		session=request.getSession();
-		int circleId=(Integer) session.getAttribute("circleid");
-		
-		System.out.println("circle id "+circleId);
-		
-
-
-
-		ArrayList<JSONObject> listinformation=new ArrayList<JSONObject>();
-		JSONObject jsonobject=new JSONObject();
-		ISoftAgeEnterpriseProxy emp_prxoy=new ISoftAgeEnterpriseProxy();
-int count=1;
-		
-
-		
+	public JSONObject getnoduesitinformation(HttpServletRequest request, HttpSession session,
+			@RequestParam("status") int status) {
+		int count = 1;
+		session = request.getSession();
+		int circleid = (Integer) session.getAttribute("circleid");
+		ArrayList<JSONObject> listinformation = new ArrayList<JSONObject>();
+		JSONObject jsonobject = new JSONObject();
+		ISoftAgeEnterpriseProxy emp_prxoy = new ISoftAgeEnterpriseProxy();
+		List<String> listempcoderesign = noduesservice.listrmacceptedempcode(circleid, status);
 		try {
-
-			JSONObject itjson = new JSONObject();
-
-			/*itjson.put("sno", 1);
-			itjson.put("empcode","ss0097");
-=======
-			itjson.put("sno", 1);
-			itjson.put("empcode", "ss0097");
->>>>>>> d794370 Commit by Arpan for demo
-			itjson.put("firstname", "rohit");
-			itjson.put("lastname", "raj");
-			itjson.put("department", "it-software");
-			itjson.put("designation", "java developer");
-<<<<<<< Upstream, based on origin/master
-			itjson.put("location", "circle");*/
-			
-			List<String> listempcoderesign=noduesservice.listrmacceptedempcode();
-			
-			System.out.println("emp code "+listempcoderesign);
-			
-			for(String code:listempcoderesign ){
-				
-				/*emp_prxoy.getUserDetail(code);*/
-				
+			for (String code : listempcoderesign) {
+				JSONObject itjson = new JSONObject();
 				itjson.put("sno", count);
-				itjson.put("empcode",code);
+				itjson.put("empcode", code);
 				itjson.put("firstname", emp_prxoy.getUserDetail(code).getFirstName());
 				itjson.put("lastname", emp_prxoy.getUserDetail(code).getLastName());
 				itjson.put("department", "it-software");
 				itjson.put("designation", emp_prxoy.getUserDetail(code).getRoleName());
 				itjson.put("location", "gurgaon");
-				
+				listinformation.add(itjson);
 				count++;
 			}
-			
-			/*System.out.println("list of code "+listempcoderesign);*/
-			
-listinformation.add(itjson);
-
 			jsonobject.put("emplist", listinformation);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -612,39 +582,22 @@ listinformation.add(itjson);
 	@RequestMapping(value = "/getemployeemodalinfo", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getemployeeinformation(HttpServletRequest request) {
-
-		ISoftAgeEnterpriseProxy emp_prxoy=new ISoftAgeEnterpriseProxy();
-		String emp_code=request.getParameter("employee_code");
-
-
-
+		ISoftAgeEnterpriseProxy emp_prxoy = new ISoftAgeEnterpriseProxy();
+		String emp_code = request.getParameter("employee_code");
 		JSONObject itassetsmodal = new JSONObject();
-		/*emp_prxoy.getUserDetail(emp_code);*/
 
+		try {
+			itassetsmodal.put("empcode", emp_code);
+			itassetsmodal.put("firstname", emp_prxoy.getUserDetail(emp_code).getFirstName());
+			itassetsmodal.put("lastname", emp_prxoy.getUserDetail(emp_code).getLastName());
 
-try{
-	
-          /*for(String empcode:emp_prxoy)
-          {*/
-		itassetsmodal.put("empcode",emp_code);
-		itassetsmodal.put("firstname", emp_prxoy.getUserDetail(emp_code).getFirstName());
-		itassetsmodal.put("lastname", emp_prxoy.getUserDetail(emp_code).getLastName());
+			itassetsmodal.put("department", "it-software");
+			itassetsmodal.put("designation", emp_prxoy.getUserDetail(emp_code).getRoleName());
+			itassetsmodal.put("location", "gurgaon");
 
-		
-
-		itassetsmodal.put("department", "it-software");
-		itassetsmodal.put("designation", emp_prxoy.getUserDetail(emp_code).getRoleName());
-		itassetsmodal.put("location", "gurgaon");
-          /*}*/
-
-
-}
-catch (Exception e) {
-	e.printStackTrace();
-}
-
-
-
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return itassetsmodal;
 	}
@@ -681,23 +634,17 @@ catch (Exception e) {
 	@RequestMapping(value = "/insertitassets", method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject insertitassets(@RequestParam("emp_assets") String assetsissued,
-			@RequestParam("comments") String comments, @RequestParam("emp_code") String empcode) {
+			@RequestParam("comments") String comments, @RequestParam("emp_code") String empcode,
+			HttpServletRequest request, HttpSession session) {
 
+		session = request.getSession();
+		/* String departmentid=session.getAttribute(arg0); */
 		JSONObject insertitasserts = new JSONObject();
 		Date today = new Date();
-
 		TblAssetsManagement itasset = new TblAssetsManagement();
-		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 4);// for
-																									// resignation
-																									// id
-																									// where
-																									// empcode
-																									// and
-																									// status
-
+		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
 		String[] assetsvalue = assetsissued.split(",");
 		for (String singleItem : assetsvalue) {
-
 			itasset.setAssetsIssue(singleItem);
 			itasset.setCreatedBy("System");
 			itasset.setCreatedOn(today);
@@ -708,48 +655,20 @@ catch (Exception e) {
 			itasset.setReceivedBy("pradeep attri");
 			itasset.setReceivedOn(today);
 			itasset.setTblUserResignation(resignedUser);
-
 			insertitasserts = noduesservice.submitnoduesassets(itasset);
-
 		}
 		TblNoDuesClearence noduesclearence = new TblNoDuesClearence();
-
 		noduesclearence.setComments(comments);
 		noduesclearence.setDepartmentFinalStatus(2);
 		noduesclearence.setDepartmentId(4);
 		noduesclearence.setTbluserresignation(resignedUser);
 
+		/*insertitasserts = noduesservice.submitNoduesclearence(noduesclearence);*/
 		insertitasserts = noduesservice.submitNoduesclearence(noduesclearence);
-
+          
+		
 		return insertitasserts;
 
-	}
-
-	@RequestMapping(value = "/getnoduesinfra", method = RequestMethod.GET)
-	@ResponseBody
-	public JSONObject getnoduesinfrainformation() {
-		ArrayList<JSONObject> listinformation = new ArrayList<JSONObject>();
-		JSONObject jsonobject = new JSONObject();
-
-		try {
-			JSONObject itjson = new JSONObject();
-			itjson.put("sno", 1);
-			itjson.put("empcode", "ss0097");
-			itjson.put("firstname", "rohit");
-			itjson.put("lastname", "raj");
-			itjson.put("department", "it-software");
-			itjson.put("designation", "java developer");
-			itjson.put("location", "circle");
-			List<String> listempcoderesign = noduesservice.listrmacceptedempcode();
-
-			listinformation.add(itjson);
-
-			jsonobject.put("empinfralist", listinformation);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return jsonobject;
 	}
 
 	@RequestMapping(value = "/getinframodalassets", method = RequestMethod.GET)
@@ -784,15 +703,10 @@ catch (Exception e) {
 
 		JSONObject insertasserts = new JSONObject();
 		Date today = new Date();
-
 		TblAssetsManagement infraasset = new TblAssetsManagement();
-
-		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 2);
-
+		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
 		String[] asserts = infraasserts.split(",");
-
 		for (String assetssplit : asserts) {
-
 			infraasset.setAssetsIssue(assetssplit);
 			infraasset.setCreatedBy("System");
 			infraasset.setCreatedOn(today);
@@ -803,11 +717,9 @@ catch (Exception e) {
 			infraasset.setReceivedBy("delip jha");
 			infraasset.setReceivedOn(today);
 			infraasset.setTblUserResignation(resignedUser);
-
 			insertasserts = noduesservice.submitnoduesassets(infraasset);
 		}
 		TblNoDuesClearence nodues = new TblNoDuesClearence();
-
 		nodues.setComments(comments);
 		nodues.setDepartmentFinalStatus(2);
 		nodues.setTbluserresignation(resignedUser);
@@ -815,52 +727,6 @@ catch (Exception e) {
 		insertasserts = noduesservice.submitNoduesclearence(nodues);
 
 		return insertasserts;
-	}
-
-	@RequestMapping(value = "/getnoduesaccounts", method = RequestMethod.GET)
-	@ResponseBody
-	public JSONObject getnoduesaccountinformation(HttpSession session) {
-
-		ISoftAgeEnterpriseProxy emp_prxoy = new ISoftAgeEnterpriseProxy();
-
-		ArrayList<JSONObject> listinformation = new ArrayList<JSONObject>();
-		JSONObject jsonobject = new JSONObject();
-
-		try {
-			JSONObject itjson = new JSONObject();
-			itjson.put("sno", 1);
-			itjson.put("empcode", "ss0097");
-			itjson.put("firstname", "rohit");
-			itjson.put("lastname", "raj");
-			itjson.put("department", "it-software");
-			itjson.put("designation", "java developer");
-			itjson.put("location", "circle");
-			/*
-			 * List<String>
-			 * listempcoderesign=noduesservice.listrmacceptedempcode();
-			 */
-
-			listinformation.add(itjson);
-
-			jsonobject.put("emplist", listinformation);
-
-			List<String> empcode = noduesservice.listrmacceptedempcode();
-
-			/*
-			 * String
-			 * firstname=emp_prxoy.getUserDetail("ss0078").getFirstName();
-			 * String lastname=emp_prxoy.getUserDetail("ss078").getLastName();
-			 * int
-			 * department=emp_prxoy.getUserDetail("ss0078").getDepartmentId();
-			 * String designation=emp_prxoy.getUserDetail("ss0078").getl
-			 * 
-			 * System.out.println(firstname);
-			 */
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return jsonobject;
-
 	}
 
 	@RequestMapping(value = "/getaccountmodalassets", method = RequestMethod.GET)
@@ -1179,15 +1045,19 @@ catch (Exception e) {
 	@RequestMapping(value = "/getEmpUploadList", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getEmpUploadList(HttpServletRequest request, HttpServletResponse response) {
-		HttpSession session=request.getSession();//added by arpan for change in hr approval service
+		HttpSession session = request.getSession();// added by arpan for change
+													// in hr approval service
 		JSONArray list = new JSONArray();
-		int circle_code=(Integer) session.getAttribute("circleid");//same change as above
+		int circle_code = (Integer) session.getAttribute("circleid");// same
+																		// change
+																		// as
+																		// above
 		String empcode = "SS0073";
 		int status = 4;
 		JSONObject resignations = null;
 
 		try {
-			resignations = resignationService.getHrApprovalInitService(empcode, status,circle_code);
+			resignations = resignationService.getHrApprovalInitService(empcode, status, circle_code);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1206,13 +1076,12 @@ catch (Exception e) {
 		Date today = new Date();
 
 		TblAssetsManagement accountasset = new TblAssetsManagement();
-		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 2);
-
+		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
 		String[] asserts = assertsreceived.split(",");
 
 		for (String assetssplit : asserts) {
 			accountasset.setAssetsIssue(assetssplit);
-			accountasset.setCreatedBy("rohit raj");
+			accountasset.setCreatedBy("system");
 			accountasset.setCreatedOn(today);
 			accountasset.setDepartmentId(1);
 			accountasset.setIssuedBy("ck jha");
@@ -1224,18 +1093,11 @@ catch (Exception e) {
 
 			insertasserts = noduesservice.submitnoduesassets(accountasset);
 		}
-
 		TblNoDuesClearence nodues = new TblNoDuesClearence();
-		/*
-		 * TblUserResignation
-		 * resignedUser=resignationService.getResignationUserService(empcode,
-		 * 2);
-		 */
 		nodues.setComments(comments);
 		nodues.setDepartmentFinalStatus(2);
 		nodues.setTbluserresignation(resignedUser);
 		nodues.setDepartmentId(1);
-
 		insertasserts = noduesservice.submitNoduesclearence(nodues);
 
 		return insertasserts;
@@ -1266,10 +1128,8 @@ catch (Exception e) {
 			receiveditem.setReceivedBy("pradeep attri");
 			receiveditem.setReceivedOn(today);
 
+			TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
 
-			TblUserResignation resignedUser=resignationService.getResignationUserService(empcode, 5);
-
-		
 			receiveditem.setTblUserResignation(resignedUser);
 
 			rejectjson = noduesservice.submitnoduesassets(receiveditem);
@@ -1290,15 +1150,11 @@ catch (Exception e) {
 				receiveditem.setReceivedOn(today);
 				receiveditem.setReceivedBy("pradeep attri");
 
-				
-				
-				TblUserResignation resignedUser=resignationService.getResignationUserService(empcode, 5);
-				
-				receiveditem.setTblUserResignation(resignedUser);
-				
-				rejectjson=noduesservice.submitnoduesassets(receiveditem);
+				TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
 
-				
+				receiveditem.setTblUserResignation(resignedUser);
+
+				rejectjson = noduesservice.submitnoduesassets(receiveditem);
 
 			}
 		}
@@ -1308,10 +1164,8 @@ catch (Exception e) {
 		clearence.setDepartmentFinalStatus(status);
 		clearence.setDepartmentId(4);
 
+		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
 
-		TblUserResignation resignedUser=resignationService.getResignationUserService(empcode, 5);
-
-		
 		clearence.setTbluserresignation(resignedUser);
 
 		rejectjson = noduesservice.submitNoduesclearence(clearence);
@@ -1324,61 +1178,20 @@ catch (Exception e) {
 		return rejectjson;
 	}
 
-	@RequestMapping(value = "/getnodueshr", method = RequestMethod.GET)
-	@ResponseBody
-	public JSONObject getnodueshrinformation() {
-		ArrayList<JSONObject> listinformation = new ArrayList<JSONObject>();
-		JSONObject jsonobject = new JSONObject();
-
-		try {
-			JSONObject hrjson = new JSONObject();
-			hrjson.put("sno", 1);
-			hrjson.put("empcode", "ss0097");
-			hrjson.put("firstname", "rohit");
-			hrjson.put("lastname", "raj");
-			hrjson.put("department", "it-software");
-			hrjson.put("designation", "java developer");
-			hrjson.put("location", "circle");
-			List<String> listempcoderesign = noduesservice.listrmacceptedempcode();
-
-			listinformation.add(hrjson);
-
-			jsonobject.put("emphrlist", listinformation);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return jsonobject;
-
-	}
-
 	@RequestMapping(value = "/inserthrassets", method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject inserthrassets(@RequestParam("emp_assets") String hrassets,
 
-			@RequestParam("hr_comments") String comments,
-			@RequestParam("emp_code") String empcode
-			) {
-		
-		TblUserResignation resignedUser=resignationService.getResignationUserService(empcode, 5);
-		
+			@RequestParam("hr_comments") String comments, @RequestParam("emp_code") String empcode) {
 
-
+		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
 
 		JSONObject inserthrasserts = new JSONObject();
 
 		Date today = new Date();
 
-
-		TblAssetsManagement hrasset=new TblAssetsManagement();
-
-
-		//TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 2);
-
-
+		TblAssetsManagement hrasset = new TblAssetsManagement();
 		String[] asserts = hrassets.split(",");
-
 		for (String assetssplit : asserts) {
 
 			hrasset.setAssetsIssue(assetssplit);
@@ -1392,11 +1205,7 @@ catch (Exception e) {
 			hrasset.setReceivedOn(today);
 			hrasset.setTblUserResignation(resignedUser);
 
-
-			inserthrasserts=noduesservice.submitnoduesassets(hrasset);
-			
-			
-			
+			inserthrasserts = noduesservice.submitnoduesassets(hrasset);
 
 		}
 
@@ -1404,46 +1213,16 @@ catch (Exception e) {
 		nodues.setDepartmentFinalStatus(2);
 		nodues.setComments(comments);
 		nodues.setTbluserresignation(resignedUser);
-
+		nodues.setDepartmentId(2);
 		inserthrasserts = noduesservice.submitNoduesclearence(nodues);
 
-        MstResignationStatus status_mast=resignationService.getStatus(7);
-		
+		MstResignationStatus status_mast = resignationService.getStatus(7);
+
 		resignedUser.setMstResignationStatus(status_mast);
-		
+
 		approvalservice.updateResignationStatus(resignedUser);
-		
-		
+
 		return inserthrasserts;
-	}
-
-	@RequestMapping(value = "/getnoduesrm", method = RequestMethod.GET)
-	@ResponseBody
-	public JSONObject getnoduesrminformation() {
-		ArrayList<JSONObject> listinformation = new ArrayList<JSONObject>();
-		JSONObject jsonobject = new JSONObject();
-
-		try {
-			JSONObject rmempjson = new JSONObject();
-			rmempjson.put("sno", 1);
-			rmempjson.put("empcode", "ss0097");
-			rmempjson.put("firstname", "rohit");
-			rmempjson.put("lastname", "raj");
-			rmempjson.put("department", "it-software");
-			rmempjson.put("designation", "java developer");
-			rmempjson.put("location", "circle");
-			List<String> listempcoderesign = noduesservice.listrmacceptedempcode();
-
-			listinformation.add(rmempjson);
-
-			jsonobject.put("emprmlist", listinformation);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return jsonobject;
-
 	}
 
 	@RequestMapping(value = "/insertrmassets", method = RequestMethod.POST)
@@ -1452,21 +1231,12 @@ catch (Exception e) {
 			@RequestParam("comments") String comments, @RequestParam("emp_code") String empcode) {
 
 		JSONObject insertrmasserts = new JSONObject();
-
 		Date today = new Date();
-
 		TblAssetsManagement rmasset = new TblAssetsManagement();
-
-		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 2);
-
+		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
 		String[] asserts = rmassets.split(",");
-
-
-		
 		for (String assetssplit : asserts) {
-
 			rmasset.setAssetsIssue(assetssplit);
-
 			rmasset.setCreatedBy("system");
 			rmasset.setCreatedOn(today);
 			rmasset.setDepartmentId(3);
@@ -1475,49 +1245,16 @@ catch (Exception e) {
 			rmasset.setItemStatus(2);
 			rmasset.setReceivedBy("sunil raizada");
 			rmasset.setReceivedOn(today);
-
 			rmasset.setTblUserResignation(resignedUser);
-
 			insertrmasserts = noduesservice.submitnoduesassets(rmasset);
 		}
-
 		TblNoDuesClearence nodues = new TblNoDuesClearence();
 		nodues.setDepartmentFinalStatus(2);
 		nodues.setComments(comments);
 		nodues.setTbluserresignation(resignedUser);
 		nodues.setDepartmentId(3);
 		insertrmasserts = noduesservice.submitNoduesclearence(nodues);
-
 		return insertrmasserts;
-	}
-
-	@RequestMapping(value = "/hrfeedbacklist", method = RequestMethod.GET)
-	@ResponseBody
-	public JSONObject getexitemphr() {
-		ArrayList<JSONObject> listinformation = new ArrayList<JSONObject>();
-		JSONObject jsonobject = new JSONObject();
-
-		try {
-			JSONObject exithrjson = new JSONObject();
-			exithrjson.put("sno", 1);
-			exithrjson.put("empcode", "ss0097");
-			exithrjson.put("firstname", "rohit");
-			exithrjson.put("lastname", "raj");
-			exithrjson.put("department", "it-software");
-			exithrjson.put("designation", "java developer");
-			exithrjson.put("location", "circle");
-			List<String> listempcoderesign = noduesservice.listrmacceptedempcode();
-
-			listinformation.add(exithrjson);
-
-			jsonobject.put("feedbacklist", listinformation);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return jsonobject;
-
 	}
 
 	@RequestMapping(value = "/gethrfeedbackquestions", method = RequestMethod.GET)
@@ -1561,53 +1298,40 @@ catch (Exception e) {
 			 * resignationId=resignationidservice.listresignationid(empcode);
 			 */
 
-			/*for (JSONObject hranswer : listAnswers) {
+			/*
+			 * for (JSONObject hranswer : listAnswers) { Long serialid = (Long)
+			 * hranswer.get("qid"); int sid = serialid.intValue(); String ans =
+			 * (String) hranswer.get("value");
+			 */
+
+			TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 7);
+			for (JSONObject hranswer : listAnswers) {
 				Long serialid = (Long) hranswer.get("qid");
 				int sid = serialid.intValue();
 				String ans = (String) hranswer.get("value");
-*/
-
-			TblUserResignation resignedUser=resignationService.getResignationUserService(empcode, 5);
-			for(JSONObject hranswer:listAnswers)
-			{
-				Long serialid=(Long) hranswer.get("qid");
-				int sid=serialid.intValue();
-				String ans=(String)hranswer.get("value");
-
-				/*System.out.println(sid);
-			System.out.println(ans);*/
-				String feedbackby="HR";
-
-				
+				String feedbackby = "HR";
 
 				TblFeedbacks feedbackhr = new TblFeedbacks();
-
 
 				feedbackhr.setAnsText(ans);
 				feedbackhr.setFeedbackBy(feedbackby);
 				feedbackhr.setFeedbackFrom(hrempcode);
 
-				MstQuestions question=approvalservice.getRmFeedbackQuestionService(sid);
-
-				
+				MstQuestions question = approvalservice.getRmFeedbackQuestionService(sid);
 
 				feedbackhr.setMstQuestions(question);
 				feedbackhr.setTblUserResignation(resignedUser);
 
+				hranswers = exitinterviewservice.submithrfeedback(feedbackhr);
 
-				hranswers=exitinterviewservice.submithrfeedback(feedbackhr);
-				
-		}
-			
-			MstResignationStatus status_mast=resignationService.getStatus(7);
-			
+			}
+
+			MstResignationStatus status_mast = resignationService.getStatus(9);
+
 			resignedUser.setMstResignationStatus(status_mast);
 			approvalservice.updateResignationStatus(resignedUser);
-			
 
-				//hranswers = exitinterviewservice.submithrfeedback(feedbackhr);
-			
-
+			// hranswers = exitinterviewservice.submithrfeedback(feedbackhr);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1615,21 +1339,6 @@ catch (Exception e) {
 
 		return hranswers;
 
-	}
-
-	@RequestMapping(value = "/employeefeedback", method = RequestMethod.GET)
-	@ResponseBody
-	public JSONObject getempfeedback(HttpServletRequest request, HttpSession session) {
-
-		session = request.getSession();
-		String empfeedback = (String) session.getAttribute("employeecode");
-
-		JSONObject empfeedbacklist = new JSONObject();
-		try {
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return empfeedbacklist;
 	}
 
 	@RequestMapping(value = "/employeeQuery", method = RequestMethod.GET)
@@ -1972,31 +1681,26 @@ catch (Exception e) {
 	@RequestMapping(value = "/empfeedback", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getempfeedback(HttpSession session, HttpServletRequest request) {
-
+		ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 		session = request.getSession();
-
-		String userempcode = (String) session.getAttribute("employeecode");
-
-		/* System.out.println("user empcode "+userempcode); */
-
-		int roleid = (Integer) session.getAttribute("roleid");
-
-		/* System.out.println(roleid); */
-		int stageid = 4;// stage of application employee feedback
-
+		String code = (String) session.getAttribute("employeecode");
+		System.out.println(code);
+        int roleid = (Integer) session.getAttribute("roleid");
+        System.out.println(roleid);
+		int stageid = 4;
 		JSONObject empfeedback = new JSONObject();
 		try {
 
-			empfeedback.put("empcode", "ss0097");
-			empfeedback.put("firstname", "rohit");
-			empfeedback.put("lastname", "raj");
-			empfeedback.put("department", "it-software");
+			empfeedback.put("empcode", code);
+			empfeedback.put("firstname", empdetails.getUserDetail(code).getFirstName());
+			empfeedback.put("lastname", empdetails.getUserDetail(code).getLastName());
+			empfeedback.put("department", empdetails.getUserDetail(code).getDepartmentId());
 			empfeedback.put("designation", "java developer");
 			empfeedback.put("location", "circle");
 
 			List<JSONObject> listempquestion = exitinterviewservice.listHrQuestion(roleid, stageid);
 
-			/* System.out.println(listempquestion); */
+			System.out.println(listempquestion);
 
 			empfeedback.put("empfeedbackquestion", listempquestion);
 		} catch (Exception e) {

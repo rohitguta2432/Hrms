@@ -1,17 +1,5 @@
-application.controller('nodueshrmodalcontroller',function($scope,$http,$window,$modal) {
-	
-
-  /* $scope.emp_code = $window.sessionStorage.getItem("Mydata");*/
-	/*$scope.$on("Mydata",function(event, emp_code){
-	
-	alert(" hr empcode "+emp_code)
-alert("hii")
- //$scope.store=emp_code;
-var selectedempcode='employee_code='+$scope.emp_code;
-		
-});*/
-	/*alert("hr modal "+$scope.emp_code);*/
-	$http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
+application.controller('nodueshrmodalcontroller',function($scope,$http,$window,$modal,$location) {
+$http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 			.success(function(data, status, headers, config){
 			/*alert('data are found');*/
 				
@@ -40,10 +28,8 @@ var selectedempcode='employee_code='+$scope.emp_code;
 		if (emp.selected) $scope.selectedItems.push(emp.name)
 			
 		})
-	
-		
-		var emp_data='emp_assets='+$scope.selectedItems+'&hr_comments='+$scope.empcomments+'&emp_code='+$scope.emplycode;
-		alert("data is"+emp_data)
+	var emp_data='emp_assets='+$scope.selectedItems+'&hr_comments='+$scope.empcomments+'&emp_code='+$scope.emplycode;
+		/*alert("data is"+emp_data)*/
 
 	$http({
         method: 'POST',
@@ -55,32 +41,34 @@ var selectedempcode='employee_code='+$scope.emp_code;
         }
     }).success(function(data){
        alert("submitted hr asserts")
+       location.reload();
     }).error(function(){
-        alert("errors")
+       /* alert("errors")*/
     })
 				}		
-			
-	
-	$scope.reject=function()
+$scope.reject=function()
 	{
 		angular.forEach($scope.nodueshrassets,function(emp){
 	        if(emp.selected){
 	      $scope.selectedItems.push(emp.name);
 	 }
 	    })
-	    alert("selected  item "+$scope.selectedItems)
+	    /*alert("selected  item "+$scope.selectedItems)*/
 	    angular.forEach($scope.nodueshrassets,function(emp){
 	    if(!emp.selected)
 	    	{
 	    	$scope.itemnotselected.push(emp.name)
 	    	}
 	    	})
-		alert("not received  item "+$scope.itemnotselected)
+		/*alert("not received  item "+$scope.itemnotselected)*/
 		
 var emp_data='comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&not_received='+$scope.itemnotselected+'&received_assets='+$scope.selectedItems+'&final_status='+$scope.rejected_final_status;
-alert(emp_data)
+/*alert(emp_data)*/
 $http.get(domain+'/rejectempassets?'+emp_data)
-alert(success)
-				}
-
+.success(function(data){
+       alert("rejected hr asserts")
+       location.reload();
+				
+	})
+	}
 	});

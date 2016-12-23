@@ -1,8 +1,8 @@
 application.controller('nodueshrcontroller',function($scope,$http,$modal,$rootScope,$window) {
-	
+	var status=5;
 	$scope.init=function(){
 /*Employee grid information*/
-			$http.get(domain+'/getnoduesemplist')
+			$http.get(domain+'/getnoduesemplist?status='+status)
 			.success(function(data,status,headers,config){
 			$scope.nodueshrtjs=data.emplist;
 			/*alert($scope.nodueshrtjs);*/

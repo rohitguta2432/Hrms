@@ -1,18 +1,4 @@
-application.controller('noduesinframodalcontroller',function($scope,$http,$window) {
-	
-	
-  /* $scope.emp_code = $window.sessionStorage.getItem("Mydata");
-$scope.$on("Mydata",function(event, emp_code){
-	
-
-
-var store=$scope.emp_code;
-	
-	var selectedempcode='employee_code='+$scope.emp_code;*/
-		
-	/*alert(' selected code are '+selectedempcode);*/
-		/*alert("infra modal "+$scope.emp_code)*/
-	
+application.controller('noduesinframodalcontroller',function($scope,$http,$window,$location) {
 	$http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 			.success(function(data, status, headers, config){
 			/*alert('data are found');*/
@@ -47,7 +33,7 @@ var store=$scope.emp_code;
 	            })
 	         
 var emp_data='emp_assets='+$scope.selectedItems+'&comments='+$scope.empcomments+'&emp_code='+$scope.emp_code;
-		 alert("accept "+emp_data)
+		 /*alert("accept "+emp_data)*/
 		 $http({
 		        method: 'POST',
 		        url: domain+'/insertinfraassets',
@@ -58,8 +44,9 @@ var emp_data='emp_assets='+$scope.selectedItems+'&comments='+$scope.empcomments+
 		        }
 		    }).success(function(data){
 		       alert("submitted infra assets")
+		       location.reload();
 		    }).error(function(){
-		        alert("errors")
+		        /*alert("errors")*/
 		    })
 	}
 	 
@@ -81,10 +68,10 @@ $scope.reject=function()
 	      var emp_data='comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&not_received='+$scope.itemnotselected+'&received_assets='+$scope.selectedItems+'&final_status='+$scope.rejected_final_status;
 	      		/*alert(emp_data)*/
 	      		$http.get(domain+'/rejectempassets?'+emp_data)
-	      		alert(success)
-	      				
-					
+		 
+		 .success(function(data){
+		       alert("rejected infra assets")
+		       location.reload();		
+		 })
 		}
-				
-			
-});
+	});

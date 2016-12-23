@@ -10,12 +10,12 @@ import com.softage.hrms.model.TblNoDuesClearence;
 
 public interface NoDuesService {
 
-	public List<String> listrmacceptedempcode();
+	public List<String> listrmacceptedempcode(int circleid,int status);
 	
 	public List<JSONObject> listassetsdetails(int departmentid);
 
 
-/*public JSONObject submithrassets(TblAssetsManagement hrassetsbean);*/
+public void insertupdatednodues(TblNoDuesClearence updatednodues);
 
 public JSONObject submitNoduesclearence(TblNoDuesClearence clearencebeanstatus);
 

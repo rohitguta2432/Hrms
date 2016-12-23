@@ -12,49 +12,46 @@ import com.softage.hrms.model.TblAssetsManagement;
 import com.softage.hrms.model.TblNoDuesClearence;
 import com.softage.hrms.service.NoDuesService;
 
-
 @Service
-public class NoDuesServiceImpl  implements NoDuesService{
+public class NoDuesServiceImpl implements NoDuesService {
 
+	@Autowired
+	private NoDuesDao noduesdao;
 
-@Autowired
-private NoDuesDao noduesdao;
-	
 	@Override
-	public List<String> listrmacceptedempcode() {
-		
-		return noduesdao.getrmacceptedempcode();
+	public List<String> listrmacceptedempcode(int circleid, int status) {
+
+		return noduesdao.getrmacceptedempcode(circleid, status);
 	}
 
 	@Override
 	public List<JSONObject> listassetsdetails(int departmentid) {
-		
+
 		return noduesdao.getassetsdetails(departmentid);
 	}
 
 	@Override
 	public JSONObject submitnoduesassets(TblAssetsManagement accountassertsbeaan) {
-		
+
 		return noduesdao.insertnoduesassetsdetails(accountassertsbeaan);
 	}
 
-	/*@Override
-	public JSONObject submithrassets(TblAssetsManagement hrassetsbean) {
-		
-		return noduesdao.inserthrassertsdetails(hrassetsbean);
-	}*/
-
 	@Override
 	public JSONObject submitNoduesclearence(TblNoDuesClearence clearencebeanstatus) {
-		
+
 		return noduesdao.insertnoduesclearence(clearencebeanstatus);
 	}
-	
-	//Service to find the pending No Dues Status by Arpan
+
+	// Service to find the pending No Dues Status by Arpan
 	@Override
 	public JSONObject getNoDuesPendingStatus(int resignationID) {
 		return noduesdao.getNoDuesPendingStatus(resignationID);
 	}
 
-	
+	@Override
+	public void insertupdatednodues(TblNoDuesClearence updatednodues) {
+
+		noduesdao.updatenoduesclearence(updatednodues);
+	}
+
 }

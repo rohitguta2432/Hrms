@@ -29,11 +29,15 @@ public class NoDuesDaoImpl implements NoDuesDao {
 
 	@Override
 	@Transactional
-	public List<String> getrmacceptedempcode() {
+	public List<String> getrmacceptedempcode(int circleid,int status) {
 
 		org.hibernate.Session session=sessionfactory.getCurrentSession();
-		String hql="select empCode from TblUserResignation where status=5";
+		String hql="select empCode from TblUserResignation where circleId=:circleid and status=:status";
 		Query query=session.createQuery(hql);
+		
+		query.setParameter("circleid", circleid);
+		query.setParameter("status", status);
+		
 		List<String> listempcode=query.list();
 
 		return listempcode;
@@ -72,7 +76,7 @@ public class NoDuesDaoImpl implements NoDuesDao {
 		JSONObject insertbean=new JSONObject();
 		org.hibernate.Session session=sessionfactory.getCurrentSession();
 	    
-session.saveOrUpdate(accountbean);
+session.save(accountbean);
 		
 		
 		return insertbean;
@@ -99,6 +103,16 @@ session.saveOrUpdate(accountbean);
 		List<String> noDuesPendingDeptList=query.list();
 		pendingNoDuesDeptJson.put("noDuesPendingDept", noDuesPendingDeptList);
 		return pendingNoDuesDeptJson;
+	}
+
+
+	@Override
+	@Transactional
+	public void updatenoduesclearence(TblNoDuesClearence updatenoduesclearence) {
+		
+		Session session=sessionfactory.getCurrentSession();
+		session.saveOrUpdate(updatenoduesclearence);
+		
 	}
 
 }
