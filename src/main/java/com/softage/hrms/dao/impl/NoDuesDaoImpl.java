@@ -34,27 +34,21 @@ public class NoDuesDaoImpl implements NoDuesDao {
 		org.hibernate.Session session=sessionfactory.getCurrentSession();
 		String hql="select empCode from TblUserResignation where circleId=:circleid and status=:status";
 		Query query=session.createQuery(hql);
-		
 		query.setParameter("circleid", circleid);
 		query.setParameter("status", status);
-		
 		List<String> listempcode=query.list();
-
-		return listempcode;
+        return listempcode;
 	}
 
 
 	@Override
 	@Transactional
 	public List<JSONObject> getassetsdetails(int departmentid) {
-	
-		
-    org.hibernate.Session session=sessionfactory.getCurrentSession();
+	org.hibernate.Session session=sessionfactory.getCurrentSession();
     JSONObject json =new JSONObject();
-      String hql="from MstAssests d where d.departmentId=:departmentid"; 	 
+     String hql="from MstAssests d where d.departmentId=:departmentid"; 	 
      Query query=session.createQuery(hql);	
      query.setParameter("departmentid", departmentid);
-     
      List<JSONObject> stringlist=new ArrayList<JSONObject>();
      List<MstAssests> listassets=query.list();
      for(MstAssests assets:listassets)
@@ -72,11 +66,9 @@ public class NoDuesDaoImpl implements NoDuesDao {
 	@Override
 	@Transactional
 	public JSONObject insertnoduesassetsdetails(TblAssetsManagement accountbean) {
-		
 		JSONObject insertbean=new JSONObject();
 		org.hibernate.Session session=sessionfactory.getCurrentSession();
-	    
-session.save(accountbean);
+	    session.save(accountbean);
 		
 		
 		return insertbean;
@@ -86,7 +78,6 @@ session.save(accountbean);
 	@Transactional
 	public JSONObject insertnoduesclearence(TblNoDuesClearence clearencebean) {
 		JSONObject insertclearence=new JSONObject();
-		
 		Session session=sessionfactory.getCurrentSession();
 		session.save(clearencebean);
 		
@@ -105,15 +96,15 @@ session.save(accountbean);
 		pendingNoDuesDeptJson.put("noDuesPendingDept", noDuesPendingDeptList);
 		return pendingNoDuesDeptJson;
 	}
-
-
-	@Override
+   /* @Override
 	@Transactional
-	public void updatenoduesclearence(TblNoDuesClearence updatenoduesclearence) {
-		
+	public JSONObject getUserStatus(int resignation) {
 		Session session=sessionfactory.getCurrentSession();
-		session.saveOrUpdate(updatenoduesclearence);
-		
-	}
+		JSONObject empstatus=new JSONObject();
+		String hql="select d from  TblNoDuesClearence d where d.resignation_id=:resignation";
+		Query query=session.createQuery(hql);
+		query.setParameter("resignation", resignation);
+		return empstatus;
+		}*/
 
 }

@@ -9,7 +9,7 @@ import com.softage.hrms.model.TblFeedbacks;
 public interface ExitInterviewService {
 
 	public List<JSONObject> listHrQuestion(int roleid,int stageid);
-	
-	public JSONObject submithrfeedback(TblFeedbacks feedbackbean);
-	
+    public List<JSONObject> listempQuestion(int stageid);
+    public JSONObject submithrfeedback(TblFeedbacks feedbackbean);
+	public JSONObject listempfeedbackstatus(int resignationid);
 }

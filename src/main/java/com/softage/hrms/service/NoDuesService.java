@@ -15,7 +15,7 @@ public interface NoDuesService {
 	public List<JSONObject> listassetsdetails(int departmentid);
 
 
-public void insertupdatednodues(TblNoDuesClearence updatednodues);
+/*public JSONObject listUserStatus(int resignation);*/
 
 public JSONObject submitNoduesclearence(TblNoDuesClearence clearencebeanstatus);
 

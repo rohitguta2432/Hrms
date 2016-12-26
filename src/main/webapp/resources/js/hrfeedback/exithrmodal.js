@@ -2,9 +2,7 @@ application.controller('feedbackmodalcontroller',function($scope,$http,$window,$
 	
 $http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 			.success(function(data, status, headers, config){
-			
-				
-				$scope.employeecode=data.empcode;
+			    $scope.employeecode=data.empcode;
 				$scope.employeefirstname=data.firstname;
 				$scope.employeelastname=data.lastname;
 				$scope.employeedepartment=data.department;
@@ -13,15 +11,10 @@ $http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 				
 		$http.get(domain+'/gethrfeedbackquestions?employee_code='+$scope.emp_code)
 			.success(function(data,status,headers,config){
-			
-					
-					$scope.hrquestion=data.hrquestionslist;
+			$scope.hrquestion=data.hrquestionslist;
 					
 					})
 			})
-				
-				
-
 	/*submitting value*/
 $scope.submit=function(form){
 		/*alert($scope.hrquestion);*/

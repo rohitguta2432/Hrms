@@ -17,17 +17,21 @@ public class ExitInterviewServiceImpl implements ExitInterviewService {
 private ExitInterviewDao exitinterviewdao;
 	
 	
-	@Override
+@Override
 	public List<JSONObject> listHrQuestion(int roleid,int stageid) {
-		
-		return exitinterviewdao.getHrQuestions(roleid,stageid);
+   return exitinterviewdao.getHrQuestions(roleid,stageid);
 	}
-
-
-	@Override
+   @Override
 	public JSONObject submithrfeedback(TblFeedbacks feedbackbean) {
-		// TODO Auto-generated method stub
-		return exitinterviewdao.inserthrfeedback(feedbackbean);
+	return exitinterviewdao.inserthrfeedback(feedbackbean);
+	}
+   @Override
+public List<JSONObject> listempQuestion(int stageid) {
+return exitinterviewdao.getEmpQuestions(stageid);
+	}
+@Override
+public JSONObject listempfeedbackstatus(int resignationid) {
+return exitinterviewdao.getEmpFeedbackStatus(resignationid);
 	}
 
 }

@@ -63,8 +63,11 @@
 																	<td>{{emp.designation}}</td>
 																	<td>{{emp.location}}</td>
 																	<td><button class="btn btn-primary btn-sm" 
-																	 ng-click="EmployeeFeedback(emp.empcode)">NODUES 
-																	</button></td>
+																	 ng-click="EmployeeFeedback(emp.empcode)" ng-disabled="$scope.nodues_allowed">NODUES 
+																	</button>
+																	<button class="btn btn-warning" 
+																	 ng-click="EmpOthernoDues(emp.empcode)">OTHER NODUES</td>
+																	<td></td>
 																</tr>
 															</tbody>
 														</table>

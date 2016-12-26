@@ -16,7 +16,7 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
     static org.apache.axis.description.OperationDesc [] _operations;
 
     static {
-        _operations = new org.apache.axis.description.OperationDesc[21];
+        _operations = new org.apache.axis.description.OperationDesc[28];
         _initOperationDesc1();
         _initOperationDesc2();
         _initOperationDesc3();
@@ -191,12 +191,12 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
         _operations[8] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
-        oper.setName("GetDepartmentDeails");
-        oper.setReturnType(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "ArrayOfDepartmentMaster"));
-        oper.setReturnClass(org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.DepartmentMaster[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("http://tempuri.org/", "GetDepartmentDeailsResult"));
+        oper.setName("Getofficedetails");
+        oper.setReturnType(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "ArrayOfoffice_Details"));
+        oper.setReturnClass(org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.Office_Details[].class);
+        oper.setReturnQName(new javax.xml.namespace.QName("http://tempuri.org/", "GetofficedetailsResult"));
         param = oper.getReturnParamDesc();
-        param.setItemQName(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "DepartmentMaster"));
+        param.setItemQName(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "office_Details"));
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
         _operations[9] = oper;
@@ -206,6 +206,17 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
     private static void _initOperationDesc2(){
         org.apache.axis.description.OperationDesc oper;
         org.apache.axis.description.ParameterDesc param;
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("GetDepartmentDeails");
+        oper.setReturnType(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "ArrayOfDepartmentMaster"));
+        oper.setReturnClass(org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.DepartmentMaster[].class);
+        oper.setReturnQName(new javax.xml.namespace.QName("http://tempuri.org/", "GetDepartmentDeailsResult"));
+        param = oper.getReturnParamDesc();
+        param.setItemQName(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "DepartmentMaster"));
+        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        _operations[10] = oper;
+
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("GetStateDetails");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://tempuri.org/", "countryId"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), java.lang.Integer.class, false, false);
@@ -218,7 +229,7 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
         param.setItemQName(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "StateMaster"));
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[10] = oper;
+        _operations[11] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("GetOfficeTypeMaster");
@@ -233,7 +244,69 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
         param.setItemQName(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "officeTypeMaster"));
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[11] = oper;
+        _operations[12] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("GetOfficeTypeMaster_byID");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://tempuri.org/", "ID"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), java.lang.Integer.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "ArrayOfofficeTypeMaster"));
+        oper.setReturnClass(org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.OfficeTypeMaster[].class);
+        oper.setReturnQName(new javax.xml.namespace.QName("http://tempuri.org/", "GetOfficeTypeMaster_byIDResult"));
+        param = oper.getReturnParamDesc();
+        param.setItemQName(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "officeTypeMaster"));
+        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        _operations[13] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("GetSpokeDetails_BYID");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://tempuri.org/", "circleId"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), java.lang.Integer.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://tempuri.org/", "spokeid"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), java.lang.Integer.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "ArrayOfSpokeMaster"));
+        oper.setReturnClass(org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.SpokeMaster[].class);
+        oper.setReturnQName(new javax.xml.namespace.QName("http://tempuri.org/", "GetSpokeDetails_BYIDResult"));
+        param = oper.getReturnParamDesc();
+        param.setItemQName(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "SpokeMaster"));
+        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        _operations[14] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("GetCircleDetails_BYID_ID");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://tempuri.org/", "countryId"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), java.lang.Integer.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://tempuri.org/", "circleid"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), java.lang.Integer.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "ArrayOfCircleMaster"));
+        oper.setReturnClass(org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.CircleMaster[].class);
+        oper.setReturnQName(new javax.xml.namespace.QName("http://tempuri.org/", "GetCircleDetails_BYID_IDResult"));
+        param = oper.getReturnParamDesc();
+        param.setItemQName(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "CircleMaster"));
+        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        _operations[15] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("GetSpokeDetails_ByCircleID");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://tempuri.org/", "circleId"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), java.lang.Integer.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "ArrayOfSpokeMaster"));
+        oper.setReturnClass(org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.SpokeMaster[].class);
+        oper.setReturnQName(new javax.xml.namespace.QName("http://tempuri.org/", "GetSpokeDetails_ByCircleIDResult"));
+        param = oper.getReturnParamDesc();
+        param.setItemQName(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "SpokeMaster"));
+        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        _operations[16] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("InsertExceptionDetails");
@@ -255,7 +328,28 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
         oper.setReturnType(org.apache.axis.encoding.XMLType.AXIS_VOID);
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[12] = oper;
+        _operations[17] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("GetCircleDetails_byCircleid");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://tempuri.org/", "countryId"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), java.lang.Integer.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://tempuri.org/", "typeuser"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param.setOmittable(true);
+        param.setNillable(true);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://tempuri.org/", "Circleid"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), java.lang.Integer.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "ArrayOfCircleMaster"));
+        oper.setReturnClass(org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.CircleMaster[].class);
+        oper.setReturnQName(new javax.xml.namespace.QName("http://tempuri.org/", "GetCircleDetails_byCircleidResult"));
+        param = oper.getReturnParamDesc();
+        param.setItemQName(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "CircleMaster"));
+        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        _operations[18] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("SendMail");
@@ -291,8 +385,13 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
         oper.setReturnQName(new javax.xml.namespace.QName("http://tempuri.org/", "SendMailResult"));
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[13] = oper;
+        _operations[19] = oper;
 
+    }
+
+    private static void _initOperationDesc3(){
+        org.apache.axis.description.OperationDesc oper;
+        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("GetCircleMaster");
         oper.setReturnType(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "ArrayOfCircleMaster"));
@@ -302,7 +401,7 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
         param.setItemQName(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "CircleMaster"));
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[14] = oper;
+        _operations[20] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("GetSpokeMaster");
@@ -313,7 +412,7 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
         param.setItemQName(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "SpokeMaster"));
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[15] = oper;
+        _operations[21] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("GetReasonCode");
@@ -325,7 +424,7 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
         oper.setReturnQName(new javax.xml.namespace.QName("http://tempuri.org/", "GetReasonCodeResult"));
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[16] = oper;
+        _operations[22] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("GetSpokeCode");
@@ -337,7 +436,7 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
         oper.setReturnQName(new javax.xml.namespace.QName("http://tempuri.org/", "GetSpokeCodeResult"));
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[17] = oper;
+        _operations[23] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("GetCorporateOfficeMaster");
@@ -351,7 +450,7 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
         param.setItemQName(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "OfficeMaster"));
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[18] = oper;
+        _operations[24] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("GetCenterMaster");
@@ -362,13 +461,8 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
         param.setItemQName(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "CenterMaster"));
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[19] = oper;
+        _operations[25] = oper;
 
-    }
-
-    private static void _initOperationDesc3(){
-        org.apache.axis.description.OperationDesc oper;
-        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("GetUserCenter");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://tempuri.org/", "userId"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), java.lang.Integer.class, false, false);
@@ -379,7 +473,29 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
         oper.setReturnQName(new javax.xml.namespace.QName("http://tempuri.org/", "GetUserCenterResult"));
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[20] = oper;
+        _operations[26] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("EnterPriseDataService");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://tempuri.org/", "Service"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param.setOmittable(true);
+        param.setNillable(true);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://tempuri.org/", "Operation"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param.setOmittable(true);
+        param.setNillable(true);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://tempuri.org/", "List"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.microsoft.com/2003/10/Serialization/Arrays", "ArrayOfKeyValueOfstringstring"), com.microsoft.schemas._2003._10.Serialization.Arrays.ArrayOfKeyValueOfstringstringKeyValueOfstringstring[].class, false, false);
+        param.setItemQName(new javax.xml.namespace.QName("http://schemas.microsoft.com/2003/10/Serialization/Arrays", "KeyValueOfstringstring"));
+        param.setOmittable(true);
+        param.setNillable(true);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        oper.setReturnClass(java.lang.String.class);
+        oper.setReturnQName(new javax.xml.namespace.QName("http://tempuri.org/", "EnterPriseDataServiceResult"));
+        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        _operations[27] = oper;
 
     }
 
@@ -454,6 +570,15 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
             cachedSerClasses.add(cls);
             qName = new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "DepartmentMaster");
             qName2 = new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "DepartmentMaster");
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "ArrayOfoffice_Details");
+            cachedSerQNames.add(qName);
+            cls = org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.Office_Details[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "office_Details");
+            qName2 = new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "office_Details");
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
@@ -544,6 +669,13 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
+            qName = new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "office_Details");
+            cachedSerQNames.add(qName);
+            cls = org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.Office_Details.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
             qName = new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "OfficeMaster");
             cachedSerQNames.add(qName);
             cls = org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.OfficeMaster.class;
@@ -585,6 +717,22 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://schemas.microsoft.com/2003/10/Serialization/Arrays", ">ArrayOfKeyValueOfstringstring>KeyValueOfstringstring");
+            cachedSerQNames.add(qName);
+            cls = com.microsoft.schemas._2003._10.Serialization.Arrays.ArrayOfKeyValueOfstringstringKeyValueOfstringstring.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://schemas.microsoft.com/2003/10/Serialization/Arrays", "ArrayOfKeyValueOfstringstring");
+            cachedSerQNames.add(qName);
+            cls = com.microsoft.schemas._2003._10.Serialization.Arrays.ArrayOfKeyValueOfstringstringKeyValueOfstringstring[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://schemas.microsoft.com/2003/10/Serialization/Arrays", ">ArrayOfKeyValueOfstringstring>KeyValueOfstringstring");
+            qName2 = new javax.xml.namespace.QName("http://schemas.microsoft.com/2003/10/Serialization/Arrays", "KeyValueOfstringstring");
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
     }
 
@@ -990,12 +1138,46 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
 }
     }
 
-    public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.DepartmentMaster[] getDepartmentDeails() throws java.rmi.RemoteException {
+    public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.Office_Details[] getofficedetails() throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
         _call.setOperation(_operations[9]);
+        _call.setUseSOAPAction(true);
+        _call.setSOAPActionURI("http://tempuri.org/ISoftAgeEnterprise/Getofficedetails");
+        _call.setEncodingStyle(null);
+        _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
+        _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
+        _call.setOperationName(new javax.xml.namespace.QName("http://tempuri.org/", "Getofficedetails"));
+
+        setRequestHeaders(_call);
+        setAttachments(_call);
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {});
+
+        if (_resp instanceof java.rmi.RemoteException) {
+            throw (java.rmi.RemoteException)_resp;
+        }
+        else {
+            extractAttachments(_call);
+            try {
+                return (org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.Office_Details[]) _resp;
+            } catch (java.lang.Exception _exception) {
+                return (org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.Office_Details[]) org.apache.axis.utils.JavaUtils.convert(_resp, org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.Office_Details[].class);
+            }
+        }
+  } catch (org.apache.axis.AxisFault axisFaultException) {
+  throw axisFaultException;
+}
+    }
+
+    public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.DepartmentMaster[] getDepartmentDeails() throws java.rmi.RemoteException {
+        if (super.cachedEndpoint == null) {
+            throw new org.apache.axis.NoEndPointException();
+        }
+        org.apache.axis.client.Call _call = createCall();
+        _call.setOperation(_operations[10]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("http://tempuri.org/ISoftAgeEnterprise/GetDepartmentDeails");
         _call.setEncodingStyle(null);
@@ -1029,7 +1211,7 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[10]);
+        _call.setOperation(_operations[11]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("http://tempuri.org/ISoftAgeEnterprise/GetStateDetails");
         _call.setEncodingStyle(null);
@@ -1063,7 +1245,7 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[11]);
+        _call.setOperation(_operations[12]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("http://tempuri.org/ISoftAgeEnterprise/GetOfficeTypeMaster");
         _call.setEncodingStyle(null);
@@ -1092,12 +1274,148 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
 }
     }
 
+    public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.OfficeTypeMaster[] getOfficeTypeMaster_byID(java.lang.Integer ID) throws java.rmi.RemoteException {
+        if (super.cachedEndpoint == null) {
+            throw new org.apache.axis.NoEndPointException();
+        }
+        org.apache.axis.client.Call _call = createCall();
+        _call.setOperation(_operations[13]);
+        _call.setUseSOAPAction(true);
+        _call.setSOAPActionURI("http://tempuri.org/ISoftAgeEnterprise/GetOfficeTypeMaster_byID");
+        _call.setEncodingStyle(null);
+        _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
+        _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
+        _call.setOperationName(new javax.xml.namespace.QName("http://tempuri.org/", "GetOfficeTypeMaster_byID"));
+
+        setRequestHeaders(_call);
+        setAttachments(_call);
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {ID});
+
+        if (_resp instanceof java.rmi.RemoteException) {
+            throw (java.rmi.RemoteException)_resp;
+        }
+        else {
+            extractAttachments(_call);
+            try {
+                return (org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.OfficeTypeMaster[]) _resp;
+            } catch (java.lang.Exception _exception) {
+                return (org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.OfficeTypeMaster[]) org.apache.axis.utils.JavaUtils.convert(_resp, org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.OfficeTypeMaster[].class);
+            }
+        }
+  } catch (org.apache.axis.AxisFault axisFaultException) {
+  throw axisFaultException;
+}
+    }
+
+    public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.SpokeMaster[] getSpokeDetails_BYID(java.lang.Integer circleId, java.lang.Integer spokeid) throws java.rmi.RemoteException {
+        if (super.cachedEndpoint == null) {
+            throw new org.apache.axis.NoEndPointException();
+        }
+        org.apache.axis.client.Call _call = createCall();
+        _call.setOperation(_operations[14]);
+        _call.setUseSOAPAction(true);
+        _call.setSOAPActionURI("http://tempuri.org/ISoftAgeEnterprise/GetSpokeDetails_BYID");
+        _call.setEncodingStyle(null);
+        _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
+        _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
+        _call.setOperationName(new javax.xml.namespace.QName("http://tempuri.org/", "GetSpokeDetails_BYID"));
+
+        setRequestHeaders(_call);
+        setAttachments(_call);
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {circleId, spokeid});
+
+        if (_resp instanceof java.rmi.RemoteException) {
+            throw (java.rmi.RemoteException)_resp;
+        }
+        else {
+            extractAttachments(_call);
+            try {
+                return (org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.SpokeMaster[]) _resp;
+            } catch (java.lang.Exception _exception) {
+                return (org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.SpokeMaster[]) org.apache.axis.utils.JavaUtils.convert(_resp, org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.SpokeMaster[].class);
+            }
+        }
+  } catch (org.apache.axis.AxisFault axisFaultException) {
+  throw axisFaultException;
+}
+    }
+
+    public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.CircleMaster[] getCircleDetails_BYID_ID(java.lang.Integer countryId, java.lang.Integer circleid) throws java.rmi.RemoteException {
+        if (super.cachedEndpoint == null) {
+            throw new org.apache.axis.NoEndPointException();
+        }
+        org.apache.axis.client.Call _call = createCall();
+        _call.setOperation(_operations[15]);
+        _call.setUseSOAPAction(true);
+        _call.setSOAPActionURI("http://tempuri.org/ISoftAgeEnterprise/GetCircleDetails_BYID_ID");
+        _call.setEncodingStyle(null);
+        _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
+        _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
+        _call.setOperationName(new javax.xml.namespace.QName("http://tempuri.org/", "GetCircleDetails_BYID_ID"));
+
+        setRequestHeaders(_call);
+        setAttachments(_call);
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {countryId, circleid});
+
+        if (_resp instanceof java.rmi.RemoteException) {
+            throw (java.rmi.RemoteException)_resp;
+        }
+        else {
+            extractAttachments(_call);
+            try {
+                return (org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.CircleMaster[]) _resp;
+            } catch (java.lang.Exception _exception) {
+                return (org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.CircleMaster[]) org.apache.axis.utils.JavaUtils.convert(_resp, org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.CircleMaster[].class);
+            }
+        }
+  } catch (org.apache.axis.AxisFault axisFaultException) {
+  throw axisFaultException;
+}
+    }
+
+    public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.SpokeMaster[] getSpokeDetails_ByCircleID(java.lang.Integer circleId) throws java.rmi.RemoteException {
+        if (super.cachedEndpoint == null) {
+            throw new org.apache.axis.NoEndPointException();
+        }
+        org.apache.axis.client.Call _call = createCall();
+        _call.setOperation(_operations[16]);
+        _call.setUseSOAPAction(true);
+        _call.setSOAPActionURI("http://tempuri.org/ISoftAgeEnterprise/GetSpokeDetails_ByCircleID");
+        _call.setEncodingStyle(null);
+        _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
+        _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
+        _call.setOperationName(new javax.xml.namespace.QName("http://tempuri.org/", "GetSpokeDetails_ByCircleID"));
+
+        setRequestHeaders(_call);
+        setAttachments(_call);
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {circleId});
+
+        if (_resp instanceof java.rmi.RemoteException) {
+            throw (java.rmi.RemoteException)_resp;
+        }
+        else {
+            extractAttachments(_call);
+            try {
+                return (org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.SpokeMaster[]) _resp;
+            } catch (java.lang.Exception _exception) {
+                return (org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.SpokeMaster[]) org.apache.axis.utils.JavaUtils.convert(_resp, org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.SpokeMaster[].class);
+            }
+        }
+  } catch (org.apache.axis.AxisFault axisFaultException) {
+  throw axisFaultException;
+}
+    }
+
     public void insertExceptionDetails(java.lang.Integer applicationId, java.lang.String errorMessage, java.lang.String errorUrl, java.lang.String methodName) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[12]);
+        _call.setOperation(_operations[17]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("http://tempuri.org/ISoftAgeEnterprise/InsertExceptionDetails");
         _call.setEncodingStyle(null);
@@ -1119,12 +1437,46 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
 }
     }
 
+    public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.CircleMaster[] getCircleDetails_byCircleid(java.lang.Integer countryId, java.lang.String typeuser, java.lang.Integer circleid) throws java.rmi.RemoteException {
+        if (super.cachedEndpoint == null) {
+            throw new org.apache.axis.NoEndPointException();
+        }
+        org.apache.axis.client.Call _call = createCall();
+        _call.setOperation(_operations[18]);
+        _call.setUseSOAPAction(true);
+        _call.setSOAPActionURI("http://tempuri.org/ISoftAgeEnterprise/GetCircleDetails_byCircleid");
+        _call.setEncodingStyle(null);
+        _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
+        _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
+        _call.setOperationName(new javax.xml.namespace.QName("http://tempuri.org/", "GetCircleDetails_byCircleid"));
+
+        setRequestHeaders(_call);
+        setAttachments(_call);
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {countryId, typeuser, circleid});
+
+        if (_resp instanceof java.rmi.RemoteException) {
+            throw (java.rmi.RemoteException)_resp;
+        }
+        else {
+            extractAttachments(_call);
+            try {
+                return (org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.CircleMaster[]) _resp;
+            } catch (java.lang.Exception _exception) {
+                return (org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.CircleMaster[]) org.apache.axis.utils.JavaUtils.convert(_resp, org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.CircleMaster[].class);
+            }
+        }
+  } catch (org.apache.axis.AxisFault axisFaultException) {
+  throw axisFaultException;
+}
+    }
+
     public java.lang.String sendMail(java.lang.String emailSource, java.lang.Integer emailPort, java.lang.String emailFrom, java.lang.String emailPassword, java.lang.String toEmail, java.lang.String subject, java.lang.String body) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[13]);
+        _call.setOperation(_operations[19]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("http://tempuri.org/ISoftAgeEnterprise/SendMail");
         _call.setEncodingStyle(null);
@@ -1158,7 +1510,7 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[14]);
+        _call.setOperation(_operations[20]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("http://tempuri.org/ISoftAgeEnterprise/GetCircleMaster");
         _call.setEncodingStyle(null);
@@ -1192,7 +1544,7 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[15]);
+        _call.setOperation(_operations[21]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("http://tempuri.org/ISoftAgeEnterprise/GetSpokeMaster");
         _call.setEncodingStyle(null);
@@ -1226,7 +1578,7 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[16]);
+        _call.setOperation(_operations[22]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("http://tempuri.org/ISoftAgeEnterprise/GetReasonCode");
         _call.setEncodingStyle(null);
@@ -1260,7 +1612,7 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[17]);
+        _call.setOperation(_operations[23]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("http://tempuri.org/ISoftAgeEnterprise/GetSpokeCode");
         _call.setEncodingStyle(null);
@@ -1294,7 +1646,7 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[18]);
+        _call.setOperation(_operations[24]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("http://tempuri.org/ISoftAgeEnterprise/GetCorporateOfficeMaster");
         _call.setEncodingStyle(null);
@@ -1328,7 +1680,7 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[19]);
+        _call.setOperation(_operations[25]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("http://tempuri.org/ISoftAgeEnterprise/GetCenterMaster");
         _call.setEncodingStyle(null);
@@ -1362,7 +1714,7 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[20]);
+        _call.setOperation(_operations[26]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("http://tempuri.org/ISoftAgeEnterprise/GetUserCenter");
         _call.setEncodingStyle(null);
@@ -1384,6 +1736,40 @@ public class BasicHttpBinding_ISoftAgeEnterpriseStub extends org.apache.axis.cli
                 return (java.lang.Integer) _resp;
             } catch (java.lang.Exception _exception) {
                 return (java.lang.Integer) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Integer.class);
+            }
+        }
+  } catch (org.apache.axis.AxisFault axisFaultException) {
+  throw axisFaultException;
+}
+    }
+
+    public java.lang.String enterPriseDataService(java.lang.String service, java.lang.String operation, com.microsoft.schemas._2003._10.Serialization.Arrays.ArrayOfKeyValueOfstringstringKeyValueOfstringstring[] list) throws java.rmi.RemoteException {
+        if (super.cachedEndpoint == null) {
+            throw new org.apache.axis.NoEndPointException();
+        }
+        org.apache.axis.client.Call _call = createCall();
+        _call.setOperation(_operations[27]);
+        _call.setUseSOAPAction(true);
+        _call.setSOAPActionURI("http://tempuri.org/ISoftAgeEnterprise/EnterPriseDataService");
+        _call.setEncodingStyle(null);
+        _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
+        _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
+        _call.setOperationName(new javax.xml.namespace.QName("http://tempuri.org/", "EnterPriseDataService"));
+
+        setRequestHeaders(_call);
+        setAttachments(_call);
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {service, operation, list});
+
+        if (_resp instanceof java.rmi.RemoteException) {
+            throw (java.rmi.RemoteException)_resp;
+        }
+        else {
+            extractAttachments(_call);
+            try {
+                return (java.lang.String) _resp;
+            } catch (java.lang.Exception _exception) {
+                return (java.lang.String) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.String.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {

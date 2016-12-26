@@ -14,16 +14,20 @@ public class SpokeMaster  implements java.io.Serializable {
 
     private java.lang.String spokeName;
 
+    private java.lang.Integer circleid;
+
     public SpokeMaster() {
     }
 
     public SpokeMaster(
            java.lang.String spokeCode,
            java.lang.Integer spokeId,
-           java.lang.String spokeName) {
+           java.lang.String spokeName,
+           java.lang.Integer circleid) {
            this.spokeCode = spokeCode;
            this.spokeId = spokeId;
            this.spokeName = spokeName;
+           this.circleid = circleid;
     }
 
 
@@ -86,6 +90,26 @@ public class SpokeMaster  implements java.io.Serializable {
         this.spokeName = spokeName;
     }
 
+
+    /**
+     * Gets the circleid value for this SpokeMaster.
+     * 
+     * @return circleid
+     */
+    public java.lang.Integer getCircleid() {
+        return circleid;
+    }
+
+
+    /**
+     * Sets the circleid value for this SpokeMaster.
+     * 
+     * @param circleid
+     */
+    public void setCircleid(java.lang.Integer circleid) {
+        this.circleid = circleid;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof SpokeMaster)) return false;
@@ -106,7 +130,10 @@ public class SpokeMaster  implements java.io.Serializable {
               this.spokeId.equals(other.getSpokeId()))) &&
             ((this.spokeName==null && other.getSpokeName()==null) || 
              (this.spokeName!=null &&
-              this.spokeName.equals(other.getSpokeName())));
+              this.spokeName.equals(other.getSpokeName()))) &&
+            ((this.circleid==null && other.getCircleid()==null) || 
+             (this.circleid!=null &&
+              this.circleid.equals(other.getCircleid())));
         __equalsCalc = null;
         return _equals;
     }
@@ -126,6 +153,9 @@ public class SpokeMaster  implements java.io.Serializable {
         }
         if (getSpokeName() != null) {
             _hashCode += getSpokeName().hashCode();
+        }
+        if (getCircleid() != null) {
+            _hashCode += getCircleid().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -155,6 +185,13 @@ public class SpokeMaster  implements java.io.Serializable {
         elemField.setFieldName("spokeName");
         elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "SpokeName"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("circleid");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "circleid"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

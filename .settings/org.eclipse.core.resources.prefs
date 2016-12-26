@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//src/main/java/com/microsoft/schemas/_2003/_10/Serialization/Arrays/ArrayOfKeyValueOfstringstringKeyValueOfstringstring.java=UTF-8
 encoding//src/main/java/org/datacontract/schemas/_2004/_07/SoftAge_Enterprise_BusinessObject/CenterMaster.java=UTF-8
 encoding//src/main/java/org/datacontract/schemas/_2004/_07/SoftAge_Enterprise_BusinessObject/CircleMaster.java=UTF-8
 encoding//src/main/java/org/datacontract/schemas/_2004/_07/SoftAge_Enterprise_BusinessObject/CompanyMaster.java=UTF-8
@@ -7,6 +8,7 @@ encoding//src/main/java/org/datacontract/schemas/_2004/_07/SoftAge_Enterprise_Bu
 encoding//src/main/java/org/datacontract/schemas/_2004/_07/SoftAge_Enterprise_BusinessObject/ExceptionInfo.java=UTF-8
 encoding//src/main/java/org/datacontract/schemas/_2004/_07/SoftAge_Enterprise_BusinessObject/OfficeMaster.java=UTF-8
 encoding//src/main/java/org/datacontract/schemas/_2004/_07/SoftAge_Enterprise_BusinessObject/OfficeTypeMaster.java=UTF-8
+encoding//src/main/java/org/datacontract/schemas/_2004/_07/SoftAge_Enterprise_BusinessObject/Office_Details.java=UTF-8
 encoding//src/main/java/org/datacontract/schemas/_2004/_07/SoftAge_Enterprise_BusinessObject/RoleMaster.java=UTF-8
 encoding//src/main/java/org/datacontract/schemas/_2004/_07/SoftAge_Enterprise_BusinessObject/SpokeMaster.java=UTF-8
 encoding//src/main/java/org/datacontract/schemas/_2004/_07/SoftAge_Enterprise_BusinessObject/StateMaster.java=UTF-8

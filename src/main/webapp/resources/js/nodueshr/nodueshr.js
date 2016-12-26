@@ -15,17 +15,47 @@ application.controller('nodueshrcontroller',function($scope,$http,$modal,$rootSc
 	$scope.EmployeeFeedback=function(empcode)
 	{
            var emp_code=empcode;
-    /*$window.sessionStorage.setItem("Mydata",emp_code);*/
- 
-    //$rootScope.$broadcast("Mydata",emp_code);
-		/*alert("hr "+emp_code);*/
+  
 		var scope = $rootScope.$new();
 		scope.emp_code = emp_code;
-		
-		var modalInstance = $modal.open({
+	    var modalInstance = $modal.open({
 			scope:scope,
       		templateUrl : "resources/js/nodueshr/nodueshrmodal.html",
       		controller :'nodueshrmodalcontroller'
 		});
 	}
+	
+	$scope.EmpOthernoDues=function(empcode)
+	{
+		
+	      var emp_code=empcode;
+
+		var scope = $rootScope.$new();
+		scope.emp_code = emp_code;
+		scope.params={employeecode:emp_code}
+		var modalInstance = $modal.open({
+			scope:scope,
+	  		templateUrl : "resources/js/nodueshr/othernodues.html",
+	  		controller :'nodueshrcontroller'
+		
+		})
+		}
+$scope.nodueStatus=function(){
+	$scope.emp_code=$scope.params.employeecode;
+	$http.get(domain+'/noduesstatus?employeecode='+$scope.emp_code)
+	.success(function(data,status,headers,config){
+	 $scope.noduestatus=data.noDuesPendingDept;
+	$scope.nodues_allowed=true;
+	for(var i=0;i<$scope.noduestatus.length;i++){
+		if($scope.noduestatus[i]!='HR'){
+			$scope.nodues_allowed=false;
+		}
+	}
+	})
+.error(function(data,status,headers,config){
+	/*alert('not found');*/
+		})
+	
+	}
+	
 });

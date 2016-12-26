@@ -25,6 +25,14 @@ public class TblFeedbacks implements java.io.Serializable {
 	private String ansText;
 	private String feedbackBy;
 	private String feedbackFrom;
+   private Integer stageId;
+	public Integer getStageId() {
+	return stageId;
+}
+
+public void setStageId(Integer stageId) {
+	this.stageId = stageId;
+}
 
 	public TblFeedbacks() {
 	}

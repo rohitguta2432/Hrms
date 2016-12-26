@@ -71,4 +71,4 @@ $http.get(domain+'/rejectempassets?'+emp_data)
 				
 	})
 	}
-	});
+});

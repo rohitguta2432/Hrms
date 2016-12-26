@@ -98,6 +98,12 @@ public class ISoftAgeEnterpriseProxy implements org.tempuri.ISoftAgeEnterprise {
     return iSoftAgeEnterprise.getRoleDetails();
   }
   
+  public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.Office_Details[] getofficedetails() throws java.rmi.RemoteException{
+    if (iSoftAgeEnterprise == null)
+      _initISoftAgeEnterpriseProxy();
+    return iSoftAgeEnterprise.getofficedetails();
+  }
+  
   public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.DepartmentMaster[] getDepartmentDeails() throws java.rmi.RemoteException{
     if (iSoftAgeEnterprise == null)
       _initISoftAgeEnterpriseProxy();
@@ -116,10 +122,40 @@ public class ISoftAgeEnterpriseProxy implements org.tempuri.ISoftAgeEnterprise {
     return iSoftAgeEnterprise.getOfficeTypeMaster(typeuser);
   }
   
+  public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.OfficeTypeMaster[] getOfficeTypeMaster_byID(java.lang.Integer ID) throws java.rmi.RemoteException{
+    if (iSoftAgeEnterprise == null)
+      _initISoftAgeEnterpriseProxy();
+    return iSoftAgeEnterprise.getOfficeTypeMaster_byID(ID);
+  }
+  
+  public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.SpokeMaster[] getSpokeDetails_BYID(java.lang.Integer circleId, java.lang.Integer spokeid) throws java.rmi.RemoteException{
+    if (iSoftAgeEnterprise == null)
+      _initISoftAgeEnterpriseProxy();
+    return iSoftAgeEnterprise.getSpokeDetails_BYID(circleId, spokeid);
+  }
+  
+  public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.CircleMaster[] getCircleDetails_BYID_ID(java.lang.Integer countryId, java.lang.Integer circleid) throws java.rmi.RemoteException{
+    if (iSoftAgeEnterprise == null)
+      _initISoftAgeEnterpriseProxy();
+    return iSoftAgeEnterprise.getCircleDetails_BYID_ID(countryId, circleid);
+  }
+  
+  public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.SpokeMaster[] getSpokeDetails_ByCircleID(java.lang.Integer circleId) throws java.rmi.RemoteException{
+    if (iSoftAgeEnterprise == null)
+      _initISoftAgeEnterpriseProxy();
+    return iSoftAgeEnterprise.getSpokeDetails_ByCircleID(circleId);
+  }
+  
   public void insertExceptionDetails(java.lang.Integer applicationId, java.lang.String errorMessage, java.lang.String errorUrl, java.lang.String methodName) throws java.rmi.RemoteException{
     if (iSoftAgeEnterprise == null)
       _initISoftAgeEnterpriseProxy();
     iSoftAgeEnterprise.insertExceptionDetails(applicationId, errorMessage, errorUrl, methodName);
+  }
+  
+  public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.CircleMaster[] getCircleDetails_byCircleid(java.lang.Integer countryId, java.lang.String typeuser, java.lang.Integer circleid) throws java.rmi.RemoteException{
+    if (iSoftAgeEnterprise == null)
+      _initISoftAgeEnterpriseProxy();
+    return iSoftAgeEnterprise.getCircleDetails_byCircleid(countryId, typeuser, circleid);
   }
   
   public java.lang.String sendMail(java.lang.String emailSource, java.lang.Integer emailPort, java.lang.String emailFrom, java.lang.String emailPassword, java.lang.String toEmail, java.lang.String subject, java.lang.String body) throws java.rmi.RemoteException{
@@ -168,6 +204,12 @@ public class ISoftAgeEnterpriseProxy implements org.tempuri.ISoftAgeEnterprise {
     if (iSoftAgeEnterprise == null)
       _initISoftAgeEnterpriseProxy();
     return iSoftAgeEnterprise.getUserCenter(userId);
+  }
+  
+  public java.lang.String enterPriseDataService(java.lang.String service, java.lang.String operation, com.microsoft.schemas._2003._10.Serialization.Arrays.ArrayOfKeyValueOfstringstringKeyValueOfstringstring[] list) throws java.rmi.RemoteException{
+    if (iSoftAgeEnterprise == null)
+      _initISoftAgeEnterpriseProxy();
+    return iSoftAgeEnterprise.enterPriseDataService(service, operation, list);
   }
   
   

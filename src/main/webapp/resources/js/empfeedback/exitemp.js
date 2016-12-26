@@ -11,6 +11,7 @@ application.controller('exitempcontroller', function($scope, $http,$location) {
 				$scope.empdesignation = data.designation;
 				$scope.Emplocation = data.location;
 				$scope.empquestion = data.empfeedbackquestion;
+				/*alert($scope.empquestion)*/
 			})
 	$scope.submit = function(form) {
 

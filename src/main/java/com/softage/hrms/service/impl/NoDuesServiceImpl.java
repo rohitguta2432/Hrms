@@ -48,10 +48,12 @@ public class NoDuesServiceImpl implements NoDuesService {
 		return noduesdao.getNoDuesPendingStatus(resignationID);
 	}
 
-	@Override
-	public void insertupdatednodues(TblNoDuesClearence updatednodues) {
-
-		noduesdao.updatenoduesclearence(updatednodues);
+	/*@Override
+	public JSONObject listUserStatus(int resignation) {
+		
+		
+		
+        return  noduesdao.getUserStatus(resignation);
 	}
-
+*/
 }

@@ -1,13 +1,17 @@
 package com.softage.hrms.dao.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.jpa.criteria.expression.SearchedCaseExpression;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -16,6 +20,7 @@ import org.w3c.dom.ls.LSInput;
 import com.softage.hrms.dao.ExitInterviewDao;
 import com.softage.hrms.model.MstQuestions;
 import com.softage.hrms.model.TblFeedbacks;
+import com.sun.mail.util.LineOutputStream;
 
 @Repository
 public class ExitInterviewDaoImpl implements ExitInterviewDao {
@@ -28,23 +33,17 @@ public class ExitInterviewDaoImpl implements ExitInterviewDao {
 	public List<JSONObject> getHrQuestions(int roleid,int stageid) {
 		List<JSONObject> questionslist=new ArrayList<JSONObject>();
 		int count=1;
-		try{
-			
+	try{
 		Session session=sessionfactory.getCurrentSession();
-	    String hql="from MstQuestions q where q.roleId=:roleid and q.stageId=:stageid";
-	    
-	    Query query=session.createQuery(hql);
+       String	hql="from MstQuestions q where q.roleId=:roleid and q.stageId=:stageid";
+        Query query=session.createQuery(hql);
 	    query.setParameter("roleid", roleid);
 	    query.setParameter("stageid", stageid);
-	    
-	    
 	    List<MstQuestions> hrqueslist=query.list();
 	    for(MstQuestions question:hrqueslist)
 	    {
-	    	
-	    	JSONObject jsonObject=new JSONObject();
-	    	/*jsonObject.put("sno", count);*/
-	    	jsonObject.put("question", question.getQuestionText());
+	        JSONObject jsonObject=new JSONObject();
+	        jsonObject.put("question", question.getQuestionText());
 	        jsonObject.put("qtype", question.getQuestionType());
 	        jsonObject.put("qid",question.getQid());
 	        jsonObject.put("value", "");
@@ -69,13 +68,66 @@ public class ExitInterviewDaoImpl implements ExitInterviewDao {
 		try {
 			
 			Session session=sessionfactory.getCurrentSession();
-			
-			session.save(feedbackbean);
+		    session.save(feedbackbean);
 			
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}
 		
 		return feedbackhr;
+	
+}
+
+	@Override
+	@Transactional
+	public List<JSONObject> getEmpQuestions(int stageid) {
+		List<JSONObject> questionsemp=new ArrayList<JSONObject>();
+		int count=1;
+		try{
+		Session session=sessionfactory.getCurrentSession();
+        String hql="from MstQuestions q where q.stageId=:stageid";
+		Query query=session.createQuery(hql);
+	    query.setParameter("stageid", stageid);
+	    List<MstQuestions> hrqueslist=query.list();
+	    for(MstQuestions question:hrqueslist)
+	    {
+	   JSONObject jsonObject=new JSONObject();
+	    	jsonObject.put("question", question.getQuestionText());
+	        jsonObject.put("qtype", question.getQuestionType());
+	        jsonObject.put("qid",question.getQid());
+	        jsonObject.put("value", "");
+	        questionsemp.add(jsonObject);
+	    	count=count+1;
+	    }
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	    	return questionsemp;
 	}
+    @Override
+	@Transactional
+	public JSONObject getEmpFeedbackStatus(int resignationid) {
+		JSONObject liststageid=new JSONObject();
+		Session session=sessionfactory.getCurrentSession(); 
+		Set<JSONObject> listarray=new HashSet<JSONObject>();
+		try {
+			
+			String hql="from TblFeedbacks a where a.tblUserResignation.resignationId=:resignationid";
+			Query query=session.createQuery(hql)
+					.setParameter("resignationid", resignationid);
+			List<TblFeedbacks> empfeedback=query.list();
+			for(TblFeedbacks status:empfeedback)
+			{
+				JSONObject feedbackstatus=new JSONObject();
+				feedbackstatus.put("empstatus", status.getStageId());
+				System.out.println(status.getStageId());
+				listarray.add(feedbackstatus);
+			}
+			liststageid.put("statusemp", listarray);
+			} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return liststageid;
 	}
+		}

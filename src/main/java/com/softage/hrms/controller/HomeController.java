@@ -31,7 +31,7 @@ import org.apache.commons.net.ftp.FTPFile;
 import org.json.simple.JSONArray;
 
 import org.apache.axis.transport.mail.MailSender;
-
+import org.hibernate.loader.custom.Return;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -138,6 +138,7 @@ public class HomeController {
 		ISoftAgeEnterpriseProxy i = new ISoftAgeEnterpriseProxy();
 		try {
 			request.setAttribute("param1", i.getUserDetail("ss0077").getRoleId());
+			System.out.println(i.getUserDetail("ss0077").getRoleId());
 			model.addAttribute("emp", i.getUserDetail("ss0077").getFirstName());
 		} catch (Exception e) {
 			model.addAttribute("msg", "NULL Values");
@@ -636,8 +637,7 @@ public class HomeController {
 	public JSONObject insertitassets(@RequestParam("emp_assets") String assetsissued,
 			@RequestParam("comments") String comments, @RequestParam("emp_code") String empcode,
 			HttpServletRequest request, HttpSession session) {
-
-		session = request.getSession();
+            session = request.getSession();
 		/* String departmentid=session.getAttribute(arg0); */
 		JSONObject insertitasserts = new JSONObject();
 		Date today = new Date();
@@ -662,11 +662,9 @@ public class HomeController {
 		noduesclearence.setDepartmentFinalStatus(2);
 		noduesclearence.setDepartmentId(4);
 		noduesclearence.setTbluserresignation(resignedUser);
-
-		/*insertitasserts = noduesservice.submitNoduesclearence(noduesclearence);*/
 		insertitasserts = noduesservice.submitNoduesclearence(noduesclearence);
-          
-		
+	/*TblNoDuesClearence updated=noduesservice.insertupdatednodues(resignedUser);*/
+
 		return insertitasserts;
 
 	}
@@ -1229,7 +1227,6 @@ public class HomeController {
 		TblAssetsManagement hrasset = new TblAssetsManagement();
 		String[] asserts = hrassets.split(",");
 		for (String assetssplit : asserts) {
-
 			hrasset.setAssetsIssue(assetssplit);
 			hrasset.setCreatedBy("system");
 			hrasset.setCreatedOn(today);
@@ -1240,22 +1237,16 @@ public class HomeController {
 			hrasset.setReceivedBy("thomas verges");
 			hrasset.setReceivedOn(today);
 			hrasset.setTblUserResignation(resignedUser);
-
 			inserthrasserts = noduesservice.submitnoduesassets(hrasset);
-
 		}
-
 		TblNoDuesClearence nodues = new TblNoDuesClearence();
 		nodues.setDepartmentFinalStatus(2);
 		nodues.setComments(comments);
 		nodues.setTbluserresignation(resignedUser);
 		nodues.setDepartmentId(2);
 		inserthrasserts = noduesservice.submitNoduesclearence(nodues);
-
 		MstResignationStatus status_mast = resignationService.getStatus(7);
-
 		resignedUser.setMstResignationStatus(status_mast);
-
 		approvalservice.updateResignationStatus(resignedUser);
 
 		return inserthrasserts;
@@ -1296,98 +1287,68 @@ public class HomeController {
 	@RequestMapping(value = "/gethrfeedbackquestions", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject gethrfeedbackquestion() {
+		int roleid = 8;
+		int stageid = 5;
 		JSONObject feedbackjson = new JSONObject();
 		try {
-			int roleid = 8;
-			int stageid = 3;
 			List<JSONObject> listhrquestion = exitinterviewservice.listHrQuestion(roleid, stageid);
-
-			/* System.out.println(listhrquestion); */
-
 			feedbackjson.put("hrquestionslist", listhrquestion);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return feedbackjson;
 
 	}
-
-	@RequestMapping(value = "/inserthrfeedback", method = RequestMethod.POST)
+    @RequestMapping(value = "/inserthrfeedback", method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject inserthrfeedback(@RequestParam("hr_feedback") String feedback,
 			@RequestParam("emp_code") String empcode, HttpSession session, HttpServletRequest request) {
-
-		session = request.getSession();
+    	String empname="";
+    	ISoftAgeEnterpriseProxy empdetails=new ISoftAgeEnterpriseProxy();
+        session = request.getSession();
 		String hrempcode = (String) session.getAttribute("employeecode");
-
-		/* System.out.println(hrempcode); */
+		try {
+		 empname=empdetails.getUserDetail(hrempcode).getFirstName();
+		} catch (RemoteException e1) {
+		e1.printStackTrace();
+		}
 		JSONObject hranswers = new JSONObject();
 		try {
 			JSONParser parser = new JSONParser();
 			JSONObject json = (JSONObject) parser.parse(feedback);
 			List<JSONObject> listAnswers = (List<JSONObject>) json.get("data");
-
-			/*
-			 * List<String>
-			 * resignationId=resignationidservice.listresignationid(empcode);
-			 */
-
-			/*
-			 * for (JSONObject hranswer : listAnswers) { Long serialid = (Long)
-			 * hranswer.get("qid"); int sid = serialid.intValue(); String ans =
-			 * (String) hranswer.get("value");
-			 */
-
-			TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 7);
+           TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 7);
 			for (JSONObject hranswer : listAnswers) {
 				Long serialid = (Long) hranswer.get("qid");
 				int sid = serialid.intValue();
 				String ans = (String) hranswer.get("value");
-				String feedbackby = "HR";
-
 				TblFeedbacks feedbackhr = new TblFeedbacks();
-
-				feedbackhr.setAnsText(ans);
-				feedbackhr.setFeedbackBy(feedbackby);
+                feedbackhr.setAnsText(ans);
+				feedbackhr.setFeedbackBy(empname);
 				feedbackhr.setFeedbackFrom(hrempcode);
-
-				MstQuestions question = approvalservice.getRmFeedbackQuestionService(sid);
-
-				feedbackhr.setMstQuestions(question);
+                MstQuestions question = approvalservice.getRmFeedbackQuestionService(sid);
+                feedbackhr.setMstQuestions(question);
 				feedbackhr.setTblUserResignation(resignedUser);
-
-				hranswers = exitinterviewservice.submithrfeedback(feedbackhr);
-
-			}
-
-			MstResignationStatus status_mast = resignationService.getStatus(9);
-
-			resignedUser.setMstResignationStatus(status_mast);
+                hranswers = exitinterviewservice.submithrfeedback(feedbackhr);
+}
+MstResignationStatus status_mast = resignationService.getStatus(9);
+            resignedUser.setMstResignationStatus(status_mast);
 			approvalservice.updateResignationStatus(resignedUser);
-
-			// hranswers = exitinterviewservice.submithrfeedback(feedbackhr);
-
-		} catch (Exception e) {
+} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return hranswers;
 
 	}
-
-	@RequestMapping(value = "/employeeQuery", method = RequestMethod.GET)
+   @RequestMapping(value = "/employeeQuery", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject employeeQuery(HttpServletRequest request, HttpSession session) {
-
-		String empcode = "ss0062";
+        String empcode = "ss0062";
 		String empName = "Rohit";
 		String rmEmpCode = "ss0078";
-
-		try {
-
-			session = request.getSession();
+try {
+            session = request.getSession();
 			empcode = (String) session.getAttribute("employeecode");
 			String deptId = request.getParameter("deptId");
 			int departmentId = Integer.parseInt(deptId);
@@ -1743,26 +1704,20 @@ public class HomeController {
 		ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 		session = request.getSession();
 		String code = (String) session.getAttribute("employeecode");
-		System.out.println(code);
-        int roleid = (Integer) session.getAttribute("roleid");
-        System.out.println(roleid);
-		int stageid = 4;
+		int stageid = 3;
 		JSONObject empfeedback = new JSONObject();
 		try {
-
 			empfeedback.put("empcode", code);
 			empfeedback.put("firstname", empdetails.getUserDetail(code).getFirstName());
 			empfeedback.put("lastname", empdetails.getUserDetail(code).getLastName());
 			empfeedback.put("department", empdetails.getUserDetail(code).getDepartmentId());
 			empfeedback.put("designation", "java developer");
 			empfeedback.put("location", "circle");
-
-			List<JSONObject> listempquestion = exitinterviewservice.listHrQuestion(roleid, stageid);
-
-			System.out.println(listempquestion);
-
+			List<JSONObject> listempquestion = exitinterviewservice.listempQuestion(stageid);
 			empfeedback.put("empfeedbackquestion", listempquestion);
-		} catch (Exception e) {
+		}
+
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -1773,47 +1728,36 @@ public class HomeController {
 	@ResponseBody
 	public JSONObject insertempfeedback(@RequestParam("emp_feedback") String feedback, HttpSession session,
 			HttpServletRequest request) {
-
+		String empname="";
+		int stageid=3;
+		ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 		session = request.getSession();
-
-		/* String userempcode=(String) session.getAttribute("employeecode"); */
-
-		String userempcode = "ss0097";
-
+		 String userempcode = (String) session.getAttribute("employeecode");
+		 try {
+			 empname=empdetails.getUserDetail(userempcode).getFirstName();
+		} catch (RemoteException e1) {
+			
+			e1.printStackTrace();
+		}
 		JSONObject empanswers = new JSONObject();
 		try {
 			JSONParser parser = new JSONParser();
 			JSONObject json = (JSONObject) parser.parse(feedback);
-
-			List<JSONObject> listAnswers = (List<JSONObject>) json.get("data");
-
-			for (JSONObject hranswer : listAnswers) {
+           List<JSONObject> listAnswers = (List<JSONObject>) json.get("data");
+           for (JSONObject hranswer : listAnswers) {
 				Long serialid = (Long) hranswer.get("qid");
 				int sid = serialid.intValue();
 				String ans = (String) hranswer.get("value");
-
-				String feedbackby = "emp";
-
-				TblFeedbacks feedbackemp = new TblFeedbacks();
-
+                TblFeedbacks feedbackemp = new TblFeedbacks();
 				feedbackemp.setAnsText(ans);
-				feedbackemp.setFeedbackBy(feedbackby);
+				feedbackemp.setFeedbackBy(empname);
 				feedbackemp.setFeedbackFrom(userempcode);
-
-				TblUserResignation resignedUser = resignationService.getResignationUserService(userempcode, 2);// for
-																												// resignation
-																												// id
-																												// where
-																												// empcode
-																												// and
-																												// status
+				feedbackemp.setStageId(stageid);
+                TblUserResignation resignedUser = resignationService.getResignationUserService(userempcode, 7);
 				MstQuestions question = approvalservice.getRmFeedbackQuestionService(sid);
-
 				feedbackemp.setMstQuestions(question);
-
-				feedbackemp.setTblUserResignation(resignedUser);
-
-				empanswers = exitinterviewservice.submithrfeedback(feedbackemp);
+                feedbackemp.setTblUserResignation(resignedUser);
+                empanswers = exitinterviewservice.submithrfeedback(feedbackemp);
 			}
 
 		} catch (Exception e) {
@@ -1822,29 +1766,16 @@ public class HomeController {
 
 		return empanswers;
 	}
-
-	@RequestMapping(value = "/empratingfeedback", method = RequestMethod.GET)
+    @RequestMapping(value = "/empratingfeedback", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getempratingfeedback(HttpSession session, HttpServletRequest request) {
-
-		session = request.getSession();
-
+    	session = request.getSession();
 		String userempcode = (String) session.getAttribute("employeecode");
-
-		/* System.out.println("user empcode "+userempcode); */
-
 		int roleid = (Integer) session.getAttribute("roleid");
-
-		/* System.out.println(roleid); */
 		int stageid = 4;// stage of application employee feedback
-
 		JSONObject empratingfeedback = new JSONObject();
 		try {
-
-			List<JSONObject> listempquestion = exitinterviewservice.listHrQuestion(roleid, stageid);
-
-			System.out.println(listempquestion);
-
+			List<JSONObject> listempquestion = exitinterviewservice.listempQuestion(stageid);
 			empratingfeedback.put("empratingfeedbackquestion", listempquestion);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1857,61 +1788,38 @@ public class HomeController {
 	@ResponseBody
 	public JSONObject insertempratingfeedback(@RequestParam("emprating_feedback") String feedback, HttpSession session,
 			HttpServletRequest request) {
-
+		String empname="";
+		int stageid=4;
+ ISoftAgeEnterpriseProxy empdetails=new ISoftAgeEnterpriseProxy();
 		session = request.getSession();
-
-		/* String userempcode=(String) session.getAttribute("employeecode"); */
-
-		String userempcode = "ss0097";
-
-		JSONObject empratinganswers = new JSONObject();
+        String userempcode=(String) session.getAttribute("employeecode"); 
+        try {
+			 empname=empdetails.getUserDetail(userempcode).getFirstName();
+		} catch (RemoteException e1) {
+			e1.printStackTrace();
+		}
+        JSONObject empratinganswers = new JSONObject();
 		try {
 			JSONParser parser = new JSONParser();
 			JSONObject json = (JSONObject) parser.parse(feedback);
-
-			List<JSONObject> listAnswers = (List<JSONObject>) json.get("data");
-
-			for (JSONObject hranswer : listAnswers) {
+            List<JSONObject> listAnswers = (List<JSONObject>) json.get("data");
+            for (JSONObject hranswer : listAnswers) {
 				Long serialid = (Long) hranswer.get("qid");
-
-				int sid = serialid.intValue();
-
-				String ans = (String) hranswer.get("value");
-
-				String finalans = ans.substring(3);// for eliminating integer
-													// value
-
-				System.out.println(finalans);
-
-				String feedbackby = "emp";
-
-				TblFeedbacks feedbackemp = new TblFeedbacks();
-
-				feedbackemp.setAnsText(finalans);
-				feedbackemp.setFeedbackBy(feedbackby);
-				feedbackemp.setFeedbackFrom(userempcode);
-
-				TblUserResignation resignedUser = resignationService.getResignationUserService(userempcode, 2);// for
-																												// resignation
-																												// id
-																												// where
-																												// empcode
-																												// and
-																												// status
-
-				MstQuestions question = approvalservice.getRmFeedbackQuestionService(sid);
-
-				feedbackemp.setMstQuestions(question);
-
-				feedbackemp.setTblUserResignation(resignedUser);
-
-				/*
-				 * empratinganswers=exitinterviewservice.submithrfeedback(
-				 * feedbackemp);
-				 */
-			}
-
-		} catch (Exception e) {
+                int sid = serialid.intValue();
+                String ans = (String) hranswer.get("value");
+                String finalans = ans.substring(3);
+              TblFeedbacks feedbackemprating = new TblFeedbacks();
+              feedbackemprating.setAnsText(finalans);
+              feedbackemprating.setFeedbackBy(empname);
+              feedbackemprating.setStageId(stageid);
+              feedbackemprating.setFeedbackFrom(userempcode);
+         TblUserResignation resignedUser = resignationService.getResignationUserService(userempcode, 7);
+           MstQuestions question = approvalservice.getRmFeedbackQuestionService(sid);
+           feedbackemprating.setMstQuestions(question);
+           feedbackemprating.setTblUserResignation(resignedUser);
+           empratinganswers = exitinterviewservice.submithrfeedback(feedbackemprating);
+           }
+} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -1922,47 +1830,46 @@ public class HomeController {
 	@RequestMapping(value = "/exemployee", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getexempregister(HttpServletRequest request) {
-
-		/*
-		 * @RequestParam("emp_code")String userid,
-		 * 
-		 * @RequestParam("emp_email")String email,
-		 * 
-		 * @RequestParam("emp_password")String password
-		 */
-
-		HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
 		String empcode = (String) session.getAttribute("employeecode");
-
-		System.out.println("register code " + empcode);
-
 		String userid = request.getParameter("emp_code");
 		String email = request.getParameter("emp_email");
 		String password = request.getParameter("emp_password");
-
-		JSONObject exempregister = new JSONObject();
-
-		try {
-
-			System.out.println(userid);
-			System.out.println(email);
-			System.out.println(password);
-
-			TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 7);
-
-			System.out.println("resignation id " + resignedUser);
-
-			/* TblUserResignation register=new TblUserResignation(); */
+       JSONObject exempregister = new JSONObject();
+try {
+TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 9);
+/* TblUserResignation register=new TblUserResignation(); */
 			resignedUser.setExEmpEmail(email);
 			resignedUser.setExEmpPassword(password);
 			resignedUser.setExEmpUserid(userid);
 			/* register.setComments(" ex employee id"); */
-
-			approvalservice.updateResignationStatus(resignedUser);
+approvalservice.updateResignationStatus(resignedUser);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return exempregister;
 	}
+	@RequestMapping(value="/noduesstatus",method=RequestMethod.GET)
+	@ResponseBody
+public JSONObject getothernodues(HttpServletRequest request){
+		JSONObject empstatus=new JSONObject();
+		String empcode=request.getParameter("employeecode");
+		TblUserResignation resignationbean=resignationService.getResignationUserService(empcode, 5);
+  int resignationId=resignationbean.getResignationId();
+  
+  empstatus=noduesservice.getNoDuesPendingStatus(resignationId);
+
+return empstatus;
+}
+	@RequestMapping(value="/employeefeedbackstatus",method=RequestMethod.GET)
+	@ResponseBody
+public JSONObject getemployeefeedbackstatus(HttpServletRequest request){
+		JSONObject employeefeedbackstatus=new JSONObject();
+		String empcode=request.getParameter("employeecode");
+		TblUserResignation resignationbean=resignationService.getResignationUserService(empcode, 7);
+        int resignationId=resignationbean.getResignationId();
+        employeefeedbackstatus=exitinterviewservice.listempfeedbackstatus(resignationId);
+return employeefeedbackstatus;
+}
 }
