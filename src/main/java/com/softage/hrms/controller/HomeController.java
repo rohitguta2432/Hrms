@@ -115,6 +115,7 @@ public class HomeController {
 
 	@Autowired
 	private QueryService queryService;
+	
 
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -139,16 +140,16 @@ public class HomeController {
 		ISoftAgeEnterpriseProxy i = new ISoftAgeEnterpriseProxy();
 		
 		String [] keys={"empcode"};
-		String [] values={"s00006"};
+		String [] values={"s42970"};
 		
 		
 		
-		try {
+		try { 	
 			String empInfo=i.enterPriseDataService("EVM","EmpInfo", keys,values);
 			JSONParser jsonParser =new JSONParser();
 			JSONObject jsonObject  = (JSONObject)jsonParser.parse(empInfo);
 			
-			
+			 
 			request.setAttribute("param1", i.getUserDetail("ss0077").getRoleId());
 			System.out.println(i.getUserDetail("ss0077").getRoleId());
 			model.addAttribute("emp", i.getUserDetail("ss0077").getFirstName());
@@ -173,9 +174,8 @@ public class HomeController {
 		System.out.println("The current datetime is : " + current_date);
 		ISoftAgeEnterpriseProxy emp_prxoy = new ISoftAgeEnterpriseProxy();
 		// try {
-		// int id=emp_prxoy.getUserDetail("ss0077").getRoleId(); standalones id
-		// int id=1;
 		jsobj = pageService.getPagesLink(roleid);
+		//jsobj=pageService.getPagesBasedOnRoleId(empcode,current_date,roleid); NEW METHOD TO BE MADE
 		// } catch (RemoteException e) {
 		// e.printStackTrace();
 		// }
@@ -186,19 +186,29 @@ public class HomeController {
 	@ResponseBody
 	public JSONObject getResignationReason(HttpServletRequest request, HttpSession session) {
 		session = request.getSession();
-		String empcode = (String) request.getAttribute("employeecode");
+		String empcode = (String) session.getAttribute("employeecode");
 		JSONObject jsonReason = new JSONObject();
 		JSONObject jsob = new JSONObject();
 		JSONObject jsonRelDate = new JSONObject();
 		ISoftAgeEnterpriseProxy emp_prxoy = new ISoftAgeEnterpriseProxy();
-		// int notice_time=emp_prxoy.getUserDetail("").getNoticePeriod(); We
-		// have to use ESF Service
-		int notice_time = 60;
-		jsonReason = resignationService.resignationInitialization();
-		jsonRelDate = resignationService.getReleivingDate(empcode, notice_time);
-		jsob.put("ReasonJson", jsonReason);
-		jsob.put("noticeTime", notice_time);
-		jsob.put("reldate", jsonRelDate);
+		String[] keys={"empcode"};
+		String[] values={empcode};
+		try {
+			String empInfo=emp_prxoy.enterPriseDataService("EVM","EmpInfo", keys,values);
+			System.out.println(empInfo);
+			JSONParser parser=new JSONParser();
+			JSONObject serviceJson=(JSONObject)parser.parse(empInfo);
+			//int notice_time=(Integer) serviceJson.get("NoticePeriod");ESF SERVICE TO BE USED
+			int notice_time = 60;
+			jsonReason = resignationService.resignationInitialization();
+			
+			jsonRelDate = resignationService.getReleivingDate(empcode, notice_time);
+			jsob.put("ReasonJson", jsonReason);
+			jsob.put("noticeTime", notice_time);
+			jsob.put("reldate", jsonRelDate);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return jsob;
 	}
 
@@ -221,54 +231,70 @@ public class HomeController {
 		MstReason reason_mast = resignationService.getReason(reason_for_leaving);
 		MstResignationStatus status_mast = resignationService.getStatus(1);
 		String remarks = request.getParameter("emp_comments");
-		// emp.getUserDetail(empcode).getReportingManager(); GET RM USING ESF
-		// SERVICE
-		// String hr_empcode=emp.getUserDetail(empcode).getHrManager(); GET HR
-		// USING ESF SERVICE
-		String rm_empcode = "ss0078";
-		String hr_empcode = "ss0073";
-		int noticeperiod = 60; // Get Notice Period Using ESF Service
-		String submit_date = df.format(dateobj);
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(dateobj);
-		cal.add(Calendar.DATE, noticeperiod);
-		// String release_Datetime=String.valueOf(cal.getTime());
-		Date release_Datetime = cal.getTime();
-		// Date reldate =
-		// Calendar.getInstance().setTimeInMillis(release_Datetime);
-		String relDate = String.valueOf(df.format(release_Datetime));
-		Date finalDate = new Date(relDate);
-		resignation.setComments(remarks);
-		resignation.setEmpCode(empcode);
-		resignation.setRmEmpcode(rm_empcode);
-		resignation.setHrEmpcode(hr_empcode);
-		resignation.setMstReason(reason_mast);
-		resignation.setReleivingDate(finalDate);
-		resignation.setResignationDate(dateobj);
-		resignation.setMstResignationStatus(status_mast);
-		jsonObj = resignationService.submitResignationService(resignation);
-		// emp.getUserDetail(emp_code).getRMEmail(); RM email Using ESF service
-		// emp.getUserDetail(emp_code).getHREmail(); HR email Using ESF service
-		// emp.getUserDetail(emp_code).getEmail(); EMployee Email
-		// String manager_email=resignationService.getRmEmail(employee_code);
-		String manager_email = "arpan.mathur@softageindia.com";// ESF Service
-		String hr_email = "arpan.mathur@softageindia.com";
-		String emp_email = "arpan.mathur@softageindia.com";
-		// System.out.println(manager_email);
-		String rm_message = "Request for resignatin has been raised by " + empcode + " for RM";
-		String hr_message = "Request for resignatin has been raised by " + empcode + " for HR";
-		String emp_message = "Request for resignation has been raised by you";
-		if (jsonObj.get("result").equals("successful")) {
-			try {
-				mailService.sendEmail(manager_email, "evm@softageindia.com", "test", rm_message);
-				mailService.sendEmail(hr_email, "evm@softageindia.com", "test", hr_message);
-				mailService.sendEmail(emp_email, "evm@softageindia.com", "test", emp_message);
-			} catch (Exception e) {
-				// e.printStackTrace();
-				System.out.println("Problem is sending email");
+		String[] keys={"empcode"};
+		String[] values={empcode};
+		String[] key_hr={"OFFICECODE"};
+		try {
+			String empinfo=emp.enterPriseDataService("EVM", "EmpInfo", keys, values);
+			JSONParser parser=new JSONParser();
+			JSONObject serviceJson=(JSONObject)parser.parse(empinfo);
+			//int noticeperiod=(Integer)serviceJson.get("NoticePeriod");
+			//String rm_empcode =(String)serviceJson.get("ManagerCode");
+			String empHrInfo=emp.enterPriseDataService("EVM", "NODUESOWNERS", key_hr, values);
+			JSONObject hrJson=(JSONObject)parser.parse(empHrInfo);
+			//String hr_empcode=(String)hrJson.get("HrEmpCode");
+			//int noticeperiod=(Integer)serviceJson.get("NoticePeriod");
+			String rm_empcode = "ss0078";
+			String hr_empcode = "ss0073";
+			int noticeperiod = 60; // Get Notice Period Using ESF Service
+			String submit_date = df.format(dateobj);
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(dateobj);
+			cal.add(Calendar.DATE, noticeperiod);
+			// String release_Datetime=String.valueOf(cal.getTime());
+			Date release_Datetime = cal.getTime();
+			// Date reldate =
+			// Calendar.getInstance().setTimeInMillis(release_Datetime);
+			String relDate = String.valueOf(df.format(release_Datetime));
+			Date finalDate = new Date(relDate);
+			resignation.setComments(remarks);
+			resignation.setEmpCode(empcode);
+			resignation.setRmEmpcode(rm_empcode);
+			resignation.setHrEmpcode(hr_empcode);
+			resignation.setMstReason(reason_mast);
+			resignation.setReleivingDate(finalDate);
+			resignation.setResignationDate(dateobj);
+			resignation.setMstResignationStatus(status_mast);
+			jsonObj = resignationService.submitResignationService(resignation);
+			// emp.getUserDetail(emp_code).getRMEmail(); RM email Using ESF service
+			// emp.getUserDetail(emp_code).getHREmail(); HR email Using ESF service
+			// emp.getUserDetail(emp_code).getEmail(); EMployee Email
+			// String manager_email=resignationService.getRmEmail(employee_code);
+			String manager_email = "arpan.mathur@softageindia.com";// ESF Service
+			String hr_email = "arpan.mathur@softageindia.com";
+			String emp_email = "arpan.mathur@softageindia.com";
+			// System.out.println(manager_email);
+			String rm_message = "Request for resignatin has been raised by " + empcode + " for RM";
+			String hr_message = "Request for resignatin has been raised by " + empcode + " for HR";
+			String emp_message = "Request for resignation has been raised by you";
+			if (jsonObj.get("result").equals("successful")) {
+				try {
+					mailService.sendEmail(manager_email, "evm@softageindia.com", "test", rm_message);
+					mailService.sendEmail(hr_email, "evm@softageindia.com", "test", hr_message);
+					mailService.sendEmail(emp_email, "evm@softageindia.com", "test", emp_message);
+				} catch (Exception e) {
+					// e.printStackTrace();
+					System.out.println("Problem is sending email");
+				}
 			}
-		}
 
+		} catch (RemoteException e1) {
+			e1.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		
 		return jsonObj;
 	}
 
@@ -516,6 +542,38 @@ public class HomeController {
 		return resigneduser;
 	}
 
+	@RequestMapping(value="/exEmployeeLogin",method=RequestMethod.GET)
+	public String getExEmpLogin(Model model){
+		model.addAttribute("loginBean",new TblUserResignation());
+		return "login";
+	}
+	
+	@RequestMapping(value="/checkLogin",method=RequestMethod.POST)
+	public String authenticate(@ModelAttribute("loginBean") TblUserResignation tbluserresignation,Model model,
+			HttpServletRequest request){
+		String emp_code=tbluserresignation.getExEmpUserid();
+		TblUserResignation ex_emp=resignationService.getResignationUserService(emp_code, 13);
+		if(ex_emp!=null){
+			HttpSession session=request.getSession();
+			session.setAttribute("resignID", ex_emp.getResignationId());
+			session.setAttribute("employeecode", ex_emp.getEmpCode());
+			session.setAttribute("roleid", 50);
+			session.setAttribute("hrapprovaldate", ex_emp.getHrApprovalDate());
+			session.setAttribute("hrempcode", ex_emp.getHrEmpcode());
+			session.setAttribute("hrlwd", ex_emp.getHrLwdDate());
+			session.setAttribute("resdate", ex_emp.getResignationDate());
+			session.setAttribute("rmapprovaldate", ex_emp.getRmApprovalDate());
+			session.setAttribute("rmempcode", ex_emp.getRmEmpcode());
+			session.setAttribute("exexmpcode",ex_emp.getExEmpUserid());
+			session.setAttribute("exempemail", ex_emp.getExEmpEmail());
+			return "home";
+			
+		}else{
+			model.addAttribute("msg", "Incorrect Username or Password");
+			return "login";
+		}
+	}
+	
 	@RequestMapping(value = "/getNoDuesStatuses", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getNoDuesPendingStatuses(HttpServletRequest request, HttpSession session) {
@@ -1130,13 +1188,12 @@ public class HomeController {
 		JSONArray list = new JSONArray();
 		int circle_code = (Integer) session.getAttribute("circleid");
 		String empcode = (String) session.getAttribute("employeecode");
-	
 		int deptId =1 ;													
 		int status = 0;													
 	
 		if(deptId==1){
 
-			status = 7;
+			status = 9;
 		}
 
 		if(deptId==2){
@@ -1149,7 +1206,8 @@ public class HomeController {
 		JSONObject resignations = null;
 
 		try {
-			resignations = resignationService.getHrApprovalInitService(empcode, status, circle_code);
+			resignations=resignationService.getResignationModelByCircleID(circle_code);
+			//resignations = resignationService.getHrApprovalInitService(empcode, status, circle_code);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1561,38 +1619,50 @@ public class HomeController {
 		List<String> rm_list = resignationService.getAllResignedUserRMs();
 		Set<String> to_show = new HashSet<String>();
 		for (String rm : rm_list) {
+			String[] keys={"empcode"};
+			String[] values={emp_code};
 			String rm_rm1 = "ss0053";
 			String rm_rm2 = "ss0050";
 			ISoftAgeEnterpriseProxy emp = new ISoftAgeEnterpriseProxy();
-			/*
-			 * String rm_rm1=emp.getUserDetail(rm).getRmManager(); USE ESF
-			 * SERVICE String rm_rm2=emp.getUserDetail(rm_rm1).getRmManager();
-			 */
-			if ((rm_rm1 == null || rm_rm1 == "") && emp_code.equals(rm)) {
-				to_show.add(rm);
-				// continue;
-			} else if ((rm_rm1 == null || rm_rm1 == "") && !emp_code.equals(rm)) {
-				continue;
-			} else if (rm_rm2 == null || rm_rm2 == "") {
-				if (emp_code.equals(rm)) {
+			try {
+				String empinfo=emp.enterPriseDataService("EVM", "EmpInfo", keys, values);
+				JSONParser parser=new JSONParser();
+				JSONObject serviceJson=(JSONObject)parser.parse(empinfo);
+				//String rm_rm1=(String)serviceJson.get("ManagerCode");
+				String[] rmkey={"empcode"};
+				String[] rmvalues={rm_rm1};
+				String rm_empinfo=emp.enterPriseDataService("EVM", "EmpInfo", rmkey, rmvalues);
+				JSONObject rm_rmJson=(JSONObject)parser.parse(rm_empinfo);
+				//String rm_rm2=(String)rm_rmJson.get("ManagerCode");
+				if ((rm_rm1 == null || rm_rm1 == "") && emp_code.equals(rm)) {
 					to_show.add(rm);
-				} else if (emp_code.equals(rm_rm1)) {
-					to_show.add(rm);
-				} else {
+					// continue;
+				} else if ((rm_rm1 == null || rm_rm1 == "") && !emp_code.equals(rm)) {
 					continue;
-				}
-			} else {
+				} else if (rm_rm2 == null || rm_rm2 == "") {
+					if (emp_code.equals(rm)) {
+						to_show.add(rm);
+					} else if (emp_code.equals(rm_rm1)) {
+						to_show.add(rm);
+					} else {
+						continue;
+					}
+				} else {
 
-				if (emp_code.equals(rm)) {
-					to_show.add(rm);
-				} else if (emp_code.equals(rm_rm1)) {
-					to_show.add(rm);
-				} else if (emp_code.equals(rm_rm2)) {
-					to_show.add(rm);
-				} else {
-					continue;
+					if (emp_code.equals(rm)) {
+						to_show.add(rm);
+					} else if (emp_code.equals(rm_rm1)) {
+						to_show.add(rm);
+					} else if (emp_code.equals(rm_rm2)) {
+						to_show.add(rm);
+					} else {
+						continue;
+					}
 				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+			
 		}
 		jsonApproval = resignationService.getAllResignedUsers(to_show);
 		return jsonApproval;
@@ -1611,29 +1681,43 @@ public class HomeController {
 			String hr_hr1 = "ss0073";
 			String hr_hr2 = "ss0029";
 			ISoftAgeEnterpriseProxy emp = new ISoftAgeEnterpriseProxy();
-			// String hr_hr1=emp.getUserDetail(hr).getHrManager(); USE ESF
-			// SERVICE
-			// String hr_hr2=emp.getUserDetail(hr_hr1).getHrManager();
-			if ((hr_hr1 == null || hr_hr1 == "") && emp_code.equals(hr)) {
-				hr_to_show.add(hr);
-			} else if ((hr_hr1 == null && hr_hr1 == "") && !emp_code.equals(hr)) {
-				continue;
-			} else if (hr_hr2 == null && hr_hr2 == "") {
-				if (emp_code.equals(hr)) {
+			String[] key={"empcode"};
+			String[] values={emp_code};
+			try {
+				String empinfo=emp.enterPriseDataService("EVM", "EmpInfo", key, values);
+				JSONParser parser=new JSONParser();
+				JSONObject serviceJson=(JSONObject)parser.parse(empinfo);
+				//String hr_hr1=(String)serviceJson.get("ManagerCode");
+				String[] hr_key={"empcode"};
+				String[] hr_values={hr_hr1};
+				String hr_empinfo=emp.enterPriseDataService("EVM", "EmpInfo", hr_key, hr_values);
+				JSONObject hr_json=(JSONObject)parser.parse(hr_empinfo);
+				//String hr_hr2=(String)hr_json.get("ManagerCode");
+				if ((hr_hr1 == null || hr_hr1 == "") && emp_code.equals(hr)) {
 					hr_to_show.add(hr);
-				} else if (emp_code.equals(hr_hr1)) {
-					hr_to_show.add(hr);
-				}
-			} else {
-				if (emp_code.equals(hr)) {
-					hr_to_show.add(hr);
-				} else if (emp_code.equals(hr_hr1)) {
-					hr_to_show.add(hr);
-				} else if (emp_code.equals(hr_hr2)) {
-					hr_to_show.add(hr);
-				} else {
+				} else if ((hr_hr1 == null && hr_hr1 == "") && !emp_code.equals(hr)) {
 					continue;
+				} else if (hr_hr2 == null && hr_hr2 == "") {
+					if (emp_code.equals(hr)) {
+						hr_to_show.add(hr);
+					} else if (emp_code.equals(hr_hr1)) {
+						hr_to_show.add(hr);
+					}
+				} else {
+					if (emp_code.equals(hr)) {
+						hr_to_show.add(hr);
+					} else if (emp_code.equals(hr_hr1)) {
+						hr_to_show.add(hr);
+					} else if (emp_code.equals(hr_hr2)) {
+						hr_to_show.add(hr);
+					} else {
+						continue;
+					}
 				}
+			}
+			 catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		hrapprovaljson = resignationService.getAllResignedUsersHR(hr_to_show);

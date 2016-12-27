@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tempuri.ISoftAgeEnterpriseProxy;
@@ -202,5 +203,60 @@ public class ResignationServiceImpl implements ResignationService {
 	public TblUserResignation getById(int id) {
 		// TODO Auto-generated method stub
 		return resignationdao.getById(id);
+	}
+
+	@Override
+	public JSONObject getResignationModelByCircleID(int circleID) {
+		int count=1;
+		DateFormat df=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		JSONObject resListJson=new JSONObject();
+		List<JSONObject> jsonList=new ArrayList<JSONObject>();
+		List<TblUserResignation> resignedUsers=resignationdao.getResignationModelByCircleID(circleID);
+		for(TblUserResignation resbean : resignedUsers){
+			JSONObject resJson=new JSONObject();
+			String empcode=resbean.getEmpCode();
+			ISoftAgeEnterpriseProxy emp=new ISoftAgeEnterpriseProxy();
+			try {
+				String fname = emp.getUserDetail(empcode).getFirstName();
+				String lname=emp.getUserDetail(empcode).getLastName();
+				String name=fname+lname;
+				MstReason reason=resbean.getMstReason();
+				String reason_for_leaving=reason.getReason();
+				int resignId=resbean.getResignationId();
+				String remarks=resbean.getComments();
+				int notice_period=60;
+				String[] keys={"empcode"};
+				String[] values={empcode};
+				//String empinfo=emp.enterPriseDataService("EVM", "EmpInfo", keys, values);
+				//JSONParser parser=new JSONParser();
+				//JSONObject empInformation=(JSONObject)parser.parse(empinfo);
+				//int notice_period=(Integer)empInformation.get("NoticePeriod");
+				//String rm_email=(String)empInformation.get("ManagerEmail");
+				Date resDate=resbean.getResignationDate();
+				String resignDate=df.format(resDate);
+				String rmempcode=resbean.getRmEmpcode();
+				//String rm_email=emp.getUserDetail(rmempcode).getEmail(); FROM ESF SERVICE
+				String rm_email="arpan.mathur@softageindia.com";
+				resJson.put("sno", count);
+				resJson.put("empname", name);
+				resJson.put("empcode", empcode);
+				resJson.put("leaving_reason", reason_for_leaving);
+				resJson.put("remarks", remarks);
+				resJson.put("noticetime", notice_period);
+				resJson.put("resignDate", resignDate);
+				resJson.put("rm_empcode", rmempcode);
+				resJson.put("resignId", resignId);
+				resJson.put("rm_email", rm_email);
+				jsonList.add(resJson);
+				count=count+1;
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			
+		}
+		resListJson.put("empinfo", jsonList);
+		return resListJson;
 	}
 }

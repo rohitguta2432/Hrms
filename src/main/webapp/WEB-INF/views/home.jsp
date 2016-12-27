@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="resources/libs/css/ace.css" id="main-ace-style" />
     <!-- ace settings handler -->
     
-    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.css' type='text/css' media='all' />
+    <link rel='stylesheet' href='resources/libs/css/loading-bar.min.css' type='text/css' media='all' />
     
     <script src="resources/libs/js/jquery.min.js"></script>
 
@@ -30,6 +30,7 @@
 	<!-- <script src="resources/libs/bootstrap/dist/js/bootstrap.min.js"></script> -->
 	 <script src="resources/libs/jquery/dist/jquery-ui.min.js"></script> 
 	<script src="resources/libs/ui-bootstrap-tpls-0.14.3.min.js"></script>
+	<script src="resources/libs/loading-bar.min.js"></script>
 	<script src="resources/js/home.js"></script>
 	<script src="resources/js/rmapproval/approval.js"></script>
 	<!-- <script src="resources/js/approvalActionModal.js"></script> -->
@@ -37,7 +38,6 @@
 	<script src="resources/js/dowmloadDocument/download.js"></script>
 	<script src="resources/js/document/upload.js"></script>
 	<script src="resources/js/empfeedback/exitemprate.js"></script>
-	<script src="resources/js/exitrm.js"></script>
 	<script src="resources/js/empfeedback/exitemp.js"></script>
 	<script src="resources/js/hrfeedback/exitemphr.js"></script>
 	<script src="resources/js/hrfeedback/exithrmodal.js"></script>  
@@ -56,7 +56,7 @@
 	<script src="resources/js/query/query.js"></script>
 	<script src="resources/js/managerQuery/queryList.js"></script>
 	<script src="resources/js/exemployee/register.js"></script>
-	<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.js'></script>
+
 </head>
 <body class="no-skin" ng-controller="homeController" ng-init="getLinks()">
     <div id="navbar" class="navbar navbar-default navbar-collapse h-navbar">

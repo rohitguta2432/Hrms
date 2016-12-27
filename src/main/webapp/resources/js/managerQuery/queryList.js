@@ -1,5 +1,6 @@
 application.controller('MangerQueryController', ['$scope', '$http','$modal','$location','$rootScope', function ($scope, $http,$modal,$location,$rootScope) {
 	
+	/*app.controller('MangerQueryController', ['$scope', '$http','$modal','$location','$rootScope', function ($scope, $http,$modal,$location,$rootScope) {*/
 	
 	$scope.getQueryList=function(){
 		alert('initializing ')

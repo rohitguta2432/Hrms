@@ -35,5 +35,5 @@ public interface ISoftAgeEnterprise extends java.rmi.Remote {
     public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.OfficeMaster[] getCorporateOfficeMaster(java.lang.Integer officeTypeId) throws java.rmi.RemoteException;
     public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.CenterMaster[] getCenterMaster() throws java.rmi.RemoteException;
     public java.lang.Integer getUserCenter(java.lang.Integer userId) throws java.rmi.RemoteException;
-    public java.lang.String enterPriseDataService(java.lang.String service, java.lang.String operation, com.microsoft.schemas._2003._10.Serialization.Arrays.ArrayOfKeyValueOfstringstringKeyValueOfstringstring[] list) throws java.rmi.RemoteException;
+    public java.lang.String enterPriseDataService(java.lang.String service, java.lang.String operation, java.lang.String[] keys, java.lang.String[] values) throws java.rmi.RemoteException;
 }

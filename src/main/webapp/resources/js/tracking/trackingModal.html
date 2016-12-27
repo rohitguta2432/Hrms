@@ -48,7 +48,7 @@
             <div class="form-group col-sm-12" >
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">HR Status :</label>
                 <div class="col-sm-12" >
-                 <input type="text" ng-if="resStatusid > '2' && resStatusid < '5' && resStatusid != '3' " ng-disabled="true" value="Last Working Day Decision Pending" >
+                 <input type="text" ng-if="resStatusid > '1' && resStatusid < '5' && resStatusid != '3' " ng-disabled="true" value="Last Working Day Decision Pending" >
                 <input type="text" ng-if="resStatusid > '4' " ng-disabled="true" value="Last Working Day Decided" >
                 <input type="text" ng-if="resStatusid < '2' " ng-disabled="true" value="Resignation Pending With RM" >
                 <input type="text" ng-if="resStatusid == '3' " ng-disabled="true" value="Resignation Rejected By RM" >
@@ -101,7 +101,7 @@
           <div class="form-group col-sm-12" >
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Exit Interviews Pending :</label>
                 <div class="col-sm-12">
-                 <input type="text" ng-if="resStatusid >'7' && resStatusid <'9'" ng-disabled="true" value="Exit Interview Pending">
+                 <input type="text" ng-if="resStatusid >'6' && resStatusid <'9'" ng-disabled="true" value="Exit Interview Pending">
                  <input type="text" ng-if="resStatusid <'7' && resStatusid!='3'" ng-disabled="true" value="Exit Interview Initiation Pending">
                  <input type="text" ng-if="resStatusid == '3'" ng-disabled="true" value="Resignation Rejected By RM">
                   <input type="text" ng-if="resStatusid > '8'" ng-disabled="true" value="Exit Interview Completed">

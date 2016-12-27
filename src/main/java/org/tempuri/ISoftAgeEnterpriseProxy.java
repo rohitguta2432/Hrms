@@ -206,10 +206,10 @@ public class ISoftAgeEnterpriseProxy implements org.tempuri.ISoftAgeEnterprise {
     return iSoftAgeEnterprise.getUserCenter(userId);
   }
   
-  public java.lang.String enterPriseDataService(java.lang.String service, java.lang.String operation, com.microsoft.schemas._2003._10.Serialization.Arrays.ArrayOfKeyValueOfstringstringKeyValueOfstringstring[] list) throws java.rmi.RemoteException{
+  public java.lang.String enterPriseDataService(java.lang.String service, java.lang.String operation, java.lang.String[] keys, java.lang.String[] values) throws java.rmi.RemoteException{
     if (iSoftAgeEnterprise == null)
       _initISoftAgeEnterpriseProxy();
-    return iSoftAgeEnterprise.enterPriseDataService(service, operation, list);
+    return iSoftAgeEnterprise.enterPriseDataService(service, operation, keys, values);
   }
   
   

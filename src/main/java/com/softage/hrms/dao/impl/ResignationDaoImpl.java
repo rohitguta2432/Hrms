@@ -309,7 +309,8 @@ public class ResignationDaoImpl implements ResignationDao {
 		TblUserResignation tblresignation=null;
 		try{
 			Session session=this.sessionFactory.getCurrentSession();
-			tblresignation=(TblUserResignation)session.load(TblUserResignation.class, new Integer(id));
+			tblresignation=(TblUserResignation)session.get(TblUserResignation.class, new Integer(id));
+			//tblresignation=(TblUserResignation)session.load(TblUserResignation.class, new Integer(id));
 
 		}catch (Exception e) {
 			logger.error("",e);
@@ -317,6 +318,17 @@ public class ResignationDaoImpl implements ResignationDao {
 
 
 		return  tblresignation;
+	}
+
+	@Override
+	@Transactional
+	public List<TblUserResignation> getResignationModelByCircleID(int cirID) {
+		Session session=this.sessionFactory.getCurrentSession();
+		String hql="Select resBean from TblUserResignation resBean join fetch resBean.mstReason where resBean.circleId=:cirID";
+		Query query=session.createQuery(hql);
+		query.setParameter("cirID", cirID);
+		List<TblUserResignation> resignedUsers=query.list();
+		return resignedUsers;
 	}
 
 

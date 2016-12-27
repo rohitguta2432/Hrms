@@ -1,5 +1,4 @@
 application.controller('documentDownload', ['$scope', '$http', function ($scope, $http) {
-
 	$scope.downloadItem=function(){
 		alert(' geting Upload Items   ');
 		$http.get(domain+'/getDownloadItem')
