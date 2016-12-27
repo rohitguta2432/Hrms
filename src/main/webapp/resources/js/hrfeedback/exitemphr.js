@@ -39,7 +39,7 @@ application.controller('hrfeedbackcontroller', function($scope, $http, $modal,
 $http.get(domain+'/employeefeedbackstatus?employeecode='+$scope.emp_code)
 	.success(function(data,status,headers,config){
 	 $scope.feedbackstatus=data.statusemp;
-	 alert($scope.feedbackstatus)
+	/* alert($scope.feedbackstatus)*/
 		
 	})
 .error(function(data,status,headers,config){

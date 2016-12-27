@@ -12,7 +12,7 @@
 			} catch (e) {
 			}
 		</script>
-		<div class="main-content" ng-controller="registercontroller" ng-init="init()">
+		<div class="main-content" ng-controller="registercontroller">
 
 			<div class="page-content">
 				<div class="page-content-area">
@@ -54,7 +54,7 @@
 																for="employeeemail">Employee Email </label>
 															<div class="col-sm-9">
 <input type="email"  class="col-xs-10 col-sm-12" name="email"  ng-model="Employeeemail" placeholder="email" required="true"/>
- <span "ng-show="register.email.$dirty && register.email.$error.required">Email Required!</span>
+<!--  <span "ng-show="register.email.$dirty && register.email.$error.required">Email Required!</span> -->
  <span class="error" ng-show="register.email.$error.email">Not valid email!</span>
 				</div>
 </div>
@@ -76,7 +76,7 @@
 															<div class="col-sm-9">
 <input type="password"  class="col-xs-10 col-sm-12" name='user_password'  ng-model="passwordverify" placeholder='confirm password' ng-required="true"/>
 <span ng-show="password !==passwordverify">password mismatch</span>
-<span ng-show="register.user_password.$dirty && register.user_password.$error.required">Password Required!</span>
+<!-- <span ng-show="register.user_password.$dirty && register.user_password.$error.required">Password Required!</span> -->
 
 				</div>
 </div>

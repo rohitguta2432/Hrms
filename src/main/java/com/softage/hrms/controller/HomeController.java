@@ -336,7 +336,7 @@ public class HomeController {
 				feedback.setAnsText(ans);
 				feedback.setFeedbackBy(feedbackby);
 				feedback.setFeedbackFrom(empcode);
-
+                feedback.setStageId(1);
 				MstQuestions question = approvalservice.getRmFeedbackQuestionService(sid);
 				feedback.setMstQuestions(question);
 				feedback.setTblUserResignation(resignedUser);
@@ -433,6 +433,7 @@ public class HomeController {
 		hr_lwd_comment.setFeedbackBy("HR");
 		hr_lwd_comment.setFeedbackFrom(hrempcode);
 		hr_lwd_comment.setMstQuestions(hrcomment);
+		hr_lwd_comment.setStageId(2);
 		hr_lwd_comment.setTblUserResignation(resignation);
 		String lwdStatus = approvalservice.insertHrLwdService(resignation);
 		/* We have to use ESF service to get emails */

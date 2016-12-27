@@ -120,8 +120,36 @@ public class ExitInterviewDaoImpl implements ExitInterviewDao {
 			for(TblFeedbacks status:empfeedback)
 			{
 				JSONObject feedbackstatus=new JSONObject();
-				feedbackstatus.put("empstatus", status.getStageId());
-				System.out.println(status.getStageId());
+//				feedbackstatus.put("empstatus", status.getStageId());
+				if(status.getStageId()==3){
+					feedbackstatus.put("statuslbl", "Employee Feedback Status");
+				}else if(status.getStageId()==4){
+					feedbackstatus.put("statuslbl", "Employee Rating Status");
+				}
+				
+				if(status.getStageId()==3)
+				{
+					feedbackstatus.put("statustext", "Feedback Completed");
+				}
+				else{
+					if(status.getStageId()!=4){
+						feedbackstatus.put("statustext", "Feedback Pending");
+					}
+				}
+				
+				if(status.getStageId()==4)
+				{
+					feedbackstatus.put("statustext", "Rating Completed");
+				}
+				else{
+					if(status.getStageId()!=3){
+						feedbackstatus.put("statustext", "Rating Pending");
+					}
+				}
+				
+				
+				
+				/*System.out.println(status.getStageId());*/
 				listarray.add(feedbackstatus);
 			}
 			liststageid.put("statusemp", listarray);

@@ -1,7 +1,8 @@
-var application = angular.module('home', [ 'ui.router', 'ui.bootstrap']);
+var application = angular.module('home', [ 'ui.router', 'ui.bootstrap','angular-loading-bar']);
 //var domain = 'http://localhost:8080/hrms';
 var domain = '/hrms';
-application.config(function($stateProvider, $urlRouterProvider) {
+application.config(function($stateProvider, $urlRouterProvider, cfpLoadingBarProvider) {
+	cfpLoadingBarProvider.includeSpinner = false;
 	$stateProvider.state('Resignation', {
 		url : '/Resignation',
 		templateUrl : 'resources/js/resignation/resignation.html',
