@@ -18,10 +18,9 @@
     <link rel="stylesheet" href="resources/libs/css/ace.css" id="main-ace-style" />
     <!-- ace settings handler -->
     
-    <link rel='stylesheet' href='resources/libs/css/loading-bar.min.css' type='text/css' media='all' />
+    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.css' type='text/css' media='all' />
     
     <script src="resources/libs/js/jquery.min.js"></script>
-
     <script src="resources/libs/js/ace-extra.js"></script>
     <link href="resources/libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 	<script src="resources/libs/angular.min.js" ></script>
@@ -56,7 +55,7 @@
 	<script src="resources/js/query/query.js"></script>
 	<script src="resources/js/managerQuery/queryList.js"></script>
 	<script src="resources/js/exemployee/register.js"></script>
-
+	<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.js'></script>
 </head>
 <body class="no-skin" ng-controller="homeController" ng-init="getLinks()">
     <div id="navbar" class="navbar navbar-default navbar-collapse h-navbar">

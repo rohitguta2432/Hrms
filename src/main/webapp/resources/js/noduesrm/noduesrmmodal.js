@@ -10,9 +10,8 @@ application.controller('noduesrmmodalcontroller', function($scope, $http,
 						/* alert('data are found'); */
 
 						$scope.emplycode = data.empcode;
-						$scope.empfirstname = data.firstname;
-						$scope.emplastname = data.lastname;
-						$scope.empdepartment = data.department;
+						$scope.empfirstname = data.empname;
+					    $scope.empdepartment = data.department;
 						$scope.empdesignation = data.designation;
 						$scope.emplocation = data.location;
 

@@ -3,8 +3,7 @@ application.controller('feedbackmodalcontroller',function($scope,$http,$window,$
 $http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 			.success(function(data, status, headers, config){
 			    $scope.employeecode=data.empcode;
-				$scope.employeefirstname=data.firstname;
-				$scope.employeelastname=data.lastname;
+				$scope.employeefirstname=data.empname;
 				$scope.employeedepartment=data.department;
 				$scope.employeedesignation=data.designation;
 				$scope.employeelocation=data.location;

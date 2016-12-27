@@ -6,8 +6,7 @@ application.controller('noduesitmodaljscontroller', function($scope, $http,
 							+ $scope.emp_code).success(
 					function(data, status, headers, config) {
 						$scope.emplycode = data.empcode;
-						$scope.empfirstname = data.firstname;
-						$scope.emplastname = data.lastname;
+						$scope.empfirstname = data.empname;
 						$scope.empdepartment = data.department;
 						$scope.empdesignation = data.designation;
 						$scope.emplocation = data.location;

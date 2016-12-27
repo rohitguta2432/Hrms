@@ -4,8 +4,7 @@ $http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 			/*alert('data are found');*/
 				
 				$scope.emplycode=data.empcode;
-				$scope.empfirstname=data.firstname;
-				$scope.emplastname=data.lastname;
+				$scope.empfirstname=data.empname;
 				$scope.empdepartment=data.department;
 				$scope.empdesignation=data.designation;
 				$scope.emplocation=data.location;

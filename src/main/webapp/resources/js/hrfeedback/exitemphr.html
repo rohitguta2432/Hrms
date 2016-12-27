@@ -45,9 +45,8 @@
 																<tr>
 																	<th>S.No</th>
 																	<th>Employee Code</th>
-																	<th>Firstname</th>
-																	<th>Lastname</th>
-																	<th>Department</th>
+																	<th>Employee name</th>
+																	<th>DepartmentID</th>
 																	<th>Designation</th>
 																	<th>Location</th>
 																	<th>Action</th>
@@ -57,13 +56,12 @@
 																<tr>
 																	<td>{{emp.sno}}</td>
 																	<td>{{emp.empcode}}</td>
-																	<td>{{emp.firstname}}</td>
-																	<td>{{emp.lastname}}</td>
-																	<td>{{emp.department}}</td>
+																	<td>{{emp.empname}}</td>
+																    <td>{{emp.department}}</td>
 																	<td>{{emp.designation}}</td>
 																	<td>{{emp.location}}</td>
-																	<td><button  class="btn btn-primary btn-sm"
-																	 ng-click="EmployeeFeedback(emp.empcode)">FEEDBACK 
+																	<td><button  class="btn btn-primary btn-sm" 
+																	 ng-click="EmployeeFeedback(emp.empcode)" ng-disable="$scope.feedback_status=true">FEEDBACK 
 																	</button></td>
 																	<td><button  class="btn btn-warning" 
 																	 ng-click="EmployeeFeedbackStatus(emp.empcode)">FEEDBACK STATUS 

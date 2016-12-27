@@ -30,8 +30,7 @@ public class NoDuesDaoImpl implements NoDuesDao {
 	@Override
 	@Transactional
 	public List<String> getrmacceptedempcode(int circleid,int status) {
-
-		org.hibernate.Session session=sessionfactory.getCurrentSession();
+        org.hibernate.Session session=sessionfactory.getCurrentSession();
 		String hql="select empCode from TblUserResignation where circleId=:circleid and status=:status";
 		Query query=session.createQuery(hql);
 		query.setParameter("circleid", circleid);
@@ -55,15 +54,12 @@ public class NoDuesDaoImpl implements NoDuesDao {
      {
     	 JSONObject JSONObject=new JSONObject();
     	 JSONObject.put("name", assets.getAssetsName());
-       	 stringlist.add(JSONObject);    	 
-      
-     }    
+    	 
+    	 stringlist.add(JSONObject);    	 
+   }    
       return stringlist;
-
-	}
-
-
-	@Override
+    }
+    @Override
 	@Transactional
 	public JSONObject insertnoduesassetsdetails(TblAssetsManagement accountbean) {
 		JSONObject insertbean=new JSONObject();

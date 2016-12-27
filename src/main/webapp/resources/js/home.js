@@ -116,8 +116,6 @@ application.config(function($stateProvider, $urlRouterProvider, cfpLoadingBarPro
 
 	});
 });
-
-
 application.controller('homeController', function($scope, $http) {
 	$scope.getLinks = function() {
 		$http.get(domain + '/getPages').success(

@@ -5,8 +5,7 @@ application.controller('exitempcontroller', function($scope, $http,$location) {
 
 				/* alert('data are found '+ data); */
 				$scope.Employeecode = data.empcode;
-				$scope.empfirstname = data.firstname;
-				$scope.Emplastname = data.lastname;
+				$scope.empfirstname = data.empname;
 				$scope.empdepartment = data.department;
 				$scope.empdesignation = data.designation;
 				$scope.Emplocation = data.location;

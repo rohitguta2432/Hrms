@@ -50,10 +50,10 @@ table tr:nth-child(even) {
 													<form name="exitEmp" ng-submit=submit(exitEmp) novalidate>
 
 														<table>
-
+<div class="center">
 															<tr>
 																<!-- <th>S.No</th> -->
-																<br />
+																<br/>
 
 																<th>Factors</th>
 																<th>Poor</th>
@@ -62,33 +62,35 @@ table tr:nth-child(even) {
 																<th>Good</th>
 																<th>Excellent</th>
 
-															</tr>
-<div >
-		<div>
-				<tr ng-if="feedback.qtype=='radio'" ng-repeat="feedback in empratingquestion">
-																 
-																		<!-- <td>{{feedback.sno}}</td> -->
-																		<td>{{feedback.question}}</td>
-										                              	<td><input type="radio"  value="{{feedback.qid}} poor" ng-model="feedback.value" ng-change=getRadioValue(feedback)></td>
-																		<td><input type="radio" value="{{feedback.qid}} average" ng-model="feedback.value" ng-change=getRadioValue(feedback)></td>
-																		<td><input type="radio" value="{{feedback.qid}} Above Average" ng-model="feedback.value" ng-change=getRadioValue(feedback)></td>
-																		<td><input type="radio" value="{{feedback.qid}} Good" ng-model="feedback.value" ng-change=getRadioValue(feedback)> </td>
-																		<td><input type="radio" value="{{feedback.qid}} Excellent" ng-model="feedback.value" ng-change=getRadioValue(feedback)></td>
-																	
-																	</tr>
-																	
-															</div>
-															</div>
-															</div>
+														</tr>
+<div>
 
+		
+				<tr ng-if="feedback.qtype=='radio'" ng-repeat="feedback in empratingquestion">
+															 
+																	
+																		<td>{{feedback.question}}</td>
+										                              	<td><input type="radio"  value="{{feedback.qid}} poor" ng-model="feedback.value" ng-change=getRadioValue(feedback) required="true"></td>
+																		<td><input type="radio" value="{{feedback.qid}} average" ng-model="feedback.value" ng-change=getRadioValue(feedback) required="true"></td>
+																		<td><input type="radio" value="{{feedback.qid}} Above Average" ng-model="feedback.value" ng-change=getRadioValue(feedback) required="true"></td>
+																		<td><input type="radio" value="{{feedback.qid}} Good" ng-model="feedback.value" ng-change=getRadioValue(feedback) required="true"> </td>
+																		<td><input type="radio" value="{{feedback.qid}} Excellent" ng-model="feedback.value" ng-change=getRadioValue(feedback) required="true"></td>
+																	</tr>
+															
+																
+															</div>	
+															</div>
+															</div>
+															</div>
 														</table>
+														
 
 
 
 														<div class="clearfix"></div>
 
 														<div class="center">
-															<input type="submit" value="submit">
+															<input type="submit" class="btn btn-primary" ng-disabled="exitEmp.$invalid" value="submit">
 														</div>
 													</form>
 												</div>

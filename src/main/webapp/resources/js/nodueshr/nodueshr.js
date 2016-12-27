@@ -15,8 +15,7 @@ application.controller('nodueshrcontroller',function($scope,$http,$modal,$rootSc
 	$scope.EmployeeFeedback=function(empcode)
 	{
            var emp_code=empcode;
-  
-		var scope = $rootScope.$new();
+        var scope = $rootScope.$new();
 		scope.emp_code = emp_code;
 	    var modalInstance = $modal.open({
 			scope:scope,
@@ -27,17 +26,14 @@ application.controller('nodueshrcontroller',function($scope,$http,$modal,$rootSc
 	
 	$scope.EmpOthernoDues=function(empcode)
 	{
-		
-	      var emp_code=empcode;
-
-		var scope = $rootScope.$new();
+		var emp_code=empcode;
+        var scope = $rootScope.$new();
 		scope.emp_code = emp_code;
 		scope.params={employeecode:emp_code}
 		var modalInstance = $modal.open({
 			scope:scope,
 	  		templateUrl : "resources/js/nodueshr/othernodues.html",
 	  		controller :'nodueshrcontroller'
-		
 		})
 		}
 $scope.nodueStatus=function(){
@@ -45,16 +41,14 @@ $scope.nodueStatus=function(){
 	$http.get(domain+'/noduesstatus?employeecode='+$scope.emp_code)
 	.success(function(data,status,headers,config){
 	 $scope.noduestatus=data.noDuesPendingDept;
-	$scope.nodues_allowed=true;
 	for(var i=0;i<$scope.noduestatus.length;i++){
-		if($scope.noduestatus[i]!='HR'){
-			$scope.nodues_allowed=false;
+		if($scope.noduestatus[i]=='Manger' && 'ITManager' && 'InfraManager' && 'Accounts'){
+			$scope.nodues_allowed=true;
 		}
 	}
 	})
 .error(function(data,status,headers,config){
-	/*alert('not found');*/
-		})
+	})
 	
 	}
 	
