@@ -16,4 +16,5 @@ public interface EmployeeDocumentDao {
 	public List<TblUploadedPath> getByEmpCode(String empcode);
 	public TblUploadedPath getByResignId(int resignId,int itemId);
 	public JSONObject getNotUploadedDocumentsById(int resignID);
+	public String update(TblUploadedPath tblUploadedPath);
 }

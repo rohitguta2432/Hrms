@@ -29,5 +29,6 @@ public interface ResignationDao {
 	public JSONObject getAllResignedUsers(Set<String> setRMs);
 	public List<String> getAllResignedUsersHrs();
 	public List<ArrayList<TblUserResignation>> getAllResignedUsersHR(Set<String> setHRs);
+	public TblUserResignation getById(int id);
 
 }

@@ -51,4 +51,10 @@ public class EmployeeDocumentServiceImp implements EmployeeDocumentService {
 		return employeeDocumentDao.getNotUploadedDocumentsById(resignationID);
 	}
 
+	@Override
+	public String update(TblUploadedPath tblUploadedPath) {
+		// TODO Auto-generated method stub
+		return employeeDocumentDao.update(tblUploadedPath);
+	}
+
 }

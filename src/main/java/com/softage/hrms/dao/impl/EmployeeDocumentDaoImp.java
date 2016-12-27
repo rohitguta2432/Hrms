@@ -132,4 +132,20 @@ public class EmployeeDocumentDaoImp implements EmployeeDocumentDao{
 		return notUploadedDocsJson;
 	}
 
+	@Override
+	@Transactional
+	public String update(TblUploadedPath tblUploadedPath) {
+		String result=null;
+		try{
+			Session session=this.sessionfactory.getCurrentSession();
+			session.saveOrUpdate(tblUploadedPath);
+			  logger.info("Update  Sucessfully  ");
+			  result="done";
+			}catch(Exception e){
+				result="error";
+				logger.error("",e);
+			}
+		return result;
+	}
+
 }

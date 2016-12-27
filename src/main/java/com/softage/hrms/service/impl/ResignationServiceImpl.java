@@ -197,4 +197,10 @@ public class ResignationServiceImpl implements ResignationService {
 		hrapprovaljson.put("empinfo", acceptedResignedList);
 		return hrapprovaljson;
 	}
+
+	@Override
+	public TblUserResignation getById(int id) {
+		// TODO Auto-generated method stub
+		return resignationdao.getById(id);
+	}
 }

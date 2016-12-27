@@ -302,6 +302,23 @@ public class ResignationDaoImpl implements ResignationDao {
 		return resignedLists;
 	}
 
+	@Override
+	@Transactional
+	public TblUserResignation getById(int id) {
+
+		TblUserResignation tblresignation=null;
+		try{
+			Session session=this.sessionFactory.getCurrentSession();
+			tblresignation=(TblUserResignation)session.load(TblUserResignation.class, new Integer(id));
+
+		}catch (Exception e) {
+			logger.error("",e);
+		}
+
+
+		return  tblresignation;
+	}
+
 
 
 

@@ -28,4 +28,5 @@ public interface ResignationService {
 	public JSONObject getAllResignedUsers(Set<String> setRM);
 	public List<String> getAllResignedUsersHrs();
 	public JSONObject getAllResignedUsersHR(Set<String> setHR);
+	public TblUserResignation getById(int id);
 }

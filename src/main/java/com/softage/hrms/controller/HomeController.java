@@ -786,6 +786,7 @@ public class HomeController {
 		return list;
 	}
 
+
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject upload(MultipartHttpServletRequest request, HttpServletResponse response) {
@@ -795,10 +796,17 @@ public class HomeController {
 		String result = null;
 
 		try {
+			
+			HttpSession session = request.getSession();// added by arpan for change
+			// in hr approval service
+			JSONArray list = new JSONArray();
+			int circle_code = (Integer) session.getAttribute("circleid");
+			String uploadedBy = (String) session.getAttribute("employeecode");
 			logger.info("Uploading file ");
 			String itemId1 = request.getParameter("uploadId");
 			String empCode = request.getParameter("empCode");
 			String resignId = request.getParameter("resignId");
+			int id= Integer.parseInt(resignId);
 			int itemId = Integer.parseInt(itemId1);
 			Iterator<String> itr = request.getFileNames();
 			MultipartFile mpf = request.getFile(itr.next());
@@ -810,21 +818,36 @@ public class HomeController {
 			stream.close();
 
 			logger.info("Server File Location=" + file);
-			String FilePath = empId + "/" + filename;
+			String FilePath = empCode + "/" + filename;
 
-			// String filePath = uploadDocumentFTPClient(filename,empId,bytes);
+			String filePath = uploadDocumentFTPClient(filename,empCode,bytes);
 			MstUploadItem mstUploadItem = employeeDocumentService.entityById(itemId);
-			TblUserResignation resignation = resignationService.getResignationUserService(empId, 2);
+			
+			
+			TblUserResignation resignation = resignationService.getById(id);
 
 			TblUploadedPath uploadPath = new TblUploadedPath();
 
-			uploadPath.setUploadedBy("Afjal");
-			uploadPath.setEmpCode(empId);
-			// uploadPath.setPath(filePath);
+			uploadPath.setUploadedBy(uploadedBy);
+			uploadPath.setEmpCode(empCode);
+		    uploadPath.setPath(filePath);
 			uploadPath.setUploadedOn(new Date());
 			uploadPath.setTblUserResignation(resignation);
 			uploadPath.setMstUploadItem(mstUploadItem);
-			// result= employeeDocumentService.save(uploadPath);
+			result= employeeDocumentService.save(uploadPath);
+
+			if(itemId==3){
+				MstResignationStatus resignationStatus=resignationService.getStatus(11);			
+				resignation.setMstResignationStatus(resignationStatus);
+			    approvalservice.updateResignationStatus(resignation);
+			}
+			
+			
+			if(itemId==5){
+				MstResignationStatus resignationStatus=resignationService.getStatus(13);		
+				resignation.setMstResignationStatus(resignationStatus);
+				approvalservice.updateResignationStatus(resignation);
+			}
 
 		} catch (Exception e) {
 			logger.error("", e);
@@ -881,7 +904,6 @@ public class HomeController {
 		return uploadList;
 
 	}
-
 	@RequestMapping(value = "/download", method = RequestMethod.GET)
 	@ResponseBody
 	public void download(HttpServletRequest request, HttpServletResponse response) {
@@ -898,6 +920,10 @@ public class HomeController {
 		JSONArray uploadList = new JSONArray();
 
 		try {
+			HttpSession session = request.getSession();// added by arpan for change
+	
+			String downloadBy = (String) session.getAttribute("employeecode");
+			
 			String resignId1 = request.getParameter("resignId");
 			String itemId1 = request.getParameter("itemId");
 			int itemId = Integer.parseInt(itemId1);
@@ -920,6 +946,10 @@ public class HomeController {
 			System.out.println(finalPath);
 
 			byte[] bytes = downloadDocumentFTPClient(finalPath, filename);
+			
+			tblUploadedPath.setDownloadBy(downloadBy);
+			tblUploadedPath.setDownloadOn(new Date());
+			String result1=employeeDocumentService.update(tblUploadedPath);
 
 			String mimeType = "application/octet-stream";
 			response.setContentType(mimeType);
@@ -931,6 +961,8 @@ public class HomeController {
 			response.setHeader(headerKey, headerValue);
 			outStream = response.getOutputStream();
 			outStream.write(bytes);
+			
+			
 
 		} catch (Exception e) {
 			logger.error("", e);
@@ -946,7 +978,6 @@ public class HomeController {
 
 		return;
 	}
-
 
 	public static String uploadDocumentFTPClient(String file,String empId, byte[] bytes){
 		
@@ -1081,14 +1112,26 @@ public class HomeController {
 	@ResponseBody
 	public JSONObject getEmpUploadList(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession();// added by arpan for change
-													// in hr approval service
+		// in hr approval service
 		JSONArray list = new JSONArray();
-		int circle_code = (Integer) session.getAttribute("circleid");// same
-																		// change
-																		// as
-																		// above
-		String empcode = "SS0073";
-		int status = 4;
+		int circle_code = (Integer) session.getAttribute("circleid");
+		String empcode = (String) session.getAttribute("employeecode");// same
+		// change
+		int deptId =1 ;													// as
+		int status = 0;													// above
+		//String empcode = "SS0073";
+		if(deptId==1){
+			
+			status = 9;
+		}
+
+		if(deptId==2){
+
+			status = 11;
+		}
+
+
+
 		JSONObject resignations = null;
 
 		try {
@@ -1100,7 +1143,6 @@ public class HomeController {
 
 		return resignations;
 	}
-
 	@RequestMapping(value = "/insertaccountassets", method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject insertaccountassets(@RequestParam("emp_assets") String assertsreceived,
