@@ -22,6 +22,8 @@ public class UserDetails  implements java.io.Serializable {
 
     private java.lang.String password;
 
+    private java.lang.String reportingOfficeCode;
+
     private java.lang.Integer roleId;
 
     private java.lang.String roleName;
@@ -41,6 +43,7 @@ public class UserDetails  implements java.io.Serializable {
            java.lang.String lastName,
            java.lang.Integer officeTypeId,
            java.lang.String password,
+           java.lang.String reportingOfficeCode,
            java.lang.Integer roleId,
            java.lang.String roleName,
            java.lang.Integer userId,
@@ -52,6 +55,7 @@ public class UserDetails  implements java.io.Serializable {
            this.lastName = lastName;
            this.officeTypeId = officeTypeId;
            this.password = password;
+           this.reportingOfficeCode = reportingOfficeCode;
            this.roleId = roleId;
            this.roleName = roleName;
            this.userId = userId;
@@ -200,6 +204,26 @@ public class UserDetails  implements java.io.Serializable {
 
 
     /**
+     * Gets the reportingOfficeCode value for this UserDetails.
+     * 
+     * @return reportingOfficeCode
+     */
+    public java.lang.String getReportingOfficeCode() {
+        return reportingOfficeCode;
+    }
+
+
+    /**
+     * Sets the reportingOfficeCode value for this UserDetails.
+     * 
+     * @param reportingOfficeCode
+     */
+    public void setReportingOfficeCode(java.lang.String reportingOfficeCode) {
+        this.reportingOfficeCode = reportingOfficeCode;
+    }
+
+
+    /**
      * Gets the roleId value for this UserDetails.
      * 
      * @return roleId
@@ -311,6 +335,9 @@ public class UserDetails  implements java.io.Serializable {
             ((this.password==null && other.getPassword()==null) || 
              (this.password!=null &&
               this.password.equals(other.getPassword()))) &&
+            ((this.reportingOfficeCode==null && other.getReportingOfficeCode()==null) || 
+             (this.reportingOfficeCode!=null &&
+              this.reportingOfficeCode.equals(other.getReportingOfficeCode()))) &&
             ((this.roleId==null && other.getRoleId()==null) || 
              (this.roleId!=null &&
               this.roleId.equals(other.getRoleId()))) &&
@@ -354,6 +381,9 @@ public class UserDetails  implements java.io.Serializable {
         }
         if (getPassword() != null) {
             _hashCode += getPassword().hashCode();
+        }
+        if (getReportingOfficeCode() != null) {
+            _hashCode += getReportingOfficeCode().hashCode();
         }
         if (getRoleId() != null) {
             _hashCode += getRoleId().hashCode();
@@ -422,6 +452,13 @@ public class UserDetails  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("password");
         elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "Password"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("reportingOfficeCode");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "ReportingOfficeCode"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);

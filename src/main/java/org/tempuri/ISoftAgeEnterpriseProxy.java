@@ -50,6 +50,18 @@ public class ISoftAgeEnterpriseProxy implements org.tempuri.ISoftAgeEnterprise {
     return iSoftAgeEnterprise.getUserDetails(emp_code, password, companyId);
   }
   
+  public java.lang.Boolean getUserDetailByEVM(java.lang.String emp_code) throws java.rmi.RemoteException{
+    if (iSoftAgeEnterprise == null)
+      _initISoftAgeEnterpriseProxy();
+    return iSoftAgeEnterprise.getUserDetailByEVM(emp_code);
+  }
+  
+  public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.AssetDetails[] getAssetDetailUserWise(java.lang.String emp_code) throws java.rmi.RemoteException{
+    if (iSoftAgeEnterprise == null)
+      _initISoftAgeEnterpriseProxy();
+    return iSoftAgeEnterprise.getAssetDetailUserWise(emp_code);
+  }
+  
   public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.UserDetails getUserDetail(java.lang.String emp_code) throws java.rmi.RemoteException{
     if (iSoftAgeEnterprise == null)
       _initISoftAgeEnterpriseProxy();
@@ -206,10 +218,22 @@ public class ISoftAgeEnterpriseProxy implements org.tempuri.ISoftAgeEnterprise {
     return iSoftAgeEnterprise.getUserCenter(userId);
   }
   
+  public java.lang.String getAssetBarCode(java.lang.Integer officeTypeID, java.lang.Integer officeID) throws java.rmi.RemoteException{
+    if (iSoftAgeEnterprise == null)
+      _initISoftAgeEnterpriseProxy();
+    return iSoftAgeEnterprise.getAssetBarCode(officeTypeID, officeID);
+  }
+  
   public java.lang.String enterPriseDataService(java.lang.String service, java.lang.String operation, java.lang.String[] keys, java.lang.String[] values) throws java.rmi.RemoteException{
     if (iSoftAgeEnterprise == null)
       _initISoftAgeEnterpriseProxy();
     return iSoftAgeEnterprise.enterPriseDataService(service, operation, keys, values);
+  }
+  
+  public java.lang.String assetDeallocation(java.lang.String emp, java.lang.String barcode, java.lang.String deallocatedBy) throws java.rmi.RemoteException{
+    if (iSoftAgeEnterprise == null)
+      _initISoftAgeEnterpriseProxy();
+    return iSoftAgeEnterprise.assetDeallocation(emp, barcode, deallocatedBy);
   }
   
   

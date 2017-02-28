@@ -133,6 +133,7 @@ public class HomeController {
 		int userID = Integer.parseInt(request.getParameter("user_id"));
 		int spokeID = Integer.parseInt(request.getParameter("spoke_id"));
 		int circleID = Integer.parseInt(request.getParameter("CircleID"));
+		String officeCode=(String)request.getParameter("ReportingOfficeCode");
 		HttpSession session = request.getSession();
 		session.setAttribute("firstname", first_Name);
 		session.setAttribute("employeecode", employee_code);
@@ -140,14 +141,23 @@ public class HomeController {
 		session.setAttribute("userid", userID);
 		session.setAttribute("spokeid", spokeID);
 		session.setAttribute("circleid", circleID);
+		session.setAttribute("officecode", officeCode);
 		ISoftAgeEnterpriseProxy i = new ISoftAgeEnterpriseProxy();
 		
 		String [] keys={"empcode"};
 		String [] values={"s42970"};
+		String [] assetValues={"ss0073"};
+		String[] officekeys = {"OFFICECODE"};
+		String[] officevalues = {officeCode};
+		String noduestring=null;
 		try { 	
 			String empInfo=i.enterPriseDataService("EVM","EmpInfo", keys,values);
+			String assestInfo=i.enterPriseDataService("Asset", "ASSETINFO", keys, assetValues);
+			noduestring=i.enterPriseDataService("EVM", "NODUESOWNERS", officekeys, officevalues);
+			System.out.println("Asset information string" + assestInfo+"nodues : "+noduestring);
 			JSONParser jsonParser =new JSONParser();
 			JSONObject jsonObject  = (JSONObject)jsonParser.parse(empInfo);
+			JSONObject assetJson=(JSONObject)jsonParser.parse(assestInfo);
 			request.setAttribute("param1", i.getUserDetail("ss0077").getRoleId());
 			System.out.println(i.getUserDetail("ss0077").getRoleId());
 			model.addAttribute("emp", i.getUserDetail("ss0077").getFirstName());
@@ -196,6 +206,7 @@ public class HomeController {
 			JSONParser parser=new JSONParser();
 			JSONObject serviceJson=(JSONObject)parser.parse(empInfo);
 			//int notice_time=(Integer) serviceJson.get("NoticePeriod");ESF SERVICE TO BE USED
+			
 			int notice_time = 60;
 			jsonReason = resignationService.resignationInitialization();
 			
@@ -216,11 +227,12 @@ public class HomeController {
 		session = request.getSession();
 		String empcode = (String) session.getAttribute("employeecode");
 		int circleid = (Integer) session.getAttribute("circleid");
+		String office_code=(String)session.getAttribute("officecode");
 		ISoftAgeEnterpriseProxy emp = new ISoftAgeEnterpriseProxy();
 		TblUserResignation resignation = new TblUserResignation();
 		Date dateobj = new Date();
 		DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		System.out.println("date is : " + df.format(dateobj));
+		System.out.println("date is : " + df.format(dateobj) + " office code is : "+office_code);
 		JSONObject jsonObj = new JSONObject();
 		//try {
 		String re = request.getParameter("emp_reason");
@@ -234,8 +246,32 @@ public class HomeController {
 		// SERVICE
 		// String hr_empcode=emp.getUserDetail(empcode).getHrManager(); GET HR
 		// USING ESF SERVICE
-		String rm_empcode = "ss0078";
-		String hr_empcode = "ss0073";
+		String[] keys={"empcode"};
+		String[] values={empcode};
+		String empinfostring = null;
+		String noduestring=null;
+		JSONParser parser=new JSONParser();
+		JSONObject empinfoJson = new JSONObject();
+		JSONObject noduesJson=new JSONObject();
+		String[] officekeys = {"OFFICECODE"};
+		String[] officevalues = {office_code};
+		String hr_empcode=null;
+		try {
+			empinfostring = emp.enterPriseDataService("EVM", "EmpInfo", keys, values);
+			noduestring=emp.enterPriseDataService("EVM", "NODUESOWNERS", officekeys, officevalues);
+			empinfoJson = (JSONObject)parser.parse(empinfostring);
+			noduesJson=(JSONObject)parser.parse(noduestring);
+			hr_empcode=(String)noduesJson.get("HrEmpCode");
+			System.out.println(noduesJson.toString());
+			System.out.println(empinfoJson);
+			//noduesJson=(JSONObject)parser.parse("");
+			//System.out.println(empinfoJson);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		String rm_empcode=(String)empinfoJson.get("ManagerCode");
+		//String rm_empcode = "ss0078";
+		//String hr_empcode = "ss0073";
 		int noticeperiod = 60; // Get Notice Period Using ESF Service
 		String submit_date = df.format(dateobj);
 		Calendar cal = Calendar.getInstance();
@@ -1731,19 +1767,19 @@ public class HomeController {
 		for (String rm : rm_list) {
 			String[] keys={"empcode"};
 			String[] values={emp_code};
-			String rm_rm1 = "ss0053";
-			String rm_rm2 = "ss0050";
+			//String rm_rm1 = "ss0053";
+			//String rm_rm2 = "ss0050";
 			ISoftAgeEnterpriseProxy emp = new ISoftAgeEnterpriseProxy();
 			try {
 				String empinfo=emp.enterPriseDataService("EVM", "EmpInfo", keys, values);
 				JSONParser parser=new JSONParser();
 				JSONObject serviceJson=(JSONObject)parser.parse(empinfo);
-				//String rm_rm1=(String)serviceJson.get("ManagerCode");
+				String rm_rm1=(String)serviceJson.get("ManagerCode");
 				String[] rmkey={"empcode"};
 				String[] rmvalues={rm_rm1};
 				String rm_empinfo=emp.enterPriseDataService("EVM", "EmpInfo", rmkey, rmvalues);
 				JSONObject rm_rmJson=(JSONObject)parser.parse(rm_empinfo);
-				//String rm_rm2=(String)rm_rmJson.get("ManagerCode");
+				String rm_rm2=(String)rm_rmJson.get("ManagerCode");
 				if ((rm_rm1 == null || rm_rm1 == "") && emp_code.equals(rm)) {
 					to_show.add(rm);
 					// continue;
@@ -1788,8 +1824,8 @@ public class HomeController {
 		List<String> resignedUsersHrList = resignationService.getAllResignedUsersHrs();
 		Set<String> hr_to_show = new HashSet<String>();
 		for (String hr : resignedUsersHrList) {
-			String hr_hr1 = "ss0073";
-			String hr_hr2 = "ss0029";
+			//String hr_hr1 = "ss0073";
+			//String hr_hr2 = "ss0029";
 			ISoftAgeEnterpriseProxy emp = new ISoftAgeEnterpriseProxy();
 			String[] key={"empcode"};
 			String[] values={emp_code};
@@ -1797,12 +1833,12 @@ public class HomeController {
 				String empinfo=emp.enterPriseDataService("EVM", "EmpInfo", key, values);
 				JSONParser parser=new JSONParser();
 				JSONObject serviceJson=(JSONObject)parser.parse(empinfo);
-				//String hr_hr1=(String)serviceJson.get("ManagerCode");
+				String hr_hr1=(String)serviceJson.get("ManagerCode");
 				String[] hr_key={"empcode"};
 				String[] hr_values={hr_hr1};
 				String hr_empinfo=emp.enterPriseDataService("EVM", "EmpInfo", hr_key, hr_values);
 				JSONObject hr_json=(JSONObject)parser.parse(hr_empinfo);
-				//String hr_hr2=(String)hr_json.get("ManagerCode");
+				String hr_hr2=(String)hr_json.get("ManagerCode");
 				if ((hr_hr1 == null || hr_hr1 == "") && emp_code.equals(hr)) {
 					hr_to_show.add(hr);
 				} else if ((hr_hr1 == null && hr_hr1 == "") && !emp_code.equals(hr)) {

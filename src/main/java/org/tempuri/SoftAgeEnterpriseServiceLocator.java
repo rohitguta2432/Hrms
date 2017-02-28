@@ -22,7 +22,7 @@ public class SoftAgeEnterpriseServiceLocator extends org.apache.axis.client.Serv
     }
 
     // Use to get a proxy class for BasicHttpBinding_ISoftAgeEnterprise
-    private java.lang.String BasicHttpBinding_ISoftAgeEnterprise_address = "http://172.25.38.139/EServiceDev/SoftAgeEnterprise.svc";
+    private java.lang.String BasicHttpBinding_ISoftAgeEnterprise_address = "http://172.25.38.139/EServiceBarCode/SoftAgeEnterprise.svc";
 
     public java.lang.String getBasicHttpBinding_ISoftAgeEnterpriseAddress() {
         return BasicHttpBinding_ISoftAgeEnterprise_address;

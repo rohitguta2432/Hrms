@@ -212,7 +212,7 @@ public class ResignationDaoImpl implements ResignationDao {
 	@Transactional
 	public List<String> getAllResignedUserRMs() {
 		Session session=this.sessionFactory.getCurrentSession();
-		String sql="select rm_empcode from tbl_user_resignation";
+		String sql="select rm_empcode from tbl_user_resignation where status=1";
 		Query query=session.createSQLQuery(sql);
 		List<String> list_of_rm=query.list();
 		return list_of_rm;
