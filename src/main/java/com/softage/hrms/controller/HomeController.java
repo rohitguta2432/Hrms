@@ -181,8 +181,8 @@ public class HomeController {
 		System.out.println("The current datetime is : " + current_date);
 		ISoftAgeEnterpriseProxy emp_prxoy = new ISoftAgeEnterpriseProxy();
 		// try {
-		jsobj = pageService.getPagesLink(roleid);
-		//jsobj=pageService.getPagesBasedOnRoleId(empcode,current_date,roleid); NEW METHOD TO BE MADE
+		//jsobj = pageService.getPagesLink(roleid);NEW METHOD TO BE MADE,made below this
+		jsobj=pageService.getPagesBasedOnRoleId(empcode,current_date,roleid); 
 		// } catch (RemoteException e) {
 		// e.printStackTrace();
 		// }

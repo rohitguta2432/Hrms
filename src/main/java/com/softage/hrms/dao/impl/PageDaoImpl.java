@@ -32,4 +32,16 @@ public class PageDaoImpl implements PageDao {
 		return jsob;
 	}
 
+	@Override
+	@Transactional
+	public JSONObject getPagesBasedOnRoleId(String empcode, String hitdatetime, int roleid) {
+		JSONObject jsonObject=new JSONObject();
+		Session session=this.sessionfactory.getCurrentSession();
+		String sql="Call usp_rolepage_mapping(?,?,?)";
+		Query query=session.createSQLQuery(sql).setParameter(0,empcode).setParameter(1,hitdatetime).setParameter(2,roleid);
+		List list=query.list();
+		jsonObject.put("pages", list);
+		return jsonObject;
+	}
+
 }

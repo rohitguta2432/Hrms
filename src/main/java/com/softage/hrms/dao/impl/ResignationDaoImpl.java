@@ -113,18 +113,27 @@ public class ResignationDaoImpl implements ResignationDao {
 		JSONObject jsob=new JSONObject();
 		Date releiving_date=null;
 		//String releiving_date=null;
+		String flagResult=null;
+		Boolean flag=null;
 		Session session=this.sessionFactory.getCurrentSession();
 		String sp_query="call usp_getReleivingDate(?,?)";
 		Query query=session.createSQLQuery(sp_query).setParameter(0, empcode).setParameter(1, noticeperiod);
-		List releaseDate_list=query.list();
-		for(Object relDate : releaseDate_list){
-			 releiving_date=(Date)relDate;
-			
+		Object[] releaseDate_list=(Object[])query.uniqueResult();
+		/*for(Object relDate : releaseDate_list){
+			 releiving_date=(Date)relDate;			
+		}*/
+		releiving_date=(Date)releaseDate_list[0];
+		flagResult=(String)releaseDate_list[1];
+		if(flagResult.equalsIgnoreCase("enabled")){
+			flag=false;
+		}else{
+			flag=true;
 		}
 		DateFormat formatter=new SimpleDateFormat("dd/MM/yyyy");
 		formatter.format(releiving_date);
 		//jsob.put("releaseDate", releiving_date);
 		jsob.put("releaseDate", formatter.format(releiving_date));
+		jsob.put("flag",flag);
 		return jsob;
 	}
 

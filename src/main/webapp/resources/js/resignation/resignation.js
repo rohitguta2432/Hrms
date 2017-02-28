@@ -6,6 +6,7 @@ application.controller('resignationController',function($scope,$http,$location){
 			//alert('the data returned is : '+JSON.stringify({data : data}));
 			$scope.resignationReason=data.ReasonJson.reasonList;
 			$scope.reldate=data.reldate.releaseDate;
+			$scope.submitFlag=data.reldate.flag;
 		})
 		.error(function(data,status,headers,config){
 			alert('Error ');

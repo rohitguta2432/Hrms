@@ -18,4 +18,9 @@ public class PageServiceImpl implements PageService {
 		return pagedao.getPagesLinkDao(id);
 	}
 
+	@Override
+	public JSONObject getPagesBasedOnRoleId(String empcode, String hitDatetime, int roleid) {
+		return pagedao.getPagesBasedOnRoleId(empcode, hitDatetime, roleid);
+	}
+
 }
