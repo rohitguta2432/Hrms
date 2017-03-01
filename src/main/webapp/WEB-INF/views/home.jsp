@@ -82,7 +82,7 @@
                         <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-blue dropdown-caret dropdown-close">
                             <li><a href="#" data-toggle="modal" data-target="#myModal1"><i class="ace-icon fa fa-user"></i>Change Password </a></li>
                             <li class="divider"></li>
-                            <li><a href="http://172.25.38.139/S_Connectqc"><i class="ace-icon fa fa-power-off"></i>Logout </a></li>
+                            <li><a href="http://172.25.38.139/S_ConnectQC/Account/Logout"><i class="ace-icon fa fa-power-off"></i>Logout </a></li>
                         </ul>
                     </li>
                 </ul>

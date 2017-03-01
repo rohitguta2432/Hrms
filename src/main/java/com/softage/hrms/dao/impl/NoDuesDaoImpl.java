@@ -1,5 +1,6 @@
 package com.softage.hrms.dao.impl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,18 +11,21 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.ls.LSInput;
 
+import com.softage.hrms.controller.HomeController;
 import com.softage.hrms.dao.NoDuesDao;
-
 import com.softage.hrms.model.MstAssests;
 import com.softage.hrms.model.TblAssetsManagement;
 import com.softage.hrms.model.TblNoDuesClearence;
 
 @Repository
 public class NoDuesDaoImpl implements NoDuesDao {
+	private static final Logger logger = LoggerFactory.getLogger(NoDuesDaoImpl.class);
 
 	@Autowired
 	private SessionFactory sessionfactory;
@@ -30,13 +34,21 @@ public class NoDuesDaoImpl implements NoDuesDao {
 	@Override
 	@Transactional
 	public List<String> getrmacceptedempcode(int circleid,int status) {
+		List<String> listempcode=new ArrayList<String>();
+		try{
         org.hibernate.Session session=sessionfactory.getCurrentSession();
 		String hql="select empCode from TblUserResignation where circleId=:circleid and status=:status";
 		Query query=session.createQuery(hql);
 		query.setParameter("circleid", circleid);
 		query.setParameter("status", status);
-		List<String> listempcode=query.list();
+	    listempcode=query.list();
+		}catch(Exception e){
+			logger.error("get RM Accepted employee List>>>>   ",e);
+		}
+	    
         return listempcode;
+        
+        
 	}
 
 
@@ -84,12 +96,20 @@ public class NoDuesDaoImpl implements NoDuesDao {
 	@Override
 	@Transactional
 	public JSONObject getNoDuesPendingStatus(int resignationID) {
-		Session session=this.sessionfactory.getCurrentSession();
 		JSONObject pendingNoDuesDeptJson=new JSONObject();
+		
+		try{
+		Session session=this.sessionfactory.getCurrentSession();
+		
 		String sql="call usp_getNoDuesPendingDeptName(?)";
 		Query query=session.createSQLQuery(sql).setParameter(0, resignationID);
 		List<String> noDuesPendingDeptList=query.list();
 		pendingNoDuesDeptJson.put("noDuesPendingDept", noDuesPendingDeptList);
+		
+		logger.info("Nodues Pending List>>>>     "+ noDuesPendingDeptList);
+		}catch(Exception e){
+			logger.error("get noduesStatus",e);
+		}
 		return pendingNoDuesDeptJson;
 	}
    /* @Override

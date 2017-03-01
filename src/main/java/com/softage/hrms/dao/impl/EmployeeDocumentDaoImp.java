@@ -124,11 +124,15 @@ public class EmployeeDocumentDaoImp implements EmployeeDocumentDao{
 	@Transactional
 	public JSONObject getNotUploadedDocumentsById(int resignID) {
 		JSONObject notUploadedDocsJson=new JSONObject();
+		try{
 		Session session=this.sessionfactory.getCurrentSession();
 		String sql="call usp_getNotUploadedDocs(?)";
 		Query query=session.createSQLQuery(sql).setParameter(0, resignID);
 		List<String> notUploadedDocs=query.list();
 		notUploadedDocsJson.put("docList", notUploadedDocs);
+		}catch(Exception e){
+			logger.error(" ",e);
+		}
 		return notUploadedDocsJson;
 	}
 
