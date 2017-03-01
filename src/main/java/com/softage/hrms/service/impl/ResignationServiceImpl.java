@@ -142,7 +142,7 @@ public class ResignationServiceImpl implements ResignationService {
 
 	@Override
 	public JSONObject getAllResignedUsers(Set<String> setRM) {
-		return null;
+		return resignationdao.getAllResignedUsers(setRM);
 	}
 
 	@Override

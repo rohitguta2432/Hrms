@@ -1,5 +1,6 @@
 application.controller('approvalController',['$scope','$modal','$http','$timeout','$location','$rootScope',function($scope, $modal, $http,$timeout,$location,$rootScope) {
 $scope.approvalInit = function() {
+	//approvalInitialization ; getRMApprovalInitFromService
 		$http.get(domain + '/approvalInitialization').success(
 				function(data, status, headers, config) {
 					$scope.approvalBody = data.jsonArray;
