@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,6 +40,17 @@ public class TblAssetsManagement implements java.io.Serializable {
 	private Date receivedOn;
 	private Integer itemStatus;
 	
+	@Basic
+	@Column(name="barcodeno")
+	public String getAssetsbarcodeno() {
+		return assetsbarcodeno;
+	}
+
+	public void setAssetsbarcodeno(String assetsbarcodeno) {
+		this.assetsbarcodeno = assetsbarcodeno;
+	}
+
+	private String  assetsbarcodeno;
 	/*private Set<TblNoDuesClearence> tblNoDuesClearences = new HashSet<TblNoDuesClearence>(0);*/
 
 	public TblAssetsManagement() {
