@@ -303,6 +303,7 @@ public class HomeController {
 		resignation.setResignationDate(dateobj);
 		resignation.setMstResignationStatus(status_mast);
 		resignation.setCircleId(circleid);
+		resignation.setApprovedBy(empcode);
 		jsonObj = resignationService.submitResignationService(resignation);
 		// emp.getUserDetail(emp_code).getRMEmail(); RM email Using ESF service
 		// emp.getUserDetail(emp_code).getHREmail(); HR email Using ESF service

@@ -62,6 +62,7 @@ public class TblUserResignation implements java.io.Serializable {
 	private Date rmApprovalDate;
 	private Date hrApprovalDate;
 	private Date hrLwdDate;
+	private String approvedBy;
 	private Set<TblNoDuesClearence> tblnoduesclearence=new HashSet<TblNoDuesClearence>(0);
 	private Set<TblUploadedPath> tblUploadedPaths = new HashSet<TblUploadedPath>(0);
 	private Set<TblFeedbacks> tblFeedbackses = new HashSet<TblFeedbacks>(0);
@@ -280,6 +281,15 @@ public class TblUserResignation implements java.io.Serializable {
 
 	public void setTblExEmployeeQueries(Set<TblExEmployeeQuery> tblExEmployeeQueries) {
 		this.tblExEmployeeQueries = tblExEmployeeQueries;
+	}
+
+	@Column(name="approvedby",length=15)
+	public String getApprovedBy() {
+		return approvedBy;
+	}
+
+	public void setApprovedBy(String approvedBy) {
+		this.approvedBy = approvedBy;
 	}
 
 	}
