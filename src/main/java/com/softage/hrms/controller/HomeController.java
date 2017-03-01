@@ -2028,10 +2028,11 @@ status = 9;
 		JSONObject jsonApproval = new JSONObject();
 		String emp_code = (String) session.getAttribute("employeecode");
 		List<String> rm_list = resignationService.getAllResignedUserRMs();
+		System.out.println(rm_list);
 		Set<String> to_show = new HashSet<String>();
 		for (String rm : rm_list) {
 			String[] keys={"empcode"};
-			String[] values={emp_code};
+			String[] values={rm};
 			//String rm_rm1 = "ss0053";
 			//String rm_rm2 = "ss0050";
 			ISoftAgeEnterpriseProxy emp = new ISoftAgeEnterpriseProxy();
