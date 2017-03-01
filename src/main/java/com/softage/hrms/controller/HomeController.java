@@ -986,13 +986,13 @@ if(!serviceparser.isEmpty())
  return jsoninfraassets;
 	}
 @RequestMapping(value = "/insertinfraassets", method = RequestMethod.POST)
-
 @ResponseBody
-            public JSONObject insertinfraassets(@RequestParam("emp_assets") String infraasserts,
-			@RequestParam("comments") String comments, @RequestParam("emp_code") String empcode,
-			HttpServletRequest request, HttpSession session) {
+        public JSONObject insertinfraassets(HttpServletRequest request, HttpSession session) {
 		session = request.getSession();
 		String inframanagerempcode = (String) session.getAttribute("employeecode");
+		String infraasserts=request.getParameter("emp_assets");
+		String empcode=request.getParameter("emp_code");
+		String comments=request.getParameter("comments");
 		int department = 0;
 		String barcodeno=null;
 		String empinfo = null;
@@ -1055,6 +1055,7 @@ if(!serviceparser.isEmpty())
 			infraasset.setItemStatus(2);
 			infraasset.setReceivedBy(inframanagerempcode);
 			infraasset.setReceivedOn(today);
+			infraasset.setAssetsbarcodeno("");
 			infraasset.setTblUserResignation(resignedUser);
 			insertasserts = noduesservice.submitnoduesassets(infraasset);
 		}

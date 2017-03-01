@@ -1,4 +1,5 @@
 application.controller('noduesinframodalcontroller',function($scope,$http,$window,$location) {
+	var departmentid;
 	$http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 			.success(function(data, status, headers, config){
 			/*alert('data are found');*/
@@ -12,7 +13,8 @@ application.controller('noduesinframodalcontroller',function($scope,$http,$windo
 				.success(function(data,status,headers,config){
 					/*alert('the data returned is : '+JSON.stringify({data : data}));*/
 					$scope.nodueinfraassets=data.infraassets;
-			/*alert($scope.nodueinfraassets)*/
+					departmentid=$scope.nodueinfraassets[0].DepartmentId
+			alert(departmentid)
 				})
 				
 				})
@@ -30,7 +32,8 @@ application.controller('noduesinframodalcontroller',function($scope,$http,$windo
 	            }
 	            })
 	         
-var emp_data='emp_assets='+$scope.selectedItems+'&comments='+$scope.empcomments+'&emp_code='+$scope.emp_code;
+var emp_data='emp_assets='+$scope.selectedItems+'&comments='+$scope.empcomments+'&emp_code='+$scope.emp_code
+'&departmentId='+departmentid;
 		 /*alert("accept "+emp_data)*/
 		 $http({
 		        method: 'POST',
