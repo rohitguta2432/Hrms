@@ -33,8 +33,7 @@ public class TblFeedbacks implements java.io.Serializable {
 public void setStageId(Integer stageId) {
 	this.stageId = stageId;
 }
-
-	public TblFeedbacks() {
+public TblFeedbacks() {
 	}
 
 	public TblFeedbacks(MstAnswers mstAnswers, MstQuestions mstQuestions, TblUserResignation tblUserResignation,

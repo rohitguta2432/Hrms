@@ -2,14 +2,13 @@ application.controller('noduesinframodalcontroller',function($scope,$http,$windo
 	$http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 			.success(function(data, status, headers, config){
 			/*alert('data are found');*/
-				
 				$scope.emplycode=data.empcode;
 				$scope.empfirstname=data.empname;
 			    $scope.empdepartment=data.department;
 				$scope.empdesignation=data.designation;
 				$scope.emplocation=data.location;
 				
-				$http.get(domain+'/getinframodalassets')
+				$http.get(domain+'/getinframodalassets?employee_code='+$scope.emplycode)
 				.success(function(data,status,headers,config){
 					/*alert('the data returned is : '+JSON.stringify({data : data}));*/
 					$scope.nodueinfraassets=data.infraassets;

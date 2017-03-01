@@ -1,4 +1,5 @@
 application.controller('nodueshrmodalcontroller',function($scope,$http,$window,$modal,$location) {
+	var departmentid;
 $http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 			.success(function(data, status, headers, config){
 			/*alert('data are found');*/
@@ -10,11 +11,12 @@ $http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 				$scope.emplocation=data.location;
 				
 				
-				$http.get(domain+'/getNoDuesAssets')
+				$http.get(domain+'/gethrassets?employee_code='+$scope.emplycode)
 				.success(function(data,status,headers,config){
 					/*alert('the data returned is : '+JSON.stringify({data : data}));*/
-					$scope.nodueshrassets=data.list;
-					/*alert($scope.nodueshrassets)*/
+					$scope.nodueshrassets=data.hrassets;
+					departmentid=$scope.nodueshrassets[0].DepartmentId
+				/*alert(departmentid)*/
 					})
 				})
 			   $scope.selectedItems = [];
@@ -27,7 +29,7 @@ $http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 		if (emp.selected) $scope.selectedItems.push(emp.name)
 			
 		})
-	var emp_data='emp_assets='+$scope.selectedItems+'&hr_comments='+$scope.empcomments+'&emp_code='+$scope.emplycode;
+	var emp_data='emp_assets='+$scope.selectedItems+'&hr_comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&departmentId='+departmentid;
 		/*alert("data is"+emp_data)*/
 
 	$http({

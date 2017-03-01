@@ -1,5 +1,6 @@
 application.controller('noduesitmodaljscontroller', function($scope, $http,
 		$window,$location) {
+	var departmentid;
 	$http
 			.get(
 					domain + '/getemployeemodalinfo?employee_code='
@@ -11,14 +12,16 @@ application.controller('noduesitmodaljscontroller', function($scope, $http,
 						$scope.empdesignation = data.designation;
 						$scope.emplocation = data.location;
 
-						$http.get(domain + '/getitassets').success(
+						$http.get(domain + '/getitassets?employee_code='
+								+ $scope.emp_code)
+								.success(
 								function(data, status, headers, config) {
-									/*
-									 * alert('the data returned is :
-									 * '+JSON.stringify({data : data}));
-									 */
+									
+									 /* alert('the data returned is :'+JSON.stringify({data : data}));*/
+									 
 									$scope.nodueitassets = data.itassets;
-									/* alert($scope.nodueitassets) */
+							departmentid=$scope.nodueitassets[0].DepartmentId
+								/*alert(departmentid)*/
 								})
 
 					})
@@ -38,7 +41,7 @@ application.controller('noduesitmodaljscontroller', function($scope, $http,
 		/* alert("store item "+$scope.selectedItems) */
 
 		var emp_data = 'emp_assets=' + $scope.selectedItems + '&comments='
-				+ $scope.empcomments + '&emp_code=' + $scope.emp_code;
+				+ $scope.empcomments + '&emp_code=' + $scope.emp_code +'&departmentId='+departmentid;
 		/* alert("accepted "+emp_data) */
 		$http({
 			method : 'POST',

@@ -1,5 +1,6 @@
 application.controller('noduesaccountsmodalcontroller', function($scope, $http,
 		$window, $modal,$location) {
+	var departmentid;
 	$http
 			.get(
 					domain + '/getemployeemodalinfo?employee_code='
@@ -14,11 +15,13 @@ application.controller('noduesaccountsmodalcontroller', function($scope, $http,
 						$scope.emplocation = data.location;
 
 						$http.get(
-								domain + '/getNoDuesAssets?employee_code='
+								domain + '/getacccountassets?employee_code='
 										+ $scope.emp_code).success(
 								function(data, status, headers, config) {
-									$scope.nodueaccountassets = data.list;
-									/* alert($scope.nodueaccountassets) */
+									$scope.nodueaccountassets = data.accountassets;
+								/*alert($scope.nodueaccountassets)*/
+									departmentid=$scope.nodueaccountassets[0].DepartmentId
+								/*	alert(departmentid)*/
 								})
 					})
 
@@ -36,11 +39,10 @@ application.controller('noduesaccountsmodalcontroller', function($scope, $http,
 		})
 		var emp_data = 'emp_assets=' + $scope.selectedItems
 				+ '&accounts_comments=' + $scope.empcomments + '&emp_code='
-				+ $scope.emp_code + '&final_status=' + $scope.accepted_status;
-		/*alert(emp_data)*/
+				+ $scope.emp_code + '&final_status=' + $scope.accepted_status+'&departmentId='+departmentid;
+	/*	alert(emp_data)*/
 
 		$http({
-			method : 'POST',
 			url : domain + '/insertaccountassets',
 			data : emp_data,
 			headers : {
