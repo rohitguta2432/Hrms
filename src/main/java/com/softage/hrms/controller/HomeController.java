@@ -2122,7 +2122,7 @@ status = 9;
 			//String hr_hr2 = "ss0029";
 			ISoftAgeEnterpriseProxy emp = new ISoftAgeEnterpriseProxy();
 			String[] key={"empcode"};
-			String[] values={emp_code};
+			String[] values={hr};
 			try {
 				String empinfo=emp.enterPriseDataService("EVM", "EmpInfo", key, values);
 				JSONParser parser=new JSONParser();
@@ -2142,6 +2142,8 @@ status = 9;
 						hr_to_show.add(hr);
 					} else if (emp_code.equals(hr_hr1)) {
 						hr_to_show.add(hr);
+					}else{
+						continue;
 					}
 				} else {
 					if (emp_code.equals(hr)) {
