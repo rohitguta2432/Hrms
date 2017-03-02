@@ -21,7 +21,7 @@ application.controller('noduesaccountsmodalcontroller', function($scope, $http,
 									$scope.nodueaccountassets = data.accountassets;
 								/*alert($scope.nodueaccountassets)*/
 									departmentid=$scope.nodueaccountassets[0].DepartmentId
-								/*	alert(departmentid)*/
+							alert(departmentid)
 								})
 					})
 
@@ -43,6 +43,7 @@ application.controller('noduesaccountsmodalcontroller', function($scope, $http,
 	/*	alert(emp_data)*/
 
 		$http({
+			method : 'POST',
 			url : domain + '/insertaccountassets',
 			data : emp_data,
 			headers : {

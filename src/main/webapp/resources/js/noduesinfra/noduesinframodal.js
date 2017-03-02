@@ -13,13 +13,14 @@ application.controller('noduesinframodalcontroller',function($scope,$http,$windo
 				.success(function(data,status,headers,config){
 					/*alert('the data returned is : '+JSON.stringify({data : data}));*/
 					$scope.nodueinfraassets=data.infraassets;
-					departmentid=$scope.nodueinfraassets[0].DepartmentId
+					departmentid=$scope.nodueinfraassets[0].departmentId
 			alert(departmentid)
 				})
 				
 				})
 				
 	 $scope.selectedItems=[];
+	 $scope.selectedItemsbarcode=[];
 	 $scope.itemnotselected=[];
      $scope.rejected_final_status=[3];
      $scope.accepted_status=[2];
@@ -29,11 +30,13 @@ application.controller('noduesinframodalcontroller',function($scope,$http,$windo
 	            if(emp.selected){
 	            	
 	            	$scope.selectedItems.push(emp.name);
+	            	$scope.selectedItemsbarcode.push(emp.barcodeno);
 	            }
 	            })
-	         
+	         alert($scope.selectedItems)
+	          alert($scope.selectedItemsbarcode)
 var emp_data='emp_assets='+$scope.selectedItems+'&comments='+$scope.empcomments+'&emp_code='+$scope.emp_code
-'&departmentId='+departmentid;
++'&departmentId='+departmentid;
 		 /*alert("accept "+emp_data)*/
 		 $http({
 		        method: 'POST',
@@ -66,8 +69,9 @@ $scope.reject=function()
 	          	}
 	          	})
 	      	/*alert("not received  item "+$scope.itemnotselected)*/
-	      var emp_data='comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&not_received='+$scope.itemnotselected+'&received_assets='+$scope.selectedItems+'&final_status='+$scope.rejected_final_status;
-	      		/*alert(emp_data)*/
+	      var emp_data='comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&not_received='+$scope.itemnotselected+'&received_assets='+$scope.selectedItems+'&final_status='+$scope.rejected_final_status
+	      +'&departmentId='+departmentid;
+	      		alert(emp_data)
 	      		$http.get(domain+'/rejectempassets?'+emp_data)
 		 
 		 .success(function(data){

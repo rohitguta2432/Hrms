@@ -303,7 +303,7 @@ public class HomeController {
 		resignation.setResignationDate(dateobj);
 		resignation.setMstResignationStatus(status_mast);
 		resignation.setCircleId(circleid);
-		resignation.setApprovedBy(empcode);
+		//resignation.setApprovedBy(empcode);
 		jsonObj = resignationService.submitResignationService(resignation);
 		// emp.getUserDetail(emp_code).getRMEmail(); RM email Using ESF service
 		// emp.getUserDetail(emp_code).getHREmail(); HR email Using ESF service
@@ -398,6 +398,7 @@ public class HomeController {
 			TblUserResignation resignedUser = resignationService.getResignationUserService(feedbackon, 1);
 			resignedUser.setMstResignationStatus(resignationStatus);
 			resignedUser.setRmApprovalDate(rm_approval_date);
+			resignedUser.setApprovedBy(empcode);
 			for (JSONObject answer : listAnswers) {
 				Long serialid = (Long) answer.get("sno");
 				int sid = serialid.intValue();
@@ -947,6 +948,7 @@ return insertitasserts;
 		JSONObject infraassetsmodal=null;
 		String empcode=request.getParameter("employee_code");
 		String empassets=null;
+		String barcodeno=null;
 		JSONObject jsoninfraassets = new JSONObject();
 		ArrayList<JSONObject> arrlist = new ArrayList<JSONObject>();
 		List<String> listvalue = new ArrayList<String>();
@@ -970,8 +972,10 @@ if(!serviceparser.isEmpty())
 		if(departmentId==3){
 		 infraassetsmodal = new JSONObject();
 		 String assetname=(String)jsondata.get("Asset_Name");
+		 barcodeno=(String)jsondata.get("Barcode_No");
 		infraassetsmodal.put("name", assetname);
 		infraassetsmodal.put("departmentId", departmentId);
+		infraassetsmodal.put("barcodeno", barcodeno);
 		arrlist.add(infraassetsmodal);
 		}
 	}
@@ -994,7 +998,12 @@ if(!serviceparser.isEmpty())
 		String infraasserts=request.getParameter("emp_assets");
 		String empcode=request.getParameter("emp_code");
 		String comments=request.getParameter("comments");
+		String departmentid=request.getParameter("departmentId");
+		long Department = Long.parseLong(departmentid);
+		int assetDepartment=(int)Department;
 		int department = 0;
+		JSONArray serviceparser=null;
+		String assetname=null;
 		String barcodeno=null;
 		String empinfo = null;
 		String empassets=null;
@@ -1009,64 +1018,80 @@ if(!serviceparser.isEmpty())
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
-		try {
-		JSONArray serviceparser=null;
+	/*	try {
+	
 			JSONParser parser = new JSONParser();
 			serviceparser = (JSONArray) parser.parse(empassets);
 		    for (Object str : serviceparser) {
 				JSONObject jsondata=(JSONObject)str;
-				String assetname=(String)jsondata.get("Asset_Name");
+			assetname=(String)jsondata.get("Asset_Name");
 				 barcodeno=(String)jsondata.get("Barcode_No");
 				 Long departmentId=(Long) jsondata.get("Department_Id");
 				department=departmentId.intValue();
-			/*if(department==3){*/
-				assetsallocatedby=(String)jsondata.get("Allocated_By");
+		        assetsallocatedby=(String)jsondata.get("Allocated_By");
 				assetsallocateddate=(String)jsondata.get("AllocatedDate");
 				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 				 try {
 					date = formatter.parse(assetsallocateddate);
 					 formatter.format(date); 
-					
-				} catch (java.text.ParseException e) {
+					} catch (java.text.ParseException e) {
 					e.printStackTrace();
 				}
-				/* try {
+				 try {
 					empdetails.assetDeallocation("ss0073", barcodeno, inframanagerempcode);
 					System.out.println(barcodeno);
 				} catch (RemoteException e) {
 					e.printStackTrace();
-				}*/
+				}
 				}
 		    }
 		catch (ParseException e) {
 			e.printStackTrace();
-		}
+		}*/
 		JSONObject insertasserts = new JSONObject();
 		Date today = new Date();
 		TblAssetsManagement infraasset = new TblAssetsManagement();
 		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
 		String[] asserts = infraasserts.split(",");
 		for (String assetssplit : asserts) {
-			infraasset.setAssetsIssue(assetssplit);
+			JSONParser parser = new JSONParser();
+			try {
+				serviceparser = (JSONArray) parser.parse(empassets);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		for (Object str : serviceparser) {
+		JSONObject jsondata=(JSONObject)str;
+		Long departmentId=(Long) jsondata.get("Department_Id");
+		if(departmentId==3){
+		assetname=(String)jsondata.get("Asset_Name");
+		if(assetssplit.equals(assetname))
+		{
+		barcodeno=(String)jsondata.get("Barcode_No");
+		assetsallocatedby=(String)jsondata.get("Allocated_By");
+		assetsallocateddate=(String)jsondata.get("AllocatedDate");
+		    infraasset.setAssetsIssue(assetssplit);
 			infraasset.setCreatedBy("System");
 			infraasset.setCreatedOn(today);
-			infraasset.setDepartmentId(department);
+			infraasset.setDepartmentId(assetDepartment);
 			infraasset.setIssuedBy(assetsallocatedby);
 			infraasset.setIssuedOn(date);
 			infraasset.setItemStatus(2);
 			infraasset.setReceivedBy(inframanagerempcode);
 			infraasset.setReceivedOn(today);
-			infraasset.setAssetsbarcodeno("");
+			infraasset.setAssetsbarcodeno(barcodeno);
 			infraasset.setTblUserResignation(resignedUser);
 			insertasserts = noduesservice.submitnoduesassets(infraasset);
+			}
+			}
+		}
 		}
 		TblNoDuesClearence nodues = new TblNoDuesClearence();
 		nodues.setComments(comments);
 		nodues.setDepartmentFinalStatus(2);
 		nodues.setTbluserresignation(resignedUser);
-		nodues.setDepartmentId(department);
+		nodues.setDepartmentId(assetDepartment);
 		insertasserts = noduesservice.submitNoduesclearence(nodues);
-		
 		return insertasserts;
 	}
 
@@ -1137,9 +1162,7 @@ if(!serviceparser.isEmpty())
 
 			String filePath = uploadDocumentFTPClient(filename,empCode,bytes);
 			MstUploadItem mstUploadItem = employeeDocumentService.entityById(itemId);
-
-
-			TblUserResignation resignation = resignationService.getById(id);
+            TblUserResignation resignation = resignationService.getById(id);
 
 			TblUploadedPath uploadPath = new TblUploadedPath();
 
@@ -1452,8 +1475,7 @@ status = 9;
 	}
 	@RequestMapping(value = "/insertaccountassets", method = RequestMethod.POST)
 	@ResponseBody
-	public JSONObject insertaccountassets(
-			 HttpServletRequest request, HttpSession session) {
+	public JSONObject insertaccountassets(HttpServletRequest request, HttpSession session) {
 		session = request.getSession();
 		String accountmanagerempcode = (String) session.getAttribute("employeecode");
 		String assertsreceived = (String) request.getParameter("emp_assets");
@@ -1540,14 +1562,18 @@ status = 9;
 
 	@RequestMapping(value = "/rejectempassets", method = RequestMethod.GET)
 	@ResponseBody
-	public JSONObject rejectaccountassets(HttpServletRequest request, HttpSession session,
-			                              @RequestParam("received_assets") String receivedassets,
-			                              @RequestParam("not_received") String notreceivedassets,  
-			                              @RequestParam("comments") String comments,
-			                              @RequestParam("emp_code") String empcode,
-			                              @RequestParam("final_status") int status) {
+	public JSONObject rejectaccountassets(HttpServletRequest request, HttpSession session) {
+		String receivedassets=request.getParameter("received_assets");
+		String notreceivedassets=request.getParameter("not_received");
+		String comments=request.getParameter("comments");
+		String empcode=request.getParameter("emp_code");
+		String status=request.getParameter("final_status");
+		int finalstatus=Integer.parseInt(status);
+		String departmentId=request.getParameter("departmentId");
+		long Department = Long.parseLong(departmentId);
+	    int assetDepartment=(int)Department;
 		ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
-		String managercode="";
+		String managercode=null;
 		session = request.getSession();
 		// Department Manager Information
 		String departmentmanagerempcode = (String) session.getAttribute("employeecode");
@@ -1560,7 +1586,7 @@ status = 9;
 				JSONObject managerservicejson=(JSONObject) departmentmanagerparse.parse(departmentempInfo);
 				String departmentmanagername=(String) managerservicejson.get("EmployeeName");
 				String departmentmanageremail=(String) managerservicejson.get("CompanyEmail");
-				String departmentmanagerdepartmentid=(String) managerservicejson.get("DepartmentID");
+				/*String departmentmanagerdepartmentid=(String) managerservicejson.get("DepartmentID");*/
 		} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -1616,7 +1642,7 @@ status = 9;
 			receiveditem.setAssetsIssue(remaingassets);
 			receiveditem.setCreatedBy("system");
 			receiveditem.setCreatedOn(today);
-			receiveditem.setDepartmentId(4);
+			receiveditem.setDepartmentId(assetDepartment);
 			receiveditem.setIssuedBy("pradeep attri");
 			receiveditem.setIssuedOn(today);
 			receiveditem.setItemStatus(1);
@@ -1636,7 +1662,7 @@ status = 9;
 				receiveditem.setAssetsIssue(assetsitem);
 				receiveditem.setCreatedBy("system");
 				receiveditem.setCreatedOn(today);
-				receiveditem.setDepartmentId(4);
+				receiveditem.setDepartmentId(assetDepartment);
 				receiveditem.setIssuedBy("pradeep attri");
 				receiveditem.setIssuedOn(today);
 				receiveditem.setItemStatus(2);
@@ -1649,8 +1675,8 @@ status = 9;
 		}
 		TblNoDuesClearence clearence = new TblNoDuesClearence();
 		clearence.setComments(comments);
-		clearence.setDepartmentFinalStatus(status);
-		clearence.setDepartmentId(4);
+		clearence.setDepartmentFinalStatus(finalstatus);
+		clearence.setDepartmentId(assetDepartment);
 		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
 		clearence.setTbluserresignation(resignedUser);
 		rejectjson = noduesservice.submitNoduesclearence(clearence);

@@ -73,11 +73,11 @@ application.controller('noduesitmodaljscontroller', function($scope, $http,
 		var emp_data = 'comments=' + $scope.empcomments + '&emp_code='
 				+ $scope.emplycode + '&not_received=' + $scope.itemnotselected
 				+ '&received_assets=' + $scope.selectedItems + '&final_status='
-				+ $scope.rejected_final_status;
+				+ $scope.rejected_final_status+'&departmentId='+departmentid;
 
 		$http.get(domain +'/rejectempassets?'+emp_data)
 		.success(function(data) {
-			alert("rejected it assets")
+			/*alert("rejected it assets")*/
      location.reload();
 		})
 	}
