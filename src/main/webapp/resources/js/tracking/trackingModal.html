@@ -16,65 +16,65 @@
          <div class="form-group col-sm-12" >
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Employee Code :</label>
                 <div class="col-sm-9">
-                 <input type="text" ng-disabled="true" ng-model="resempcode">
+                 <input type="text" ng-readonly="true" ng-model="resempcode">
                 </div>
             </div>
             <div class="form-group col-sm-12" >
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Resignation Date :</label>
                 <div class="col-sm-12">
-                 <input type="text" ng-disabled="true" ng-model="resdate">
+                 <input type="text" ng-readonly="true" ng-model="resdate">
                 </div>
             </div>
             <div class="form-group col-sm-12" >
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Current Resignation Status :</label>
                 <div class="col-sm-12">
-                 <input type="text" ng-disabled="true" ng-model="resstatus">
+                 <input type="text" ng-readonly="true" ng-model="resstatus">
                 </div>
             </div>
             <div class="form-group col-sm-12" >
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">RM Status :</label>
                 <div class="col-sm-12" >
-                 <input type="text" ng-if="resStatusid > '1' && resStatusid != '3' " ng-disabled="true" value="RM ACCEPTED" >
-                 <input type="text" ng-if="resStatusid == '3' " ng-disabled="true" value="RM Rejected" >
-                  <input type="text" ng-if="resStatusid == '1' " ng-disabled="true" value="RM Approval Pending" >
+                 <input type="text" ng-if="resStatusid > '1' && resStatusid != '3' " ng-readonly="true" value="RM ACCEPTED" >
+                 <input type="text" ng-if="resStatusid == '3' " ng-readonly="true" value="RM Rejected" >
+                  <input type="text" ng-if="resStatusid == '1' " ng-readonly="true" value="RM Approval Pending" >
                 </div>
             </div>
               <div class="form-group col-sm-12" >
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">RM Approval Date :</label>
                 <div class="col-sm-12">
-                 <input type="text" ng-disabled="true" ng-model="resapprovaldate">
+                 <input type="text" ng-readonly="true" ng-model="resapprovaldate">
                 </div>
             </div>
             <div class="form-group col-sm-12" >
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">HR Status :</label>
                 <div class="col-sm-12" >
-                 <input type="text" ng-if="resStatusid > '1' && resStatusid < '5' && resStatusid != '3' " ng-disabled="true" value="Last Working Day Decision Pending" >
-                <input type="text" ng-if="resStatusid > '4' " ng-disabled="true" value="Last Working Day Decided" >
-                <input type="text" ng-if="resStatusid < '2' " ng-disabled="true" value="Resignation Pending With RM" >
-                <input type="text" ng-if="resStatusid == '3' " ng-disabled="true" value="Resignation Rejected By RM" >
+                 <input type="text" ng-if="resStatusid > '1' && resStatusid < '5' && resStatusid != '3' " ng-readonly="true" value="Last Working Day Decision Pending" >
+                <input type="text" ng-if="resStatusid > '4' " ng-readonly="true" value="Last Working Day Decided" >
+                <input type="text" ng-if="resStatusid < '2' " ng-readonly="true" value="Resignation Pending With RM" >
+                <input type="text" ng-if="resStatusid == '3' " ng-readonly="true" value="Resignation Rejected By RM" >
                 </div>
             </div>
              <div class="form-group col-sm-12" >
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">HR Approval Date :</label>
                 <div class="col-sm-12">
-                 <input type="text" ng-disabled="true" ng-model="reshrapprovaldate">
+                 <input type="text" ng-readonly="true" ng-model="reshrapprovaldate">
                 </div>
             </div>
             <div class="form-group col-sm-12" >
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Last Working Date Decided :</label>
                 <div class="col-sm-12">
-                 <input type="text" ng-disabled="true" ng-model="reslwddate">
+                 <input type="text" ng-readonly="true" ng-model="reslwddate">
                 </div>
             </div>
             <div class="form-group col-sm-12" ng-init=noduesstatusinit(resid)>
                 <div ng-if="resStatusid > '4' && resStatusid <'7'"> 
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">No Dues Status :</label>
                 <div class="col-sm-12" >
-                 <input type="text"  ng-disabled="true" value="No Dues Pending" >
+                 <input type="text"  ng-readonly="true" value="No Dues Pending" >
                  <div ng-repeat="dept in pendingNoDuesDeptList">
                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;" >No Dues Pending From :</label>
                 <div class="col-sm-12" >
-                 <input type="text" ng-disabled="true" value="{{dept|uppercase}}" >
+                 <input type="text" ng-readonly="true" value="{{dept|uppercase}}" >
                 </div>
                 </div>
                 </div>
@@ -82,29 +82,29 @@
                 <div ng-if="resStatusid > '6'">
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">No Dues Status :</label>
                 <div class="col-sm-12">
-                 <input type="text"  ng-disabled="true" value="No Dues Completed">
+                 <input type="text"  ng-readonly="true" value="No Dues Completed">
                 </div>
                 </div>
                 <div ng-if="resStatusid < '4'">
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">No Dues Status :</label>
                 <div class="col-sm-12">
-                 <input type="text" ng-disabled="true" value="No Dues To Be Initiated">
+                 <input type="text" ng-readonly="true" value="No Dues To Be Initiated">
                 </div>
                 </div>
                 <div ng-if="resStatusid == '3'">
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">No Dues Status :</label>
                 <div class="col-sm-12">
-                 <input type="text" ng-disabled="true" value="Resignation Rejected By RM">
+                 <input type="text" ng-readonly="true" value="Resignation Rejected By RM">
                 </div>
                 </div>
             </div>
           <div class="form-group col-sm-12" >
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Exit Interviews Pending :</label>
                 <div class="col-sm-12">
-                 <input type="text" ng-if="resStatusid >'6' && resStatusid <'9'" ng-disabled="true" value="Exit Interview Pending">
-                 <input type="text" ng-if="resStatusid <'7' && resStatusid!='3'" ng-disabled="true" value="Exit Interview Initiation Pending">
-                 <input type="text" ng-if="resStatusid == '3'" ng-disabled="true" value="Resignation Rejected By RM">
-                  <input type="text" ng-if="resStatusid > '8'" ng-disabled="true" value="Exit Interview Completed">
+                 <input type="text" ng-if="resStatusid >'6' && resStatusid <'9'" ng-readonly="true" value="Exit Interview Pending">
+                 <input type="text" ng-if="resStatusid <'7' && resStatusid!='3'" ng-readonly="true" value="Exit Interview Initiation Pending">
+                 <input type="text" ng-if="resStatusid == '3'" ng-readonly="true" value="Resignation Rejected By RM">
+                  <input type="text" ng-if="resStatusid > '8'" ng-readonly="true" value="Exit Interview Completed">
                 </div>
             </div>
             
@@ -113,11 +113,11 @@
                 <div ng-if="resStatusid > '9' && resStatusid <'11'"> 
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Document Uploading Status :</label>
                 <div class="col-sm-12" >
-                 <input type="text"  ng-disabled="true" value="Documents Uploading Pending" >
+                 <input type="text"  ng-readonly="true" value="Documents Uploading Pending" >
                  <div ng-repeat="doc in notUploadedDocs">
                <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;" >Document Pending :</label>
                 <div class="col-sm-12" >
-                 <input type="text" ng-disabled="true" value="{{doc |uppercase}}" >
+                 <input type="text" ng-readonly="true" value="{{doc |uppercase}}" >
                 </div>
                 </div>
                 </div>
@@ -125,19 +125,19 @@
                 <div ng-if="resStatusid < '9' ">
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Document uploading Status :</label>
                 <div class="col-sm-12">
-                 <input type="text"  ng-disabled="true" value="Document Uploading Intitiation Pending">
+                 <input type="text"  ng-readonly="true" value="Document Uploading Intitiation Pending">
                 </div>
                 </div>
                 <div ng-if="resStatusid > '11' ">
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Document uploading Status :</label>
                 <div class="col-sm-12">
-                 <input type="text"  ng-disabled="true" value="Documents Uploading Completed">
+                 <input type="text"  ng-readonly="true" value="Documents Uploading Completed">
                 </div>
                 </div>
                 <div ng-if="resStatusid == '3' ">
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Document uploading Status :</label>
                 <div class="col-sm-12">
-                 <input type="text"  ng-disabled="true" value="Resignation Rejected By Rm">
+                 <input type="text"  ng-readonly="true" value="Resignation Rejected By Rm">
                 </div>
                 </div>
             </div>

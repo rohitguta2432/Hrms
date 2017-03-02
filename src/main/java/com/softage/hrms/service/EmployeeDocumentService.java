@@ -17,4 +17,5 @@ public interface EmployeeDocumentService {
 	public TblUploadedPath getByResignId(int resignId,int itemId);
 	public JSONObject getNotUploadedDocumentsById(int resignationID);
 	public String update(TblUploadedPath tblUploadedPath);
+	public TblUploadedPath findByEmpCodeAndItemId(String empcode,int itemid);
 }

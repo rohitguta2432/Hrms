@@ -152,4 +152,21 @@ public class EmployeeDocumentDaoImp implements EmployeeDocumentDao{
 		return result;
 	}
 
+	@Override
+	@Transactional
+	public TblUploadedPath findByEmpCodeAndItemId(String empcode, int itemid) {
+		TblUploadedPath tbluploadedpath=new TblUploadedPath();
+		Session session=this.sessionfactory.getCurrentSession();
+		String hql="select tbluploadedpath from TblUploadedPath tbluploadedpath where tbluploadedpath.empCode=:employeecode and tbluploadedpath.mstUploadItem.uploadId=:itemid";
+		Query query=session.createQuery(hql);
+		query.setParameter("employeecode", empcode);
+		query.setParameter("itemid", itemid);
+		try{
+		tbluploadedpath=(TblUploadedPath)query.uniqueResult();
+		}catch(NullPointerException e){
+			tbluploadedpath=null;
+		}
+		return tbluploadedpath;
+	}
+
 }

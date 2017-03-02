@@ -8,13 +8,18 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.softage.hrms.controller.HomeController;
 import com.softage.hrms.dao.PageDao;
 
 @Repository
 public class PageDaoImpl implements PageDao {
+	
+	private static final Logger logger = LoggerFactory.getLogger(PageDaoImpl.class);
 	
 	@Autowired
 	private SessionFactory sessionfactory;
@@ -37,10 +42,14 @@ public class PageDaoImpl implements PageDao {
 	public JSONObject getPagesBasedOnRoleId(String empcode, String hitdatetime, int roleid) {
 		JSONObject jsonObject=new JSONObject();
 		Session session=this.sessionfactory.getCurrentSession();
+		try{
 		String sql="Call usp_rolepage_mapping(?,?,?)";
 		Query query=session.createSQLQuery(sql).setParameter(0,empcode).setParameter(1,hitdatetime).setParameter(2,roleid);
 		List list=query.list();
 		jsonObject.put("pages", list);
+		}catch(Exception e){
+			logger.error(">>>>>>>>>>>>>>> Exception in retreiving the pages in dao"+e.getMessage());
+		}
 		return jsonObject;
 	}
 

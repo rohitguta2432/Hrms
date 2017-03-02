@@ -156,12 +156,7 @@ public class HomeController {
 		ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 		try {
 			empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO", keys, values);
-			System.out.println(empassets);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-
-		try { 	
+			System.out.println(empassets); 	
 			String empInfo=i.enterPriseDataService("EVM","EmpInfo", keys,values);
 
 			String assestInfo=i.enterPriseDataService("Asset", "ASSETINFO", keys, assetValues);
@@ -175,6 +170,7 @@ public class HomeController {
 			System.out.println(i.getUserDetail("ss0077").getRoleId());
 			model.addAttribute("emp", i.getUserDetail("ss0077").getFirstName());
 		} catch (Exception e) {
+			logger.error(">>>>>>>>>>>>>>> Exception in default method"+e.getMessage());
 			model.addAttribute("msg", "NULL Values");
 		}
 
@@ -186,19 +182,18 @@ public class HomeController {
 	public JSONObject getTemplateLinks(HttpServletRequest request, HttpSession session) {
 		JSONObject jsobj = new JSONObject();
 		session = request.getSession();
+		try{
 		String empcode = (String) session.getAttribute("employeecode");
 		int roleid = (Integer) session.getAttribute("roleid");
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date currDatetime = new Date();
 		String current_date = df.format(currDatetime);
 		System.out.println("The current datetime is : " + current_date);
-		ISoftAgeEnterpriseProxy emp_prxoy = new ISoftAgeEnterpriseProxy();
-		// try {
 		//jsobj = pageService.getPagesLink(roleid);NEW METHOD TO BE MADE,made below this
-		jsobj=pageService.getPagesBasedOnRoleId(empcode,current_date,roleid); 
-		// } catch (RemoteException e) {
-		// e.printStackTrace();
-		// }
+		jsobj=pageService.getPagesBasedOnRoleId(empcode,current_date,roleid);
+		}catch(Exception e){
+			logger.error(">>>>>>>>>>>>>>> Exception in getPages in controller"+e.getMessage());
+		}
 		return jsobj;
 	}
 
@@ -228,6 +223,7 @@ public class HomeController {
 			jsob.put("noticeTime", notice_time);
 			jsob.put("reldate", jsonRelDate);
 		} catch (Exception e) {
+			logger.error(">>>>>>>>>>>>>>> Exception in initialization of resignation page in controller"+e.getMessage());
 			e.printStackTrace();
 		}
 		return jsob;
@@ -236,7 +232,6 @@ public class HomeController {
 	@RequestMapping(value = "/resignation", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getResignationPage(HttpServletRequest request, HttpSession session) {
-		// String employee_code="ss0077";
 		session = request.getSession();
 		String empcode = (String) session.getAttribute("employeecode");
 		int circleid = (Integer) session.getAttribute("circleid");
@@ -245,20 +240,15 @@ public class HomeController {
 		TblUserResignation resignation = new TblUserResignation();
 		Date dateobj = new Date();
 		DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		System.out.println("date is : " + df.format(dateobj) + " office code is : "+office_code);
 		JSONObject jsonObj = new JSONObject();
-		//try {
+		try{
 		String re = request.getParameter("emp_reason");
-		System.out.println(re);
 		int reason_for_leaving = Integer.parseInt(request.getParameter("emp_reason"));
+		System.out.println("date is : " + df.format(dateobj) + " office code is : "+office_code);
+		System.out.println(re);
 		MstReason reason_mast = resignationService.getReason(reason_for_leaving);
 		MstResignationStatus status_mast = resignationService.getStatus(1);
 		String remarks = request.getParameter("emp_comments");
-
-		// emp.getUserDetail(empcode).getReportingManager(); GET RM USING ESF
-		// SERVICE
-		// String hr_empcode=emp.getUserDetail(empcode).getHrManager(); GET HR
-		// USING ESF SERVICE
 		String[] keys={"empcode"};
 		String[] values={empcode};
 		String empinfostring = null;
@@ -269,7 +259,6 @@ public class HomeController {
 		String[] officekeys = {"OFFICECODE"};
 		String[] officevalues = {office_code};
 		String hr_empcode=null;
-		try {
 			empinfostring = emp.enterPriseDataService("EVM", "EmpInfo", keys, values);
 			noduestring=emp.enterPriseDataService("EVM", "NODUESOWNERS", officekeys, officevalues);
 			empinfoJson = (JSONObject)parser.parse(empinfostring);
@@ -279,9 +268,6 @@ public class HomeController {
 			System.out.println(empinfoJson);
 			//noduesJson=(JSONObject)parser.parse("");
 			//System.out.println(empinfoJson);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
 		String rm_empcode=(String)empinfoJson.get("ManagerCode");
 		//String rm_empcode = "ss0078";
 		//String hr_empcode = "ss0073";
@@ -318,19 +304,18 @@ public class HomeController {
 		String rm_message = "Request for resignatin has been raised by " + empcode + " for RM";
 		String hr_message = "Request for resignatin has been raised by " + empcode + " for HR";
 		String emp_message = "Request for resignation has been raised by you";
+	
 		if (jsonObj.get("result").equals("successful")) {
-			try {
+
 				mailService.sendEmail(manager_email, "evm@softageindia.com", "test", rm_message);
 				mailService.sendEmail(hr_email, "evm@softageindia.com", "test", hr_message);
 				mailService.sendEmail(emp_email, "evm@softageindia.com", "test", emp_message);
-			} catch (Exception e) {
-				// e.printStackTrace();
-				System.out.println("Problem is sending email");
-			}
+
 
 		}
-
-
+		}catch(Exception e){
+			logger.error(">>>>>>>>>>>>>>> Exception in submitting resignation"+e.getMessage());
+		}
 		return jsonObj;
 	}
 
@@ -1096,14 +1081,19 @@ if(!serviceparser.isEmpty())
 	
 	@RequestMapping(value = "/getUploadItems", method = RequestMethod.GET)
 	@ResponseBody
-	public JSONArray getUploadItems() {
+	public JSONArray getUploadItems(HttpServletRequest request,HttpSession session) {
 		JSONArray list = new JSONArray();
+		session=request.getSession();
+		int roleid=(Integer)session.getAttribute("roleid");
 		// item List depends on deptId 
-		int deptId=2;
+		int deptId=0;//will change as roleid changes
+		if(roleid==16){
+			deptId=5;
+		}else if(roleid==17){
+			deptId=6;
+		}
 		
-		
-
-		List<MstUploadItem> itemList = employeeDocumentService.getUploadItems(2);
+		List<MstUploadItem> itemList = employeeDocumentService.getUploadItems(deptId);
 
 		for (MstUploadItem mstUploadItem : itemList) {
 			JSONObject jsonObject = new JSONObject();
@@ -1121,14 +1111,12 @@ if(!serviceparser.isEmpty())
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject upload(MultipartHttpServletRequest request, HttpServletResponse response) {
-
+		HttpSession session = request.getSession();
 		String fileLocation = "D:/CSVFile/";
-		String empId = "ss0062";
+		//String empId = "ss0062";
 		String result = null;
 
 		try {
-			HttpSession session = request.getSession();// added by arpan for change
-			// in hr approval service
 			JSONArray list = new JSONArray();
 			int circle_code = (Integer) session.getAttribute("circleid");
 			String uploadedBy = (String) session.getAttribute("employeecode");
@@ -1154,14 +1142,19 @@ if(!serviceparser.isEmpty())
 			MstUploadItem mstUploadItem = employeeDocumentService.entityById(itemId);
             TblUserResignation resignation = resignationService.getById(id);
 
-			TblUploadedPath uploadPath = new TblUploadedPath();
-
-			uploadPath.setUploadedBy(uploadedBy);
-			uploadPath.setEmpCode(empCode);
-			uploadPath.setPath(filePath);
-			uploadPath.setUploadedOn(new Date());
-			uploadPath.setTblUserResignation(resignation);
-			uploadPath.setMstUploadItem(mstUploadItem);
+			TblUploadedPath uploadPath = employeeDocumentService.findByEmpCodeAndItemId(empCode,itemId);
+			if(uploadPath==null){
+				uploadPath.setUploadedBy(uploadedBy);
+				uploadPath.setEmpCode(empCode);
+				uploadPath.setPath(filePath);
+				uploadPath.setUploadedOn(new Date());
+				uploadPath.setTblUserResignation(resignation);
+				uploadPath.setMstUploadItem(mstUploadItem);
+			}else{
+				uploadPath.setUploadedBy(uploadedBy);
+				uploadPath.setPath(filePath);
+				uploadPath.setUploadedOn(new Date());
+			}
 			result= employeeDocumentService.save(uploadPath);
 
 			if(itemId==3){

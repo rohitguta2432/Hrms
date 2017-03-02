@@ -76,6 +76,7 @@ public class ResignationDaoImpl implements ResignationDao {
 		//Query query=session.createSQLQuery(sql);
 		JSONObject jsonResult=new JSONObject();
 		List<JSONObject> jsonList=new ArrayList<JSONObject>();
+		try{
 		Query query=session.createQuery("select resignReason.id,resignReason.reason from MstReason resignReason");
 		List<Object[]> results=query.list();
 		for(Object[] reasonOnj : results){
@@ -87,6 +88,9 @@ public class ResignationDaoImpl implements ResignationDao {
 			jsonList.add(json);
 		}
 		jsonResult.put("reasonList", jsonList);
+		}catch(Exception e){
+			logger.error(">>>>>>>>>>>>>>> Exception in resignationInitializationDao to get reasons"+e.getMessage());
+		}
 		return jsonResult;
 	}
 
@@ -115,6 +119,7 @@ public class ResignationDaoImpl implements ResignationDao {
 		//String releiving_date=null;
 		String flagResult=null;
 		Boolean flag=null;
+		try{
 		Session session=this.sessionFactory.getCurrentSession();
 		String sp_query="call usp_getReleivingDate(?,?)";
 		Query query=session.createSQLQuery(sp_query).setParameter(0, empcode).setParameter(1, noticeperiod);
@@ -134,6 +139,9 @@ public class ResignationDaoImpl implements ResignationDao {
 		//jsob.put("releaseDate", releiving_date);
 		jsob.put("releaseDate", formatter.format(releiving_date));
 		jsob.put("flag",flag);
+		}catch(Exception e){
+			logger.error(">>>>>>>>>>>>>>> Exception in retreiving the relieving date in dao"+e.getMessage());
+		}
 		return jsob;
 	}
 

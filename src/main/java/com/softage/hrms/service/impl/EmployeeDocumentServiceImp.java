@@ -57,4 +57,9 @@ public class EmployeeDocumentServiceImp implements EmployeeDocumentService {
 		return employeeDocumentDao.update(tblUploadedPath);
 	}
 
+	@Override
+	public TblUploadedPath findByEmpCodeAndItemId(String empcode, int itemid) {
+		return employeeDocumentDao.findByEmpCodeAndItemId(empcode, itemid);
+	}
+
 }
