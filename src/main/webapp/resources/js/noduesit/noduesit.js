@@ -1,5 +1,10 @@
 application.controller('noduesitcontroller',function($scope,$http,$modal,$rootScope,$window) {
 var status=5;
+$scope.accepted=false;
+$scope.$on("EVT_ACCEPTED",function(event,data){
+	$scope.accepted = true;
+	$scope.modalInstance.close();
+});
 	$scope.init=function(){
 /*Employee grid information*/
 			$http.get(domain+'/getnoduesemplist?status='+status)
@@ -8,9 +13,9 @@ var status=5;
 			/*alert($scope.nodueitjs);*/
 })
 		
-			error(function(data,status,headers,config){
-			/*alert('not found');*/
-				})
+			/*error(function(data,status,headers,config){
+			alert('not found');
+				})*/
 }
 	$scope.EmployeeFeedback=function(empcode)
 	{
@@ -24,7 +29,7 @@ var status=5;
            scope.emp_code=emp_code;
            
            
-var modalInstance = $modal.open({
+$scope.modalInstance = $modal.open({
 	  scope:scope,
       templateUrl : "resources/js/noduesit/noduesitmodal.html",
 			controller :'noduesitmodaljscontroller'	

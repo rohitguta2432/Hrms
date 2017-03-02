@@ -116,13 +116,14 @@
 														 <thead>
 																<tr>
 																	<th>item</th>
+																	<th>barcode</th>
 																	<th>received</th>
 																</tr>
 															</thead>
 													
 														  <tbody ng-repeat="emp in nodueshrassets">      
 														<tr>
-								<td>{{emp.name}}</td><td> <input type="checkbox" name="check"  ng-model="emp.selected" value="{{emp.name}}" required/></td>
+								<td>{{emp.name}}</td><td>{{emp.barcodeno}}</td><td> <input type="checkbox" name="check"  ng-model="emp.selected" value="{{emp.name}}" required/></td>
 								 <span ng-show="hr.check.$dirty && hr.check.$error.required">This field is required</span>
 								 </tr>
 							</tbody>

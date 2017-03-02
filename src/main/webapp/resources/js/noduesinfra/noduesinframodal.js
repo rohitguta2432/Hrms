@@ -28,15 +28,14 @@ application.controller('noduesinframodalcontroller',function($scope,$http,$windo
 	 $scope.submit=function(form){
 		 angular.forEach($scope.nodueinfraassets,function(emp){
 	            if(emp.selected){
-	            	
-	            	$scope.selectedItems.push(emp.name);
+	          $scope.selectedItems.push(emp.name);
 	            	$scope.selectedItemsbarcode.push(emp.barcodeno);
 	            }
 	            })
-	         alert($scope.selectedItems)
-	          alert($scope.selectedItemsbarcode)
+	        /* alert($scope.selectedItems)
+	          alert($scope.selectedItemsbarcode)*/
 var emp_data='emp_assets='+$scope.selectedItems+'&comments='+$scope.empcomments+'&emp_code='+$scope.emp_code
-+'&departmentId='+departmentid;
++'&departmentId='+departmentid+'&emp_barcode='+$scope.selectedItemsbarcode;
 		 /*alert("accept "+emp_data)*/
 		 $http({
 		        method: 'POST',

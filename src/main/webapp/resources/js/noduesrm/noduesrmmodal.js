@@ -1,6 +1,6 @@
 application.controller('noduesrmmodalcontroller', function($scope, $http,
 		$window, $modal,$location) {
-
+var departmentid=1;
 	$http
 			.get(
 					domain + '/getemployeemodalinfo?employee_code='
@@ -71,8 +71,8 @@ application.controller('noduesrmmodalcontroller', function($scope, $http,
 		var emp_data = 'comments=' + $scope.empcomments + '&emp_code='
 				+ $scope.emplycode + '&not_received=' + $scope.itemnotselected
 				+ '&received_assets=' + $scope.selectedItems + '&final_status='
-				+ $scope.rejected_final_status;
-		/*alert(emp_data)*/
+				+ $scope.rejected_final_status+'&departmentId='+departmentid;
+		alert(emp_data)
 		$http.get(domain + '/rejectempassets?' + emp_data)
 		.success(function(data) {
 			alert("rejected rm asserts")

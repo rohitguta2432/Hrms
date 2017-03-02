@@ -63,8 +63,9 @@ $scope.reject=function()
 	    	})
 		/*alert("not received  item "+$scope.itemnotselected)*/
 		
-var emp_data='comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&not_received='+$scope.itemnotselected+'&received_assets='+$scope.selectedItems+'&final_status='+$scope.rejected_final_status;
-/*alert(emp_data)*/
+var emp_data='comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&not_received='+$scope.itemnotselected+'&received_assets='+$scope.selectedItems+'&final_status='+$scope.rejected_final_status
++'&departmentId='+departmentid;
+alert(emp_data)
 $http.get(domain+'/rejectempassets?'+emp_data)
 .success(function(data){
        alert("rejected hr asserts")

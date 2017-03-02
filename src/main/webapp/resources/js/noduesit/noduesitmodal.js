@@ -1,4 +1,4 @@
-application.controller('noduesitmodaljscontroller', function($scope, $http,
+application.controller('noduesitmodaljscontroller', function($rootScope, $scope, $http,
 		$window,$location) {
 	var departmentid;
 	$http
@@ -16,10 +16,8 @@ application.controller('noduesitmodaljscontroller', function($scope, $http,
 								+ $scope.emp_code)
 								.success(
 								function(data, status, headers, config) {
-									
-									 /* alert('the data returned is :'+JSON.stringify({data : data}));*/
-									 
-									$scope.nodueitassets = data.itassets;
+					/* alert('the data returned is :'+JSON.stringify({data : data}));*/
+									 $scope.nodueitassets = data.itassets;
 							departmentid=$scope.nodueitassets[0].DepartmentId
 								/*alert(departmentid)*/
 								})
@@ -52,7 +50,8 @@ application.controller('noduesitmodaljscontroller', function($scope, $http,
 			}
 		}).success(function(data) {
 			alert("submitted it assets")
-			location.reload();
+			$rootScope.$broadcast("EVT_ACCEPTED",{accepted:true});
+			//location.reload();
 		}).error(function() {
 			/* alert("errors") */
 		})

@@ -73,8 +73,8 @@ $scope.reject = function() {
 		var emp_data = 'comments=' + $scope.empcomments + '&emp_code='
 				+ $scope.emplycode + '&not_received=' + $scope.itemnotselected
 				+ '&received_assets=' + $scope.selectedItems + '&final_status='
-				+ $scope.rejected_final_status;
-		/* alert(emp_data) */
+				+ $scope.rejected_final_status+'&departmentId='+departmentid;
+		 alert(emp_data) 
 		$http.get(domain + '/rejectempassets?' + emp_data)
 		alert("rejected account assets")
 		location.reload();
