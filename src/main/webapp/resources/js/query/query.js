@@ -3,7 +3,7 @@ application.controller('queryController', ['$scope', '$http','$modal','$location
 
 
 	$scope.getDepartments=function(){
-		alert('initializing ')
+		//alert('initializing ')
 		$http.get(domain+'/getDepartments')
 		.success(function(data,status,headers,config){		
 			$scope.departments=data;
@@ -14,7 +14,7 @@ application.controller('queryController', ['$scope', '$http','$modal','$location
 	}
 	$scope.submit=function(){
 
-		alert(" departmentId ="+$scope.departmentId );
+		//alert(" departmentId ="+$scope.departmentId );
 		var emp_data='deptId='+$scope.departmentId+'&quertext='+$scope.queryText;
 		//alert(JSON.stringify({data:$scope.selReasons}))
 		$http.get(domain+'/employeeQuery?'+emp_data)
@@ -49,7 +49,7 @@ application.controller('queryController', ['$scope', '$http','$modal','$location
 
 
 	$scope.getDepartments=function(){
-		alert('initializing ')
+		//alert('initializing ')
 		$http.get(domain+'/getDepartments')
 		.success(function(data,status,headers,config){		
 			$scope.departments=data;
@@ -79,7 +79,7 @@ application.controller('queryController', ['$scope', '$http','$modal','$location
 	}
 
 	$scope.getEmpQueryList=function(){
-		alert('initializing ')
+		//alert('initializing ')
 		$http.get(domain+'/getEmpQueryList')
 		.success(function(data,status,headers,config){		
 			$scope.empQuerys=data;
@@ -110,7 +110,7 @@ application.controller('queryController', ['$scope', '$http','$modal','$location
 
 
 	$scope.getMessage=function(){
-		alert('initializing ')
+		//alert('initializing ')
 
 		$http.get(domain+'/getMessages?queryId='+$scope.params.queryId)
 		.success(function(data,status,headers,config){		

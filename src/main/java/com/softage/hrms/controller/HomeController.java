@@ -596,7 +596,7 @@ public class HomeController {
 			session.setAttribute("exexmpcode", ex_emp.getExEmpUserid());
 			session.setAttribute("exempemail", ex_emp.getExEmpEmail());
 			session.setAttribute("firstname", ex_emp.getExEmpUserid());
-			//session.setAttribute("officeCode", ex_emp.get);
+			session.setAttribute("officeCode", ex_emp.getOfficeId());
 			return "home";
 
 		} else {
@@ -2066,7 +2066,11 @@ System.out.println(departmentid);
 	public JSONObject employeeQuery(HttpServletRequest request, HttpSession session) {
 		String empcode = null;
 		String empName = null;
-		//String rmEmpCode = "ss0078";
+		String assingToEmpcode=null;
+		String officecode=null;
+		JSONParser parser=new JSONParser();
+		JSONObject jsonObject=new JSONObject();
+		//String rmEmpCode = "ss0078";officeCode
 		try {
 			session = request.getSession();
 			empcode = (String) session.getAttribute("employeecode");
@@ -2075,7 +2079,25 @@ System.out.println(departmentid);
 			int departmentId = Integer.parseInt(deptId);
 			// get Query Assigned Manager Employee Code
 			TblUserResignation tblUserResignation = resignationService.getResignationUserService(empcode, 0);
-			String assingToEmpcode = "ss0078";
+			//String assingToEmpcode = "ss0078";
+			officecode=(String)session.getAttribute("officeCode");
+			ISoftAgeEnterpriseProxy emp=new ISoftAgeEnterpriseProxy();
+			String[] officekeys = { "OFFICECODE" };
+			String[] officevalues={officecode};
+			String noduesString=emp.enterPriseDataService("EVM", "NODUESOWNERS", officekeys, officevalues);
+			jsonObject=(JSONObject)parser.parse(noduesString);
+			if(departmentId==3){
+				assingToEmpcode=(String)jsonObject.get("InfraEmpCode");
+			}
+			if(departmentId==4){
+				assingToEmpcode=(String)jsonObject.get("ItEmpCode");
+			}
+			if(departmentId==5){
+				assingToEmpcode=(String)jsonObject.get("HrEmpCode");
+			}
+			if(departmentId==6){
+				assingToEmpcode=(String)jsonObject.get("AccountEmpCode");
+			}
 			String queryText = request.getParameter("quertext");
 
 			TblExEmployeeQuery employeeQuery = new TblExEmployeeQuery();
@@ -2112,8 +2134,8 @@ System.out.println(departmentid);
 	@ResponseBody
 	public JSONArray saveQueryManger(HttpServletRequest request, HttpSession session) {
 
-		String empcode = "ss0062";
-		String empName = "Rohit";
+		//String empcode = "ss0062";
+		//String empName = "Rohit";
 		String rmEmpCode = "";
 		JSONArray array = new JSONArray();
 
@@ -2152,15 +2174,15 @@ System.out.println(departmentid);
 	@ResponseBody
 	public JSONArray getMessages(HttpServletRequest request, HttpSession session) {
 
-		String empcode = "ss0062";
-		String empName = "Rohit";
-		String rmEmpCode = "";
+		//String empcode = "ss0062";
+		//String empName = "Rohit";
+		//String rmEmpCode = "";
 		JSONArray array = new JSONArray();
 
 		try {
 
 			session = request.getSession();
-			rmEmpCode = (String) session.getAttribute("employeecode");
+			//rmEmpCode = (String) session.getAttribute("employeecode");
 			String queryId = request.getParameter("queryId");
 			int id = Integer.parseInt(queryId);
 
@@ -2395,8 +2417,9 @@ System.out.println(departmentid);
 				jsonObject.put("id", count);
 				jsonObject.put("department", deptName);
 				jsonObject.put("queryId", tblExEmployeeQuery.getQueryId());
+				jsonObject.put("queryfrom", tblExEmployeeQuery.getCreatedBy());
 				jsonObject.put("queryText", tblExEmployeeQuery.getQueryText());
-				jsonObject.put("date", tblExEmployeeQuery.getCreatedOn().toString());
+				jsonObject.put("queryDate", tblExEmployeeQuery.getCreatedOn().toString());
 				jsonArrey.add(jsonObject);
 
 			}

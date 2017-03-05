@@ -35,8 +35,10 @@ public class QueryDaoImp implements QueryDao {
 		List<MstDepartment> mastDepartments=null;
 		try{
 			Session session=this.sessionFactory.getCurrentSession();
-			String hql="from MstDepartment";
+			String hql="from MstDepartment where department_name!=:dept1 and department_name!=:dept2";
 			Query query=session.createQuery(hql);
+			query.setParameter("dept1", "hardware");
+			query.setParameter("dept2", "rm");
 			mastDepartments=query.list();
 			logger.info("get Departmet List Sucessfully" + mastDepartments);
 		}catch (Exception e) {

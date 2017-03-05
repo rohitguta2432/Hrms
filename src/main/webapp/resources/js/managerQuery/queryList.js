@@ -3,7 +3,7 @@ application.controller('MangerQueryController', ['$scope', '$http','$modal','$lo
 	/*app.controller('MangerQueryController', ['$scope', '$http','$modal','$location','$rootScope', function ($scope, $http,$modal,$location,$rootScope) {*/
 	
 	$scope.getQueryList=function(){
-		alert('initializing ')
+		//alert('initializing ')
 		$http.get(domain+'/getQueryList')
 		.success(function(data,status,headers,config){		
 			$scope.empQueryList=data;
@@ -44,7 +44,7 @@ application.controller('MangerQueryController', ['$scope', '$http','$modal','$lo
 		})
 	}
 	$scope.getMessage=function(){
-		alert('initializing ')
+		//alert('initializing ')
 		
 		$http.get(domain+'/getMessages?queryId='+$scope.params.queryId)
 		.success(function(data,status,headers,config){		
