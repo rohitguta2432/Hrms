@@ -898,8 +898,9 @@ System.out.println(departmentid);
 		String comments = request.getParameter("comments");
 		String empcode = request.getParameter("emp_code");
 		String DepartmentId = request.getParameter("departmentId");
-		long Department = Long.parseLong(DepartmentId);
-		int assetDepartment = (int) Department;
+	/*	long Department = Long.parseLong(DepartmentId);
+		int assetDepartment = (int) Department;*/
+		int assetDepartment=Integer.parseInt(DepartmentId);
 		String itmanagername = null;
 		int department = 0;
 		int resignationId = 0;

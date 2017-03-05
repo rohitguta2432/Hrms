@@ -18,7 +18,7 @@ $http
 								function(data, status, headers, config) {
 					/* alert('the data returned is :'+JSON.stringify({data : data}));*/
 									 $scope.nodueitassets = data.itassets;
-							departmentid=$scope.nodueitassets[0].DepartmentId
+							/*departmentid=$scope.nodueitassets[0].DepartmentId*/
 								alert($scope.department_id)
 							
 								})
@@ -40,7 +40,7 @@ $http
 		/* alert("store item "+$scope.selectedItems) */
 
 		var emp_data = 'emp_assets=' + $scope.selectedItems + '&comments='
-				+ $scope.empcomments + '&emp_code=' + $scope.emp_code +'&departmentId='+departmentid;
+				+ $scope.empcomments + '&emp_code=' + $scope.emp_code +'&departmentId='+$scope.department_id;
 		/* alert("accepted "+emp_data) */
 		$http({
 			method : 'POST',
@@ -73,7 +73,7 @@ $http
 		var emp_data = 'comments=' + $scope.empcomments + '&emp_code='
 				+ $scope.emplycode + '&not_received=' + $scope.itemnotselected
 				+ '&received_assets=' + $scope.selectedItems + '&final_status='
-				+ $scope.rejected_final_status+'&departmentId='+departmentid;
+				+ $scope.rejected_final_status+'&departmentId='+$scope.department_id;
 
 		$http.get(domain +'/rejectempassets?'+emp_data)
 		.success(function(data) {
