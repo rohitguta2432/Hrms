@@ -34,8 +34,22 @@ public class NoDuesDaoImpl implements NoDuesDao {
 
 	@Override
 	@Transactional
-	public List<String> getrmacceptedempcode(String officeid, int status) {
+	public List<String> getrmacceptedempcode(String stageid,int departmentid,String officeid, int status) {
 		List<String> listempcode = new ArrayList<String>();
+		
+		if(stageid.equalsIgnoreCase("1")){
+			try {
+				org.hibernate.Session session = sessionfactory.getCurrentSession();
+				String hql = "select r.emp_code from tbl_user_resignation r join tbl_no_dues_clearence n on r.resignation_id=n.resignation_id where r.status="+status+" and r.office_id='"+officeid+"' and n.department_final_status <> 2 and n.department_id="+departmentid;
+				Query query = session.createSQLQuery(hql);
+				/*query.setParameter("officeId", officeid);
+				query.setParameter("status", status);*/
+				listempcode = query.list();
+			} catch (Exception e) {
+				logger.error("get RM Accepted employee List>>>>   ", e);
+			}
+		}else{
+		
 		try {
 			org.hibernate.Session session = sessionfactory.getCurrentSession();
 			String hql = "select empCode from TblUserResignation where officeId=:officeId and status=:status";
@@ -45,6 +59,7 @@ public class NoDuesDaoImpl implements NoDuesDao {
 			listempcode = query.list();
 		} catch (Exception e) {
 			logger.error("get RM Accepted employee List>>>>   ", e);
+		}
 		}
 	return listempcode;
 	}

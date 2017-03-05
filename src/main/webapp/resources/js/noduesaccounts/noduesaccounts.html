@@ -46,7 +46,7 @@
 																	<th>S.No</th>
 																	<th>Employee Code</th>
 																	<th>Employee name</th>
-																	<th>DepartmentID</th>
+																	<th>SpokeCode</th>
 																	<th>Designation</th>
 																	<th>Location</th>
 																	<th>Accept/Reject</th>
@@ -57,11 +57,11 @@
 																	<td>{{emp.sno}}</td>
 																	<td>{{emp.empcode}}</td>
 																	<td>{{emp.empname}}</td>
-																	<td>{{emp.department}}</td>
+																	<td>{{emp.spokecode}}</td>
 																	<td>{{emp.designation}}</td>
 																	<td>{{emp.location}}</td>
 																	<td><button  class="btn btn-primary btn-sm" 
-																	 ng-click="EmployeeFeedback(emp.empcode)">NODUES 
+																	 ng-click="EmployeeFeedback(emp.empcode,emp.department)">NODUES 
 																	</button></td>
 																</tr>
 															</tbody>

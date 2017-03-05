@@ -1,22 +1,22 @@
 application.controller('nodueshrmodalcontroller',function($scope,$http,$window,$modal,$location) {
-	var departmentid;
+
 $http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 			.success(function(data, status, headers, config){
 			/*alert('data are found');*/
 				
 				$scope.emplycode=data.empcode;
 				$scope.empfirstname=data.empname;
-				$scope.empdepartment=data.department;
+				$scope.empdepartment=data.spokecode;
 				$scope.empdesignation=data.designation;
 				$scope.emplocation=data.location;
 				
 				
-				$http.get(domain+'/gethrassets?employee_code='+$scope.emplycode)
+				$http.get(domain+'/getassets?employee_code='+$scope.emplycode+'&department='+$scope.department_id)
 				.success(function(data,status,headers,config){
 					/*alert('the data returned is : '+JSON.stringify({data : data}));*/
-					$scope.nodueshrassets=data.hrassets;
-					departmentid=$scope.nodueshrassets[0].DepartmentId
-				/*alert(departmentid)*/
+					$scope.nodueshrassets=data.assets;
+				
+				/*alert($scope.department_id)*/
 					})
 				})
 			   $scope.selectedItems = [];
@@ -29,7 +29,7 @@ $http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 		if (emp.selected) $scope.selectedItems.push(emp.name)
 			
 		})
-	var emp_data='emp_assets='+$scope.selectedItems+'&hr_comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&departmentId='+departmentid;
+	var emp_data='emp_assets='+$scope.selectedItems+'&hr_comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&departmentId='+$scope.department_id;
 		/*alert("data is"+emp_data)*/
 
 	$http({
@@ -64,7 +64,7 @@ $scope.reject=function()
 		/*alert("not received  item "+$scope.itemnotselected)*/
 		
 var emp_data='comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&not_received='+$scope.itemnotselected+'&received_assets='+$scope.selectedItems+'&final_status='+$scope.rejected_final_status
-+'&departmentId='+departmentid;
++'&departmentId='+$scope.department_id;
 /*alert(emp_data)*/
 $http.get(domain+'/rejectempassets?'+emp_data)
 .success(function(data){

@@ -17,7 +17,7 @@ $http
 								.success(
 								function(data, status, headers, config) {
 					/* alert('the data returned is :'+JSON.stringify({data : data}));*/
-									 $scope.nodueitassets = data.itassets;
+									 $scope.nodueitassets = data.assets;
 							/*departmentid=$scope.nodueitassets[0].DepartmentId*/
 								alert($scope.department_id)
 							

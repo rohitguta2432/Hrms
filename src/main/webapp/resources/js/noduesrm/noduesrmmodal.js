@@ -11,7 +11,7 @@ var departmentid=1;
 
 						$scope.emplycode = data.empcode;
 						$scope.empfirstname = data.empname;
-					    $scope.empdepartment = data.department;
+					    $scope.empdepartment = data.spokecode;
 						$scope.empdesignation = data.designation;
 						$scope.emplocation = data.location;
 
@@ -37,8 +37,7 @@ var departmentid=1;
 		var emp_data = 'emp_assets=' + $scope.selectedItems + '&comments='
 				+ $scope.empcomments + '&emp_code=' + $scope.emplycode;
 		/*alert("accepted " + emp_data)*/
-
-		$http({
+$http({
 			method : 'POST',
 			url : domain + '/insertrmassets',
 			data : emp_data,

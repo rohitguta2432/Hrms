@@ -19,9 +19,9 @@ public class NoDuesServiceImpl implements NoDuesService {
 	private NoDuesDao noduesdao;
 
 	@Override
-	public List<String> listrmacceptedempcode(String officeid, int status) {
+	public List<String> listrmacceptedempcode(String stageid,int departmentid,String officeid, int status) {
 
-		return noduesdao.getrmacceptedempcode(officeid, status);
+		return noduesdao.getrmacceptedempcode(stageid,departmentid,officeid, status);
 	}
 
 	@Override

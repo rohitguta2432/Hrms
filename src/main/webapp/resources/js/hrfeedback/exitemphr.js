@@ -2,9 +2,10 @@ application.controller('hrfeedbackcontroller', function($scope, $http, $modal,
 		$rootScope, $window) {
 	/* alert("hii"); */
 	var status = 7;
+	var stage=2;
 	$scope.init = function() {
 		/* Employee grid information */
-		$http.get(domain + '/getnoduesemplist?status=' + status).success(
+		$http.get(domain + '/getnoduesemplist?status=' + status+'&stageid='+stage).success(
 				function(data, status, headers, config) {
 					$scope.hrfeedback = data.emplist;
 					/*alert($scope.hrfeedback);*/

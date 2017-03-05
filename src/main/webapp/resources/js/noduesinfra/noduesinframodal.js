@@ -1,20 +1,19 @@
 application.controller('noduesinframodalcontroller',function($scope,$http,$window,$location) {
-	var departmentid;
+
 	$http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 			.success(function(data, status, headers, config){
 			/*alert('data are found');*/
 				$scope.emplycode=data.empcode;
 				$scope.empfirstname=data.empname;
-			    $scope.empdepartment=data.department;
+			    $scope.empdepartment=data.spokecode;
 				$scope.empdesignation=data.designation;
 				$scope.emplocation=data.location;
 				
-				$http.get(domain+'/getinframodalassets?employee_code='+$scope.emplycode)
+				$http.get(domain+'/getassets?employee_code='+$scope.emplycode+'&department='+$scope.department_id)
 				.success(function(data,status,headers,config){
 					/*alert('the data returned is : '+JSON.stringify({data : data}));*/
-					$scope.nodueinfraassets=data.infraassets;
-					departmentid=$scope.nodueinfraassets[0].departmentId
-			/*alert(departmentid)*/
+					$scope.nodueinfraassets=data.assets;
+					/*alert($scope.department_id)*/
 				})
 				
 				})
@@ -35,7 +34,7 @@ application.controller('noduesinframodalcontroller',function($scope,$http,$windo
 	        /* alert($scope.selectedItems)
 	          alert($scope.selectedItemsbarcode)*/
 var emp_data='emp_assets='+$scope.selectedItems+'&comments='+$scope.empcomments+'&emp_code='+$scope.emp_code
-+'&departmentId='+departmentid+'&emp_barcode='+$scope.selectedItemsbarcode;
++'&departmentId='+$scope.department_id+'&emp_barcode='+$scope.selectedItemsbarcode;
 		 /*alert("accept "+emp_data)*/
 		 $http({
 		        method: 'POST',
@@ -69,7 +68,7 @@ $scope.reject=function()
 	          	})
 	      	/*alert("not received  item "+$scope.itemnotselected)*/
 	      var emp_data='comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&not_received='+$scope.itemnotselected+'&received_assets='+$scope.selectedItems+'&final_status='+$scope.rejected_final_status
-	      +'&departmentId='+departmentid;
+	      +'&departmentId='+$scope.department_id;
 	      		/*alert(emp_data)*/
 	      		$http.get(domain+'/rejectempassets?'+emp_data)
 		 

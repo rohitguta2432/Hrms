@@ -1,8 +1,9 @@
 application.controller('noduesrmcontroller',function($scope,$http,$modal,$rootScope,$window) {
 var status=5;
+var stage=1;
 	$scope.init=function(){
 /*Employee grid information*/
-			$http.get(domain+'/getnoduesemplist?status='+status)
+			$http.get(domain+'/getnoduesemplist?status='+status+'&stageid='+stage)
 			.success(function(data,status,headers,config){
 			$scope.noduesrmsystem=data.emplist;
 

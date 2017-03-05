@@ -1,5 +1,6 @@
 application.controller('noduesitcontroller',function($scope,$http,$modal,$rootScope,$window) {
 var status=5;
+var stage=1;
 $scope.accepted=false;
 $scope.$on("EVT_ACCEPTED",function(event,data){
 	$scope.accepted = true;
@@ -7,7 +8,7 @@ $scope.$on("EVT_ACCEPTED",function(event,data){
 });
 	$scope.init=function(){
 /*Employee grid information*/
-			$http.get(domain+'/getnoduesemplist?status='+status)
+			$http.get(domain+'/getnoduesemplist?status='+status+'&stageid='+stage)
 			.success(function(data,status,headers,config){
 			$scope.nodueitjs=data.emplist;
 			/*alert($scope.nodueitjs);*/

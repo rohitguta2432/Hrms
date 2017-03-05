@@ -1,6 +1,6 @@
 application.controller('noduesaccountsmodalcontroller', function($scope, $http,
 		$window, $modal,$location) {
-	var departmentid;
+
 	$http
 			.get(
 					domain + '/getemployeemodalinfo?employee_code='
@@ -10,18 +10,17 @@ application.controller('noduesaccountsmodalcontroller', function($scope, $http,
 
 						$scope.emplycode = data.empcode;
 						$scope.empfirstname = data.empname;
-					    $scope.empdepartment = data.department;
+					    $scope.empdepartment = data.spokecode;
 						$scope.empdesignation = data.designation;
 						$scope.emplocation = data.location;
 
 						$http.get(
-								domain + '/getacccountassets?employee_code='
-										+ $scope.emp_code).success(
+								domain + '/getassets?employee_code='
+										+ $scope.emp_code+'&department='+$scope.department_id).success(
 								function(data, status, headers, config) {
-									$scope.nodueaccountassets = data.accountassets;
+									$scope.nodueaccountassets = data.assets;
 								/*alert($scope.nodueaccountassets)*/
-									departmentid=$scope.nodueaccountassets[0].DepartmentId
-							/*alert(departmentid)*/
+
 								})
 					})
 
@@ -39,7 +38,7 @@ application.controller('noduesaccountsmodalcontroller', function($scope, $http,
 		})
 		var emp_data = 'emp_assets=' + $scope.selectedItems
 				+ '&accounts_comments=' + $scope.empcomments + '&emp_code='
-				+ $scope.emp_code + '&final_status=' + $scope.accepted_status+'&departmentId='+departmentid;
+				+ $scope.emp_code + '&final_status=' + $scope.accepted_status+'&departmentId='+$scope.department_id;
 	/*	alert(emp_data)*/
 
 		$http({
@@ -73,7 +72,7 @@ $scope.reject = function() {
 		var emp_data = 'comments=' + $scope.empcomments + '&emp_code='
 				+ $scope.emplycode + '&not_received=' + $scope.itemnotselected
 				+ '&received_assets=' + $scope.selectedItems + '&final_status='
-				+ $scope.rejected_final_status+'&departmentId='+departmentid;
+				+ $scope.rejected_final_status+'&departmentId='+$scope.department_id;
 		/* alert(emp_data) */
 		$http.get(domain + '/rejectempassets?' + emp_data)
 		alert("rejected account assets")

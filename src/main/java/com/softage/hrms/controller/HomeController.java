@@ -97,25 +97,18 @@ import javassist.compiler.Parser;
 public class HomeController {
 
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-
 	@Autowired
 	private ExitInterviewService exitinterviewservice;
-
 	@Autowired
 	private PageService pageService;
-
 	@Autowired
 	private ResignationService resignationService;
-
 	@Autowired
-
 	private MailServiceImpl mailService;
 	@Autowired
 	private ApprovalService approvalservice;
-
 	@Autowired
 	private NoDuesService noduesservice;
-
 	@Autowired
 	private EmployeeDocumentService employeeDocumentService;
 
@@ -596,7 +589,9 @@ public class HomeController {
 			session.setAttribute("exexmpcode", ex_emp.getExEmpUserid());
 			session.setAttribute("exempemail", ex_emp.getExEmpEmail());
 			session.setAttribute("firstname", ex_emp.getExEmpUserid());
+
 			session.setAttribute("officeCode", ex_emp.getOfficeId());
+
 			return "home";
 
 		} else {
@@ -638,7 +633,9 @@ public class HomeController {
 	@RequestMapping(value = "/getnoduesemplist", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getnoduesitinformation(HttpServletRequest request, HttpSession session,
-			@RequestParam("status") int status) {
+			@RequestParam("status") int status ) {
+		String stageid=request.getParameter("stageid");
+		
 		int count = 1;
 		int departmentid = 0;
 		// session = request.getSession();
@@ -659,7 +656,7 @@ public class HomeController {
 		ArrayList<JSONObject> listinformation = new ArrayList<JSONObject>();
 		JSONObject jsonobject = new JSONObject();
 		ISoftAgeEnterpriseProxy emp_prxoy = new ISoftAgeEnterpriseProxy();
-		List<String> listempcoderesign = noduesservice.listrmacceptedempcode(office_code, status);
+		List<String> listempcoderesign = noduesservice.listrmacceptedempcode(stageid,departmentid,office_code, status);
 		try {
 			for (String code : listempcoderesign) {
 				String[] key = { "empcode" };
@@ -679,9 +676,11 @@ public class HomeController {
 				String designation = (String) servicejson.get("Designation");
 				String spokename = (String) servicejson.get("SpokeName");
 				String employeecode = (String) servicejson.get("EmployeeCode");
-				/*long Departmentid = (Long) servicejson.get("DepartmentID");*/
+				/*
+				 * long Departmentid = (Long) servicejson.get("DepartmentID");
+				 */
 				String spokeCode = (String) servicejson.get("SpokeCode");
-System.out.println(departmentid);
+				System.out.println(departmentid);
 				JSONObject itjson = new JSONObject();
 				itjson.put("sno", count);
 				itjson.put("empcode", code);
@@ -898,9 +897,11 @@ System.out.println(departmentid);
 		String comments = request.getParameter("comments");
 		String empcode = request.getParameter("emp_code");
 		String DepartmentId = request.getParameter("departmentId");
-	/*	long Department = Long.parseLong(DepartmentId);
-		int assetDepartment = (int) Department;*/
-		int assetDepartment=Integer.parseInt(DepartmentId);
+		/*
+		 * long Department = Long.parseLong(DepartmentId); int assetDepartment =
+		 * (int) Department;
+		 */
+		int assetDepartment = Integer.parseInt(DepartmentId);
 		String itmanagername = null;
 		int department = 0;
 		int resignationId = 0;
@@ -1206,24 +1207,23 @@ System.out.println(departmentid);
 			MstUploadItem mstUploadItem = employeeDocumentService.entityById(itemId);
 			TblUserResignation resignation = resignationService.getById(id);
 
-			TblUploadedPath uploadPath = employeeDocumentService.findByEmpCodeAndItemId(empCode,itemId);
-			if(uploadPath==null){
-				TblUploadedPath newUploadPath=new TblUploadedPath();
+			TblUploadedPath uploadPath = employeeDocumentService.findByEmpCodeAndItemId(empCode, itemId);
+			if (uploadPath == null) {
+				TblUploadedPath newUploadPath = new TblUploadedPath();
 				newUploadPath.setUploadedBy(uploadedBy);
 				newUploadPath.setEmpCode(empCode);
 				newUploadPath.setPath(filePath);
 				newUploadPath.setUploadedOn(new Date());
 				newUploadPath.setTblUserResignation(resignation);
 				newUploadPath.setMstUploadItem(mstUploadItem);
-				result= employeeDocumentService.save(newUploadPath);
-			}else{
+				result = employeeDocumentService.save(newUploadPath);
+			} else {
 
 				uploadPath.setUploadedBy(uploadedBy);
 				uploadPath.setPath(filePath);
 				uploadPath.setUploadedOn(new Date());
-				result= employeeDocumentService.save(uploadPath);
+				result = employeeDocumentService.save(uploadPath);
 			}
-
 
 			if (itemId == 3) {
 				MstResignationStatus resignationStatus = resignationService.getStatus(11);
@@ -1249,10 +1249,10 @@ System.out.println(departmentid);
 	@RequestMapping(value = "/getDownloadItem", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONArray getDownloadItem(HttpServletRequest request, HttpServletResponse response) {
-		HttpSession session=request.getSession();
+		HttpSession session = request.getSession();
 		String fileLocation = "D:/CSVFile/";
-		//String empcode = "ss0062";
-		String empcode =(String)session.getAttribute("employeecode");
+		// String empcode = "ss0062";
+		String empcode = (String) session.getAttribute("employeecode");
 		String result = null;
 
 		String ftpHost = "172.25.37.14";
@@ -1299,8 +1299,8 @@ System.out.println(departmentid);
 	public void download(HttpServletRequest request, HttpServletResponse response) {
 
 		String fileLocation = "D:/CSVFile/";
-		//String empcode = "ss0062";
-		String empcode =null;
+		// String empcode = "ss0062";
+		String empcode = null;
 		String result = null;
 
 		String ftpHost = "172.25.37.14";
@@ -1312,8 +1312,9 @@ System.out.println(departmentid);
 
 		try {
 
-			HttpSession session = request.getSession();// added by arpan for change
-			empcode=(String)session.getAttribute("employeecode");
+			HttpSession session = request.getSession();// added by arpan for
+														// change
+			empcode = (String) session.getAttribute("employeecode");
 			String downloadBy = (String) session.getAttribute("employeecode");
 
 			String resignId1 = request.getParameter("resignId");
@@ -1469,8 +1470,8 @@ System.out.println(departmentid);
 		String password = "hrms@123@15";
 		FileOutputStream fos = null;
 		String ftpPath = "";
-		//FTPClient ftpClient = new FTPClient();
-		FTPSClient ftpClient =new FTPSClient();
+		// FTPClient ftpClient = new FTPClient();
+		FTPSClient ftpClient = new FTPSClient();
 		byte[] bytes = null;
 		InputStream inputStream = null;
 
@@ -1557,8 +1558,8 @@ System.out.println(departmentid);
 		String comments = (String) request.getParameter("accounts_comments");
 		String empcode = (String) request.getParameter("emp_code");
 		String DepartmentId = (String) request.getParameter("departmentId");
-		long Department = Long.parseLong(DepartmentId);
-		int assetDepartment = (int) Department;
+		/* long Department = Long.parseLong(DepartmentId); */
+		int assetDepartment = Integer.parseInt(DepartmentId);
 		int department = 0;
 		int resignationId = 0;
 		String empassets = null;
@@ -1594,7 +1595,8 @@ System.out.println(departmentid);
 			for (Object str : serviceparser) {
 				JSONObject jsondata = (JSONObject) str;
 				Long departmentId = (Long) jsondata.get("Department_Id");
-				if (departmentId == 6) {
+				int department1 = (int) (long) departmentId;
+				if (department1 == assetDepartment) {
 					assetname = (String) jsondata.get("Asset_Name");
 					if (assetssplit.equals(assetname)) {
 						barcodeno = (String) jsondata.get("Barcode_No");
@@ -1653,8 +1655,11 @@ System.out.println(departmentid);
 		String status = request.getParameter("final_status");
 		int finalstatus = Integer.parseInt(status);
 		String departmentId = request.getParameter("departmentId");
-		long Department = Long.parseLong(departmentId);
-		int assetDepartment = (int) Department;
+		/*
+		 * long Department = Long.parseLong(departmentId); int assetDepartment =
+		 * (int) Department;
+		 */
+		int assetDepartment = Integer.parseInt(departmentId);
 
 		ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 		String managercode = null;
@@ -1664,7 +1669,7 @@ System.out.println(departmentid);
 		String assetname = null;
 		JSONArray serviceparser = null;
 		Date date = null;
-		Date date1=null;
+		Date date1 = null;
 		String empassets = null;
 		session = request.getSession();
 		// Department Manager Information
@@ -1742,7 +1747,8 @@ System.out.println(departmentid);
 				JSONObject jsondata = (JSONObject) str;
 				Long departmentId1 = (Long) jsondata.get("Department_Id");
 				/* int DepartmentId=Integer.parseInt(departmentId1); */
-				if (departmentId1 == Department) {
+				int DepartmentId = (int) (long) departmentId1;
+                   if (DepartmentId == assetDepartment) {
 					assetname = (String) jsondata.get("Asset_Name");
 					if (remaingassets.equals(assetname)) {
 						barcodeno = (String) jsondata.get("Barcode_No");
@@ -1789,7 +1795,8 @@ System.out.println(departmentid);
 					JSONObject jsondata1 = (JSONObject) str1;
 					Long departmentId2 = (Long) jsondata1.get("Department_Id");
 					/* int DepartmentId=Integer.parseInt(departmentId1); */
-					if (departmentId2 == Department) {
+					int departmnet2 = (int) (long) departmentId2;
+					if (departmnet2 == assetDepartment) {
 						assetname = (String) jsondata1.get("Asset_Name");
 						if (assetsitem.equals(assetname)) {
 							barcodeno = (String) jsondata1.get("Barcode_No");
@@ -1827,10 +1834,10 @@ System.out.println(departmentid);
 		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
 		clearence.setTbluserresignation(resignedUser);
 		rejectjson = noduesservice.submitNoduesclearence(clearence);
-		/*
-		 * mailService.sendEmail(employeeemail, departmentmanageremail,
-		 * "NO DUES CLEARENCES", comments);
-		 */
+		
+		  mailService.sendEmail("rohit.raj@softageindia.com", "rohitgupta2432@gmail.com",
+		 "NO DUES CLEARENCES", comments);
+		 
 
 		return rejectjson;
 	}
@@ -1844,8 +1851,8 @@ System.out.println(departmentid);
 		String comments = (String) request.getParameter("hr_comments");
 		String empcode = (String) request.getParameter("emp_code");
 		String departmntId = (String) request.getParameter("departmentId");
-		long Department = Long.parseLong(departmntId);
-		int assetDepartment = (int) Department;
+		/*long Department = Long.parseLong(departmntId);*/
+		int assetDepartment = Integer.parseInt(departmntId);
 		int department = 0;
 		String assetname = null;
 		JSONArray serviceparser = null;
@@ -1881,7 +1888,8 @@ System.out.println(departmentid);
 			for (Object str : serviceparser) {
 				JSONObject jsondata = (JSONObject) str;
 				Long departmentId = (Long) jsondata.get("Department_Id");
-				if (departmentId == 5) {
+				int departmentId1=(int)(long)departmentId;
+				if (departmentId1 == assetDepartment) {
 					assetname = (String) jsondata.get("Asset_Name");
 					if (assetssplit.equals(assetname)) {
 						barcodeno = (String) jsondata.get("Barcode_No");
@@ -2066,15 +2074,17 @@ System.out.println(departmentid);
 	public JSONObject employeeQuery(HttpServletRequest request, HttpSession session) {
 		String empcode = null;
 		String empName = null;
+
 		String assingToEmpcode=null;
 		String officecode=null;
 		JSONParser parser=new JSONParser();
 		JSONObject jsonObject=new JSONObject();
 		//String rmEmpCode = "ss0078";officeCode
+
 		try {
 			session = request.getSession();
 			empcode = (String) session.getAttribute("employeecode");
-			empName=(String)session.getAttribute("firstname");
+			empName = (String) session.getAttribute("firstname");
 			String deptId = request.getParameter("deptId");
 			int departmentId = Integer.parseInt(deptId);
 			// get Query Assigned Manager Employee Code
@@ -2470,6 +2480,7 @@ System.out.println(departmentid);
 		String employeename = "";
 		String designation = "";
 		String spokename = "";
+		String spokecode=null;
 		int department = 0;
 		String[] key = { "empcode" };
 		String[] value = { empcode };
@@ -2483,6 +2494,7 @@ System.out.println(departmentid);
 			JSONObject serviceparser = (JSONObject) parser.parse(empinfo);
 			employeename = (String) serviceparser.get("EmployeeName");
 			designation = (String) serviceparser.get("Designation");
+	 spokecode=(String)serviceparser.get("SpokeCode");
 			spokename = (String) serviceparser.get("SpokeName");
 			Long departmentid = (Long) serviceparser.get("DepartmentID");
 			department = departmentid.intValue();
@@ -2495,6 +2507,7 @@ System.out.println(departmentid);
 			empfeedback.put("empcode", empcode);
 			empfeedback.put("empname", employeename);
 			empfeedback.put("department", department);
+			empfeedback.put("spokecode", spokecode);
 			empfeedback.put("designation", designation);
 			empfeedback.put("location", spokename);
 			List<JSONObject> listempquestion = exitinterviewservice.listempQuestion(stageid);
@@ -2664,13 +2677,14 @@ System.out.println(departmentid);
 
 		return employeefeedbackstatus;
 	}
+
 	@RequestMapping(value = "/getassets", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getnoduesassets(HttpServletRequest request) {
 		JSONObject assetsmodal = null;
 		String empcode = request.getParameter("employee_code");
-		String departmentid=request.getParameter("department");
-		int assetdepartment=Integer.parseInt(departmentid);
+		String departmentid = request.getParameter("department");
+		int assetdepartment = Integer.parseInt(departmentid);
 		String empassets = null;
 		String barcodeno = null;
 		JSONObject jsonassets = new JSONObject();
@@ -2691,7 +2705,7 @@ System.out.println(departmentid);
 			if (!serviceparser.isEmpty()) {
 				for (Object str : serviceparser) {
 					JSONObject jsondata = (JSONObject) str;
-                    Long departmentId = (Long) jsondata.get("Department_Id");
+					Long departmentId = (Long) jsondata.get("Department_Id");
 					Integer department = (int) (long) departmentId;
 					if (department == assetdepartment) {
 						String assetname = (String) jsondata.get("Asset_Name");
@@ -2703,12 +2717,12 @@ System.out.println(departmentid);
 						arrlist.add(assetsmodal);
 					}
 				}
-				jsonassets.put("itassets", arrlist);
+				jsonassets.put("assets", arrlist);
 			} else {
 				assetsmodal.put("name", "No Assets Allocated");
 				arrlist.add(assetsmodal);
 			}
-			jsonassets.put("itassets", arrlist);
+			jsonassets.put("assets", arrlist);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

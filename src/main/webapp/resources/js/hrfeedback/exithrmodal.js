@@ -4,7 +4,7 @@ $http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 			.success(function(data, status, headers, config){
 			    $scope.employeecode=data.empcode;
 				$scope.employeefirstname=data.empname;
-				$scope.employeedepartment=data.department;
+				$scope.employeedepartment=data.spokecode;
 				$scope.employeedesignation=data.designation;
 				$scope.employeelocation=data.location;
 				
