@@ -12,6 +12,24 @@ application.controller('MangerQueryController', ['$scope', '$http','$modal','$lo
 			alert('the error returned is : '+JSON.stringify({data : data}));
 		})
 	}
+	
+	$scope.createQuery=function(){
+
+		var scope=$rootScope.$new();
+		var modalInstance = $modal.open({
+			scope:scope,
+			templateUrl : 'resources/js/query/createQuery.html',
+			controller 	: 'queryController',
+			resolve:{
+				name: function(){
+					return name;
+				}
+			}
+		});
+
+
+
+	}
 
 	$scope.saveQueryManger=function(){
 		var queryData="queryReply="+$scope.queryReply+"&queryId="+$scope.params.queryId;

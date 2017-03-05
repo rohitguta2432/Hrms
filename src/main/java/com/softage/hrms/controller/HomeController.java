@@ -595,11 +595,13 @@ public class HomeController {
 			session.setAttribute("rmempcode", ex_emp.getRmEmpcode());
 			session.setAttribute("exexmpcode", ex_emp.getExEmpUserid());
 			session.setAttribute("exempemail", ex_emp.getExEmpEmail());
+			session.setAttribute("firstname", ex_emp.getExEmpUserid());
+			//session.setAttribute("officeCode", ex_emp.get);
 			return "home";
 
 		} else {
 			model.addAttribute("msg", "Incorrect Username or Password");
-			return "login";
+			return "redirect:exEmployeeLogin";
 		}
 	}
 
@@ -1203,20 +1205,24 @@ System.out.println(departmentid);
 			MstUploadItem mstUploadItem = employeeDocumentService.entityById(itemId);
 			TblUserResignation resignation = resignationService.getById(id);
 
-			TblUploadedPath uploadPath = employeeDocumentService.findByEmpCodeAndItemId(empCode, itemId);
-			if (uploadPath == null) {
+			TblUploadedPath uploadPath = employeeDocumentService.findByEmpCodeAndItemId(empCode,itemId);
+			if(uploadPath==null){
+				TblUploadedPath newUploadPath=new TblUploadedPath();
+				newUploadPath.setUploadedBy(uploadedBy);
+				newUploadPath.setEmpCode(empCode);
+				newUploadPath.setPath(filePath);
+				newUploadPath.setUploadedOn(new Date());
+				newUploadPath.setTblUserResignation(resignation);
+				newUploadPath.setMstUploadItem(mstUploadItem);
+				result= employeeDocumentService.save(newUploadPath);
+			}else{
+
 				uploadPath.setUploadedBy(uploadedBy);
-				uploadPath.setEmpCode(empCode);
 				uploadPath.setPath(filePath);
 				uploadPath.setUploadedOn(new Date());
-				uploadPath.setTblUserResignation(resignation);
-				uploadPath.setMstUploadItem(mstUploadItem);
-			} else {
-				uploadPath.setUploadedBy(uploadedBy);
-				uploadPath.setPath(filePath);
-				uploadPath.setUploadedOn(new Date());
+				result= employeeDocumentService.save(uploadPath);
 			}
-			result = employeeDocumentService.save(uploadPath);
+
 
 			if (itemId == 3) {
 				MstResignationStatus resignationStatus = resignationService.getStatus(11);
@@ -1242,9 +1248,10 @@ System.out.println(departmentid);
 	@RequestMapping(value = "/getDownloadItem", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONArray getDownloadItem(HttpServletRequest request, HttpServletResponse response) {
-
+		HttpSession session=request.getSession();
 		String fileLocation = "D:/CSVFile/";
-		String empcode = "ss0062";
+		//String empcode = "ss0062";
+		String empcode =(String)session.getAttribute("employeecode");
 		String result = null;
 
 		String ftpHost = "172.25.37.14";
@@ -1291,7 +1298,8 @@ System.out.println(departmentid);
 	public void download(HttpServletRequest request, HttpServletResponse response) {
 
 		String fileLocation = "D:/CSVFile/";
-		String empcode = "ss0062";
+		//String empcode = "ss0062";
+		String empcode =null;
 		String result = null;
 
 		String ftpHost = "172.25.37.14";
@@ -1302,9 +1310,9 @@ System.out.println(departmentid);
 		JSONArray uploadList = new JSONArray();
 
 		try {
-			HttpSession session = request.getSession();// added by arpan for
-														// change
 
+			HttpSession session = request.getSession();// added by arpan for change
+			empcode=(String)session.getAttribute("employeecode");
 			String downloadBy = (String) session.getAttribute("employeecode");
 
 			String resignId1 = request.getParameter("resignId");
@@ -1460,7 +1468,8 @@ System.out.println(departmentid);
 		String password = "hrms@123@15";
 		FileOutputStream fos = null;
 		String ftpPath = "";
-		FTPClient ftpClient = new FTPClient();
+		//FTPClient ftpClient = new FTPClient();
+		FTPSClient ftpClient =new FTPSClient();
 		byte[] bytes = null;
 		InputStream inputStream = null;
 
@@ -1476,7 +1485,7 @@ System.out.println(departmentid);
 			}
 
 			// FTPFile[] files =ftpClient.listDirectories(ftpPath);
-
+			ftpClient.execPROT("P");
 			ftpClient.enterLocalPassiveMode();
 			ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 
@@ -2054,12 +2063,13 @@ System.out.println(departmentid);
 	@RequestMapping(value = "/employeeQuery", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject employeeQuery(HttpServletRequest request, HttpSession session) {
-		String empcode = "ss0062";
-		String empName = "Rohit";
-		String rmEmpCode = "ss0078";
+		String empcode = null;
+		String empName = null;
+		//String rmEmpCode = "ss0078";
 		try {
 			session = request.getSession();
 			empcode = (String) session.getAttribute("employeecode");
+			empName=(String)session.getAttribute("firstname");
 			String deptId = request.getParameter("deptId");
 			int departmentId = Integer.parseInt(deptId);
 			// get Query Assigned Manager Employee Code
