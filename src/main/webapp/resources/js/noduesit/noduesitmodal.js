@@ -1,25 +1,26 @@
 application.controller('noduesitmodaljscontroller', function($rootScope, $scope, $http,
 		$window,$location) {
 	var departmentid;
-	$http
+$http
 			.get(
 					domain + '/getemployeemodalinfo?employee_code='
 							+ $scope.emp_code).success(
 					function(data, status, headers, config) {
 						$scope.emplycode = data.empcode;
 						$scope.empfirstname = data.empname;
-						$scope.empdepartment = data.department;
+						$scope.empdepartment = data.spokecode;
 						$scope.empdesignation = data.designation;
 						$scope.emplocation = data.location;
 
-						$http.get(domain + '/getitassets?employee_code='
-								+ $scope.emp_code)
+					/*	getitassets	*/$http.get(domain + '/getassets?employee_code='
+								+ $scope.emp_code+'&department='+$scope.department_id)
 								.success(
 								function(data, status, headers, config) {
 					/* alert('the data returned is :'+JSON.stringify({data : data}));*/
 									 $scope.nodueitassets = data.itassets;
 							departmentid=$scope.nodueitassets[0].DepartmentId
-								/*alert(departmentid)*/
+								alert($scope.department_id)
+							
 								})
 
 					})

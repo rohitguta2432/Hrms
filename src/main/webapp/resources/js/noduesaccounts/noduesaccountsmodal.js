@@ -21,7 +21,7 @@ application.controller('noduesaccountsmodalcontroller', function($scope, $http,
 									$scope.nodueaccountassets = data.accountassets;
 								/*alert($scope.nodueaccountassets)*/
 									departmentid=$scope.nodueaccountassets[0].DepartmentId
-							alert(departmentid)
+							/*alert(departmentid)*/
 								})
 					})
 
@@ -74,7 +74,7 @@ $scope.reject = function() {
 				+ $scope.emplycode + '&not_received=' + $scope.itemnotselected
 				+ '&received_assets=' + $scope.selectedItems + '&final_status='
 				+ $scope.rejected_final_status+'&departmentId='+departmentid;
-		 alert(emp_data) 
+		/* alert(emp_data) */
 		$http.get(domain + '/rejectempassets?' + emp_data)
 		alert("rejected account assets")
 		location.reload();

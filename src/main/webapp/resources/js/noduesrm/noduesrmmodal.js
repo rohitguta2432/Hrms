@@ -72,7 +72,7 @@ var departmentid=1;
 				+ $scope.emplycode + '&not_received=' + $scope.itemnotselected
 				+ '&received_assets=' + $scope.selectedItems + '&final_status='
 				+ $scope.rejected_final_status+'&departmentId='+departmentid;
-		alert(emp_data)
+		/*alert(emp_data)*/
 		$http.get(domain + '/rejectempassets?' + emp_data)
 		.success(function(data) {
 			alert("rejected rm asserts")

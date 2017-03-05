@@ -19,9 +19,9 @@ public class NoDuesServiceImpl implements NoDuesService {
 	private NoDuesDao noduesdao;
 
 	@Override
-	public List<String> listrmacceptedempcode(int circleid, int status) {
+	public List<String> listrmacceptedempcode(String officeid, int status) {
 
-		return noduesdao.getrmacceptedempcode(circleid, status);
+		return noduesdao.getrmacceptedempcode(officeid, status);
 	}
 
 	@Override
@@ -46,6 +46,17 @@ public class NoDuesServiceImpl implements NoDuesService {
 	@Override
 	public JSONObject getNoDuesPendingStatus(int resignationID) {
 		return noduesdao.getNoDuesPendingStatus(resignationID);
+	}
+
+	@Override
+	public void updateNoduesClearence(TblNoDuesClearence tblNoDuesClearence) {
+		noduesdao.updateNoduesClearence(tblNoDuesClearence);
+		
+	}
+
+	@Override
+	public TblNoDuesClearence getByResignationId(int resignationId) {
+	return noduesdao.findByResignationId(resignationId);
 	}
 
 	/*@Override

@@ -40,6 +40,7 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Constants;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
@@ -293,6 +294,7 @@ public class HomeController {
 			resignation.setResignationDate(dateobj);
 			resignation.setMstResignationStatus(status_mast);
 			resignation.setCircleId(circleid);
+			resignation.setOfficeId(office_code);
 			// resignation.setApprovedBy(empcode);
 			jsonObj = resignationService.submitResignationService(resignation);
 			// emp.getUserDetail(emp_code).getRMEmail(); RM email Using ESF
@@ -636,12 +638,26 @@ public class HomeController {
 	public JSONObject getnoduesitinformation(HttpServletRequest request, HttpSession session,
 			@RequestParam("status") int status) {
 		int count = 1;
-		session = request.getSession();
+		int departmentid = 0;
+		// session = request.getSession();
+		int role_id = (Integer) session.getAttribute("roleid");
+		if (role_id == 15) {
+			departmentid = 4;
+		} else if (role_id == 16) {
+			departmentid = 5;
+		} else if (role_id == 17) {
+			departmentid = 6;
+		} else if (role_id == 18) {
+			departmentid = 3;
+		} else if (role_id == 19) {
+			departmentid = 1;
+		}
+		String office_code = (String) session.getAttribute("officecode");
 		int circleid = (Integer) session.getAttribute("circleid");
 		ArrayList<JSONObject> listinformation = new ArrayList<JSONObject>();
 		JSONObject jsonobject = new JSONObject();
 		ISoftAgeEnterpriseProxy emp_prxoy = new ISoftAgeEnterpriseProxy();
-		List<String> listempcoderesign = noduesservice.listrmacceptedempcode(circleid, status);
+		List<String> listempcoderesign = noduesservice.listrmacceptedempcode(office_code, status);
 		try {
 			for (String code : listempcoderesign) {
 				String[] key = { "empcode" };
@@ -649,25 +665,35 @@ public class HomeController {
 				String empInfo = emp_prxoy.enterPriseDataService("EVM", "empInfo", key, value);
 				JSONParser parser = new JSONParser();
 				JSONObject servicejson = (JSONObject) parser.parse(empInfo);
+
+				// information based on officecode
+				String[] officekeys = { "OFFICECODE" };
+				String[] officevalues = { "CORGUR001" };
+				String NODUESOWNERS = emp_prxoy.enterPriseDataService("EVM", "NODUESOWNERS", officekeys, officevalues);
+				JSONParser parseemp = new JSONParser();
+				JSONObject jsonparse = (JSONObject) parseemp.parse(NODUESOWNERS);
+
 				String employeename = (String) servicejson.get("EmployeeName");
 				String designation = (String) servicejson.get("Designation");
 				String spokename = (String) servicejson.get("SpokeName");
 				String employeecode = (String) servicejson.get("EmployeeCode");
-				long departmentid = (Long) servicejson.get("DepartmentID");
-
+				/*long Departmentid = (Long) servicejson.get("DepartmentID");*/
+				String spokeCode = (String) servicejson.get("SpokeCode");
+System.out.println(departmentid);
 				JSONObject itjson = new JSONObject();
 				itjson.put("sno", count);
 				itjson.put("empcode", code);
 				itjson.put("empname", employeename);
 				itjson.put("department", departmentid);
 				itjson.put("designation", designation);
+				itjson.put("spokecode", spokeCode);
 				itjson.put("location", spokename);
 				listinformation.add(itjson);
 				count++;
 			}
 			jsonobject.put("emplist", listinformation);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("", e);
 		}
 
 		return jsonobject;
@@ -682,7 +708,7 @@ public class HomeController {
 		JSONObject itassetsmodal = new JSONObject();
 		String[] key = { "empcode" };
 		String[] value = { emp_code };
-		String empInfo = "";
+		String empInfo = null;
 
 		try {
 			empInfo = emp_prxoy.enterPriseDataService("EVM", "empInfo", key, value);
@@ -691,11 +717,13 @@ public class HomeController {
 			String employeename = (String) servicejson.get("EmployeeName");
 			String designation = (String) servicejson.get("Designation");
 			String spokename = (String) servicejson.get("SpokeName");
+			String spokecode = (String) servicejson.get("SpokeCode");
 			String employeecode = (String) servicejson.get("EmployeeCode");
 			long departmentid = (Long) servicejson.get("DepartmentID");
 			itassetsmodal.put("empcode", emp_code);
 			itassetsmodal.put("empname", employeename);
 			itassetsmodal.put("department", departmentid);
+			itassetsmodal.put("spokecode", spokecode);
 			itassetsmodal.put("designation", designation);
 			itassetsmodal.put("location", spokename);
 
@@ -765,6 +793,7 @@ public class HomeController {
 		JSONObject accountassetsmodal = null;
 		String empcode = request.getParameter("employee_code");
 		String empassets = null;
+		String barcodeno = null;
 		JSONObject jsonAccountassets = new JSONObject();
 		ArrayList<JSONObject> arrlist = new ArrayList<JSONObject>();
 		List<String> listvalue = new ArrayList<String>();
@@ -783,12 +812,14 @@ public class HomeController {
 			if (!serviceparser.isEmpty()) {
 				for (Object str : serviceparser) {
 					JSONObject jsondata = (JSONObject) str;
-					String assetname = (String) jsondata.get("Asset_Name");
 					Long departmentId = (Long) jsondata.get("Department_Id");
 					if (departmentId == 6) {
+						barcodeno = (String) jsondata.get("Barcode_No");
+						String assetname = (String) jsondata.get("Asset_Name");
 						accountassetsmodal = new JSONObject();
 						accountassetsmodal.put("name", assetname);
 						accountassetsmodal.put("DepartmentId", departmentId);
+						accountassetsmodal.put("barcodeno", barcodeno);
 						arrlist.add(accountassetsmodal);
 					}
 				}
@@ -837,7 +868,7 @@ public class HomeController {
 						hrassetsmodal = new JSONObject();
 						hrassetsmodal.put("name", assetname);
 						hrassetsmodal.put("DepartmentId", departmentId);
-						hrassetsmodal.put("barcode", barcodeno);
+						hrassetsmodal.put("barcodeno", barcodeno);
 						arrlist.add(hrassetsmodal);
 					}
 				}
@@ -869,6 +900,7 @@ public class HomeController {
 		int assetDepartment = (int) Department;
 		String itmanagername = null;
 		int department = 0;
+		int resignationId = 0;
 		Date date = null;
 		String empassets = null;
 		String barcodeno = null;
@@ -886,6 +918,7 @@ public class HomeController {
 		Date today = new Date();
 		TblAssetsManagement itasset = new TblAssetsManagement();
 		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
+		resignationId = resignedUser.getResignationId();
 		String[] assetsvalue = assetsissued.split(",");
 		Set<String> assetsset = new HashSet<String>(Arrays.asList(assetsvalue));
 		for (String assetssplit : assetsset) {
@@ -935,12 +968,19 @@ public class HomeController {
 				}
 			}
 		}
-		TblNoDuesClearence noduesclearence = new TblNoDuesClearence();
+		TblNoDuesClearence noduesclearence = noduesservice.getByResignationId(resignationId);
+		if (noduesclearence == null) {
+			noduesclearence = new TblNoDuesClearence();
+		}
 		noduesclearence.setComments(comments);
 		noduesclearence.setDepartmentFinalStatus(2);
 		noduesclearence.setDepartmentId(assetDepartment);
 		noduesclearence.setTbluserresignation(resignedUser);
-		insertitasserts = noduesservice.submitNoduesclearence(noduesclearence);
+		/*
+		 * insertitasserts =
+		 * noduesservice.submitNoduesclearence(noduesclearence);
+		 */
+		noduesservice.updateNoduesClearence(noduesclearence);
 		return insertitasserts;
 	}
 
@@ -978,9 +1018,7 @@ public class HomeController {
 						infraassetsmodal.put("departmentId", departmentId);
 						infraassetsmodal.put("barcodeno", barcodeno);
 						arrlist.add(infraassetsmodal);
-
 					}
-					return jsoninfraassets;
 				}
 				jsoninfraassets.put("infraassets", arrlist);
 			} else {
@@ -1009,6 +1047,7 @@ public class HomeController {
 		int department = 0;
 		JSONArray serviceparser = null;
 		String assetname = null;
+		int resignationId = 0;
 		String barcodeno = null;
 		String empinfo = null;
 		String empassets = null;
@@ -1028,6 +1067,7 @@ public class HomeController {
 		Date today = new Date();
 		TblAssetsManagement infraasset = new TblAssetsManagement();
 		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
+		resignationId = resignedUser.getResignationId();
 		String[] asserts = infraasserts.split(",");
 		Set<String> assetsset = new HashSet<String>(Arrays.asList(asserts));
 		for (String assetssplit : assetsset) {
@@ -1076,13 +1116,16 @@ public class HomeController {
 				}
 			}
 		}
-		TblNoDuesClearence nodues = new TblNoDuesClearence();
-		nodues.setComments(comments);
-		nodues.setDepartmentFinalStatus(2);
-		nodues.setTbluserresignation(resignedUser);
-		nodues.setDepartmentId(assetDepartment);
-		insertasserts = noduesservice.submitNoduesclearence(nodues);
-
+		TblNoDuesClearence noduesclearence = noduesservice.getByResignationId(resignationId);
+		if (noduesclearence == null) {
+			noduesclearence = new TblNoDuesClearence();
+		}
+		noduesclearence.setComments(comments);
+		noduesclearence.setDepartmentFinalStatus(2);
+		noduesclearence.setTbluserresignation(resignedUser);
+		noduesclearence.setDepartmentId(assetDepartment);
+		// insertasserts = noduesservice.submitNoduesclearence(nodues);
+		noduesservice.updateNoduesClearence(noduesclearence);
 		return insertasserts;
 	}
 
@@ -1507,6 +1550,7 @@ public class HomeController {
 		long Department = Long.parseLong(DepartmentId);
 		int assetDepartment = (int) Department;
 		int department = 0;
+		int resignationId = 0;
 		String empassets = null;
 		String barcodeno = null;
 		String assetsallocatedby = null;
@@ -1527,6 +1571,7 @@ public class HomeController {
 		Date today = new Date();
 		TblAssetsManagement accountasset = new TblAssetsManagement();
 		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
+		resignationId = resignedUser.getResignationId();
 		String[] asserts = assertsreceived.split(",");
 		Set<String> assetsset = new HashSet<String>(Arrays.asList(asserts));
 		for (String assetssplit : assetsset) {
@@ -1574,12 +1619,17 @@ public class HomeController {
 				}
 			}
 		}
-		TblNoDuesClearence nodues = new TblNoDuesClearence();
-		nodues.setComments(comments);
-		nodues.setDepartmentFinalStatus(2);
-		nodues.setTbluserresignation(resignedUser);
-		nodues.setDepartmentId(assetDepartment);
-		insertasserts = noduesservice.submitNoduesclearence(nodues);
+		TblNoDuesClearence noduesclearence = noduesservice.getByResignationId(resignationId);
+		if (noduesclearence == null) {
+			noduesclearence = new TblNoDuesClearence();
+		}
+		noduesclearence.setComments(comments);
+		noduesclearence.setDepartmentFinalStatus(2);
+		noduesclearence.setTbluserresignation(resignedUser);
+		noduesclearence.setDepartmentId(assetDepartment);
+		// insertasserts = noduesservice.submitNoduesclearence(nodues);
+		noduesservice.updateNoduesClearence(noduesclearence);
+
 		return insertasserts;
 	}
 
@@ -1604,6 +1654,7 @@ public class HomeController {
 		String assetname = null;
 		JSONArray serviceparser = null;
 		Date date = null;
+		Date date1=null;
 		String empassets = null;
 		session = request.getSession();
 		// Department Manager Information
@@ -1702,7 +1753,7 @@ public class HomeController {
 						receiveditem.setIssuedOn(date);
 						receiveditem.setItemStatus(finalstatus);
 						receiveditem.setReceivedBy("");
-						receiveditem.setReceivedOn(today);
+						receiveditem.setReceivedOn(date1);
 						receiveditem.setAssetsbarcodeno(barcodeno);
 						TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
 						receiveditem.setTblUserResignation(resignedUser);
@@ -1758,18 +1809,19 @@ public class HomeController {
 					}
 				}
 			}
-			TblNoDuesClearence clearence = new TblNoDuesClearence();
-			clearence.setComments(comments);
-			clearence.setDepartmentFinalStatus(finalstatus);
-			clearence.setDepartmentId(assetDepartment);
-			TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
-			clearence.setTbluserresignation(resignedUser);
-			rejectjson = noduesservice.submitNoduesclearence(clearence);
-			/*
-			 * mailService.sendEmail(employeeemail, departmentmanageremail,
-			 * "NO DUES CLEARENCES", comments);
-			 */
 		}
+		TblNoDuesClearence clearence = new TblNoDuesClearence();
+		clearence.setComments(comments);
+		clearence.setDepartmentFinalStatus(finalstatus);
+		clearence.setDepartmentId(assetDepartment);
+		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
+		clearence.setTbluserresignation(resignedUser);
+		rejectjson = noduesservice.submitNoduesclearence(clearence);
+		/*
+		 * mailService.sendEmail(employeeemail, departmentmanageremail,
+		 * "NO DUES CLEARENCES", comments);
+		 */
+
 		return rejectjson;
 	}
 
@@ -1787,6 +1839,7 @@ public class HomeController {
 		int department = 0;
 		String assetname = null;
 		JSONArray serviceparser = null;
+		int resignationId = 0;
 		String empassets = null;
 		String barcodeno = null;
 		String assetsallocatedby = null;
@@ -1802,6 +1855,7 @@ public class HomeController {
 		}
 
 		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
+		resignationId = resignedUser.getResignationId();
 		JSONObject inserthrasserts = new JSONObject();
 		Date today = new Date();
 		TblAssetsManagement hrasset = new TblAssetsManagement();
@@ -1853,12 +1907,16 @@ public class HomeController {
 				}
 			}
 		}
-		TblNoDuesClearence nodues = new TblNoDuesClearence();
-		nodues.setDepartmentFinalStatus(2);
-		nodues.setComments(comments);
-		nodues.setTbluserresignation(resignedUser);
-		nodues.setDepartmentId(assetDepartment);
-		inserthrasserts = noduesservice.submitNoduesclearence(nodues);
+		TblNoDuesClearence noduesclearence = noduesservice.getByResignationId(resignationId);
+		if (noduesclearence == null) {
+			noduesclearence = new TblNoDuesClearence();
+		}
+		noduesclearence.setDepartmentFinalStatus(2);
+		noduesclearence.setComments(comments);
+		noduesclearence.setTbluserresignation(resignedUser);
+		noduesclearence.setDepartmentId(assetDepartment);
+		noduesservice.updateNoduesClearence(noduesclearence);
+		// inserthrasserts = noduesservice.submitNoduesclearence(nodues);
 		MstResignationStatus status_mast = resignationService.getStatus(7);
 		resignedUser.setMstResignationStatus(status_mast);
 		approvalservice.updateResignationStatus(resignedUser);
@@ -1876,6 +1934,7 @@ public class HomeController {
 		String empcode = request.getParameter("emp_code");
 		int department = 0;
 		String empinfo = null;
+		int resignationId = 0;
 		Date datenull = null;
 		String[] key = { "empcode" };
 		String[] value = { empcode };
@@ -1901,6 +1960,7 @@ public class HomeController {
 		Date today = new Date();
 		TblAssetsManagement rmasset = new TblAssetsManagement();
 		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
+		resignationId = resignedUser.getResignationId();
 		String[] asserts = rmassets.split(",");
 		for (String assetssplit : asserts) {
 			rmasset.setAssetsIssue(assetssplit);
@@ -1915,12 +1975,17 @@ public class HomeController {
 			rmasset.setTblUserResignation(resignedUser);
 			insertrmasserts = noduesservice.submitnoduesassets(rmasset);
 		}
-		TblNoDuesClearence nodues = new TblNoDuesClearence();
-		nodues.setDepartmentFinalStatus(2);
-		nodues.setComments(comments);
-		nodues.setTbluserresignation(resignedUser);
-		nodues.setDepartmentId(1);
-		insertrmasserts = noduesservice.submitNoduesclearence(nodues);
+		TblNoDuesClearence noduesclearence = noduesservice.getByResignationId(resignationId);
+		if (noduesclearence == null) {
+			noduesclearence = new TblNoDuesClearence();
+		}
+		noduesclearence.setDepartmentFinalStatus(2);
+		noduesclearence.setComments(comments);
+		noduesclearence.setTbluserresignation(resignedUser);
+		noduesclearence.setDepartmentId(1);
+		// insertrmasserts = noduesservice.submitNoduesclearence(nodues);
+		noduesservice.updateNoduesClearence(noduesclearence);
+
 		return insertrmasserts;
 	}
 
@@ -2192,7 +2257,6 @@ public class HomeController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
 		}
 		jsonApproval = resignationService.getAllResignedUsers(to_show);
 		return jsonApproval;
@@ -2544,10 +2608,14 @@ public class HomeController {
 	@ResponseBody
 	public JSONObject getothernodues(HttpServletRequest request) {
 		JSONObject empstatus = new JSONObject();
-		String empcode = request.getParameter("employeecode");
-		TblUserResignation resignationbean = resignationService.getResignationUserService(empcode, 5);
-		int resignationId = resignationbean.getResignationId();
-		empstatus = noduesservice.getNoDuesPendingStatus(resignationId);
+		try {
+			String empcode = request.getParameter("employeecode");
+			TblUserResignation resignationbean = resignationService.getResignationUserService(empcode, 5);
+			int resignationId = resignationbean.getResignationId();
+			empstatus = noduesservice.getNoDuesPendingStatus(resignationId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return empstatus;
 	}
 
@@ -2561,5 +2629,55 @@ public class HomeController {
 		employeefeedbackstatus = exitinterviewservice.listempfeedbackstatus(resignationId);
 
 		return employeefeedbackstatus;
+	}
+	@RequestMapping(value = "/getassets", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getnoduesassets(HttpServletRequest request) {
+		JSONObject assetsmodal = null;
+		String empcode = request.getParameter("employee_code");
+		String departmentid=request.getParameter("department");
+		int assetdepartment=Integer.parseInt(departmentid);
+		String empassets = null;
+		String barcodeno = null;
+		JSONObject jsonassets = new JSONObject();
+		ArrayList<JSONObject> arrlist = new ArrayList<JSONObject>();
+		List<String> listvalue = new ArrayList<String>();
+		String[] keys = { "empcode" };
+		String[] value = { empcode };
+		ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
+		try {
+			empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO", keys, value);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		try {
+			JSONArray serviceparser = null;
+			JSONParser parser = new JSONParser();
+			serviceparser = (JSONArray) parser.parse(empassets);
+			if (!serviceparser.isEmpty()) {
+				for (Object str : serviceparser) {
+					JSONObject jsondata = (JSONObject) str;
+                    Long departmentId = (Long) jsondata.get("Department_Id");
+					Integer department = (int) (long) departmentId;
+					if (department == assetdepartment) {
+						String assetname = (String) jsondata.get("Asset_Name");
+						barcodeno = (String) jsondata.get("Barcode_No");
+						assetsmodal = new JSONObject();
+						assetsmodal.put("name", assetname);
+						assetsmodal.put("DepartmentId", departmentId);
+						assetsmodal.put("barcodeno", barcodeno);
+						arrlist.add(assetsmodal);
+					}
+				}
+				jsonassets.put("itassets", arrlist);
+			} else {
+				assetsmodal.put("name", "No Assets Allocated");
+				arrlist.add(assetsmodal);
+			}
+			jsonassets.put("itassets", arrlist);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return jsonassets;
 	}
 }

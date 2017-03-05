@@ -17,9 +17,10 @@ $scope.$on("EVT_ACCEPTED",function(event,data){
 			alert('not found');
 				})*/
 }
-	$scope.EmployeeFeedback=function(empcode)
+	$scope.EmployeeFeedback=function(empcode,department)
 	{
            var emp_code=empcode;
+           var department_id=department;
    /* $window.sessionStorage.setItem("Mydata",emp_code);*/
  
     /*$rootScope.$broadcast("Mydata",emp_code);
@@ -27,9 +28,8 @@ $scope.$on("EVT_ACCEPTED",function(event,data){
 		*/
            var scope=$rootScope.$new();
            scope.emp_code=emp_code;
-           
-           
-$scope.modalInstance = $modal.open({
+           scope.department_id=department_id;
+           $scope.modalInstance = $modal.open({
 	  scope:scope,
       templateUrl : "resources/js/noduesit/noduesitmodal.html",
 			controller :'noduesitmodaljscontroller'	

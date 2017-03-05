@@ -42,10 +42,12 @@ $scope.nodueStatus=function(){
 	.success(function(data,status,headers,config){
 	 $scope.noduestatus=data.noDuesPendingDept;
 	for(var i=0;i<$scope.noduestatus.length;i++){
-		if($scope.noduestatus[i]=='Manger' && 'ITManager' && 'InfraManager' && 'Accounts'){
-			$scope.nodues_allowed=true;
-		}
+		
+			if($scope.noduestatus.noDuesPendingDept='All Nodues Completed'){
+				
+					}
 	}
+
 	})
 .error(function(data,status,headers,config){
 	})

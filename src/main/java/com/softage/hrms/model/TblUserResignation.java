@@ -36,7 +36,19 @@ public class TblUserResignation implements java.io.Serializable {
 	private Date releivingDate;
 	private String rmEmpcode;
 	private String hrEmpcode;
+	
+	@Column(name="office_id")
+	public String getOfficeId() {
+		return officeId;
+	}
+
+	public void setOfficeId(String officeId) {
+		this.officeId = officeId;
+	}
+
 	private int circleId;
+	private String officeId;
+	
 	
 	@Column(name="circle_id")
 	public int getCircleId() {

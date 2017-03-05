@@ -14,7 +14,7 @@ application.controller('noduesinframodalcontroller',function($scope,$http,$windo
 					/*alert('the data returned is : '+JSON.stringify({data : data}));*/
 					$scope.nodueinfraassets=data.infraassets;
 					departmentid=$scope.nodueinfraassets[0].departmentId
-			alert(departmentid)
+			/*alert(departmentid)*/
 				})
 				
 				})
@@ -70,7 +70,7 @@ $scope.reject=function()
 	      	/*alert("not received  item "+$scope.itemnotselected)*/
 	      var emp_data='comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&not_received='+$scope.itemnotselected+'&received_assets='+$scope.selectedItems+'&final_status='+$scope.rejected_final_status
 	      +'&departmentId='+departmentid;
-	      		alert(emp_data)
+	      		/*alert(emp_data)*/
 	      		$http.get(domain+'/rejectempassets?'+emp_data)
 		 
 		 .success(function(data){

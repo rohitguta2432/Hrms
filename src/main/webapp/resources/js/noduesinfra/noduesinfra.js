@@ -8,9 +8,9 @@ application.controller('noduesinfracontroller',function($scope,$http,$modal,$roo
 			/*alert($scope.nodueshrtjs);*/
 })
 		
-			error(function(data,status,headers,config){
-			/*alert('not found');*/
-				})
+			/*error(function(data,status,headers,config){
+			alert('not found');
+				})*/
 }
 	$scope.EmployeeFeedback=function(empcode)
 	{
