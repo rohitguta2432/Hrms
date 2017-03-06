@@ -55,8 +55,8 @@ public class NoDuesServiceImpl implements NoDuesService {
 	}
 
 	@Override
-	public TblNoDuesClearence getByResignationId(int resignationId) {
-	return noduesdao.findByResignationId(resignationId);
+	public TblNoDuesClearence getByResignationId(int resignationId,int departmentid) {
+	return noduesdao.findByResignationId(resignationId,departmentid);
 	}
 
 	/*@Override

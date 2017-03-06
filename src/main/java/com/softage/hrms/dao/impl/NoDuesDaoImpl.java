@@ -150,12 +150,12 @@ public class NoDuesDaoImpl implements NoDuesDao {
 
 	@Override
 	@Transactional
-	public TblNoDuesClearence findByResignationId(int resignationId) {
+	public TblNoDuesClearence findByResignationId(int resignationId,int departmentid) {
 		Session session = sessionfactory.getCurrentSession();
-		String hibernateQuery = "from TblNoDuesClearence where tbluserresignation.resignationId=:res_id";
+		String hibernateQuery = "from TblNoDuesClearence where tbluserresignation.resignationId=:res_id and departmentId=:depart_id";
 		Query query = session.createQuery(hibernateQuery);
 		query.setParameter("res_id", resignationId);
-		
+		query.setParameter("depart_id", departmentid);
 	/*	Criteria criteria =  session.createCriteria(TblNoDuesClearence.class);
 		TblNoDuesClearence tblNoDuesClearence = (TblNoDuesClearence)criteria.add(
 				Restrictions

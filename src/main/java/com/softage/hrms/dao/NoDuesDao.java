@@ -17,7 +17,7 @@ public interface NoDuesDao {
 	/*public JSONObject getUserStatus(int resignation); */
     public JSONObject insertnoduesclearence(TblNoDuesClearence clearencebean);
     public TblNoDuesClearence updateNoduesClearence(TblNoDuesClearence tblNoDuesClearence);
-    TblNoDuesClearence findByResignationId(int resignationId);
+    TblNoDuesClearence findByResignationId(int resignationId,int departmentid);
 	//Dao created by Arpna to find the No Dues Pending Status
     public JSONObject getNoDuesPendingStatus(int resignationID);
 }

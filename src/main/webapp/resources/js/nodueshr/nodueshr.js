@@ -9,9 +9,9 @@ application.controller('nodueshrcontroller',function($scope,$http,$modal,$rootSc
 			/*alert($scope.nodueshrtjs);*/
 })
 		
-			error(function(data,status,headers,config){
-			/*alert('not found');*/
-				})
+			/*error(function(data,status,headers,config){
+			alert('not found');
+				})*/
 }
 	$scope.EmployeeFeedback=function(empcode,department)
 	{
@@ -45,9 +45,10 @@ $scope.nodueStatus=function(){
 	.success(function(data,status,headers,config){
 	 $scope.noduestatus=data.noDuesPendingDept;
 	for(var i=0;i<$scope.noduestatus.length;i++){
-	if($scope.noduestatus.noDuesPendingDept='All Nodues Completed'){
-				
+	if(i=='rm' && i=='Infra' && i=='It' &&  i=='Account'){
+	alert(i)	
 					}
+	     $scope.accept=false;
 	}
 
 	})

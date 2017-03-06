@@ -18,7 +18,7 @@ public interface NoDuesService {
 
 	public JSONObject submitnoduesassets(TblAssetsManagement accountassertsbeaan);
     public void updateNoduesClearence(TblNoDuesClearence tblNoDuesClearence);
-    TblNoDuesClearence getByResignationId(int resignationId);
+    TblNoDuesClearence getByResignationId(int resignationId,int departmentid);
 	// Service created by Arpan to find the No Dues Pending Status
 	public JSONObject getNoDuesPendingStatus(int resignationID);
 }

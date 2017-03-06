@@ -52,7 +52,7 @@ $http
 		}).success(function(data) {
 			alert("submitted it assets")
 			/*$rootScope.$broadcast("EVT_ACCEPTED",{accepted:true});*/
-			//location.reload();
+		location.reload();
 		}).error(function() {
 			/* alert("errors") */
 		})

@@ -13,7 +13,6 @@ $scope.$on("EVT_ACCEPTED",function(event,data){
 			$scope.nodueitjs=data.emplist;
 			/*alert($scope.nodueitjs);*/
 })
-		
 			/*error(function(data,status,headers,config){
 			alert('not found');
 				})*/
