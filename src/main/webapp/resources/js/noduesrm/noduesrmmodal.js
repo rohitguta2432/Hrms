@@ -72,7 +72,7 @@ $http({
 				+ '&received_assets=' + $scope.selectedItems + '&final_status='
 				+ $scope.rejected_final_status+'&departmentId='+departmentid;
 		/*alert(emp_data)*/
-		$http.get(domain + '/rejectempassets?' + emp_data)
+		$http.get(domain + '/rejectrmpassets?' + emp_data)
 		.success(function(data) {
 			alert("rejected rm asserts")
 			location.reload();

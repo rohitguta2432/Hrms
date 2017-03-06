@@ -37,9 +37,9 @@ application.controller('documentManagement', ['$scope', '$http','$modal','FilePr
 		$scope.Message = '';
 
 		$scope.checkFileValid($scope.SelectedFileForUpload);
-		alert($scope.SelectedFileForUpload);
+	/*	alert($scope.SelectedFileForUpload);
 		alert($scope.IsFormValid);
-		alert($scope.IsFileValid);
+		alert($scope.IsFileValid);*/
 
 		if ($scope.IsFileValid) {
 			FileProductUploadService.UploadFile($scope.SelectedFileForUpload,$scope.uploadId,$scope.empCode,$scope.ResignId).then(function (d) {
@@ -118,7 +118,7 @@ application.controller('documentManagement', ['$scope', '$http','$modal','FilePr
     }*/
 
 	$scope.getUploadEmpList=function(){
-		alert(' geting Upload Items   ');
+		/*alert(' geting Upload Items   ');*/
 
 		$http.get(domain+'/getEmpUploadList')
 		.success(function(data,status,headers,config){
@@ -126,9 +126,9 @@ application.controller('documentManagement', ['$scope', '$http','$modal','FilePr
 			$scope.uploadEmpList=data.empinfo;
 
 		})
-		.error(function(data,status,headers,config){
+		/*.error(function(data,status,headers,config){
 			alert('the error returned is : '+JSON.stringify({data : data}));
-		})
+		})*/
 	}
 
 
@@ -141,11 +141,11 @@ application.controller('documentManagement', ['$scope', '$http','$modal','FilePr
 			//alert('the data returned is : '+JSON.stringify({data : data}));
 			$scope.uploadItems=data;
 
-			alert("List  "+$scope.uploadItems);
+		/*	alert("List  "+$scope.uploadItems);*/
 		})
-		.error(function(data,status,headers,config){
+	/*	.error(function(data,status,headers,config){
 			alert('the error returned is : '+JSON.stringify({data : data}));
-		})
+		})*/
 	}
 
 

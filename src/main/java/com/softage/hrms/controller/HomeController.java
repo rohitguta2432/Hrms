@@ -1902,7 +1902,7 @@ public class HomeController {
 		
 		  mailService.sendEmail("rohit.raj@softageindia.com", "rohitgupta2432@gmail.com",
 		 "NO DUES CLEARENCES", comments);
-		 
+		  //empdetails.sendMail(emailSource, emailPort, emailFrom, emailPassword, "rohit.raj@softageindia.com",  "NO DUES CLEARENCES", comments);
 
 		return rejectjson;
 	}
@@ -1921,8 +1921,7 @@ public class HomeController {
 		 * (int) Department;
 		 */
 		int assetDepartment = Integer.parseInt(departmentId);
-
-		ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
+	ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 		String managercode = null;
 		String barcodeno = null;
 		String assetsallocateddate = null;
@@ -1942,6 +1941,7 @@ public class HomeController {
 					departmentmanagervalue);
 			JSONParser departmentmanagerparse = new JSONParser();
 			try {
+				
 				JSONObject managerservicejson = (JSONObject) departmentmanagerparse.parse(departmentempInfo);
 				String departmentmanagername = (String) managerservicejson.get("EmployeeName");
 				String departmentmanageremail = (String) managerservicejson.get("CompanyEmail");

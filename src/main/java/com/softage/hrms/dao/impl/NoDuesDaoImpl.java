@@ -39,13 +39,9 @@ public class NoDuesDaoImpl implements NoDuesDao {
 			if(stageid.equalsIgnoreCase("1")){
 			try {
 				org.hibernate.Session session = sessionfactory.getCurrentSession();
-			/*	String hql = "select r.emp_code from tbl_user_resignation r join tbl_no_dues_clearence n on r.resignation_id=n.resignation_id where r.status="+status+" and r.office_id='"+officeid+"' and n.department_final_status <> 2 and n.department_id="+departmentid;
-				Query query = session.createSQLQuery(hql);*/
-				String hql = "select empCode from TblUserResignation where officeId=:officeId and status=:status";
-				Query query = session.createQuery(hql);
-				query.setParameter("officeId", officeid);
-				query.setParameter("status", status);
-					listempcode = query.list();
+				String hql = "select r.emp_code from tbl_user_resignation r where r.status="+status+" and r.office_id='"+officeid+"' and ((select count(clearence_id) from tbl_no_dues_clearence  c where c.resignation_id=r.resignation_id and c.department_final_status =2 and c.department_id="+departmentid+")<1)";
+                Query query = session.createSQLQuery(hql);
+				listempcode = query.list();
 			} catch (Exception e) {
 				logger.error("get RM Accepted employee List>>>>   ", e);
 			}

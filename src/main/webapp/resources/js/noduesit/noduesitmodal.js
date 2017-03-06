@@ -19,7 +19,7 @@ $http
 					/* alert('the data returned is :'+JSON.stringify({data : data}));*/
 									 $scope.nodueitassets = data.assets;
 							/*departmentid=$scope.nodueitassets[0].DepartmentId*/
-								alert($scope.department_id)
+								/*alert($scope.department_id)*/
 							
 								})
 
@@ -51,7 +51,7 @@ $http
 			}
 		}).success(function(data) {
 			alert("submitted it assets")
-			$rootScope.$broadcast("EVT_ACCEPTED",{accepted:true});
+			/*$rootScope.$broadcast("EVT_ACCEPTED",{accepted:true});*/
 			//location.reload();
 		}).error(function() {
 			/* alert("errors") */

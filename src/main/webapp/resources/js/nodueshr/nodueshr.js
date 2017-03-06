@@ -45,8 +45,7 @@ $scope.nodueStatus=function(){
 	.success(function(data,status,headers,config){
 	 $scope.noduestatus=data.noDuesPendingDept;
 	for(var i=0;i<$scope.noduestatus.length;i++){
-		
-			if($scope.noduestatus.noDuesPendingDept='All Nodues Completed'){
+	if($scope.noduestatus.noDuesPendingDept='All Nodues Completed'){
 				
 					}
 	}
