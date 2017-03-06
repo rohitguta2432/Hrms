@@ -259,4 +259,9 @@ public class ResignationServiceImpl implements ResignationService {
 		resListJson.put("empinfo", jsonList);
 		return resListJson;
 	}
+
+	@Override
+	public TblUserResignation getExEmpResignationUserService(String empcode, int status) {
+		return resignationdao.getExEmpResignationUserService(empcode, status);
+	}
 }

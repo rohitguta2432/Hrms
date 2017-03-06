@@ -270,7 +270,8 @@ public class HomeController {
 			String rm_empcode = (String) empinfoJson.get("ManagerCode");
 			// String rm_empcode = "ss0078";
 			// String hr_empcode = "ss0073";
-			int noticeperiod = 60; // Get Notice Period Using ESF Service
+			//int noticeperiod = 60; // Get Notice Period Using ESF Service
+			int noticeperiod =(Integer)empinfoJson.get("NoticePeriod");
 			String submit_date = df.format(dateobj);
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(dateobj);
@@ -300,13 +301,16 @@ public class HomeController {
 			// emp.getUserDetail(emp_code).getEmail(); EMployee Email
 			// String
 			// manager_email=resignationService.getRmEmail(employee_code);
-			String manager_email = "arpan.mathur@softageindia.com";// ESF
+			//String manager_email = "arpan.mathur@softageindia.com";// ESF
 																	// Service
-			String hr_email = "arpan.mathur@softageindia.com";
-			String emp_email = "arpan.mathur@softageindia.com";
+			//String hr_email = "arpan.mathur@softageindia.com";
+			//String emp_email = "arpan.mathur@softageindia.com";
+			String manager_email = (String)empinfoJson.get("ManagerEmail");
+			String hr_email =(String)noduesJson.get("HrEmpEmail");
+			String emp_email=(String)empinfoJson.get("CompanyEmail");
 			// System.out.println(manager_email);
-			String rm_message = "Request for resignatin has been raised by " + empcode + " for RM";
-			String hr_message = "Request for resignatin has been raised by " + empcode + " for HR";
+			String rm_message = "Request for resignatin has been raised by " + empcode + " sent by RM";
+			String hr_message = "Request for resignatin has been raised by " + empcode + " sent by HR";
 			String emp_message = "Request for resignation has been raised by you";
 
 			if (jsonObj.get("result").equals("successful")) {
@@ -314,6 +318,9 @@ public class HomeController {
 				mailService.sendEmail(manager_email, "evm@softageindia.com", "test", rm_message);
 				mailService.sendEmail(hr_email, "evm@softageindia.com", "test", hr_message);
 				mailService.sendEmail(emp_email, "evm@softageindia.com", "test", emp_message);
+				//emp.sendMail("evm@softageindia.com", 20, "evm@softageindia.com", "x23HYrtVZ69",manager_email , "Resignation request raised", rm_message);
+				//emp.sendMail("evm@softageindia.com", 20, "evm@softageindia.com", "x23HYrtVZ69",hr_email , "Resignation request raised", hr_message);
+				//emp.sendMail("evm@softageindia.com", 20, "evm@softageindia.com", "x23HYrtVZ69",emp_email , "Resignation request raised", emp_message);
 
 			}
 		} catch (Exception e) {
@@ -376,11 +383,22 @@ public class HomeController {
 		int resignStatus = Integer.parseInt(resignAction);
 		JSONObject statusJson = new JSONObject();
 		JSONParser parser = new JSONParser();
+		ISoftAgeEnterpriseProxy emp=new ISoftAgeEnterpriseProxy();
+		JSONObject mailJson=new JSONObject();
+		String empinfo=null;
+		String resOfficeCode=null;
+		String noduestring=null;
+		JSONObject noduesJson=new JSONObject();
+		String resEmpcode=null;
+		String action=null;
+		String rmEmpinfoString=null;
+		JSONObject rmEMpinfoJson=new JSONObject();
 		try {
 			JSONObject answerJson = (JSONObject) parser.parse(answerList);
 			List<JSONObject> listAnswers = (List<JSONObject>) answerJson.get("data");
 			MstResignationStatus resignationStatus = new MstResignationStatus();
 			resignationStatus = resignationService.getStatus(resignStatus);
+			action=resignationStatus.getStatus();
 			DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 			Date rmapprovaldate = new Date();
 			String rmappdate = df.format(rmapprovaldate);
@@ -389,6 +407,8 @@ public class HomeController {
 			resignedUser.setMstResignationStatus(resignationStatus);
 			resignedUser.setRmApprovalDate(rm_approval_date);
 			resignedUser.setApprovedBy(empcode);
+			resOfficeCode=(String)resignedUser.getOfficeId();
+			resEmpcode=(String)resignedUser.getEmpCode();
 			for (JSONObject answer : listAnswers) {
 				Long serialid = (Long) answer.get("sno");
 				int sid = serialid.intValue();
@@ -410,7 +430,35 @@ public class HomeController {
 			}
 			approvalservice.updateResignationStatus(resignedUser);
 			statusJson.put("status", "Success");
+			String[] keys = { "empcode" };
+			String[] values = { resEmpcode };
+			String[] rmValues={empcode};
+			String[] officekeys={"OFFICECODE"};
+			String[] officevalues={resOfficeCode};
+			empinfo=emp.enterPriseDataService("EVM", "EmpInfo", keys, values);
+			rmEmpinfoString=emp.enterPriseDataService("EVM", "EmpInfo", keys, rmValues);
+			mailJson=(JSONObject)parser.parse(empinfo);
+			rmEMpinfoJson=(JSONObject)parser.parse(rmEmpinfoString);
+			noduestring = emp.enterPriseDataService("EVM", "NODUESOWNERS", officekeys, officevalues);
+			noduesJson=(JSONObject)parser.parse(noduestring);
+			String manager_email = (String)rmEMpinfoJson.get("CompanyEmail");
+			String hr_email =(String)noduesJson.get("HrEmpEmail");
+			String emp_email=(String)mailJson.get("CompanyEmail");
+			String rm_message = "Action on request for "+resEmpcode+" has been taken and has been"+action+" sent by rm";
+			String hr_message = "Action on request for "+resEmpcode+" has been taken and has been"+action+" sent by hr";
+			String emp_message = "Action on request for "+resEmpcode+" has been taken and has been"+action+" sent by employee";
+			mailService.sendEmail(manager_email, "evm@softageindia.com", "test", rm_message);
+			mailService.sendEmail(hr_email, "evm@softageindia.com", "test", hr_message);
+			mailService.sendEmail(emp_email, "evm@softageindia.com", "test", emp_message);
+			//emp.sendMail("evm@softageindia.com", 20, "evm@softageindia.com", "x23HYrtVZ69",manager_email , "Resignation request raised", rm_message);
+			//emp.sendMail("evm@softageindia.com", 20, "evm@softageindia.com", "x23HYrtVZ69",hr_email , "Resignation request raised", hr_message);
+			//emp.sendMail("evm@softageindia.com", 20, "evm@softageindia.com", "x23HYrtVZ69",emp_email , "Resignation request raised", emp_message);
+			
 		} catch (ParseException e) {
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}catch(Exception e){
 			e.printStackTrace();
 		}
 		return statusJson;
@@ -475,18 +523,14 @@ public class HomeController {
 		String rmempcode = (String) request.getParameter("rmempcode");
 		String hrcomments = (String) request.getParameter("hrcomments");
 		DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		String officeCode=null;
 		Date hrapprovaldate = new Date();
 		String hr_app_date = df.format(hrapprovaldate);
 		Date hrappdate = new Date(hr_app_date);
 		Date lwd = new Date(lastworkingdate);
-		MstResignationStatus hrstatus = resignationService.getStatus(5); // Changed
-		// to
-		// 5
-		// after
-		// changing
-		// status
-		// table
+		MstResignationStatus hrstatus = resignationService.getStatus(5);
 		TblUserResignation resignation = resignationService.getResignationUserService(empcode, 2);
+		officeCode=(String)resignation.getOfficeId();
 		MstQuestions hrcomment = approvalservice.getRmFeedbackQuestionService(9);
 		TblFeedbacks hr_lwd_comment = new TblFeedbacks();
 		resignation.setHrApprovalDate(hrappdate);
@@ -504,12 +548,34 @@ public class HomeController {
 			lwdCommentStatus = approvalservice.insertHrLwdCommentService(hr_lwd_comment);
 			String messageToEmp = "Hi your last working day has been set to - " + hrappdate;
 			try {
-				mailService.sendEmail("arpan.mathur@softageindia.com", "evm@softageindia.com",
-						"Last Working Day Set By HR", messageToEmp);
-				mailService.sendEmail("arpan.mathur@softageindia.com", "evm@softageindia.com",
-						"Last Working Day Set By HR", messageToEmp);
-				mailService.sendEmail("arpan.mathur@softageindia.com", "evm@softageindia.com",
-						"Last Working Day Set By HR", messageToEmp);
+				ISoftAgeEnterpriseProxy emp=new ISoftAgeEnterpriseProxy();
+				String[] keys={"empcode"};
+				String[] hrvalues={hrempcode};
+				String[] empvalues={empcode};
+				String[] officekeys={"OFFICECODE"};
+				String[] officevalues={officeCode};
+				String noduestring = emp.enterPriseDataService("EVM", "NODUESOWNERS", officekeys, officevalues);
+				String empinfoString=emp.enterPriseDataService("EVM", "EmpInfo", keys, empvalues);
+				JSONObject noduesjson=new JSONObject();
+				JSONObject empduesJson=new JSONObject();
+				JSONParser parser=new JSONParser();
+				noduesjson=(JSONObject)parser.parse(noduestring);
+				empduesJson=(JSONObject)parser.parse(empinfoString);
+				String hr_email=(String)noduesjson.get("HrEmpEmail");
+				String emp_email=(String)empduesJson.get("CompanyEmail");
+				String rm_email=(String)empduesJson.get("ManagerEmail");
+				String rm_message="Resignation request for employee"+empcode+" has been processed by hr and last working day has been set to" +df.format(lwd)+" sent by rm";
+				String hr_message="Resignation request for employee"+empcode+" has been processed by hr and last working day has been set to" +df.format(lwd)+" sent by hr";
+				String emp_message="Resignation request for employee"+empcode+" has been processed hr and last working day has been set to" +df.format(lwd)+" sent by employee";
+				//emp.sendMail("evm@softageindia.com", 20, "evm@softageindia.com", "x23HYrtVZ69",rm_email , "Resignation request raised", rm_message);
+				//emp.sendMail("evm@softageindia.com", 20, "evm@softageindia.com", "x23HYrtVZ69",hr_email , "Resignation request raised", hr_message);
+				//emp.sendMail("evm@softageindia.com", 20, "evm@softageindia.com", "x23HYrtVZ69",emp_email , "Resignation request raised", emp_message);
+				mailService.sendEmail(emp_email, "evm@softageindia.com",
+						"Last Working Day Set By HR", emp_message);
+				mailService.sendEmail(rm_email, "evm@softageindia.com",
+						"Last Working Day Set By HR", rm_message);
+				mailService.sendEmail(hr_email, "evm@softageindia.com",
+						"Last Working Day Set By HR", hr_message);
 			} catch (Exception e) {
 				System.out.println("Exception in sending confirmation mails for the hr process");
 			}
@@ -577,7 +643,8 @@ public class HomeController {
 	public String authenticate(@ModelAttribute("loginBean") TblUserResignation tbluserresignation, Model model,
 			HttpServletRequest request) {
 		String emp_code = tbluserresignation.getExEmpUserid();
-		TblUserResignation ex_emp = resignationService.getResignationUserService(emp_code, 13);
+		//TblUserResignation ex_emp = resignationService.getResignationUserService(emp_code, 13);
+		TblUserResignation ex_emp=resignationService.getExEmpResignationUserService(emp_code, 13);
 		if (ex_emp != null) {
 			HttpSession session = request.getSession();
 			session.setAttribute("resignID", ex_emp.getResignationId());
@@ -2575,7 +2642,6 @@ empdetails.assetDeallocation(empcode,barcodeno, hrmanagerempcode);
 					}
 				}
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

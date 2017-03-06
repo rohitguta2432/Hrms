@@ -66,7 +66,7 @@
 					<label class="col-sm-3 control-label no-padding-right">HR
 						Comments</label>
 					<div class="col-sm-9">
-						<textarea rows="3" cols="15" ng-model="comments"></textarea>
+						<textarea rows="3" cols="15" name="comments" ng-required="true" ng-model="comments" ng-minlength="10"></textarea>
 					</div>
 				</div>
 				<div class="form-group row col-sm-6">
@@ -78,7 +78,7 @@
                                 </div>
 				</div>
 				<div></div>
-				<input type="submit" value="SUBMIT">
+				<input type="submit" value="SUBMIT" ng-disabled="hrApprovalForm.$invalid">
 			</div>
 		</form>
 	</div>

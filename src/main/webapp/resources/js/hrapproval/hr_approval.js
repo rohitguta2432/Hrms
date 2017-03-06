@@ -1,6 +1,6 @@
 application.controller('hrApprovalController',['$scope','$http','$rootScope','$modal','$location',function($scope,$http,$rootScope,$modal,$location){
 	$scope.hr_approvalInit=function(){
-		$http.get(domain+'/hrapprovalInit')
+		$http.get(domain+'/getHrApprovalFromService')
 		.success(function(data,status,headers,config){
 			$scope.employeeInfo=data.empinfo;
 		})
@@ -8,6 +8,7 @@ application.controller('hrApprovalController',['$scope','$http','$rootScope','$m
 			alert('error');
 		})
 	};
+	//hrapprovalInit;getHrApprovalFromService
 	$scope.openHrAction=function(name,empcode,leaving_reason,remarks
 			,noticetime,resignDate,rm_empcode,rm_email){
 		var scope=$rootScope.$new();

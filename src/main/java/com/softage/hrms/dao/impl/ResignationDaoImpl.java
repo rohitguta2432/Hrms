@@ -313,6 +313,7 @@ public class ResignationDaoImpl implements ResignationDao {
 		for(String hrempcode : setHRs){
 			String hql="select resignUser from TblUserResignation resignUser join fetch resignUser.mstReason where resignUser.hrEmpcode=:hr_emp_code and resignUser.mstResignationStatus=2";
 	 		Query query=session.createQuery(hql);
+	 		query.setParameter("hr_emp_code", hrempcode);
 	 		ArrayList<TblUserResignation> list_resignedUsers_hr=(ArrayList<TblUserResignation>) query.list();
 	 		resignedLists.add(list_resignedUsers_hr);
 		}
@@ -346,6 +347,18 @@ public class ResignationDaoImpl implements ResignationDao {
 		query.setParameter("cirID", cirID);
 		List<TblUserResignation> resignedUsers=query.list();
 		return resignedUsers;
+	}
+
+	@Override
+	@Transactional
+	public TblUserResignation getExEmpResignationUserService(String empcode, int status) {
+		Session session=this.sessionFactory.getCurrentSession();
+		TblUserResignation resignedUser=new TblUserResignation();
+		String hql="select resignation from TblUserResignation resignation where resignation.exEmpUserid=:exEmpUserid and resignation.mstResignationStatus="+status;
+		Query query=session.createQuery(hql);
+		query.setParameter("exEmpUserid",empcode );
+		resignedUser=(TblUserResignation)query.uniqueResult();
+		return resignedUser;
 	}
 
 
