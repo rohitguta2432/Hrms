@@ -1,6 +1,7 @@
 application.controller('nodueshrcontroller',function($scope,$http,$modal,$rootScope,$window) {
 	var status=5;
 	var stage=1;
+	var count=0;
 	$scope.init=function(){
 /*Employee grid information*/
 			$http.get(domain+'/getnoduesemplist?status='+status+'&stageid='+stage)
@@ -26,7 +27,6 @@ application.controller('nodueshrcontroller',function($scope,$http,$modal,$rootSc
       		controller :'nodueshrmodalcontroller'
 		});
 	}
-	
 	$scope.EmpOthernoDues=function(empcode)
 	{
 		var emp_code=empcode;
@@ -45,12 +45,10 @@ $scope.nodueStatus=function(){
 	.success(function(data,status,headers,config){
 	 $scope.noduestatus=data.noDuesPendingDept;
 	for(var i=0;i<$scope.noduestatus.length;i++){
-	if(i=='rm' && i=='Infra' && i=='It' &&  i=='Account'){
-	alert(i)	
-					}
 	     $scope.accept=false;
+	     count++;
 	}
-
+	  alert(count)
 	})
 .error(function(data,status,headers,config){
 	})

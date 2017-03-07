@@ -112,7 +112,7 @@
 													
 														  <tbody ng-repeat="emp in nodueitassets">      
 	<tr><td>{{emp.name}}</td><td>{{emp.barcodeno}}</td><td><input type="checkbox" value="{{emp.name}}" ng-model="checked" ng-init="checked=true"/></td><td><input type="checkbox" value="{{emp.name}}" id="check" name="check" ng-model="emp.selected" required="true"></td>
-						<!-- <span ng-show="it.check.$dirty && it.check.$error.required">This field is required</span>	 -->	 
+					 <span ng-show="it.check.$dirty && it.check.$error.required">This field is required</span>	  
 								 </tr>
 							</tbody>
 						 </table>
@@ -125,7 +125,7 @@
 					<label for="comment" class="col-sm-3 control-label no-padding-right" style="font-size: 13px; font-weight: normal;text-align: left;">COMMENTS:</label>
  <div class="col-sm-9">
  <textarea    rows="1" cols="45" id="comment" name="comment" placeholder="comments..." ng-model="empcomments"  required></textarea>
- <span ng-show="it.comment.$dirty && it.comment.$error.required">This field is required</span>
+ <span ng-show="it.comment.$dirty && it.check.$dirty">This field is required</span>
  
  </div>
  </div>
@@ -135,7 +135,7 @@
 					<div class="modal-footer">
 					
                 <button type="submit" value="submit" ng-disabled="it.$invalid" class="btn btn-primary">ACCEPT</button>
-  <button type="reset" class="btn btn-warning"  ng-disabled="it.comment.$error.required"  ng-click="reject()">REJECT</button>									
+  <button type="reset" class="btn btn-warning"  ng-disabled="it.$invalid && it.comment.$error.required  "  ng-click="reject()">REJECT</button>									
 														
 														<!-- || !it.check.$error.required -->
 														<div class="clearfix"></div>
