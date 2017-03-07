@@ -48,7 +48,7 @@ $scope.nodueStatus=function(){
 	     $scope.accept=false;
 	     count++;
 	}
-	  alert(count)
+	 /* alert(count)*/
 	})
 .error(function(data,status,headers,config){
 	})

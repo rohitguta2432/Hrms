@@ -152,8 +152,7 @@ public class HomeController {
 			empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO", keys, values);
 			/* System.out.println(empassets); */
 			String empInfo = i.enterPriseDataService("EVM", "EmpInfo", keys, values);
-
-			// String assestInfo = i.enterPriseDataService("Asset", "ASSETINFO",
+        	// String assestInfo = i.enterPriseDataService("Asset", "ASSETINFO",
 			// keys, assetValues);
 			noduestring = i.enterPriseDataService("EVM", "NODUESOWNERS", officekeys, officevalues);
 			// System.out.println("Asset information string" + assestInfo +
@@ -163,7 +162,7 @@ public class HomeController {
 			/* System.out.println(jsonObject + "keys " + empInfo); */
 			// JSONObject assetJson = (JSONObject) jsonParser.parse(assestInfo);
 			request.setAttribute("param1", i.getUserDetail("ss0077").getRoleId());
-			System.out.println(i.getUserDetail("ss0077").getRoleId());
+			/*System.out.println(i.getUserDetail("ss0077").getRoleId());*/
 			model.addAttribute("emp", i.getUserDetail("ss0077").getFirstName());
 		} catch (Exception e) {
 			logger.error(">>>>>>>>>>>>>>> Exception in default method" + e.getMessage());
