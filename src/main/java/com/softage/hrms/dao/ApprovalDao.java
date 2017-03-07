@@ -19,5 +19,6 @@ public interface ApprovalDao {
 	//public List<TblUserResignation> getHrApprovalInitDao(String empcode);
 	public String insertHrLwdDao(TblUserResignation resignation);
 	public String insertHrLwdCommentDao(TblFeedbacks feedbacks);
+	public List<TblUserResignation> getResignedUsersForRm(int status);
 
 }

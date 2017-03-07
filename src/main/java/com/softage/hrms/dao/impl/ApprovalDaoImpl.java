@@ -15,6 +15,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.tempuri.ISoftAgeEnterpriseProxy;
@@ -23,9 +25,12 @@ import com.softage.hrms.dao.ApprovalDao;
 import com.softage.hrms.model.MstQuestions;
 import com.softage.hrms.model.TblFeedbacks;
 import com.softage.hrms.model.TblUserResignation;
+import com.softage.hrms.service.impl.ResignationServiceImpl;
 
 @Repository
 public class ApprovalDaoImpl implements ApprovalDao {
+	
+	private static final Logger logger = LoggerFactory.getLogger(ApprovalDaoImpl.class);
 	
 	@Autowired
 	private SessionFactory sessionfactory;
@@ -178,5 +183,16 @@ public class ApprovalDaoImpl implements ApprovalDao {
 			lwdCommentFeedback="error";
 		}
 		return lwdCommentFeedback;
+	}
+
+	@Override
+	@Transactional
+	public List<TblUserResignation> getResignedUsersForRm(int status) {
+		Session session=sessionfactory.getCurrentSession();
+		String hql="Select res from TblUserResignation res join fetch res.mstReason where res.mstResignationStatus.statusId=:statusid";
+		Query query=session.createQuery(hql);
+		query.setParameter("statusid", status);
+		List<TblUserResignation> resignation=(List<TblUserResignation>)query.list();
+		return resignation;
 	}
 }

@@ -1,6 +1,6 @@
 application.controller('hrApprovalController',['$scope','$http','$rootScope','$modal','$location',function($scope,$http,$rootScope,$modal,$location){
 	$scope.hr_approvalInit=function(){
-		$http.get(domain+'/getHrApprovalFromService')
+		$http.get(domain+'/hrapproval')
 		.success(function(data,status,headers,config){
 			$scope.employeeInfo=data.empinfo;
 		})

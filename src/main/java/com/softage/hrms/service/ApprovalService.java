@@ -19,5 +19,6 @@ public interface ApprovalService {
 	//public List<TblUserResignation> getHrApprovalInitService(String empcode);
 	public String insertHrLwdService(TblUserResignation resignation) ;
 	public String insertHrLwdCommentService(TblFeedbacks hr_lwd_feedback);
+	public JSONObject getResignedUsersForRm(String empcode,int status);
 
 }

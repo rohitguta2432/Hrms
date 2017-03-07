@@ -40,7 +40,7 @@
 																<tr>
 																	<th>S.No</th>
 																	<th>Firstname</th>
-																	<th>Lastname</th>
+																	<!-- <th>Lastname</th> -->
 																	<th>Employee Code</th>
 																	<th>Reason</th>
 																	<th>Comments</th>
@@ -53,14 +53,14 @@
 																<tr>
 																	<td>{{emp.sno}}</td>
 																	<td>{{emp.first_name}}</td>
-																	<td>{{emp.last_name}}</td>
+																	<!-- <td>{{emp.last_name}}</td> -->
 																	<td>{{emp.empcode}}</td>
 																	<td>{{emp.leaving_reason}}</td>
 																	<td>{{emp.comments}}</td>
 																	<td>{{emp.noticePeriod}}</td>
 																	<td>{{emp.releivingDate}}</td>
 																	<td><button  class="btn btn-primary btn-sm"
-																	ng-click="openAction(emp.empcode,emp.first_name,emp.last_name)">
+																	ng-click="openAction(emp.empcode,emp.first_name)">
 																	Approval </button></td>
 																</tr>
 															</tbody>

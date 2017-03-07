@@ -10,10 +10,13 @@ import java.util.Set;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tempuri.ISoftAgeEnterpriseProxy;
 
+import com.softage.hrms.controller.HomeController;
 import com.softage.hrms.dao.ResignationDao;
 import com.softage.hrms.model.MstReason;
 import com.softage.hrms.model.MstResignationStatus;
@@ -23,7 +26,9 @@ import com.softage.hrms.service.ResignationService;
 
 @Service
 public class ResignationServiceImpl implements ResignationService {
-
+	
+	private static final Logger logger = LoggerFactory.getLogger(ResignationServiceImpl.class);
+	
 	@Autowired
 	private ResignationDao resignationdao;
 
@@ -173,6 +178,10 @@ public class ResignationServiceImpl implements ResignationService {
 					String remarks=resignedUser.getComments();
 					//int notice_period=emp.getUserDetail(employee_code).getNoticePeriod(); FROM ESF Service
 					int notice_period=60;
+					String[] keys={"empcode"};
+					String[] values={employee_code};
+					String empinfostring=emp.enterPriseDataService("EVM", "EmpInfo", keys, values);
+					
 					Date resDate=resignedUser.getResignationDate();
 					String resignDate=df.format(resDate);
 					String rmempcode=resignedUser.getRmEmpcode();
@@ -263,5 +272,53 @@ public class ResignationServiceImpl implements ResignationService {
 	@Override
 	public TblUserResignation getExEmpResignationUserService(String empcode, int status) {
 		return resignationdao.getExEmpResignationUserService(empcode, status);
+	}
+
+	@Override
+	public JSONObject getUsersForHrApproval(String officecode,int status) {
+		List<JSONObject> resUserslist=new ArrayList<JSONObject>();
+		JSONObject userListJson=new JSONObject();
+		List<TblUserResignation> resuUsers= resignationdao.getUsersForHrApproval(officecode,status);
+		ISoftAgeEnterpriseProxy employee=new ISoftAgeEnterpriseProxy();
+		DateFormat df=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		int count=1;
+		try{
+		for (TblUserResignation tblUserResignation : resuUsers) {
+			JSONParser parser=new JSONParser();
+			JSONObject jsonObject=new JSONObject();
+			String empcode=(String)tblUserResignation.getEmpCode();
+			MstReason reason=tblUserResignation.getMstReason();
+			String reason_for_leaving=reason.getReason();
+			String remarks=tblUserResignation.getComments();
+			Date resDate=tblUserResignation.getResignationDate();
+			String resignDate=df.format(resDate);
+			int resignId=tblUserResignation.getResignationId();
+			String[] keys={"empcode"};
+			String[] values={empcode};
+			String empinfoString=employee.enterPriseDataService("EVM", "EmpInfo", keys, values);
+			JSONObject empinfoJson=(JSONObject)parser.parse(empinfoString);
+			String empname=(String)empinfoJson.get("EmployeeName");
+			int notice_period=((Long)empinfoJson.get("NoticePeriod")).intValue();
+			String rmempcode=(String)empinfoJson.get("ManagerCode");
+			String rm_email=(String)empinfoJson.get("ManagerEmail");
+			jsonObject.put("sno", count);
+			jsonObject.put("empname", empname);
+			jsonObject.put("empcode", empcode);
+			jsonObject.put("leaving_reason", reason_for_leaving);
+			jsonObject.put("remarks", remarks);
+			jsonObject.put("noticetime", notice_period);
+			jsonObject.put("resignDate", resignDate);
+			jsonObject.put("rm_empcode", rmempcode);
+			jsonObject.put("resignId", resignId);
+			jsonObject.put("rm_email", rm_email);
+			resUserslist.add(jsonObject);
+			count=count+1;
+		}
+		userListJson.put("empinfo", resUserslist);
+		}catch(Exception e){
+			logger.error(">>>>>>>>>>>>>>> Error in iterating json of resigned users on office code for hr"+e.getMessage());
+			e.printStackTrace();
+		}
+		return userListJson;
 	}
 }

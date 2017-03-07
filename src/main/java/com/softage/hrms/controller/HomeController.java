@@ -671,9 +671,8 @@ public class HomeController {
 	public String authenticate(@ModelAttribute("loginBean") TblUserResignation tbluserresignation, Model model,
 			HttpServletRequest request) {
 		String emp_code = tbluserresignation.getExEmpUserid();
-		// TblUserResignation ex_emp =
-		// resignationService.getResignationUserService(emp_code, 13);
-		TblUserResignation ex_emp = resignationService.getExEmpResignationUserService(emp_code, 13);
+		//TblUserResignation ex_emp = resignationService.getResignationUserService(emp_code, 13);
+		TblUserResignation ex_emp=resignationService.getExEmpResignationUserService(emp_code,9);
 		if (ex_emp != null) {
 			HttpSession session = request.getSession();
 			session.setAttribute("resignID", ex_emp.getResignationId());
@@ -2582,6 +2581,15 @@ public class HomeController {
 		}
 		return jsonArrey;
 	}
+	
+	@RequestMapping(value="/rmapproval",method=RequestMethod.GET)
+	@ResponseBody
+	public JSONObject rmApproval(HttpServletRequest request,HttpSession session){
+		session=request.getSession();
+		String employeecode=(String)session.getAttribute("employeecode");
+		JSONObject jsonApproval=approvalservice.getResignedUsersForRm(employeecode,1);
+		return jsonApproval;
+	}
 
 	@RequestMapping(value = "/getRMApprovalInitFromService", method = RequestMethod.GET)
 	@ResponseBody
@@ -2640,6 +2648,15 @@ public class HomeController {
 		jsonApproval = resignationService.getAllResignedUsers(to_show);
 		return jsonApproval;
 
+	}
+	
+	@RequestMapping(value="/hrapproval",method=RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getHrApprovalOnOfficeCode(HttpServletRequest request,HttpSession session){
+		session=request.getSession();
+		String officeCode=(String)session.getAttribute("officecode");
+		JSONObject resignedUsers=resignationService.getUsersForHrApproval(officeCode,2);
+		return resignedUsers;
 	}
 
 	@RequestMapping(value = "/getHrApprovalFromService", method = RequestMethod.GET)
