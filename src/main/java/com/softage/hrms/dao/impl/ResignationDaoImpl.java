@@ -186,7 +186,8 @@ public class ResignationDaoImpl implements ResignationDao {
 	public MstResignationStatus getStatusMast(int statusValue) {
 		// TODO Auto-generated method stub
 		Session session=this.sessionFactory.getCurrentSession();
-		MstResignationStatus statusmast=(MstResignationStatus)session.load(MstResignationStatus.class, new Integer(statusValue));
+		//MstResignationStatus statusmast=(MstResignationStatus)session.load(MstResignationStatus.class, new Integer(statusValue));
+		MstResignationStatus statusmast=(MstResignationStatus)session.get(MstResignationStatus.class, new Integer(statusValue));
 		return statusmast;
 	}
 

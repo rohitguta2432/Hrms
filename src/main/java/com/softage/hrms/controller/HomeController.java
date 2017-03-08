@@ -149,8 +149,10 @@ public class HomeController {
 
 		ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 		try {
-			empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO", keys, values);
-			/* System.out.println(empassets); */
+
+		//	empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO", keys, values);
+		/*	System.out.println(empassets);*/
+
 			String empInfo = i.enterPriseDataService("EVM", "EmpInfo", keys, values);
         	// String assestInfo = i.enterPriseDataService("Asset", "ASSETINFO",
 			// keys, assetValues);
@@ -211,7 +213,7 @@ public class HomeController {
 			/* System.out.println(empInfo); */
 			JSONParser parser = new JSONParser();
 			JSONObject serviceJson = (JSONObject) parser.parse(empInfo);
-			 int notice_time=(Integer) serviceJson.get("NoticePeriod");
+			 int notice_time=((Long) serviceJson.get("NoticePeriod")).intValue();
 			// SERVICE TO BE USED ESF
 			//int notice_time = 60;
 			jsonReason = resignationService.resignationInitialization();
@@ -273,7 +275,7 @@ public class HomeController {
 			// String rm_empcode = "ss0078";
 			// String hr_empcode = "ss0073";
 			// int noticeperiod = 60; // Get Notice Period Using ESF Service
-			int noticeperiod = (Integer) empinfoJson.get("NoticePeriod");
+			int noticeperiod = ((Long) empinfoJson.get("NoticePeriod")).intValue();
 			String submit_date = df.format(dateobj);
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(dateobj);
@@ -317,9 +319,14 @@ public class HomeController {
 
 			if (jsonObj.get("result").equals("successful")) {
 
-				mailService.sendEmail(manager_email, "evm@softageindia.com", "test", rm_message);
+			/*	mailService.sendEmail(manager_email, "evm@softageindia.com", "test", rm_message);
 				mailService.sendEmail(hr_email, "evm@softageindia.com", "test", hr_message);
-				mailService.sendEmail(emp_email, "evm@softageindia.com", "test", emp_message);
+				mailService.sendEmail(emp_email, "evm@softageindia.com", "test", emp_message);*/
+				
+				mailService.sendEmail("rohit.raj@softageindia.com", "evm@softageindia.com", "test", rm_message);
+				mailService.sendEmail("rohit.raj@softageindia.com", "evm@softageindia.com", "test", hr_message);
+				mailService.sendEmail("rohit.raj@softageindia.com", "evm@softageindia.com", "test", emp_message);
+				
 				// emp.sendMail("evm@softageindia.com", 20,
 				// "evm@softageindia.com", "x23HYrtVZ69",manager_email ,
 				// "Resignation request raised", rm_message);
@@ -458,9 +465,16 @@ public class HomeController {
 					+ " sent by hr";
 			String emp_message = "Action on request for " + resEmpcode + " has been taken and has been" + action
 					+ " sent by employee";
-			mailService.sendEmail(manager_email, "evm@softageindia.com", "test", rm_message);
+			/*mailService.sendEmail(manager_email, "evm@softageindia.com", "test", rm_message);
 			mailService.sendEmail(hr_email, "evm@softageindia.com", "test", hr_message);
-			mailService.sendEmail(emp_email, "evm@softageindia.com", "test", emp_message);
+			mailService.sendEmail(emp_email, "evm@softageindia.com", "test", emp_message);*/
+			
+			
+			mailService.sendEmail("rohit.raj@softageindia.com", "evm@softageindia.com", "test", rm_message);
+			mailService.sendEmail("rohit.raj@softageindia.com", "evm@softageindia.com", "test", hr_message);
+			mailService.sendEmail("rohit.raj@softageindia.com", "evm@softageindia.com", "test", emp_message);
+			
+			
 			// emp.sendMail("evm@softageindia.com", 20, "evm@softageindia.com",
 			// "x23HYrtVZ69",manager_email , "Resignation request raised",
 			// rm_message);
@@ -599,9 +613,17 @@ public class HomeController {
 				// emp.sendMail("evm@softageindia.com", 20,
 				// "evm@softageindia.com", "x23HYrtVZ69",emp_email ,
 				// "Resignation request raised", emp_message);
-				mailService.sendEmail(emp_email, "evm@softageindia.com", "Last Working Day Set By HR", emp_message);
+				/*mailService.sendEmail(emp_email, "evm@softageindia.com", "Last Working Day Set By HR", emp_message);
 				mailService.sendEmail(rm_email, "evm@softageindia.com", "Last Working Day Set By HR", rm_message);
 				mailService.sendEmail(hr_email, "evm@softageindia.com", "Last Working Day Set By HR", hr_message);
+				*/
+				
+				mailService.sendEmail("rohit.raj@softageindia.com", "evm@softageindia.com", "test", rm_message);
+				mailService.sendEmail("rohit.raj@softageindia.com", "evm@softageindia.com", "test", hr_message);
+				mailService.sendEmail("rohit.raj@softageindia.com", "evm@softageindia.com", "test", emp_message);
+				
+				
+				
 			} catch (Exception e) {
 				System.out.println("Exception in sending confirmation mails for the hr process");
 			}
@@ -774,12 +796,11 @@ public class HomeController {
 		}
 
 		String itManager = (String) jsonparse.get("ItEmpCode");
-		String accountManager = (String) jsonparse.get("AccountEmpCode");
+		String accountManager = ((String) jsonparse.get("AccountEmpCode")).trim();
 		String hrManager = (String) jsonparse.get("HrEmpCode");
 		String infraManager = (String) jsonparse.get("InfraEmpCode");
 		
-		 if (DepartmentManger.equals(itManager) || DepartmentManger.equals(accountManager)
-		  || DepartmentManger.equals(hrManager) || DepartmentManger.equals(infraManager)) {
+		 if ((DepartmentManger.equals(itManager)) || (DepartmentManger.equalsIgnoreCase(accountManager))||( DepartmentManger.equals(hrManager)) ||( DepartmentManger.equals(infraManager))) {
 		 
 		List<String> listempcoderesign = noduesservice.listrmacceptedempcode(stageid, departmentid, office_code,
 				status);
@@ -1141,12 +1162,12 @@ public class HomeController {
 							e.printStackTrace();
 						}
 
-						try {
+						/*try {
 							empdetails.assetDeallocation(empcode, barcodeno, itmanagerempcode);
 						} catch (RemoteException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						}
+						}*/
 
 						itasset.setAssetsIssue(assetssplit);
 						itasset.setCreatedBy("System");
@@ -1290,12 +1311,12 @@ public class HomeController {
 							e.printStackTrace();
 						}
 
-						try {
+						/*try {
 							empdetails.assetDeallocation(empcode, barcodeno, inframanagerempcode);
 						} catch (RemoteException e) {
 
 							e.printStackTrace();
-						}
+						}*/
 
 						infraasset.setAssetsIssue(assetssplit);
 						infraasset.setCreatedBy("System");
@@ -1802,12 +1823,12 @@ public class HomeController {
 						} catch (java.text.ParseException e) {
 							e.printStackTrace();
 						}
-						try {
+						/*try {
 							empdetails.assetDeallocation(empcode, barcodeno, accountmanagerempcode);
 						} catch (RemoteException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						}
+						}*/
 
 						accountasset.setAssetsIssue(assetssplit);
 						accountasset.setCreatedBy("system");
@@ -2031,7 +2052,8 @@ public class HomeController {
 		clearence.setTbluserresignation(resignedUser);
 		rejectjson = noduesservice.submitNoduesclearence(clearence);
 
-		mailService.sendEmail(departmentmanageremail, sendToemail, "NO DUES CLEARENCES", comments);
+		/*mailService.sendEmail(departmentmanageremail, sendToemail, "NO DUES CLEARENCES", comments);*/
+		mailService.sendEmail("rohitgupta2432@gmail.com", "rohit.raj@softageindia.com", "NO DUES CLEARENCES", comments);
 
 		return rejectjson;
 	}
@@ -2171,7 +2193,8 @@ public class HomeController {
 		clearence.setTbluserresignation(resignedUser);
 		rejectjson = noduesservice.submitNoduesclearence(clearence);
 
-		mailService.sendEmail(departmentmanageremail, sendTo, "NO DUES CLEARENCES", comments);
+		/*mailService.sendEmail(departmentmanageremail, sendTo, "NO DUES CLEARENCES", comments);*/
+		mailService.sendEmail("rohitgupta2432@gmail.com", "rohit.raj@softageindia.com", "NO DUES CLEARENCES", comments);
 
 		return rejectjson;
 	}
@@ -2237,12 +2260,12 @@ public class HomeController {
 							e.printStackTrace();
 						}
 
-						try {
+						/*try {
 							empdetails.assetDeallocation(empcode, barcodeno, hrmanagerempcode);
 						} catch (RemoteException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						}
+						}*/
 						hrasset.setAssetsIssue(assetssplit);
 						hrasset.setCreatedBy("system");
 						hrasset.setCreatedOn(today);
@@ -2291,11 +2314,11 @@ public class HomeController {
 		String[] key = { "empcode" };
 		String[] value = { empcode };
 		ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
-		try {
+		/*try {
 			empinfo = empdetails.enterPriseDataService("EVM", "empinfo", key, value);
 		} catch (RemoteException e) {
 			e.printStackTrace();
-		}
+		}*/
 		JSONObject insertitasserts = new JSONObject();
 		JSONParser parser = new JSONParser();
 		JSONObject serviceparser;
