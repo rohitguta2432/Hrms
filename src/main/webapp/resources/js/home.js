@@ -1,4 +1,5 @@
-var application = angular.module('home', [ 'ui.router', 'ui.bootstrap','angular-loading-bar']);
+var application = angular.module('home', [ 'ui.router', 'ui.bootstrap','angular-loading-bar',
+                                           'ngMaterial']);
 //var domain = 'http://localhost:8080/hrms';
 var domain = '/hrms';
 application.config(function($stateProvider, $urlRouterProvider, cfpLoadingBarProvider) {
@@ -48,7 +49,7 @@ application.config(function($stateProvider, $urlRouterProvider, cfpLoadingBarPro
 	.state('noduesitmodal',{
 		url:'/IT_NODUES_MODAL',
 		templateUrl:'resources/js/noduesit/noduesitmodal.html',
-		controller:'homeController'
+		controller:'noduesitmodaljscontroller'
 	})
 	.state('InfraNodues',{
 		url:'/INFRA_NODUES',

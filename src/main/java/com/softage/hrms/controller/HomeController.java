@@ -2052,8 +2052,10 @@ public class HomeController {
 		clearence.setTbluserresignation(resignedUser);
 		rejectjson = noduesservice.submitNoduesclearence(clearence);
 
+
 		/*mailService.sendEmail(departmentmanageremail, sendToemail, "NO DUES CLEARENCES", comments);*/
 		mailService.sendEmail("rohitgupta2432@gmail.com", "rohit.raj@softageindia.com", "NO DUES CLEARENCES", comments);
+
 
 		return rejectjson;
 	}
@@ -2360,7 +2362,6 @@ public class HomeController {
 		noduesclearence.setDepartmentId(1);
 		// insertrmasserts = noduesservice.submitNoduesclearence(nodues);
 		noduesservice.updateNoduesClearence(noduesclearence);
-
 		return insertrmasserts;
 	}
 
@@ -3042,11 +3043,17 @@ public class HomeController {
 	@RequestMapping(value = "/employeefeedbackstatus", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getemployeefeedbackstatus(HttpServletRequest request) {
-		JSONObject employeefeedbackstatus = new JSONObject();
-		String empcode = request.getParameter("employeecode");
+	JSONObject employeefeedbackstatus = new JSONObject();
+	try{	
+	String empcode = request.getParameter("employeecode");
 		TblUserResignation resignationbean = resignationService.getResignationUserService(empcode, 7);
 		int resignationId = resignationbean.getResignationId();
 		employeefeedbackstatus = exitinterviewservice.listempfeedbackstatus(resignationId);
+	}
+	catch (Exception e) {
+		logger.error("employee feedback status",e.getMessage());
+		e.printStackTrace();
+	}
 		return employeefeedbackstatus;
 	}
 
@@ -3104,7 +3111,7 @@ public class HomeController {
 			}
 
 		} catch (ParseException e) {
-			logger.error("Nodues Assets Details" + e);
+			logger.error("Nodues Assets Details" + e.getMessage());
 			e.printStackTrace();
 		}
 		return jsonassets;

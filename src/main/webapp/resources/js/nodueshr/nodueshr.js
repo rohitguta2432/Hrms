@@ -1,16 +1,15 @@
-application.controller('nodueshrcontroller',function($scope,$http,$modal,$rootScope,$window) {
+application.controller('nodueshrcontroller',function($scope,$http,$modal,
+		 $rootScope,$window) {
 	var status=5;
 	var stage=1;
-	var count=0;
+	/*var count=0;*/
 	$scope.init=function(){
 /*Employee grid information*/
 			$http.get(domain+'/getnoduesemplist?status='+status+'&stageid='+stage)
 			.success(function(data,status,headers,config){
 			$scope.nodueshrtjs=data.emplist;
 			/*alert($scope.nodueshrtjs);*/
-})
-		
-			/*error(function(data,status,headers,config){
+})		/*error(function(data,status,headers,config){
 			alert('not found');
 				})*/
 }
@@ -45,10 +44,12 @@ $scope.nodueStatus=function(){
 	.success(function(data,status,headers,config){
 	 $scope.noduestatus=data.noDuesPendingDept;
 	for(var i=0;i<$scope.noduestatus.length;i++){
+		if($scope.noduestatus[i]=='rm' && $scope.noduestatus[i]=='Infra' && $scope.noduestatus[i]=='it' && $scope.noduestatus[i]=='Account'){
 	     $scope.accept=false;
 	     count++;
-	}
-	 /* alert(count)*/
+	} /* alert($scope.noduestatus[i])*/
+		}
+	/*  alert($scope.noduestatus[i])*/
 	})
 .error(function(data,status,headers,config){
 	})

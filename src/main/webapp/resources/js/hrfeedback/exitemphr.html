@@ -35,8 +35,6 @@
 												<form name="Exit" ng-submit=submit(Exit) novalidate>
 													<div class="widget-main form-horizontal">
 <div class="clearfix"></div>
-  
-  
  <div class="widget-body" style="display: block;">
 												<div class="widget-main">
 													<div class="table-responsive">
@@ -61,7 +59,8 @@
 																	<td>{{emp.designation}}</td>
 																	<td>{{emp.location}}</td>
 																	<td><button  class="btn btn-primary btn-sm" 
-																	 ng-click="EmployeeFeedback(emp.empcode)">FEEDBACK 
+	 ng-click="EmployeeFeedback(emp.empcode)" ng-disable="$scope.feedback_status='false'">FEEDBACK 
+
 																	</button></td>
 																	<td><button  class="btn btn-warning" 
 																	 ng-click="EmployeeFeedbackStatus(emp.empcode)">FEEDBACK STATUS 

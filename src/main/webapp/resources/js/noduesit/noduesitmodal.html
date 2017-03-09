@@ -92,9 +92,7 @@
 				<input type="text"  class="col-xs-10 col-sm-12" name="emplocation" ng-model="emplocation" ng-disabled="true"/>
 															</div>
 														</div>
-														
-														
-														<div class="clearfix"></div>
+															<div class="clearfix"></div>
 											 <div class="widget-body" style="display: block;">
 												<div class="widget-main">
 													<div class="table-responsive">
@@ -104,14 +102,14 @@
 																<tr>
 																	<th>item</th>
 																	<th>barcode</th>
-																	<th>issued</th>
+																	<!-- <th>issued</th> -->
 																	 <th>received</th> 
 																	
 																</tr>
 															</thead>
-													
-														  <tbody ng-repeat="emp in nodueitassets">      
-	<tr><td>{{emp.name}}</td><td>{{emp.barcodeno}}</td><td><input type="checkbox" value="{{emp.name}}" ng-model="checked" ng-init="checked=true"/></td><td><input type="checkbox" value="{{emp.name}}" id="check" name="check" ng-model="emp.selected" required="true"></td>
+			<tbody ng-repeat="emp in nodueitassets">      
+	<tr><td>{{emp.name}}</td><td>{{emp.barcodeno}}</td><td><input type="checkbox" value="{{emp.name}}" id="check" name="check" ng-model="emp.selected" required="true"></td>
+					 <!-- <td><input type="checkbox" value="{{emp.name}}" ng-model="checked" ng-init="checked=true"/></td> -->
 					 <span ng-show="it.check.$dirty && it.check.$error.required">This field is required</span>	  
 								 </tr>
 							</tbody>
@@ -135,7 +133,10 @@
 					<div class="modal-footer">
 					
                 <button type="submit" value="submit" ng-disabled="it.$invalid" class="btn btn-primary">ACCEPT</button>
-  <button type="reset" class="btn btn-warning"  ng-disabled="it.$invalid && it.comment.$error.required  "  ng-click="reject()">REJECT</button>									
+  <md-button class="btn btn-warning"  ng-disabled="it.$invalid && it.comment.$error.required  "  ng-click="reject($event)">REJECT</md-button>									
+	<!-- <md-button class="md-primary md-raised" ng-click="showConfirm($event)" >
+      Confirm Dialog
+    </md-button>	 -->			
 														
 														<!-- || !it.check.$error.required -->
 														<div class="clearfix"></div>

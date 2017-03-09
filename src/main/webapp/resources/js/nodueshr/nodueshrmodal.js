@@ -1,21 +1,18 @@
-application.controller('nodueshrmodalcontroller',function($scope,$http,$window,$modal,$location) {
+application.controller('nodueshrmodalcontroller',function($scope,$http,$window,
+		$modal,$location,ngToast) {
 
 $http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 			.success(function(data, status, headers, config){
 			/*alert('data are found');*/
-				
 				$scope.emplycode=data.empcode;
 				$scope.empfirstname=data.empname;
 				$scope.empdepartment=data.spokecode;
 				$scope.empdesignation=data.designation;
 				$scope.emplocation=data.location;
-				
-				
 				$http.get(domain+'/getassets?employee_code='+$scope.emplycode+'&department='+$scope.department_id)
 				.success(function(data,status,headers,config){
 					/*alert('the data returned is : '+JSON.stringify({data : data}));*/
 					$scope.nodueshrassets=data.assets;
-				
 				/*alert($scope.department_id)*/
 					})
 				})
@@ -68,7 +65,8 @@ var emp_data='comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&not_
 /*alert(emp_data)*/
 $http.get(domain+'/rejectempassets?'+emp_data)
 .success(function(data){
-       alert("rejected hr asserts")
+     /*  alert("rejected hr asserts")*/
+      ngToast.create('a toast message...');
        location.reload();
 				
 	})

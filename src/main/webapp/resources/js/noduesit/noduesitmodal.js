@@ -1,11 +1,9 @@
 application.controller('noduesitmodaljscontroller', function($rootScope, $scope, $http,
-		$window,$location) {
+		$window,$location,$mdDialog) {
 	var departmentid;
-$http
-			.get(
-					domain + '/getemployeemodalinfo?employee_code='
+         $http.get(domain + '/getemployeemodalinfo?employee_code='
 							+ $scope.emp_code).success(
-					function(data, status, headers, config) {
+					   function(data, status, headers, config) {
 						$scope.emplycode = data.empcode;
 						$scope.empfirstname = data.empname;
 						$scope.empdepartment = data.spokecode;
@@ -34,8 +32,7 @@ $http
 			if (emp.selected) {
 
 				$scope.selectedItems.push(emp.name);
-
-			}
+		}
 		})
 		/* alert("store item "+$scope.selectedItems) */
 
@@ -57,9 +54,9 @@ $http
 			/* alert("errors") */
 		})
 	}
-
-	$scope.reject = function() {
-		angular.forEach($scope.nodueitassets, function(emp) {
+	$scope.reject = function(ev) {
+		
+	angular.forEach($scope.nodueitassets, function(emp) {
 			if (emp.selected) {
 				$scope.selectedItems.push(emp.name);
 			}
@@ -70,16 +67,26 @@ $http
 			}
 		})
 
-		var emp_data = 'comments=' + $scope.empcomments + '&emp_code='
+	var emp_data = 'comments=' + $scope.empcomments + '&emp_code='
 				+ $scope.emplycode + '&not_received=' + $scope.itemnotselected
 				+ '&received_assets=' + $scope.selectedItems + '&final_status='
 				+ $scope.rejected_final_status+'&departmentId='+$scope.department_id;
 
 		$http.get(domain +'/rejectempassets?'+emp_data)
 		.success(function(data) {
-			/*alert("rejected it assets")*/
-     location.reload();
-		})
+			$mdDialog.show(
+				      $mdDialog.alert()
+				        .parent(angular.element(document.querySelector('#popupContainer')))
+				        .clickOutsideToClose(true)
+				        .title('Are you Sure')
+				        .textContent('Employee Assets Are Rejected.')
+				        .ariaLabel('Alert Dialog Demo')
+				        .ok('Yes!')
+				        .targetEvent(ev)
+			);
+			alert(rejected)
+/*  location.reload();*/
+	})
 	}
 
 });

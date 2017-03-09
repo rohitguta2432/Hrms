@@ -14,6 +14,20 @@
     <link rel="stylesheet" href="resources/libs/css/bootstrap.css" />
     <link rel="stylesheet" href="resources/libs/css/font-awesome.css" />
 
+   <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+    
+    <!-- Angular Material requires Angular.js Libraries -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+   <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+ <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+
+<script src="http://ajax.googleapis.com/ajax/angular-sanitize.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/ngToast.min.js"></script>
+
+
     <!-- ace styles -->
     <link rel="stylesheet" href="resources/libs/css/ace.css" id="main-ace-style" />
     <!-- ace settings handler -->

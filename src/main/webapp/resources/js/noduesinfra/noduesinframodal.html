@@ -104,14 +104,15 @@
 																<tr>
 																	<th>item</th>
 																	<th>barcode</th>
-																	<th>issued</th>
+																	<!-- <th>issued</th> -->
 																	<th>received</th>
 																</tr>
 															</thead>
 													
 														  <tbody ng-repeat="emp in nodueinfraassets">      
 														<tr>
-	<td>{{emp.name}}</td> <td>{{emp.barcodeno}}</td> <td> <input type="checkbox"   value="{{emp.name}}"  ng-model="checked" ng-init="checked=true"/></td><td><input type="checkbox" value="{{emp.name}}" value="{{emp.barcodeno}}" id="check" name="check" ng-model="emp.selected" required="true"/></td>
+	<td>{{emp.name}}</td> <td>{{emp.barcodeno}}</td> <td><input type="checkbox" value="{{emp.name}}" value="{{emp.barcodeno}}" id="check" name="check" ng-model="emp.selected" required="true"/></td>
+								<!-- <td> <input type="checkbox"   value="{{emp.name}}"  ng-model="checked" ng-init="checked=true"/></td> -->
 								 <span ng-show="infra.check.$dirty && infra.check.$error.required">This field is required</span>
 								 
 								 </tr>

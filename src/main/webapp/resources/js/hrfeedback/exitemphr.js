@@ -39,16 +39,15 @@ application.controller('hrfeedbackcontroller', function($scope, $http, $modal,
 $http.get(domain+'/employeefeedbackstatus?employeecode='+$scope.emp_code)
 	.success(function(data,status,headers,config){
 	 $scope.feedbackstatus=data.statusemp;
-
-	 $scope.feedback_status=false;
-/*for(var i=0;i<=$scope.feedbackstatus;i++)
+     $scope.feedback_status=false;
+for(var i=0;i<=$scope.feedbackstatus;i++)
 	{
-if($scope.feedbackstatus[i]='undefined')
+if($scope.feedbackstatus[i]=='undefined')
 		{
-
 		$scope.feedback_status=false;
 		}
-	}*/
+/*alert($scope.feedbackstatus[i])*/
+	}
 })
 .error(function(data,status,headers,config){
 	/*alert('not found');*/

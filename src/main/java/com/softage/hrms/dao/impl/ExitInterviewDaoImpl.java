@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.ls.LSInput;
 
+import com.fasterxml.jackson.core.JsonFactory;
 import com.softage.hrms.dao.ExitInterviewDao;
 import com.softage.hrms.model.MstQuestions;
 import com.softage.hrms.model.TblFeedbacks;
@@ -110,16 +111,19 @@ public class ExitInterviewDaoImpl implements ExitInterviewDao {
 	public JSONObject getEmpFeedbackStatus(int resignationid) {
 		JSONObject liststageid=new JSONObject();
 		Session session=sessionfactory.getCurrentSession(); 
+		JSONObject blankjson=new JSONObject();
 		Set<JSONObject> listarray=new HashSet<JSONObject>();
+		List<TblFeedbacks> empfeedback=null;
+		JSONObject feedbackstatus=null;
 		try {
 			
 			String hql="from TblFeedbacks a where a.tblUserResignation.resignationId=:resignationid";
 			Query query=session.createQuery(hql)
 					.setParameter("resignationid", resignationid);
-			List<TblFeedbacks> empfeedback=query.list();
+			empfeedback=query.list();
 			for(TblFeedbacks status:empfeedback)
 			{
-				JSONObject feedbackstatus=new JSONObject();
+				feedbackstatus=new JSONObject();
 //				feedbackstatus.put("empstatus", status.getStageId());
 				if(status.getStageId()==3){
 					feedbackstatus.put("statuslbl", "Employee Feedback Status");
@@ -141,16 +145,16 @@ public class ExitInterviewDaoImpl implements ExitInterviewDao {
 				{
 					feedbackstatus.put("statustext", "Rating Completed");
 				}
-				else{
+			else{
 					if(status.getStageId()!=3){
 						feedbackstatus.put("statustext", "Rating Pending");
 					}
 				}
 				
-				
-				
-				/*System.out.println(status.getStageId());*/
-				listarray.add(feedbackstatus);
+			}
+			if(empfeedback.isEmpty()){
+				blankjson.put("statustext", "feedback Pending");
+				listarray.add(blankjson);
 			}
 			liststageid.put("statusemp", listarray);
 			} catch (Exception e) {
