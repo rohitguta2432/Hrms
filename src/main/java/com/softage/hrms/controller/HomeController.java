@@ -211,10 +211,9 @@ public class HomeController {
 			/* System.out.println(empInfo); */
 			JSONParser parser = new JSONParser();
 			JSONObject serviceJson = (JSONObject) parser.parse(empInfo);
-			// int notice_time=(Integer) serviceJson.get("NoticePeriod");ESF
-			// SERVICE TO BE USED
-
-			int notice_time = 60;
+			 int notice_time=(Integer) serviceJson.get("NoticePeriod");
+			// SERVICE TO BE USED ESF
+			//int notice_time = 60;
 			jsonReason = resignationService.resignationInitialization();
 
 			jsonRelDate = resignationService.getReleivingDate(empcode, notice_time);
