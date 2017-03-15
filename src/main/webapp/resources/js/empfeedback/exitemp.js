@@ -2,8 +2,7 @@ application.controller('exitempcontroller', function($scope, $http,$location) {
 	
 	$http.get(domain + '/empfeedback').success(
 			function(data, status, headers, config) {
-
-				/* alert('data are found '+ data); */
+		    /* alert('data are found '+ data); */
 				$scope.Employeecode = data.empcode;
 				$scope.empfirstname = data.empname;
 				$scope.empdepartment = data.spokecode;

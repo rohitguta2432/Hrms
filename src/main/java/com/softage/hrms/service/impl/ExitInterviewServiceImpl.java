@@ -30,8 +30,8 @@ public List<JSONObject> listempQuestion(int stageid) {
 return exitinterviewdao.getEmpQuestions(stageid);
 	}
 @Override
-public JSONObject listempfeedbackstatus(int resignationid) {
-return exitinterviewdao.getEmpFeedbackStatus(resignationid);
+public List<TblFeedbacks> listempfeedback(int resignationid,int stageid1,int stageid2) {
+return exitinterviewdao.getEmpFeedbackStatus(resignationid, stageid1, stageid2);
 	}
 
 }

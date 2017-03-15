@@ -47,7 +47,8 @@
 																	<th>SpokeCode</th>
 																	<th>Designation</th>
 																	<th>Location</th>
-																	<th>Action</th>
+																	<th>Feedback</th>
+																	<th>Employee Feedback</th>
 																</tr>
 															</thead>
 																<tbody ng-repeat="emp in hrfeedback" ng-model="emp.empcode">
@@ -58,13 +59,13 @@
 																    <td>{{emp.spokecode}}</td>
 																	<td>{{emp.designation}}</td>
 																	<td>{{emp.location}}</td>
-																	<td><button  class="btn btn-primary btn-sm" 
+																	<td><md-button  class="md-primary" ng-href="{{googleUrl}}" target="_blank"
 	 ng-click="EmployeeFeedback(emp.empcode)" ng-disable="$scope.feedback_status='false'">FEEDBACK 
 
-																	</button></td>
-																	<td><button  class="btn btn-warning" 
+																	</md-button></td>
+																	<td><md-button  class="md-primary" ng-href="{{googleUrl}}" target="_blank"
 																	 ng-click="EmployeeFeedbackStatus(emp.empcode)">FEEDBACK STATUS 
-																	</button></td>
+																	</md-button></td>
 																</tr>
 															</tbody>
 														</table>

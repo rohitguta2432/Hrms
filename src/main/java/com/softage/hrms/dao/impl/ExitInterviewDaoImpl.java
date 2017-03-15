@@ -108,7 +108,7 @@ public class ExitInterviewDaoImpl implements ExitInterviewDao {
 	}
     @Override
 	@Transactional
-	public JSONObject getEmpFeedbackStatus(int resignationid) {
+	public List<TblFeedbacks> getEmpFeedbackStatus(int resignationid,int stageId1,int stageid2) {
 		JSONObject liststageid=new JSONObject();
 		Session session=sessionfactory.getCurrentSession(); 
 		JSONObject blankjson=new JSONObject();
@@ -116,50 +116,15 @@ public class ExitInterviewDaoImpl implements ExitInterviewDao {
 		List<TblFeedbacks> empfeedback=null;
 		JSONObject feedbackstatus=null;
 		try {
-			
-			String hql="from TblFeedbacks a where a.tblUserResignation.resignationId=:resignationid";
+			String hql="from TblFeedbacks a where a.tblUserResignation.resignationId=:resignationid and stageId=:stageid1 or stageId=:stageid2";
 			Query query=session.createQuery(hql)
-					.setParameter("resignationid", resignationid);
+					.setParameter("resignationid", resignationid).setInteger("stageid1", stageId1).setInteger("stageid2", stageid2);
+			
 			empfeedback=query.list();
-			for(TblFeedbacks status:empfeedback)
-			{
-				feedbackstatus=new JSONObject();
-//				feedbackstatus.put("empstatus", status.getStageId());
-				if(status.getStageId()==3){
-					feedbackstatus.put("statuslbl", "Employee Feedback Status");
-				}else if(status.getStageId()==4){
-					feedbackstatus.put("statuslbl", "Employee Rating Status");
-				}
-				
-				if(status.getStageId()==3)
-				{
-					feedbackstatus.put("statustext", "Feedback Completed");
-				}
-				else{
-					if(status.getStageId()!=4){
-						feedbackstatus.put("statustext", "Feedback Pending");
-					}
-				}
-				
-				if(status.getStageId()==4)
-				{
-					feedbackstatus.put("statustext", "Rating Completed");
-				}
-			else{
-					if(status.getStageId()!=3){
-						feedbackstatus.put("statustext", "Rating Pending");
-					}
-				}
-				
-			}
-			if(empfeedback.isEmpty()){
-				blankjson.put("statustext", "feedback Pending");
-				listarray.add(blankjson);
-			}
-			liststageid.put("statusemp", listarray);
+		
 			} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return liststageid;
+		return empfeedback;
 	}
 		}

@@ -36,19 +36,35 @@
 
 													<div class="clearfix"></div>
 
-													<div ng-repeat="emp in feedbackstatus">
+													<!-- <div ng-repeat="emp in feedbackstatus">
 														<div>
 															<div class="form-group col-sm-12">
 																<label class="col-sm-10 control-label no-padding-right"
 																	style="text-align: left; padding-bottom: 5px;">{{emp.statuslbl}}</label>
 																<div class="col-sm-12">
 																	<input type="text" ng-disabled="true" value="{{emp.statustext}}">
-																	
+																
 																</div>
 															</div>
 														</div>
+													</div> -->
+													
+	 <div class="widget-body" style="display: block;">
+												<div class="widget-main">
+													<table class="table">
+													<div class="table-responsive">
+															<thead ng-repeat="empquestion in feedbackans">
+															<tr>
+															<th>{{empquestion.empfeedbackqes}}</th>
+															<td>{{empquestion.empfeedbackans}}</td>
+															</tr>
+															</thead>
+														</table>
 													</div>
 												</div>
+											</div> 
+											
+
 											</div>
 										</div>
 										<!-- /.row -->

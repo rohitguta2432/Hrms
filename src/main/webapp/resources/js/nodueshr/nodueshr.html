@@ -60,12 +60,12 @@
 																	<td>{{emp.spokecode}}</td>
 																	<td>{{emp.designation}}</td>
 																	<td>{{emp.location}}</td>
-																	<td><button class="btn btn-primary btn-sm" 
-
-														ng-click="EmployeeFeedback(emp.empcode,emp.department)" ng-disabled="$scope.accept='false'">NODUES 
-																		<button class="btn btn-warning" 
-
-													 ng-click="EmpOthernoDues(emp.empcode)">OTHER NODUES</td>
+																	<td>
+								<button class="btn btn-primary btn-sm"  ng-mousemove="empstatus($event,emp.empcode)"  
+							ng-click="EmployeeFeedback(emp.empcode,emp.department)">NODUES 
+							{{noduestatus}}
+<!-- 																		<button class="btn btn-warning" 
+ ng-click="EmpOthernoDues(emp.empcode)">OTHER NODUES --></td>
 																	<td></td>
 																</tr>
 															</tbody>

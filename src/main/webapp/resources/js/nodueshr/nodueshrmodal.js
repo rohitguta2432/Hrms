@@ -1,5 +1,5 @@
 application.controller('nodueshrmodalcontroller',function($scope,$http,$window,
-		$modal,$location,ngToast) {
+		$modal,$location) {
 
 $http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 			.success(function(data, status, headers, config){

@@ -11,5 +11,5 @@ public interface ExitInterviewService {
 	public List<JSONObject> listHrQuestion(int roleid,int stageid);
     public List<JSONObject> listempQuestion(int stageid);
     public JSONObject submithrfeedback(TblFeedbacks feedbackbean);
-	public JSONObject listempfeedbackstatus(int resignationid);
+	public List<TblFeedbacks> listempfeedback(int resignationid,int stageid1,int stageid2);
 }

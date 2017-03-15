@@ -127,17 +127,22 @@ public class HomeController {
 		// System.out.println("role_id is : " + roleID + " first_name is : " +
 		// first_Name);
 		int userID = Integer.parseInt(request.getParameter("user_id"));
-		//int spokeID = Integer.parseInt(request.getParameter("spoke_id"));
-		//int circleID = Integer.parseInt(request.getParameter("CircleID"));
+
+		/*int spokeID = Integer.parseInt(request.getParameter("spoke_id"));
+		int circleID = Integer.parseInt(request.getParameter("CircleID"));
+		*/
+
 		String officeCode = (String) request.getParameter("ReportingOfficeCode");
 		HttpSession session = request.getSession();
 		session.setAttribute("firstname", first_Name);
 		session.setAttribute("employeecode", employee_code);
 		session.setAttribute("roleid", roleID);
 		session.setAttribute("userid", userID);
-		/*session.setAttribute("spokeid", spokeID);
-		session.setAttribute("circleid", circleID);*/
-		session.setAttribute("officecode", officeCode);
+
+	   /* session.setAttribute("spokeid", spokeID);
+	    session.setAttribute("circleid", circleID);
+		*/session.setAttribute("officecode", officeCode);
+
 		ISoftAgeEnterpriseProxy i = new ISoftAgeEnterpriseProxy();
 		String empassets = null;
 		String[] keys = { "empcode" };
@@ -773,7 +778,7 @@ public class HomeController {
 			departmentid = 1;
 		}
 		office_code = (String) session.getAttribute("officecode");
-		int circleid = (Integer) session.getAttribute("circleid");
+		//int circleid = (Integer) session.getAttribute("circleid");
 		ArrayList<JSONObject> listinformation = new ArrayList<JSONObject>();
 		JSONObject jsonobject = new JSONObject();
 		ISoftAgeEnterpriseProxy emp_prxoy = new ISoftAgeEnterpriseProxy();
@@ -792,10 +797,10 @@ public class HomeController {
 			e.printStackTrace();
 		}
 
-		String itManager = (String) jsonparse.get("ItEmpCode");
+		String itManager = ((String) jsonparse.get("ItEmpCode")).trim();
 		String accountManager = ((String) jsonparse.get("AccountEmpCode")).trim();
-		String hrManager = (String) jsonparse.get("HrEmpCode");
-		String infraManager = (String) jsonparse.get("InfraEmpCode");
+		String hrManager = ((String) jsonparse.get("HrEmpCode")).trim();
+		String infraManager = ((String) jsonparse.get("InfraEmpCode")).trim();
 		
 		 if ((DepartmentManger.equals(itManager)) || (DepartmentManger.equalsIgnoreCase(accountManager))||( DepartmentManger.equals(hrManager)) ||( DepartmentManger.equals(infraManager))) {
 		 
@@ -3037,23 +3042,6 @@ public class HomeController {
 		return empstatus;
 	}
 
-	@RequestMapping(value = "/employeefeedbackstatus", method = RequestMethod.GET)
-	@ResponseBody
-	public JSONObject getemployeefeedbackstatus(HttpServletRequest request) {
-	JSONObject employeefeedbackstatus = new JSONObject();
-	try{	
-	String empcode = request.getParameter("employeecode");
-		TblUserResignation resignationbean = resignationService.getResignationUserService(empcode, 7);
-		int resignationId = resignationbean.getResignationId();
-		employeefeedbackstatus = exitinterviewservice.listempfeedbackstatus(resignationId);
-	}
-	catch (Exception e) {
-		logger.error("employee feedback status",e.getMessage());
-		e.printStackTrace();
-	}
-		return employeefeedbackstatus;
-	}
-
 	@RequestMapping(value = "/getassets", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getnoduesassets(HttpServletRequest request) {
@@ -3079,6 +3067,7 @@ public class HomeController {
 		ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 		try {
 			empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO", keys, value);
+/*		System.out.println(empassets);*/
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -3112,5 +3101,35 @@ public class HomeController {
 			e.printStackTrace();
 		}
 		return jsonassets;
+	}
+	@RequestMapping(value = "/empfeedbackquestion", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getempfeedbackq(HttpSession session, HttpServletRequest request) {
+		ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
+		int resignationId=0;
+		JSONObject empfeedback = new JSONObject();
+		List<JSONObject> listarray=new ArrayList<JSONObject>();
+		String empcode = (String)request.getParameter("employeecode");
+		TblUserResignation resignationbean = resignationService.getResignationUserService(empcode, 7);
+		 resignationId = resignationbean.getResignationId();
+		int stageid1 = 3;
+		int stageid2=4;
+		try {
+    	List<TblFeedbacks> employeefeedback = exitinterviewservice.listempfeedback(resignationId,stageid1,stageid2);
+			if(!employeefeedback.isEmpty()){
+			for(TblFeedbacks answers:employeefeedback)
+			{
+				JSONObject anslist=new JSONObject();
+			anslist.put("empfeedbackans", answers.getAnsText());
+			anslist.put("empfeedbackqes", answers.getMstQuestions().getQuestionText());
+			 listarray.add(anslist);
+			}
+			}
+			empfeedback.put("empfeedbackanslist", listarray);
+		}
+	catch (Exception e) {
+			e.printStackTrace();
+		}
+	return empfeedback;
 	}
 }
