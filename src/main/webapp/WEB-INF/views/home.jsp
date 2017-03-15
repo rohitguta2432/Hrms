@@ -15,17 +15,6 @@
     <link rel="stylesheet" href="resources/libs/css/font-awesome.css" />
 
    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
-    
-    <!-- Angular Material requires Angular.js Libraries -->
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
-   <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
- <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
-
-<script src="http://ajax.googleapis.com/ajax/angular-sanitize.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/ngToast.min.js"></script>
 
 
     <!-- ace styles -->
@@ -34,6 +23,10 @@
     
     <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.css' type='text/css' media='all' />
     
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+    
+    
     <script src="resources/libs/js/jquery.min.js"></script>
     <script src="resources/libs/js/ace-extra.js"></script>
     <link href="resources/libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -41,9 +34,21 @@
 	<script src="resources/libs/angular-ui-router.min.js"></script>
 	<!-- <script src="resources/libs/jquery/dist/jquery.min.js"></script> -->
 	<!-- <script src="resources/libs/bootstrap/dist/js/bootstrap.min.js"></script> -->
-	 <script src="resources/libs/jquery/dist/jquery-ui.min.js"></script> 
+	
+	<!-- Angular Material requires Angular.js Libraries -->
+  	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+  	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+  	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+  	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+   	<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+ 	<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+
+	<script src="http://ajax.googleapis.com/ajax/angular-sanitize.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/ngToast.min.js"></script>
+	<script src="resources/libs/jquery/dist/jquery-ui.min.js"></script> 
 	<script src="resources/libs/ui-bootstrap-tpls-0.14.3.min.js"></script>
 	<script src="resources/libs/loading-bar.min.js"></script>
+	
 	<script src="resources/js/home.js"></script>
 	<script src="resources/js/rmapproval/approval.js"></script>
 	<!-- <script src="resources/js/approvalActionModal.js"></script> -->
