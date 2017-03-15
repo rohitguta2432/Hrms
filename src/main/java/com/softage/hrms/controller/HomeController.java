@@ -127,16 +127,16 @@ public class HomeController {
 		// System.out.println("role_id is : " + roleID + " first_name is : " +
 		// first_Name);
 		int userID = Integer.parseInt(request.getParameter("user_id"));
-		int spokeID = Integer.parseInt(request.getParameter("spoke_id"));
-		int circleID = Integer.parseInt(request.getParameter("CircleID"));
+		//int spokeID = Integer.parseInt(request.getParameter("spoke_id"));
+		//int circleID = Integer.parseInt(request.getParameter("CircleID"));
 		String officeCode = (String) request.getParameter("ReportingOfficeCode");
 		HttpSession session = request.getSession();
 		session.setAttribute("firstname", first_Name);
 		session.setAttribute("employeecode", employee_code);
 		session.setAttribute("roleid", roleID);
 		session.setAttribute("userid", userID);
-		session.setAttribute("spokeid", spokeID);
-		session.setAttribute("circleid", circleID);
+		/*session.setAttribute("spokeid", spokeID);
+		session.setAttribute("circleid", circleID);*/
 		session.setAttribute("officecode", officeCode);
 		ISoftAgeEnterpriseProxy i = new ISoftAgeEnterpriseProxy();
 		String empassets = null;
@@ -235,7 +235,7 @@ public class HomeController {
 	public JSONObject getResignationPage(HttpServletRequest request, HttpSession session) {
 		session = request.getSession();
 		String empcode = (String) session.getAttribute("employeecode");
-		int circleid = (Integer) session.getAttribute("circleid");
+		//int circleid = (Integer) session.getAttribute("circleid");
 		String office_code = (String) session.getAttribute("officecode");
 		ISoftAgeEnterpriseProxy emp = new ISoftAgeEnterpriseProxy();
 		TblUserResignation resignation = new TblUserResignation();
@@ -294,7 +294,7 @@ public class HomeController {
 			resignation.setReleivingDate(finalDate);
 			resignation.setResignationDate(dateobj);
 			resignation.setMstResignationStatus(status_mast);
-			resignation.setCircleId(circleid);
+			//resignation.setCircleId(circleid);
 			resignation.setOfficeId(office_code);
 			// resignation.setApprovedBy(empcode);
 			jsonObj = resignationService.submitResignationService(resignation);
@@ -319,13 +319,10 @@ public class HomeController {
 
 			if (jsonObj.get("result").equals("successful")) {
 
-			/*	mailService.sendEmail(manager_email, "evm@softageindia.com", "test", rm_message);
+			
+				mailService.sendEmail(manager_email, "evm@softageindia.com", "test", rm_message);
 				mailService.sendEmail(hr_email, "evm@softageindia.com", "test", hr_message);
-				mailService.sendEmail(emp_email, "evm@softageindia.com", "test", emp_message);*/
-				
-				mailService.sendEmail("rohit.raj@softageindia.com", "evm@softageindia.com", "test", rm_message);
-				mailService.sendEmail("rohit.raj@softageindia.com", "evm@softageindia.com", "test", hr_message);
-				mailService.sendEmail("rohit.raj@softageindia.com", "evm@softageindia.com", "test", emp_message);
+				mailService.sendEmail(emp_email, "evm@softageindia.com", "test", emp_message);
 				
 				// emp.sendMail("evm@softageindia.com", 20,
 				// "evm@softageindia.com", "x23HYrtVZ69",manager_email ,
@@ -470,9 +467,9 @@ public class HomeController {
 			mailService.sendEmail(emp_email, "evm@softageindia.com", "test", emp_message);*/
 			
 			
-			mailService.sendEmail("rohit.raj@softageindia.com", "evm@softageindia.com", "test", rm_message);
-			mailService.sendEmail("rohit.raj@softageindia.com", "evm@softageindia.com", "test", hr_message);
-			mailService.sendEmail("rohit.raj@softageindia.com", "evm@softageindia.com", "test", emp_message);
+			mailService.sendEmail(manager_email, "evm@softageindia.com", "test", rm_message);
+			mailService.sendEmail(hr_email, "evm@softageindia.com", "test", hr_message);
+			mailService.sendEmail(emp_email, "evm@softageindia.com", "test", emp_message);
 			
 			
 			// emp.sendMail("evm@softageindia.com", 20, "evm@softageindia.com",
@@ -618,9 +615,9 @@ public class HomeController {
 				mailService.sendEmail(hr_email, "evm@softageindia.com", "Last Working Day Set By HR", hr_message);
 				*/
 				
-				mailService.sendEmail("rohit.raj@softageindia.com", "evm@softageindia.com", "test", rm_message);
-				mailService.sendEmail("rohit.raj@softageindia.com", "evm@softageindia.com", "test", hr_message);
-				mailService.sendEmail("rohit.raj@softageindia.com", "evm@softageindia.com", "test", emp_message);
+				mailService.sendEmail(hr_email, "evm@softageindia.com", "test", rm_message);
+				mailService.sendEmail(emp_email, "evm@softageindia.com", "test", hr_message);
+				mailService.sendEmail(rm_email, "evm@softageindia.com", "test", emp_message);
 				
 				
 				
