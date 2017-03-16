@@ -693,6 +693,7 @@ public class HomeController {
 	public String authenticate(@ModelAttribute("loginBean") TblUserResignation tbluserresignation, Model model,
 			HttpServletRequest request) {
 		String emp_code = tbluserresignation.getExEmpUserid();
+		String password=tbluserresignation.getExEmpPassword();
 		//TblUserResignation ex_emp = resignationService.getResignationUserService(emp_code, 13);
 		TblUserResignation ex_emp=resignationService.getExEmpResignationUserService(emp_code,9);
 		if (ex_emp != null) {
@@ -2318,11 +2319,11 @@ public class HomeController {
 		String[] key = { "empcode" };
 		String[] value = { empcode };
 		ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
-		/*try {
+		try {
 			empinfo = empdetails.enterPriseDataService("EVM", "empinfo", key, value);
 		} catch (RemoteException e) {
 			e.printStackTrace();
-		}*/
+		}
 		JSONObject insertitasserts = new JSONObject();
 		JSONParser parser = new JSONParser();
 		JSONObject serviceparser;
