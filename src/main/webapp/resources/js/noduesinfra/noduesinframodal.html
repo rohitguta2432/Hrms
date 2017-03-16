@@ -97,10 +97,15 @@
 														<div class="clearfix"></div>
 											 <div class="widget-body" style="display: block;">
 												<div class="widget-main">
-												<div ng-if="nodueinfraassets.length<=0">
-																<span>{{error}}</span>
-															</div>
-												
+										<div ng-if="nodueinfraassets.length<=0">
+																<div class="col-sm-9 col-md-12" style="padding-left:0;">
+            <div class="alert alert-success">
+                
+               <span class="glyphicon glyphicon-ok"></span> <strong>{{error}}</strong>
+                
+            </div>
+        </div>										
+															</div><hr/><br/>				
 													<div class="table-responsive" ng-if="nodueinfraassets.length>0">
 														<table class="table">
 														 

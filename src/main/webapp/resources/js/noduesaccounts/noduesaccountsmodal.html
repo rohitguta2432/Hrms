@@ -108,9 +108,14 @@
 														 <div class="widget-body" style="display: block;">
 												<div class="widget-main">
 												<div ng-if="nodueaccountassets.length<=0">
-																<span>{{error}}</span>
-															</div>
-												
+																<div class="col-sm-9 col-md-12" style="padding-left:0;">
+            <div class="alert alert-success">
+                
+               <span class="glyphicon glyphicon-ok"></span> <strong>{{error}}</strong>
+                
+            </div>
+        </div>										
+															</div><hr/><br/>
 													<div class="table-responsive" ng-if="nodueaccountassets.length>0">
 														<table class="table">
 														 <thead>
