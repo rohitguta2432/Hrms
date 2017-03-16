@@ -111,12 +111,8 @@ public class NoDuesDaoImpl implements NoDuesDao {
             String sql = "call usp_getNoDuesPendingDeptName(?)";
 			Query query = session.createSQLQuery(sql).setParameter(0, resignationID);
 			List<String> noDuesPendingDeptList = query.list();
-			if(noDuesPendingDeptList.isEmpty()){
-			pendingNoDuesDeptJson.put("noDuesPendingDept", datalist);
-			}
-			else{
+			noDuesPendingDeptList.remove("Hr");
 				pendingNoDuesDeptJson.put("noDuesPendingDept", noDuesPendingDeptList);
-			}
 			
 			logger.info("Nodues Pending List>>>>     " + noDuesPendingDeptList);
 		} catch (Exception e) {
