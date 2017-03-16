@@ -274,7 +274,7 @@ public class ResignationServiceImpl implements ResignationService {
 	public TblUserResignation getExEmpResignationUserService(String empcode, String pwd,int status) {
 		TblUserResignation resignation= resignationdao.getExEmpResignationUserService(empcode,pwd ,status);
 		//DateFormat df=new SimpleDateFormat("yyyy/MM/dd");
-	/*	if(resignation!=null){
+		if(resignation!=null){
 		Date lwd=resignation.getHrLwdDate();
 		Date currDate=new Date();
 		long diff=currDate.getTime()-lwd.getTime();
@@ -282,7 +282,7 @@ public class ResignationServiceImpl implements ResignationService {
 		if(!(days<180 && days>=0)){
 			resignation=null;
 		}
-		}*/
+		}
 		return resignation;
 	}
 
