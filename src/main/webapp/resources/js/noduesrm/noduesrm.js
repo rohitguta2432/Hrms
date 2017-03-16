@@ -1,6 +1,6 @@
 application.controller('noduesrmcontroller',function($scope,$http,$modal,$rootScope,$window) {
 var status=5;
-var stage=1;
+var stage=2;
 	$scope.init=function(){
 /*Employee grid information*/
 		

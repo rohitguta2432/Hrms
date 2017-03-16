@@ -117,11 +117,14 @@
 																</tr>
 															</thead>
 													
-														  <tbody ng-repeat="emp in noduesrmassets">      
-														<tr>
-								<td>{{emp.name}}</td>  <td> <input type="checkbox" name="check" ng-model="emp.selected" value="{{emp.name}}"  required/></td>
-								<span ng-show="rm.check.$dirty && rm.check.$error.required">This field is required</span>
-								 </tr>
+														  <tbody >     														  
+														<tr ng-repeat="emp in noduesrmassets">
+															<td>{{emp.name}}</td>  
+															<td> 
+																<input type="checkbox" name="check" ng-model="emp.selected" value="{{emp.name}}"  required/>
+															</td>
+															<span ng-show="rm.check.$dirty && rm.check.$error.required">This field is required</span>
+								 						</tr>
 							</tbody>
 						 </table>
 						</div>

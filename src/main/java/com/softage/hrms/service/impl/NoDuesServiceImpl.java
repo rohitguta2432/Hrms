@@ -59,6 +59,12 @@ public class NoDuesServiceImpl implements NoDuesService {
 	return noduesdao.findByResignationId(resignationId,departmentid);
 	}
 
+	@Override
+	public List<String> listemprmaccepted(int departmentid, int status) {
+		
+		return noduesdao.getresignemplist(departmentid, status);
+	}
+
 	/*@Override
 	public JSONObject listUserStatus(int resignation) {
 		

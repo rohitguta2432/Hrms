@@ -12,6 +12,7 @@ public interface NoDuesDao {
 
 	
 	public List<String> getrmacceptedempcode(String stageid,int departmentid,String officeid,int status);
+	public List<String> getresignemplist(int departmentid,int status);
 	public List<JSONObject> getassetsdetails(int departmentid);
     public JSONObject insertnoduesassetsdetails(TblAssetsManagement accountbean);
 	/*public JSONObject getUserStatus(int resignation); */

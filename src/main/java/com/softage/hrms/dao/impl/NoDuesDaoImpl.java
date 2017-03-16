@@ -49,10 +49,10 @@ public class NoDuesDaoImpl implements NoDuesDao {
 		
 		try {
 			org.hibernate.Session session = sessionfactory.getCurrentSession();
-			String hql = "select empCode from TblUserResignation where officeId=:officeId and status=:status";
+			String hql = "select empCode from TblUserResignation where status=:status and officeId=:officeId";
 			Query query = session.createQuery(hql);
-			query.setParameter("officeId", officeid);
 			query.setParameter("status", status);
+			query.setParameter("officeId", officeid);
 			listempcode = query.list();
 		} catch (Exception e) {
 			logger.error("get rm Accepted employee List>>>>   ", e);
@@ -124,16 +124,7 @@ public class NoDuesDaoImpl implements NoDuesDao {
 		}
 		return pendingNoDuesDeptJson;
 	}
-	/*
-	 * @Override
-	 * 
-	 * @Transactional public JSONObject getUserStatus(int resignation) { Session
-	 * session=sessionfactory.getCurrentSession(); JSONObject empstatus=new
-	 * JSONObject(); String
-	 * hql="select d from  TblNoDuesClearence d where d.resignation_id=:resignation"
-	 * ; Query query=session.createQuery(hql); query.setParameter("resignation",
-	 * resignation); return empstatus; }
-	 */
+
 
 	@Override
 	@Transactional
@@ -164,5 +155,20 @@ public class NoDuesDaoImpl implements NoDuesDao {
 		
 		TblNoDuesClearence tblNoDuesClearence = (TblNoDuesClearence) query.uniqueResult();
 		return tblNoDuesClearence;
+	}
+	@Override
+	@Transactional
+	public List<String> getresignemplist( int departmentid, int status) {
+		List<String> listempcode = new ArrayList<String>();
+		try {
+			org.hibernate.Session session = sessionfactory.getCurrentSession();
+			String hql = "select r.emp_code from tbl_user_resignation r where r.status="+status+" and  ((select count(clearence_id) from tbl_no_dues_clearence  c where c.resignation_id=r.resignation_id and c.department_final_status =2 and c.department_id="+departmentid+")<1)";
+            Query query = session.createSQLQuery(hql);
+			listempcode = query.list();
+		} catch (Exception e) {
+			logger.error("get RM Accepted employee List>>>>   ", e);
+		}
+
+		return listempcode;
 	}
 }
