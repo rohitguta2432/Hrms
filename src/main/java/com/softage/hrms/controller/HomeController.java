@@ -1870,10 +1870,7 @@ public class HomeController {
 		String status = request.getParameter("final_status");
 		int finalstatus = Integer.parseInt(status);
 		String departmentId = request.getParameter("departmentId");
-		/*
-		 * long Department = Long.parseLong(departmentId); int assetDepartment =
-		 * (int) Department;
-		 */
+	
 		int assetDepartment = Integer.parseInt(departmentId);
 
 		ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
@@ -2053,8 +2050,7 @@ public class HomeController {
 		rejectjson = noduesservice.submitNoduesclearence(clearence);
 
 
-		/*mailService.sendEmail(departmentmanageremail, sendToemail, "NO DUES CLEARENCES", comments);*/
-		mailService.sendEmail("rohitgupta2432@gmail.com", "rohit.raj@softageindia.com", "NO DUES CLEARENCES", comments);
+		mailService.sendEmail(departmentmanageremail, sendToemail, "NO DUES CLEARENCES", comments);
 
 
 		return rejectjson;
@@ -2194,9 +2190,8 @@ public class HomeController {
 		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
 		clearence.setTbluserresignation(resignedUser);
 		rejectjson = noduesservice.submitNoduesclearence(clearence);
-
-		/*mailService.sendEmail(departmentmanageremail, sendTo, "NO DUES CLEARENCES", comments);*/
-		mailService.sendEmail("rohitgupta2432@gmail.com", "rohit.raj@softageindia.com", "NO DUES CLEARENCES", comments);
+		
+		mailService.sendEmail(departmentmanageremail, sendTo, "NO DUES CLEARENCES", comments);
 
 		return rejectjson;
 	}

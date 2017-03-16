@@ -21,10 +21,6 @@
   
  
 
-<script src="http://ajax.googleapis.com/ajax/angular-sanitize.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/ngToast.min.js"></script>
-  <script type="text/javascript" src="ng-grid-1.3.2.js"></script>
-
     <!-- ace styles -->
     <link rel="stylesheet" href="resources/libs/css/ace.css" id="main-ace-style" />
     <!-- ace settings handler -->
@@ -47,9 +43,6 @@
   	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
    	<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
  	<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
-
-	<script src="http://ajax.googleapis.com/ajax/angular-sanitize.min.js"></script>
-	<script src="http://ajax.googleapis.com/ajax/ngToast.min.js"></script>
 	<script src="resources/libs/jquery/dist/jquery-ui.min.js"></script> 
 	<script src="resources/libs/ui-bootstrap-tpls-0.14.3.min.js"></script>
 	<script src="resources/libs/loading-bar.min.js"></script>
