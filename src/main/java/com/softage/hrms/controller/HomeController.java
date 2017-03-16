@@ -1189,10 +1189,7 @@ public class HomeController {
 		noduesclearence.setDepartmentFinalStatus(2);
 		noduesclearence.setDepartmentId(assetDepartment);
 		noduesclearence.setTbluserresignation(resignedUser);
-		/*
-		 * insertitasserts =
-		 * noduesservice.submitNoduesclearence(noduesclearence);
-		 */
+	
 		noduesservice.updateNoduesClearence(noduesclearence);
 		return insertitasserts;
 	}
@@ -1207,8 +1204,8 @@ public class HomeController {
 		JSONObject jsoninfraassets = new JSONObject();
 		ArrayList<JSONObject> arrlist = new ArrayList<JSONObject>();
 		List<String> listvalue = new ArrayList<String>();
-		String[] keys = { "empcode" };
-		String[] value = { empcode };
+		String[] keys = {"empcode"};
+		String[] value = {empcode};
 		ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 		try {
 			empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO", keys, value);
@@ -1307,12 +1304,12 @@ public class HomeController {
 							e.printStackTrace();
 						}
 
-						/*try {
+						try {
 							empdetails.assetDeallocation(empcode, barcodeno, inframanagerempcode);
 						} catch (RemoteException e) {
 
 							e.printStackTrace();
-						}*/
+						}
 
 						infraasset.setAssetsIssue(assetssplit);
 						infraasset.setCreatedBy("System");
@@ -1826,12 +1823,12 @@ public class HomeController {
 						} catch (java.text.ParseException e) {
 							e.printStackTrace();
 						}
-						/*try {
+						try {
 							empdetails.assetDeallocation(empcode, barcodeno, accountmanagerempcode);
 						} catch (RemoteException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						}*/
+						}
 
 						accountasset.setAssetsIssue(assetssplit);
 						accountasset.setCreatedBy("system");
@@ -2265,12 +2262,12 @@ public class HomeController {
 							e.printStackTrace();
 						}
 
-						/*try {
+						try {
 							empdetails.assetDeallocation(empcode, barcodeno, hrmanagerempcode);
 						} catch (RemoteException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						}*/
+						}
 						hrasset.setAssetsIssue(assetssplit);
 						hrasset.setCreatedBy("system");
 						hrasset.setCreatedOn(today);
