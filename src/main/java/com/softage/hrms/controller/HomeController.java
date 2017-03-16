@@ -1884,6 +1884,8 @@ public class HomeController {
 		Date date = null;
 		Date date1 = null;
 		String empassets = null;
+		String empemail=null;
+		String manageremail =null;
 		String departmentmanageremail = null;
 		session = request.getSession();
 		// Department Manager Information
@@ -1915,8 +1917,8 @@ public class HomeController {
 			try {
 				JSONObject servicejson = (JSONObject) parser.parse(empInfo);
 				managercode = (String) servicejson.get("ManagerCode");
-				String empemail = (String) servicejson.get("CompanyEmail");
-				String manageremail = (String) servicejson.get("ManagerEmail");
+			 empemail = (String) servicejson.get("CompanyEmail");
+			manageremail = (String) servicejson.get("ManagerEmail");
 				/*
 				 * long empdepartmentid = (Long)
 				 * servicejson.get("DepartmentID");
@@ -2049,9 +2051,9 @@ public class HomeController {
 		clearence.setTbluserresignation(resignedUser);
 		rejectjson = noduesservice.submitNoduesclearence(clearence);
 
-
-		mailService.sendEmail(departmentmanageremail, sendToemail, "NO DUES CLEARENCES", comments);
-
+		
+		mailService.sendEmail(departmentmanageremail, managercode, "NO DUES CLEARENCES", comments);
+		mailService.sendEmail(departmentmanageremail, empemail, "NO DUES CLEARENCES", comments);
 
 		return rejectjson;
 	}
@@ -2080,7 +2082,9 @@ public class HomeController {
 		JSONArray serviceparser = null;
 		Date date = null;
 		Date date1 = null;
+		String empemail=null;
 		String empassets = null;
+		String manageremail=null;
 		String sendTo = null;
 		String departmentmanageremail = null;
 		session = request.getSession();
@@ -2112,8 +2116,8 @@ public class HomeController {
 			try {
 				JSONObject servicejson = (JSONObject) parser.parse(empInfo);
 				managercode = (String) servicejson.get("ManagerCode");
-				String empemail = (String) servicejson.get("CompanyEmail");
-				String manageremail = (String) servicejson.get("ManagerEmail");
+				 empemail = (String) servicejson.get("CompanyEmail");
+				 manageremail = (String) servicejson.get("ManagerEmail");
 
 				sendTo = manageremail + empemail;
 
@@ -2191,8 +2195,8 @@ public class HomeController {
 		clearence.setTbluserresignation(resignedUser);
 		rejectjson = noduesservice.submitNoduesclearence(clearence);
 		
-		mailService.sendEmail(departmentmanageremail, sendTo, "NO DUES CLEARENCES", comments);
-
+		mailService.sendEmail(departmentmanageremail, manageremail, "NO DUES CLEARENCES", comments);
+		mailService.sendEmail(departmentmanageremail, empemail, "NO DUES CLEARENCES", comments);
 		return rejectjson;
 	}
 
