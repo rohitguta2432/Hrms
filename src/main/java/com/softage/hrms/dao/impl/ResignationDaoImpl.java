@@ -352,12 +352,13 @@ public class ResignationDaoImpl implements ResignationDao {
 
 	@Override
 	@Transactional
-	public TblUserResignation getExEmpResignationUserService(String empcode, int status) {
+	public TblUserResignation getExEmpResignationUserService(String empcode, String pwd,int status) {
 		Session session=this.sessionFactory.getCurrentSession();
 		TblUserResignation resignedUser=new TblUserResignation();
-		String hql="select resignation from TblUserResignation resignation where resignation.exEmpUserid=:exEmpUserid and resignation.mstResignationStatus>="+status;
+		String hql="select resignation from TblUserResignation resignation where resignation.exEmpUserid=:exEmpUserid and resignation.exEmpPassword=:exemppwd and resignation.mstResignationStatus>="+status;
 		Query query=session.createQuery(hql);
 		query.setParameter("exEmpUserid",empcode );
+		query.setParameter("exemppwd", pwd);
 		resignedUser=(TblUserResignation)query.uniqueResult();
 		return resignedUser;
 	}

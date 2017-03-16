@@ -695,7 +695,7 @@ public class HomeController {
 		String emp_code = tbluserresignation.getExEmpUserid();
 		String password=tbluserresignation.getExEmpPassword();
 		//TblUserResignation ex_emp = resignationService.getResignationUserService(emp_code, 13);
-		TblUserResignation ex_emp=resignationService.getExEmpResignationUserService(emp_code,9);
+		TblUserResignation ex_emp=resignationService.getExEmpResignationUserService(emp_code,password,9);
 		if (ex_emp != null) {
 			HttpSession session = request.getSession();
 			session.setAttribute("resignID", ex_emp.getResignationId());

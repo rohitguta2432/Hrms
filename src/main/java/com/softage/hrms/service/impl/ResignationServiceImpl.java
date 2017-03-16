@@ -271,8 +271,8 @@ public class ResignationServiceImpl implements ResignationService {
 	}
 
 	@Override
-	public TblUserResignation getExEmpResignationUserService(String empcode, int status) {
-		TblUserResignation resignation= resignationdao.getExEmpResignationUserService(empcode, status);
+	public TblUserResignation getExEmpResignationUserService(String empcode, String pwd,int status) {
+		TblUserResignation resignation= resignationdao.getExEmpResignationUserService(empcode,pwd ,status);
 		//DateFormat df=new SimpleDateFormat("yyyy/MM/dd");
 	/*	if(resignation!=null){
 		Date lwd=resignation.getHrLwdDate();

@@ -30,6 +30,6 @@ public interface ResignationService {
 	public JSONObject getAllResignedUsersHR(Set<String> setHR);
 	public TblUserResignation getById(int id);
 	public JSONObject getResignationModelByCircleID(String officecode);
-	public TblUserResignation getExEmpResignationUserService(String empcode,int status);
+	public TblUserResignation getExEmpResignationUserService(String empcode,String password,int status);
 	public JSONObject getUsersForHrApproval(String officecode,int status);
 }
