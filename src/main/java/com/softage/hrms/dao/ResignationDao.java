@@ -30,7 +30,7 @@ public interface ResignationDao {
 	public List<String> getAllResignedUsersHrs();
 	public List<ArrayList<TblUserResignation>> getAllResignedUsersHR(Set<String> setHRs);
 	public TblUserResignation getById(int id);
-	public List<TblUserResignation> getResignationModelByCircleID(int circleID);
+	public List<TblUserResignation> getResignationModelByCircleID(String officecode);
 	public TblUserResignation getExEmpResignationUserService(String empcode,int status);
 	public List<TblUserResignation> getUsersForHrApproval(String officecode,int status);
 

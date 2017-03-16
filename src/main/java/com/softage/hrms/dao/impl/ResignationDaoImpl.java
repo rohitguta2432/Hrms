@@ -341,11 +341,11 @@ public class ResignationDaoImpl implements ResignationDao {
 
 	@Override
 	@Transactional
-	public List<TblUserResignation> getResignationModelByCircleID(int cirID) {
+	public List<TblUserResignation> getResignationModelByCircleID(String officecode) {
 		Session session=this.sessionFactory.getCurrentSession();
-		String hql="Select resBean from TblUserResignation resBean join fetch resBean.mstReason where resBean.circleId=:cirID";
+		String hql="Select resBean from TblUserResignation resBean join fetch resBean.mstReason where resBean.officeId=:officeID";
 		Query query=session.createQuery(hql);
-		query.setParameter("cirID", cirID);
+		query.setParameter("officeID", officecode);
 		List<TblUserResignation> resignedUsers=query.list();
 		return resignedUsers;
 	}

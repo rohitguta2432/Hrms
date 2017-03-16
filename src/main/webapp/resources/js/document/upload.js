@@ -134,7 +134,7 @@ application.controller('documentManagement', ['$scope', '$http','$modal','FilePr
 
 
 	$scope.getItems=function(){
-		alert(' geting Upload Items   ');
+		//alert(' geting Upload Items   ');
 
 		$http.get(domain+'/getUploadItems')
 		.success(function(data,status,headers,config){
@@ -152,7 +152,7 @@ application.controller('documentManagement', ['$scope', '$http','$modal','FilePr
 
 	$scope.actionUpload=function(empcode,resignId){
 		
-		alert(" action Upload   "+empcode);
+		//alert(" action Upload   "+empcode);
 		var scope=$rootScope.$new();
 		scope.params={empcode:empcode,resignId:resignId};
 

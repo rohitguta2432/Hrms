@@ -1392,7 +1392,7 @@ public class HomeController {
 
 		try {
 			JSONArray list = new JSONArray();
-			int circle_code = (Integer) session.getAttribute("circleid");
+			//int circle_code = (Integer) session.getAttribute("circleid");
 			String uploadedBy = (String) session.getAttribute("employeecode");
 			logger.info("Uploading file ");
 			String itemId1 = request.getParameter("uploadId");
@@ -1730,6 +1730,9 @@ public class HomeController {
 		HttpSession session = request.getSession();// added by arpan for change
 		// in hr approval service
 		JSONArray list = new JSONArray();
+
+		String officecode=(String)session.getAttribute("officecode");
+
 		//int circle_code = (Integer) session.getAttribute("circleid");
 		String empcode = (String) session.getAttribute("employeecode");
 		int deptId = 1;
@@ -1746,7 +1749,11 @@ public class HomeController {
 		JSONObject resignations = null;
 
 		try {
+
 			//resignations = resignationService.getResignationModelByCircleID(circle_code);
+
+			resignations = resignationService.getResignationModelByCircleID(officecode);
+
 			// resignations =
 			// resignationService.getHrApprovalInitService(empcode, status,
 			// circle_code);

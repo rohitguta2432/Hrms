@@ -29,7 +29,7 @@ public interface ResignationService {
 	public List<String> getAllResignedUsersHrs();
 	public JSONObject getAllResignedUsersHR(Set<String> setHR);
 	public TblUserResignation getById(int id);
-	public JSONObject getResignationModelByCircleID(int circleID);
+	public JSONObject getResignationModelByCircleID(String officecode);
 	public TblUserResignation getExEmpResignationUserService(String empcode,int status);
 	public JSONObject getUsersForHrApproval(String officecode,int status);
 }

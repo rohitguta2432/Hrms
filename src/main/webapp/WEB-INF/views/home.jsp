@@ -14,34 +14,16 @@
     <link rel="stylesheet" href="resources/libs/css/bootstrap.css" />
     <link rel="stylesheet" href="resources/libs/css/font-awesome.css" />
    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
-<!-- <<<<<<< Upstream, based on origin/master
-=======
+
    
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
   <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
   
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ng-grid/2.0.11/ng-grid.min.js"></script>
-   <script type="text/javascript" src="http://angular-ui.github.com/ng-grid/lib/ng-grid.debug.js"></script> 
-  <script src="http://ui-grid.info/docs/grunt-scripts/csv.js"></script>
- <script src="http://ui-grid.info/docs/grunt-scripts/pdfmake.js"></script>
-<script src="http://ui-grid.info/docs/grunt-scripts/vfs_fonts.js"></script>
-<script src="http://ui-grid.info/release/ui-grid-unstable.js"></script>
-    <link rel="stylesheet" href="http://ui-grid.info/release/ui-grid-unstable.css" type="text/css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" type="text/css">
-    
-    Angular Material requires Angular.js Libraries
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
-   <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
- <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+ 
 
 <script src="http://ajax.googleapis.com/ajax/angular-sanitize.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/ngToast.min.js"></script>
   <script type="text/javascript" src="ng-grid-1.3.2.js"></script>
->>>>>>> 143df4a commit for hrfeedback -->
-
 
     <!-- ace styles -->
     <link rel="stylesheet" href="resources/libs/css/ace.css" id="main-ace-style" />
@@ -49,10 +31,7 @@
     
     <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.css' type='text/css' media='all' />
     
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-    
-    
+ 
     <script src="resources/libs/js/jquery.min.js"></script>
     <script src="resources/libs/js/ace-extra.js"></script>
     <link href="resources/libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">

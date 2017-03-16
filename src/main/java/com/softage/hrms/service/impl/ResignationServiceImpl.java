@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -215,12 +216,12 @@ public class ResignationServiceImpl implements ResignationService {
 	}
 
 	@Override
-	public JSONObject getResignationModelByCircleID(int circleID) {
+	public JSONObject getResignationModelByCircleID(String officeCode) {
 		int count=1;
 		DateFormat df=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		JSONObject resListJson=new JSONObject();
 		List<JSONObject> jsonList=new ArrayList<JSONObject>();
-		List<TblUserResignation> resignedUsers=resignationdao.getResignationModelByCircleID(circleID);
+		List<TblUserResignation> resignedUsers=resignationdao.getResignationModelByCircleID(officeCode);
 		for(TblUserResignation resbean : resignedUsers){
 			JSONObject resJson=new JSONObject();
 			String empcode=resbean.getEmpCode();
@@ -271,7 +272,18 @@ public class ResignationServiceImpl implements ResignationService {
 
 	@Override
 	public TblUserResignation getExEmpResignationUserService(String empcode, int status) {
-		return resignationdao.getExEmpResignationUserService(empcode, status);
+		TblUserResignation resignation= resignationdao.getExEmpResignationUserService(empcode, status);
+		//DateFormat df=new SimpleDateFormat("yyyy/MM/dd");
+	/*	if(resignation!=null){
+		Date lwd=resignation.getHrLwdDate();
+		Date currDate=new Date();
+		long diff=currDate.getTime()-lwd.getTime();
+		Long days=TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+		if(!(days<180 && days>=0)){
+			resignation=null;
+		}
+		}*/
+		return resignation;
 	}
 
 	@Override

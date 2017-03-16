@@ -135,6 +135,10 @@ application.directive("datepicker1", function () {
     return {
         restrict: "A",
         require: "ngModel",
+        scope:{
+        	format:"@",
+        	mindate:"@"
+        },
         link: function (scope, elem, attrs, ngModelCtrl) {
             var updateModel = function (dateText) {
                 // call $apply to bring stuff to angular model
@@ -144,7 +148,8 @@ application.directive("datepicker1", function () {
             };
 
             var options = {
-                dateFormat: "yy/mm/dd",
+                dateFormat: scope.format,
+                minDate: parseInt(scope.mindate),
                 // handle jquery date change
                 onSelect: function (dateText) {
                     updateModel(dateText);
