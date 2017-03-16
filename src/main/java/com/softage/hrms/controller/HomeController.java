@@ -1156,16 +1156,13 @@ public class HomeController {
 						} catch (java.text.ParseException e) {
 							e.printStackTrace();
 						}
-
-						try {
+		
+							try {
+								empdetails.assetDeallocation(empcode, barcodeno, itmanagerempcode);
+							} catch (RemoteException e) {
+								e.printStackTrace();
+							}
 							
-							
-							empdetails.assetDeallocation(empcode, barcodeno, itmanagerempcode);
-						} catch (RemoteException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
 						itasset.setAssetsIssue(assetssplit);
 						itasset.setCreatedBy("System");
 						itasset.setCreatedOn(today);
@@ -1182,6 +1179,7 @@ public class HomeController {
 				}
 			}
 		}
+		
 		TblNoDuesClearence noduesclearence = noduesservice.getByResignationId(resignationId, assetDepartment);
 		if (noduesclearence == null) {
 			noduesclearence = new TblNoDuesClearence();
@@ -3093,8 +3091,7 @@ public class HomeController {
 			
 			if(!assetPresent){
 				JSONObject errorObj = new JSONObject();
-				errorObj.put("name", msg);
-				arrlist.add(errorObj);
+				jsonassets.put("error", msg);
 			}
 			
 			jsonassets.put("assets", arrlist);

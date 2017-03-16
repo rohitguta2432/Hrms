@@ -16,6 +16,9 @@ application.controller('noduesitmodaljscontroller', function($rootScope, $scope,
 								function(data, status, headers, config) {
 					/* alert('the data returned is :'+JSON.stringify({data : data}));*/
 									 $scope.nodueitassets = data.assets;
+									 if(data.hasOwnProperty("error")){
+										 $scope.error = data.error;
+									 }
 							/*departmentid=$scope.nodueitassets[0].DepartmentId*/
 								/*alert($scope.department_id)*/
 							

@@ -13,7 +13,9 @@ $http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
 				.success(function(data,status,headers,config){
 					/*alert('the data returned is : '+JSON.stringify({data : data}));*/
 					$scope.nodueshrassets=data.assets;
-				/*alert($scope.department_id)*/
+					 if(data.hasOwnProperty("error")){
+						 $scope.error = data.error;
+					 }
 					})
 				})
 			   $scope.selectedItems = [];

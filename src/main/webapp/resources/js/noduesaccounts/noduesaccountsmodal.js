@@ -19,7 +19,9 @@ application.controller('noduesaccountsmodalcontroller', function($scope, $http,
 										+ $scope.emp_code+'&department='+$scope.department_id).success(
 								function(data, status, headers, config) {
 									$scope.nodueaccountassets = data.assets;
-								/*alert($scope.nodueaccountassets)*/
+									if(data.hasOwnProperty("error")){
+										 $scope.error = data.error;
+									 }
 
 								})
 					})

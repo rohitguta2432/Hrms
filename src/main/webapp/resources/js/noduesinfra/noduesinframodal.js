@@ -11,9 +11,10 @@ application.controller('noduesinframodalcontroller',function($scope,$http,$windo
 				
 				$http.get(domain+'/getassets?employee_code='+$scope.emplycode+'&department='+$scope.department_id)
 				.success(function(data,status,headers,config){
-					/*alert('the data returned is : '+JSON.stringify({data : data}));*/
 					$scope.nodueinfraassets=data.assets;
-					/*alert($scope.department_id)*/
+					if(data.hasOwnProperty("error")){
+						 $scope.error = data.error;
+					 }
 				})
 				
 				})

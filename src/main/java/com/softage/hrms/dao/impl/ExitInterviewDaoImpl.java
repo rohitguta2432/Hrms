@@ -116,7 +116,7 @@ public class ExitInterviewDaoImpl implements ExitInterviewDao {
 		List<TblFeedbacks> empfeedback=null;
 		JSONObject feedbackstatus=null;
 		try {
-			String hql="from TblFeedbacks a where a.tblUserResignation.resignationId=:resignationid and stageId=:stageid1 or stageId=:stageid2";
+			String hql="from TblFeedbacks a where a.tblUserResignation.resignationId=:resignationid and (stageId=:stageid1 or stageId=:stageid2)";
 			Query query=session.createQuery(hql)
 					.setParameter("resignationid", resignationid).setInteger("stageid1", stageId1).setInteger("stageid2", stageid2);
 			
