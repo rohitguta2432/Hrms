@@ -9,6 +9,8 @@ package org.tempuri;
 
 public interface ISoftAgeEnterprise extends java.rmi.Remote {
     public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.UserDetails getUserDetails(java.lang.String emp_code, java.lang.String password, java.lang.String companyId) throws java.rmi.RemoteException, org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.ExceptionInfo;
+    public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.UserDetails authanticateUser(java.lang.String emp_code, java.lang.String password) throws java.rmi.RemoteException, org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.ExceptionInfo;
+    public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.UserDetails updateDeviceID(java.lang.String emp_code, java.lang.String deviceID) throws java.rmi.RemoteException, org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.ExceptionInfo;
     public java.lang.Boolean getUserDetailByEVM(java.lang.String emp_code) throws java.rmi.RemoteException;
     public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.AssetDetails[] getAssetDetailUserWise(java.lang.String emp_code) throws java.rmi.RemoteException;
     public org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.UserDetails getUserDetail(java.lang.String emp_code) throws java.rmi.RemoteException;

@@ -30,6 +30,8 @@ public class UserDetails  implements java.io.Serializable {
 
     private java.lang.Integer userId;
 
+    private java.lang.String device_id;
+
     private java.lang.String email_id;
 
     public UserDetails() {
@@ -47,6 +49,7 @@ public class UserDetails  implements java.io.Serializable {
            java.lang.Integer roleId,
            java.lang.String roleName,
            java.lang.Integer userId,
+           java.lang.String device_id,
            java.lang.String email_id) {
            this.companyId = companyId;
            this.departmentId = departmentId;
@@ -59,6 +62,7 @@ public class UserDetails  implements java.io.Serializable {
            this.roleId = roleId;
            this.roleName = roleName;
            this.userId = userId;
+           this.device_id = device_id;
            this.email_id = email_id;
     }
 
@@ -284,6 +288,26 @@ public class UserDetails  implements java.io.Serializable {
 
 
     /**
+     * Gets the device_id value for this UserDetails.
+     * 
+     * @return device_id
+     */
+    public java.lang.String getDevice_id() {
+        return device_id;
+    }
+
+
+    /**
+     * Sets the device_id value for this UserDetails.
+     * 
+     * @param device_id
+     */
+    public void setDevice_id(java.lang.String device_id) {
+        this.device_id = device_id;
+    }
+
+
+    /**
      * Gets the email_id value for this UserDetails.
      * 
      * @return email_id
@@ -347,6 +371,9 @@ public class UserDetails  implements java.io.Serializable {
             ((this.userId==null && other.getUserId()==null) || 
              (this.userId!=null &&
               this.userId.equals(other.getUserId()))) &&
+            ((this.device_id==null && other.getDevice_id()==null) || 
+             (this.device_id!=null &&
+              this.device_id.equals(other.getDevice_id()))) &&
             ((this.email_id==null && other.getEmail_id()==null) || 
              (this.email_id!=null &&
               this.email_id.equals(other.getEmail_id())));
@@ -393,6 +420,9 @@ public class UserDetails  implements java.io.Serializable {
         }
         if (getUserId() != null) {
             _hashCode += getUserId().hashCode();
+        }
+        if (getDevice_id() != null) {
+            _hashCode += getDevice_id().hashCode();
         }
         if (getEmail_id() != null) {
             _hashCode += getEmail_id().hashCode();
@@ -483,6 +513,13 @@ public class UserDetails  implements java.io.Serializable {
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("device_id");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.datacontract.org/2004/07/SoftAge.Enterprise.BusinessObject", "device_id"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("email_id");

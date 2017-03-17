@@ -168,9 +168,9 @@ public class HomeController {
 			JSONObject jsonObject = (JSONObject) jsonParser.parse(empInfo);
 			/* System.out.println(jsonObject + "keys " + empInfo); */
 			// JSONObject assetJson = (JSONObject) jsonParser.parse(assestInfo);
-			request.setAttribute("param1", i.getUserDetail("ss0077").getRoleId());
+			//request.setAttribute("param1", i.getUserDetail("ss0077").getRoleId());
 			/*System.out.println(i.getUserDetail("ss0077").getRoleId());*/
-			model.addAttribute("emp", i.getUserDetail("ss0077").getFirstName());
+			//model.addAttribute("emp", i.getUserDetail("ss0077").getFirstName());
 		} catch (Exception e) {
 			logger.error(">>>>>>>>>>>>>>> Exception in default method" + e.getMessage());
 			model.addAttribute("msg", "NULL Values");
