@@ -62,8 +62,10 @@
 																	<td>{{emp.location}}</td>
 																	<td>
 								<button class="btn btn-primary btn-sm" 
-							ng-click="empstatus($event,emp.empcode); EmployeeFeedback(emp.empcode,emp.department)" uib-popover popover-placement="bottom" uib-popover-template="'nodstats.html'">NODUES 							
-</td>
+										ng-click="empstatus($event,emp.empcode);EmployeeFeedback(emp.empcode,emp.department);" popover-trigger="'none'" popover-is-open="noduestatus.length>0 && !isOpen" uib-popover popover-placement="bottom" uib-popover-template="'nodstats.html'"> NODUES 							
+								</button>
+											
+											</td>
 																	<td></td>
 																</tr>
 															</tbody>
@@ -108,7 +110,7 @@
 			class="btn-scroll-up btn btn-sm btn-inverse"><i
 			class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
 	<script type="text/ng-template" id="nodstats.html">
-      <div class="popover-content" ng-if="!accept">
+      <div class="popover-content" ng-if="noduestatus.length>0">
         <div ng-repeat="status in noduestatus">
 			Nodues Pending From:
              {{status}}

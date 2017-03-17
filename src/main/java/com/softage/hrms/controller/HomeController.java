@@ -272,23 +272,13 @@ public class HomeController {
 			empinfoJson = (JSONObject) parser.parse(empinfostring);
 			noduesJson = (JSONObject) parser.parse(noduestring);
 			hr_empcode = (String) noduesJson.get("HrEmpCode");
-			System.out.println(noduesJson.toString());
-			System.out.println(empinfoJson);
-			// noduesJson=(JSONObject)parser.parse("");
-			// System.out.println(empinfoJson);
 			String rm_empcode = (String) empinfoJson.get("ManagerCode");
-			// String rm_empcode = "ss0078";
-			// String hr_empcode = "ss0073";
-			// int noticeperiod = 60; // Get Notice Period Using ESF Service
 			int noticeperiod = ((Long) empinfoJson.get("NoticePeriod")).intValue();
 			String submit_date = df.format(dateobj);
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(dateobj);
 			cal.add(Calendar.DATE, noticeperiod);
-			// String release_Datetime=String.valueOf(cal.getTime());
 			Date release_Datetime = cal.getTime();
-			// Date reldate =
-			// Calendar.getInstance().setTimeInMillis(release_Datetime);
 			String relDate = String.valueOf(df.format(release_Datetime));
 			Date finalDate = new Date(relDate);
 			resignation.setComments(remarks);
@@ -303,42 +293,25 @@ public class HomeController {
 			resignation.setOfficeId(office_code);
 			// resignation.setApprovedBy(empcode);
 			jsonObj = resignationService.submitResignationService(resignation);
-			// emp.getUserDetail(emp_code).getRMEmail(); RM email Using ESF
-			// service
-			// emp.getUserDetail(emp_code).getHREmail(); HR email Using ESF
-			// service
-			// emp.getUserDetail(emp_code).getEmail(); EMployee Email
-			// String
-			// manager_email=resignationService.getRmEmail(employee_code);
-			// String manager_email = "arpan.mathur@softageindia.com";// ESF
-			// Service
-			// String hr_email = "arpan.mathur@softageindia.com";
-			// String emp_email = "arpan.mathur@softageindia.com";
-			String manager_email = (String) empinfoJson.get("ManagerEmail");
+		    String manager_email = (String) empinfoJson.get("ManagerEmail");
 			String hr_email = (String) noduesJson.get("HrEmpEmail");
 			String emp_email = (String) empinfoJson.get("CompanyEmail");
-			// System.out.println(manager_email);
 			String rm_message = "Request for resignatin has been raised by " + empcode + " sent by RM";
 			String hr_message = "Request for resignatin has been raised by " + empcode + " sent by HR";
 			String emp_message = "Request for resignation has been raised by you";
 
 			if (jsonObj.get("result").equals("successful")) {
 
-			
+				if((org.apache.commons.lang3.StringUtils.isNotBlank(hr_email)) && (org.apache.commons.lang3.StringUtils.isNotBlank(emp_email)) && 
+						(org.apache.commons.lang3.StringUtils.isNotBlank(emp_email)))
+					{
 				mailService.sendEmail(manager_email, "evm@softageindia.com", "test", rm_message);
 				mailService.sendEmail(hr_email, "evm@softageindia.com", "test", hr_message);
 				mailService.sendEmail(emp_email, "evm@softageindia.com", "test", emp_message);
+					}else{
+						System.out.println("Resigned employee mail not available");
+					}
 				
-				// emp.sendMail("evm@softageindia.com", 20,
-				// "evm@softageindia.com", "x23HYrtVZ69",manager_email ,
-				// "Resignation request raised", rm_message);
-				// emp.sendMail("evm@softageindia.com", 20,
-				// "evm@softageindia.com", "x23HYrtVZ69",hr_email , "Resignation
-				// request raised", hr_message);
-				// emp.sendMail("evm@softageindia.com", 20,
-				// "evm@softageindia.com", "x23HYrtVZ69",emp_email ,
-				// "Resignation request raised", emp_message);
-
 			}
 		} catch (Exception e) {
 			logger.error(">>>>>>>>>>>>>>> Exception in submitting resignation" + e.getMessage());
@@ -381,12 +354,7 @@ public class HomeController {
 			quesList.add(quesjson);
 		}
 		jsonObject.put("questions", quesList);
-		// List<String> actionList =
-		// approvalservice.getResignationActionService();
-		// List noticeList = approvalservice.getResignationNoticeService();
-		// jsonObject.put("actionList", actionList);
-		// jsonObject.put("noticeList", noticeList);
-		return jsonObject;
+			return jsonObject;
 	}
 
 	@RequestMapping(value = "/insertRmFeedback", method = RequestMethod.POST)
@@ -467,26 +435,18 @@ public class HomeController {
 					+ " sent by hr";
 			String emp_message = "Action on request for " + resEmpcode + " has been taken and has been" + action
 					+ " sent by employee";
-			/*mailService.sendEmail(manager_email, "evm@softageindia.com", "test", rm_message);
-			mailService.sendEmail(hr_email, "evm@softageindia.com", "test", hr_message);
-			mailService.sendEmail(emp_email, "evm@softageindia.com", "test", emp_message);*/
-			
-			
+				
+				if((org.apache.commons.lang3.StringUtils.isNotBlank(hr_email)) && (org.apache.commons.lang3.StringUtils.isNotBlank(emp_email)) && 
+					(org.apache.commons.lang3.StringUtils.isNotBlank(emp_email)))
+				{
 			mailService.sendEmail(manager_email, "evm@softageindia.com", "test", rm_message);
 			mailService.sendEmail(hr_email, "evm@softageindia.com", "test", hr_message);
 			mailService.sendEmail(emp_email, "evm@softageindia.com", "test", emp_message);
-			
-			
-			// emp.sendMail("evm@softageindia.com", 20, "evm@softageindia.com",
-			// "x23HYrtVZ69",manager_email , "Resignation request raised",
-			// rm_message);
-			// emp.sendMail("evm@softageindia.com", 20, "evm@softageindia.com",
-			// "x23HYrtVZ69",hr_email , "Resignation request raised",
-			// hr_message);
-			// emp.sendMail("evm@softageindia.com", 20, "evm@softageindia.com",
-			// "x23HYrtVZ69",emp_email , "Resignation request raised",
-			// emp_message);
-
+				}
+				else{
+					System.out.println("rmInsert Mail not Available");
+				}
+		
 		} catch (ParseException e) {
 			e.printStackTrace();
 		} catch (RemoteException e) {
@@ -606,24 +566,16 @@ public class HomeController {
 				String emp_message = "Resignation request for employee" + empcode
 						+ " has been processed hr and last working day has been set to" + df.format(lwd)
 						+ " sent by employee";
-				// emp.sendMail("evm@softageindia.com", 20,
-				// "evm@softageindia.com", "x23HYrtVZ69",rm_email , "Resignation
-				// request raised", rm_message);
-				// emp.sendMail("evm@softageindia.com", 20,
-				// "evm@softageindia.com", "x23HYrtVZ69",hr_email , "Resignation
-				// request raised", hr_message);
-				// emp.sendMail("evm@softageindia.com", 20,
-				// "evm@softageindia.com", "x23HYrtVZ69",emp_email ,
-				// "Resignation request raised", emp_message);
-				/*mailService.sendEmail(emp_email, "evm@softageindia.com", "Last Working Day Set By HR", emp_message);
-				mailService.sendEmail(rm_email, "evm@softageindia.com", "Last Working Day Set By HR", rm_message);
-				mailService.sendEmail(hr_email, "evm@softageindia.com", "Last Working Day Set By HR", hr_message);
-				*/
-				
+				if((org.apache.commons.lang3.StringUtils.isNotBlank(hr_email)) && (org.apache.commons.lang3.StringUtils.isNotBlank(emp_email)) && 
+						(org.apache.commons.lang3.StringUtils.isNotBlank(rm_email)))
+					{
 				mailService.sendEmail(hr_email, "evm@softageindia.com", "test", rm_message);
 				mailService.sendEmail(emp_email, "evm@softageindia.com", "test", hr_message);
 				mailService.sendEmail(rm_email, "evm@softageindia.com", "test", emp_message);
-				
+					}
+				else{
+					System.out.println("Submit hr approval mail not Availble");
+				}
 				
 				
 			} catch (Exception e) {
@@ -2050,15 +2002,15 @@ public class HomeController {
 		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
 		clearence.setTbluserresignation(resignedUser);
 		rejectjson = noduesservice.submitNoduesclearence(clearence);
-
-		
-		if(!org.apache.axis.utils.StringUtils.isEmpty(manageremail))
-		{
-		mailService.sendEmail(manageremail, departmentmanageremail, "NO DUES CLEARENCES", comments);
-		}
-		if(!org.apache.axis.utils.StringUtils.isEmpty(empemail))
-		{
-		mailService.sendEmail(empemail, departmentmanageremail, "NO DUES CLEARENCES", comments);
+	 
+		if((org.apache.commons.lang3.StringUtils.isNotBlank(manageremail)) && (org.apache.commons.lang3.StringUtils.isNotBlank(departmentmanageremail)) && 
+				(org.apache.commons.lang3.StringUtils.isNotBlank(empemail)))
+			{
+			mailService.sendEmail(manageremail, departmentmanageremail, "NO DUES CLEARENCES", comments);
+			mailService.sendEmail(empemail, departmentmanageremail, "NO DUES CLEARENCES", comments);
+			}
+		else{
+			System.out.println("Rejected Employee mail not Availble");
 		}
 		return rejectjson;
 	}
@@ -2073,10 +2025,7 @@ public class HomeController {
 		String status = request.getParameter("final_status");
 		int finalstatus = Integer.parseInt(status);
 		String departmentId = request.getParameter("departmentId");
-		/*
-		 * long Department = Long.parseLong(departmentId); int assetDepartment =
-		 * (int) Department;
-		 */
+		
 		int assetDepartment = Integer.parseInt(departmentId);
 		ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 		String managercode = null;
@@ -2197,12 +2146,14 @@ public class HomeController {
 		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
 		clearence.setTbluserresignation(resignedUser);
 		rejectjson = noduesservice.submitNoduesclearence(clearence);
-		
-		if(!org.apache.axis.utils.StringUtils.isEmpty(manageremail)){
-		mailService.sendEmail(manageremail.trim(), departmentmanageremail, "NO DUES CLEARENCES", comments);
-		}
-		if(!org.apache.axis.utils.StringUtils.isEmpty(empemail)){
-		mailService.sendEmail(empemail.trim(), departmentmanageremail, "NO DUES CLEARENCES", comments);
+		if((org.apache.commons.lang3.StringUtils.isNotBlank(manageremail)) && (org.apache.commons.lang3.StringUtils.isNotBlank(departmentmanageremail)) && 
+				(org.apache.commons.lang3.StringUtils.isNotBlank(empemail)))
+			{
+		mailService.sendEmail(manageremail, departmentmanageremail, "NO DUES CLEARENCES", comments);
+		mailService.sendEmail(empemail, departmentmanageremail, "NO DUES CLEARENCES", comments);
+	}	
+	else{
+		System.out.println("Rm Rejected Employee mail not Availble");
 	}
 		return rejectjson;
 	}
@@ -3065,13 +3016,12 @@ public class HomeController {
 		// assetsmodal.put("name", "No Assets Allocated");
 		JSONObject jsonassets = new JSONObject();
 		ArrayList<JSONObject> arrlist = new ArrayList<JSONObject>();
-		List<String> listvalue = new ArrayList<String>();
+		List<String> listvalue = new ArrayList<String>();		
 		String[] keys = { "empcode" };
 		String[] value = { empcode };
 		ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 		try {
 			empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO", keys, value);
-/*		System.out.println(empassets);*/
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
