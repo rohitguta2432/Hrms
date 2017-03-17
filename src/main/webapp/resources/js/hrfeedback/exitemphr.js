@@ -39,6 +39,7 @@ application.controller('hrfeedbackcontroller', function($scope, $http, $modal,
 	$http.get(domain+'/empfeedbackquestion?employeecode=' +$scope.emp_code)
 		.success(function(data,status,headers,config){
 $scope.feedbackans=data.empfeedbackanslist;
+$scope.error="no feedback present";
 	})
 		
 	}

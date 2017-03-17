@@ -21,8 +21,6 @@ application
 					
 					$scope.empstatus = function($event, empcode) {
 						var emp_code = empcode;
-						/* $scope.emp_code=$scope.params.employeecode; */
-						
 						$http
 								.get(
 										domain + '/noduesstatus?employeecode='
@@ -36,7 +34,7 @@ application
 														&& $scope.noduestatus[i] == 'it'
 														&& $scope.noduestatus[i] == 'Account') {
 													$scope.accept = false;
-													count++;
+								
 												} 
 											}
 											
@@ -55,14 +53,14 @@ application
 							employeecode : emp_code
 						}
 						scope.department_id = department_id;
-
-						var modalInstance = $scope.accept?$modal
+						 /*$scope.accept?*/
+						var modalInstance =$scope.noduestatus.length==0?$modal
 								.open({
 									scope : scope,
 									templateUrl : "resources/js/nodueshr/nodueshrmodal.html",
 									controller : 'nodueshrmodalcontroller'
 								}):undefined;
-
+						/*:undefined*/
 					}
 					$scope.EmpOthernoDues = function(empcode) {
 						var emp_code = empcode;

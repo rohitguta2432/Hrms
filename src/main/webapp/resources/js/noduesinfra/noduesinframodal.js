@@ -60,22 +60,18 @@ $scope.reject=function()
 	            $scope.selectedItems.push(emp.name);
 	       }
 	          })
-	         /* alert("selected  item "+$scope.selectedItems)*/
-	          angular.forEach($scope.nodueinfraassets,function(emp){
+	               angular.forEach($scope.nodueinfraassets,function(emp){
 	          if(!emp.selected)
 	          	{
 	          	$scope.itemnotselected.push(emp.name)
 	          	}
 	          	})
-	      	/*alert("not received  item "+$scope.itemnotselected)*/
-	      var emp_data='comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&not_received='+$scope.itemnotselected+'&received_assets='+$scope.selectedItems+'&final_status='+$scope.rejected_final_status
+	          var emp_data='comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&not_received='+$scope.itemnotselected+'&received_assets='+$scope.selectedItems+'&final_status='+$scope.rejected_final_status
 	      +'&departmentId='+$scope.department_id;
-	      		/*alert(emp_data)*/
-	      		$http.get(domain+'/rejectempassets?'+emp_data)
-		 
-		 .success(function(data){
+	    	$http.get(domain+'/rejectempassets?'+emp_data)
+		 	 .success(function(data){
 		       alert("rejected infra assets")
-		       location.reload();		
+		      location.reload();		
 		 })
 		}
 	});

@@ -67,8 +67,7 @@ var emp_data='comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&not_
 /*alert(emp_data)*/
 $http.get(domain+'/rejectempassets?'+emp_data)
 .success(function(data){
-     /*  alert("rejected hr asserts")*/
-      ngToast.create('a toast message...');
+      alert("rejected hr asserts")
        location.reload();
 				
 	})

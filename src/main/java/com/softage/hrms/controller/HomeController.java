@@ -2052,9 +2052,14 @@ public class HomeController {
 		rejectjson = noduesservice.submitNoduesclearence(clearence);
 
 		
-		mailService.sendEmail(departmentmanageremail, managercode, "NO DUES CLEARENCES", comments);
-		mailService.sendEmail(departmentmanageremail, empemail, "NO DUES CLEARENCES", comments);
-
+		if(!org.apache.axis.utils.StringUtils.isEmpty(manageremail))
+		{
+		mailService.sendEmail(manageremail, departmentmanageremail, "NO DUES CLEARENCES", comments);
+		}
+		if(!org.apache.axis.utils.StringUtils.isEmpty(empemail))
+		{
+		mailService.sendEmail(empemail, departmentmanageremail, "NO DUES CLEARENCES", comments);
+		}
 		return rejectjson;
 	}
 
@@ -2135,9 +2140,7 @@ public class HomeController {
 		}
 		String[] key = { "empcode" };
 		String[] value = { empcode };
-		/*
-		 * ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
-		 */
+		
 		try {
 			empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO", key, value);
 		} catch (RemoteException e) {
@@ -2195,8 +2198,12 @@ public class HomeController {
 		clearence.setTbluserresignation(resignedUser);
 		rejectjson = noduesservice.submitNoduesclearence(clearence);
 		
-		mailService.sendEmail(departmentmanageremail, manageremail, "NO DUES CLEARENCES", comments);
-		mailService.sendEmail(departmentmanageremail, empemail, "NO DUES CLEARENCES", comments);
+		if(!org.apache.axis.utils.StringUtils.isEmpty(manageremail)){
+		mailService.sendEmail(manageremail.trim(), departmentmanageremail, "NO DUES CLEARENCES", comments);
+		}
+		if(!org.apache.axis.utils.StringUtils.isEmpty(empemail)){
+		mailService.sendEmail(empemail.trim(), departmentmanageremail, "NO DUES CLEARENCES", comments);
+	}
 		return rejectjson;
 	}
 
@@ -3111,6 +3118,7 @@ public class HomeController {
 	public JSONObject getempfeedbackq(HttpSession session, HttpServletRequest request) {
 		ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 		int resignationId=0;
+		String msg="Employee has not given feedback";
 		JSONObject empfeedback = new JSONObject();
 		List<JSONObject> listarray=new ArrayList<JSONObject>();
 		String empcode = (String)request.getParameter("employeecode");
@@ -3120,15 +3128,22 @@ public class HomeController {
 		int stageid2=4;
 		try {
     	List<TblFeedbacks> employeefeedback = exitinterviewservice.listempfeedback(resignationId,stageid1,stageid2);
-			if(!employeefeedback.isEmpty()){
+    	boolean questionPresent = false;	
+    	if(!employeefeedback.isEmpty()){
 			for(TblFeedbacks answers:employeefeedback)
 			{
 				JSONObject anslist=new JSONObject();
 			anslist.put("empfeedbackans", answers.getAnsText());
 			anslist.put("empfeedbackqes", answers.getMstQuestions().getQuestionText());
 			 listarray.add(anslist);
+			 questionPresent = true;
 			}
 			}
+    	if(!questionPresent){
+			JSONObject errorObj = new JSONObject();
+			empfeedback.put("error", msg);
+			
+		}
 			empfeedback.put("empfeedbackanslist", listarray);
 		}
 	catch (Exception e) {

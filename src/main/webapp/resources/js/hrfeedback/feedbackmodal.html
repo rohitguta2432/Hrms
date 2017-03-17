@@ -51,8 +51,19 @@
 													
 	 <div class="widget-body" style="display: block;">
 												<div class="widget-main">
+															<div ng-if="feedbackans.length<=0">
+																<div class="col-sm-9 col-md-12" style="padding-left:0;">
+            <div class="alert alert-success">
+                
+               <span class="glyphicon glyphicon-ok"></span> <strong>{{error}}</strong>
+                
+            </div>
+        </div>										
+															</div><hr/><br/>
+												
+												
 													<table class="table">
-													<div class="table-responsive">
+													<div class="table-responsive" ng-if="feedbackans.length>0">
 															<thead ng-repeat="empquestion in feedbackans">
 															<tr>
 															<th>{{empquestion.empfeedbackqes}}</th>

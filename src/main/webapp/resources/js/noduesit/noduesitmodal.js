@@ -77,7 +77,7 @@ application.controller('noduesitmodaljscontroller', function($rootScope, $scope,
 
 		$http.get(domain +'/rejectempassets?'+emp_data)
 		.success(function(data) {
-			$mdDialog.show(
+		/*	$mdDialog.show(
 				      $mdDialog.alert()
 				        .parent(angular.element(document.querySelector('#popupContainer')))
 				        .clickOutsideToClose(true)
@@ -86,9 +86,9 @@ application.controller('noduesitmodaljscontroller', function($rootScope, $scope,
 				        .ariaLabel('Alert Dialog Demo')
 				        .ok('Yes!')
 				        .targetEvent(ev)
-			);
-			alert(rejected)
-/*  location.reload();*/
+			);*/
+			alert('rejected')
+  location.reload();
 	})
 	}
 
