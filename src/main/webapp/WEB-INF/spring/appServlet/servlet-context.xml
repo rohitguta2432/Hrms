@@ -75,6 +75,7 @@
 				<beans:value>com.softage.hrms.model.TblUploadedPath</beans:value>
 				<beans:value>com.softage.hrms.model.TblUserResignation</beans:value>
 				<beans:value>com.softage.hrms.model.MstDepartment</beans:value>
+				<beans:value>com.softage.hrms.model.FtpDetails</beans:value>
 				</beans:list>
 		</beans:property>
 	<beans:property name="hibernateProperties">

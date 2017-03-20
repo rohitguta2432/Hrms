@@ -223,6 +223,7 @@ public class ResignationServiceImpl implements ResignationService {
 		List<JSONObject> jsonList=new ArrayList<JSONObject>();
 		List<TblUserResignation> resignedUsers=resignationdao.getResignationModelByCircleID(officeCode);
 		for(TblUserResignation resbean : resignedUsers){
+			if(resbean.getMstResignationStatus().getStatusId()>=9){
 			JSONObject resJson=new JSONObject();
 			String empcode=resbean.getEmpCode();
 			ISoftAgeEnterpriseProxy emp=new ISoftAgeEnterpriseProxy();
@@ -234,19 +235,19 @@ public class ResignationServiceImpl implements ResignationService {
 				String reason_for_leaving=reason.getReason();
 				int resignId=resbean.getResignationId();
 				String remarks=resbean.getComments();
-				int notice_period=60;
+				//int notice_period=60;
 				String[] keys={"empcode"};
 				String[] values={empcode};
-				//String empinfo=emp.enterPriseDataService("EVM", "EmpInfo", keys, values);
-				//JSONParser parser=new JSONParser();
-				//JSONObject empInformation=(JSONObject)parser.parse(empinfo);
-				//int notice_period=(Integer)empInformation.get("NoticePeriod");
-				//String rm_email=(String)empInformation.get("ManagerEmail");
+				String empinfo=emp.enterPriseDataService("EVM", "EmpInfo", keys, values);
+				JSONParser parser=new JSONParser();
+				JSONObject empInformation=(JSONObject)parser.parse(empinfo);
+				int notice_period=((Long)empInformation.get("NoticePeriod")).intValue();
+				String rm_email=(String)empInformation.get("ManagerEmail");
 				Date resDate=resbean.getResignationDate();
 				String resignDate=df.format(resDate);
 				String rmempcode=resbean.getRmEmpcode();
 				//String rm_email=emp.getUserDetail(rmempcode).getEmail(); FROM ESF SERVICE
-				String rm_email="arpan.mathur@softageindia.com";
+				//String rm_email="arpan.mathur@softageindia.com";
 				resJson.put("sno", count);
 				resJson.put("empname", name);
 				resJson.put("empcode", empcode);
@@ -263,7 +264,7 @@ public class ResignationServiceImpl implements ResignationService {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
+		}
 			
 		}
 		resListJson.put("empinfo", jsonList);

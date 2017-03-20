@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.softage.hrms.dao.EmployeeDocumentDao;
+import com.softage.hrms.model.FtpDetails;
 import com.softage.hrms.model.MstUploadItem;
 import com.softage.hrms.model.TblUploadedPath;
 import com.softage.hrms.service.EmployeeDocumentService;
@@ -60,6 +61,20 @@ public class EmployeeDocumentServiceImp implements EmployeeDocumentService {
 	@Override
 	public TblUploadedPath findByEmpCodeAndItemId(String empcode, int itemid) {
 		return employeeDocumentDao.findByEmpCodeAndItemId(empcode, itemid);
+	}
+
+	@Override
+	public JSONObject getFtpDetails() {
+		JSONObject ftpJson=new JSONObject();
+		List<FtpDetails> ftp_details=employeeDocumentDao.getFtpDetails();
+		FtpDetails ftp=ftp_details.get(0);
+		String ftphost=ftp.getFtphost();
+		String username=ftp.getFtpusername();
+		String pwd=ftp.getPassword();
+		ftpJson.put("host", ftphost);
+		ftpJson.put("username", username);
+		ftpJson.put("password", pwd);
+		return ftpJson;
 	}
 
 }

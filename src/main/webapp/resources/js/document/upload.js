@@ -177,7 +177,7 @@ application.controller('documentManagement', ['$scope', '$log','$http','$modal',
 	var fac = {};
 
 	fac.UploadFile = function (file,uploadId,empCode,resignId) {
-		alert("file UploadFile Id >>>>>"+uploadId);
+		//alert("file UploadFile Id >>>>>"+uploadId);
 
 		var formData = new FormData();
 		formData.append("file", file);

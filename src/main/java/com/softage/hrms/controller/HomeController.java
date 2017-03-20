@@ -1311,6 +1311,9 @@ public class HomeController {
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject upload(MultipartHttpServletRequest request, HttpServletResponse response) {
+		
+		JSONObject ftpdetails=employeeDocumentService.getFtpDetails();
+		
 		HttpSession session = request.getSession();
 		String fileLocation = "D:/CSVFile/";
 		// String empId = "ss0062";
@@ -1339,7 +1342,7 @@ public class HomeController {
 			logger.info("Server File Location=" + file);
 			String FilePath = empCode + "/" + filename;*/
 
-			filePath = uploadDocumentFTPClient(filename, empCode, bytes);
+			filePath = uploadDocumentFTPClient(filename, empCode, bytes,ftpdetails);
 			MstUploadItem mstUploadItem = employeeDocumentService.entityById(itemId);
 			TblUserResignation resignation = resignationService.getById(id);
 
@@ -1394,10 +1397,14 @@ public class HomeController {
 		// String empcode = "ss0062";
 		String empcode = (String) session.getAttribute("employeecode");
 		String result = null;
-
-		String ftpHost = "172.25.37.14";
-		String username = "hrms";
-		String password = "hrms@123@15";
+		
+		JSONObject ftpdetails=employeeDocumentService.getFtpDetails();
+		String ftpHost =(String)ftpdetails.get("host");
+		String username=(String)ftpdetails.get("username");
+		String password=(String)ftpdetails.get("password");
+		//String ftpHost = "172.25.37.14";
+		//String username = "hrms";
+		//String password = "hrms@123@15";
 
 		JSONArray uploadList = new JSONArray();
 
@@ -1442,10 +1449,15 @@ public class HomeController {
 		// String empcode = "ss0062";
 		String empcode = null;
 		String result = null;
+		
+		JSONObject ftpdetails=employeeDocumentService.getFtpDetails();
+		String ftpHost =(String)ftpdetails.get("host");
+		String username=(String)ftpdetails.get("username");
+		String password=(String)ftpdetails.get("password");
 
-		String ftpHost = "172.25.37.14";
-		String username = "hrms";
-		String password = "hrms@123@15";
+		//String ftpHost = "172.25.37.14";
+		//String username = "hrms";
+		//String password = "hrms@123@15";
 		String path = null;
 		OutputStream outStream = null;
 		JSONArray uploadList = new JSONArray();
@@ -1478,7 +1490,7 @@ public class HomeController {
 
 			System.out.println(finalPath);
 
-			byte[] bytes = downloadDocumentFTPClient(finalPath, filename);
+			byte[] bytes = downloadDocumentFTPClient(finalPath, filename,ftpdetails);
 
 			tblUploadedPath.setDownloadBy(downloadBy);
 			tblUploadedPath.setDownloadOn(new Date());
@@ -1510,11 +1522,15 @@ public class HomeController {
 		return;
 	}
 
-	public static String uploadDocumentFTPClient(String file, String empId, byte[] bytes) {
+	public static String uploadDocumentFTPClient(String file, String empId, byte[] bytes,JSONObject ftpdetails) {
 
-		String ftpHost = "172.25.37.14";
-		String username = "hrms";
-		String password = "hrms@123@15";
+		String ftpHost =(String)ftpdetails.get("host");
+		String username=(String)ftpdetails.get("username");
+		String password=(String)ftpdetails.get("password");
+		
+		//String ftpHost = "172.25.37.14";
+		//String username = "hrms";
+		//String password = "hrms@123@15";
 		FileOutputStream fos = null;
 		String ftpPath = "";
 		FTPSClient ftpClient = new FTPSClient(false);
@@ -1603,11 +1619,16 @@ public class HomeController {
 		}
 	}
 
-	public static byte[] downloadDocumentFTPClient(String filePath, String filename) {
-
-		String ftpHost = "172.25.37.14";
-		String username = "hrms";
-		String password = "hrms@123@15";
+	public static byte[] downloadDocumentFTPClient(String filePath, String filename,JSONObject ftpdetails) {
+		
+		
+		String ftpHost =(String)ftpdetails.get("host");
+		String username=(String)ftpdetails.get("username");
+		String password=(String)ftpdetails.get("password");
+		
+		//String ftpHost = "172.25.37.14";
+		//String username = "hrms";
+		//String password = "hrms@123@15";
 		FileOutputStream fos = null;
 		String ftpPath = "";
 		// FTPClient ftpClient = new FTPClient();

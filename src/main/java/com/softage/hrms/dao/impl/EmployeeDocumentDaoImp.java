@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.softage.hrms.controller.HomeController;
 import com.softage.hrms.dao.EmployeeDocumentDao;
+import com.softage.hrms.model.FtpDetails;
 import com.softage.hrms.model.MstAssests;
 import com.softage.hrms.model.MstQuestions;
 import com.softage.hrms.model.MstReason;
@@ -167,6 +168,16 @@ public class EmployeeDocumentDaoImp implements EmployeeDocumentDao{
 			tbluploadedpath=null;
 		}
 		return tbluploadedpath;
+	}
+
+	@Override
+	@Transactional
+	public List<FtpDetails> getFtpDetails() {
+		Session session=sessionfactory.getCurrentSession();
+		String hql="from FtpDetails";
+		Query query=session.createQuery(hql);
+		List<FtpDetails> ftp=(List<FtpDetails>)query.list();
+		return ftp;
 	}
 
 }
