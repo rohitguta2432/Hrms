@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <title>NO DUES ASSETS</title>
+
 </head>
 <body class="no-skin">
 	<div class="main-container" id="main-container"
@@ -12,8 +13,15 @@
 			} catch (e) {
 			}
 		</script>
-		<div class="main-content" ng-controller="noduesitmodaljscontroller" ng-init="init()">
+		<div id="popupContainer" class="main-content"
+			ng-controller="noduesitmodaljscontroller" ng-init="init()">
 
+            <div class="modal-header">
+       
+        <h4 class="modal-title" style="font-size:14px; font-weight:bold;">NO DUES IT ASSETS</h4>
+      </div>
+      <div style="clear:both; height:10px;"></div>
+          
 			<div class="page-content">
 				<div class="page-content-area">
 					<!-- /.page-header -->
@@ -22,139 +30,157 @@
 							<!-- PAGE CONTENT BEGINS -->
 							<div class="row">
 								<div class="col-xs-12">
-									<div class="col-xs-12 widget-container-col ui-sortable">
-										<div class="widget-box ui-sortable-handle"
+									<div class="col-xs-12  ui-sortable">
+										<div class=" ui-sortable-handle"
 											style="opacity: 1; z-index: 0;">
-											<div class="widget-header">
-												<h5 class="widget-title"> NO DUES IT ASSETS</h5>
-
-											</div>
+											
 											<form name="it" ng-submit=submit(it) novalidate>
-												<div class="widget-body" style="display: block;">
-													<div class="widget-main form-horizontal">
-													
-												<div class="clearfix"></div>	
-													
-								
-<div class="form-group row col-sm-12">
-															<label class="col-sm-3 control-label no-padding-right" style="font-size: 13px; font-weight: normal;text-align: left;"
+												<div class="" style="display: block;">
+													<div class=" form-horizontal">
+                                              	<div class="clearfix"></div>
+                                             		<div class="form-group row col-sm-12">
+															<label class="col-sm-3 control-label no-padding-right"
+																style="font-size: 13px; font-weight: normal; text-align: left;"
 																for="employeecode">Employee code </label>
 															<div class="col-sm-9">
-<input type="text"  class="col-xs-10 col-sm-12" name="employeecode"  ng-model="emplycode" ng-disabled="true"/>
-				</div>
-</div>
-<div class="clearfix"></div>
-
-                                                            <div class="form-group row col-sm-12">
-															<label class="col-sm-3 control-label no-padding-right" style="font-size: 13px; font-weight: normal;text-align: left;"
-																for="firstname"> Employee name </label>
-															<div class="col-sm-9">
-<input type="text"  class="col-xs-10 col-sm-12" name="firstname"  ng-model="empfirstname" ng-disabled="true"/>
-				
+																<input type="text" class="col-xs-10 col-sm-12"
+																	name="employeecode" ng-model="emplycode"
+																	ng-disabled="true" />
 															</div>
 														</div>
-													
-														
-														
-<div class="clearfix"></div>
+														<div class="clearfix"></div>
+
+														<div class="form-group row col-sm-12">
+															<label class="col-sm-3 control-label no-padding-right"
+																style="font-size: 13px; font-weight: normal; text-align: left;"
+																for="firstname"> Employee name </label>
+															<div class="col-sm-9">
+																<input type="text" class="col-xs-10 col-sm-12"
+																	name="firstname" ng-model="empfirstname"
+																	ng-disabled="true" />
+
+															</div>
+														</div>
+
+
+
+														<div class="clearfix"></div>
 														<div class="form-group col-sm-12">
-															<label class="col-sm-3 control-label no-padding-right" style="font-size: 13px; font-weight: normal;text-align: left;"
+															<label class="col-sm-3 control-label no-padding-right"
+																style="font-size: 13px; font-weight: normal; text-align: left;"
 																for="department">SpokeCode</label>
 
 															<div class="col-sm-9">
- 
- <input type="text"  class="col-xs-10 col-sm-12" name="department" ng-model="empdepartment" ng-disabled="true"/>
-	
+
+																<input type="text" class="col-xs-10 col-sm-12"
+																	name="department" ng-model="empdepartment"
+																	ng-disabled="true" />
+
 															</div>
 														</div>
-														
 
 
-
-															<div class="form-group col-sm-12">
-															<label class="col-sm-3 control-label no-padding-right" style="font-size: 13px; font-weight: normal;text-align: left;"
+														<div class="form-group col-sm-12">
+															<label class="col-sm-3 control-label no-padding-right"
+																style="font-size: 13px; font-weight: normal; text-align: left;"
 																for="designation">Designation:</label>
 
 															<div class="col-sm-9">
-<input type="text"  class="col-xs-10 col-sm-12" name="designation" ng-model="empdesignation" ng-disabled="true"/>
+																<input type="text" class="col-xs-10 col-sm-12"
+																	name="designation" ng-model="empdesignation"
+																	ng-disabled="true" />
 															</div>
 														</div>
-														
 
 
-<div class="clearfix"></div>
 
-									<div class="form-group col-sm-12">
-															<label class="col-sm-3 control-label no-padding-right" style="font-size: 13px; font-weight: normal;text-align: left;"
+														<div class="clearfix"></div>
+
+														<div class="form-group col-sm-12">
+															<label class="col-sm-3 control-label no-padding-right"
+																style="font-size: 13px; font-weight: normal; text-align: left;"
 																for="emplocation">Location </label>
 
 															<div class="col-sm-9">
-				<input type="text"  class="col-xs-10 col-sm-12" name="emplocation" ng-model="emplocation" ng-disabled="true"/>
+																<input type="text" class="col-xs-10 col-sm-12"
+																	name="emplocation" ng-model="emplocation"
+																	ng-disabled="true" />
 															</div>
 														</div>
-															<div class="clearfix"></div>
-															
-											 <div class="widget-body" style="display: block;">
-												<div class="widget-main">
-																										
-															<div ng-if="nodueitassets.length<=0">
-																<div class="col-sm-9 col-md-12" style="padding-left:0;">
-            <div class="alert alert-success">
-                
-               <span class="glyphicon glyphicon-ok"></span> <strong>{{error}}</strong>
-                
-            </div>
-        </div>										
-															</div><hr/><br/>
-													<div class="table-responsive" ng-if="nodueitassets.length>0">
-														<table class="table">
-														 
-														 <thead>
-																<tr>
-																	<th>item</th>
-																	<th>barcode</th>
-																	<!-- <th>issued</th> -->
-																	 <th>received</th> 
-																	
-																</tr>
-															</thead>
-			<tbody ng-repeat="emp in nodueitassets">      
-	<tr><td>{{emp.name}}</td><td>{{emp.barcodeno}}</td><td><input type="checkbox" value="{{emp.name}}" id="check" name="check" ng-model="emp.selected" required="true"></td>
-					 <!-- <td><input type="checkbox" value="{{emp.name}}" ng-model="checked" ng-init="checked=true"/></td> -->
-					 <span ng-show="it.check.$dirty && it.check.$error.required">This field is required</span>	  
-								 </tr>
-							</tbody>
-						 </table>
-						</div>
-					</div>
-				</div> 
-				
-				<div class="clearfix"></div>	
-				<div class="form-group col-sm-12">				
-					<label for="comment" class="col-sm-3 control-label no-padding-right" style="font-size: 13px; font-weight: normal;text-align: left;">COMMENTS:</label>
- <div class="col-sm-9">
- <textarea    rows="1" cols="45" id="comment" name="comment" placeholder="comments..." ng-model="empcomments"  required></textarea>
- <span ng-show="it.comment.$dirty && it.check.$dirty">This field is required</span>
- 
- </div>
- </div>
- </div>
-  <div class="clearfix"></div>
- 
-					<div class="modal-footer">
-					
-                <button type="submit" value="submit" ng-disabled="it.$invalid" class="btn btn-primary">RECEIVE</button>
-  <md-button class="btn btn-warning"  ng-disabled="it.$invalid && it.comment.$error.required  "  ng-click="reject($event)">PENDING</md-button>									
-	<!-- <md-button class="md-primary md-raised" ng-click="showConfirm($event)" >
-      Confirm Dialog
-    </md-button>	 -->			
-														
-														<!-- || !it.check.$error.required -->
 														<div class="clearfix"></div>
 
-														<div class="center">
-															
+														<div class="widget-body" style="display: block;">
+															<div class="widget-main">
+
+																<div ng-if="nodueitassets.length<=0">
+																	<div class="col-sm-9 col-md-12" style="padding-left: 0;">
+																		<div class="alert alert-success">
+																			<span class="glyphicon glyphicon-ok"></span>
+																			 <strong>{{error}}</strong>
+
+																		</div>
+																	</div>
+																	<hr />
+																	<br />
+																</div><br/>
+																<div class="table-responsive"
+																	ng-if="nodueitassets.length>0">
+																	<table class="table">
+
+																		<thead>
+																			<tr>
+																				<th>item</th>
+																				<th>barcode</th>
+																				<!-- <th>issued</th> -->
+																				<th>received</th>
+
+																			</tr>
+																		</thead>
+																		<tbody ng-repeat="emp in nodueitassets">
+																			<tr>
+																				<td>{{emp.name}}</td>
+																				<td>{{emp.barcodeno}}</td>
+																				<td><input type="checkbox" value="{{emp.name}}"
+																					id="check" name="check" ng-model="emp.selected"
+																					required="true"></td>
+																				<!-- <td><input type="checkbox" value="{{emp.name}}" ng-model="checked" ng-init="checked=true"/></td> -->
+																				<span
+																					ng-show="it.check.$dirty && it.check.$error.required">This
+																					field is required</span>
+																			</tr>
+																		</tbody>
+																	</table>
+																</div>
+															</div>
 														</div>
+
+														<div class="clearfix"></div>
+														<div class="form-group col-sm-12">
+															<label for="comment"
+																class="col-sm-3 control-label no-padding-right"
+																style="font-size: 13px; font-weight: normal; text-align: left;">COMMENTS:</label>
+															<div class="col-sm-9">
+																<textarea rows="2" cols="43" id="comment" name="comment"
+																	placeholder="comments..." ng-model="empcomments"
+																	required></textarea>
+																<span ng-show="it.comment.$dirty && it.check.$dirty">This
+																	field is required</span>
+
+															</div>
+														</div>
+													</div>
+													<div class="clearfix"></div>
+
+													<div style="text-align:center;">
+														<button type="submit" value="submit"
+															ng-disabled="it.$invalid" class="btn btn-primary">RECEIVE</button>
+														<md-button class="btn btn-warning"
+															ng-disabled="it.$invalid && it.comment.$error.required  "
+															ng-click="reject($event)">PENDING</md-button>																											
+
+														<div class="clearfix"></div>
+
+														<div class="center"></div>
 													</div>
 												</div>
 											</form>
@@ -162,7 +188,7 @@
 									</div>
 								</div>
 
-                               </div>
+							</div>
 							<!-- /.row -->
 							<!-- PAGE CONTENT ENDS -->
 						</div>

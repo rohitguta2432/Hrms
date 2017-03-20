@@ -1,37 +1,36 @@
-<!DOCTYPE html> <!--ng-controller="trackingController" ng-init="trackingModalInit()"  -->
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Track Status Request</title>
-</head>
-<body>
+<!-- <div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    Modal content
+    <div class="modal-content">
+     -->
 <div class="modal-header">
     <h3 class="modal-title">Track Status</h3>
 </div>
 <!-- ng-init="approvalActionInit()" -->
 <div class="modal-body">
     <form class="form-horizontal"  ng-controller="trackingController" ng-init="trackingModalInit()" name="rmApprovalForm" >
-        <div class="form-group">
+       
         
-         <div class="form-group col-sm-12" >
+         <div class="form-group col-sm-6" >
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Employee Code :</label>
                 <div class="col-sm-9">
                  <input type="text" ng-readonly="true" ng-model="resempcode">
                 </div>
             </div>
-            <div class="form-group col-sm-12" >
+            <div class="form-group col-sm-6" >
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Resignation Date :</label>
                 <div class="col-sm-12">
                  <input type="text" ng-readonly="true" ng-model="resdate">
                 </div>
             </div>
-            <div class="form-group col-sm-12" >
+            <div class="form-group col-sm-6" >
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Current Resignation Status :</label>
                 <div class="col-sm-12">
                  <input type="text" ng-readonly="true" ng-model="resstatus">
                 </div>
             </div>
-            <div class="form-group col-sm-12" >
+            <div class="form-group col-sm-6" >
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">RM Status :</label>
                 <div class="col-sm-12" >
                  <input type="text" ng-if="resStatusid > '1' && resStatusid != '3' " ng-readonly="true" value="RM ACCEPTED" >
@@ -39,13 +38,13 @@
                   <input type="text" ng-if="resStatusid == '1' " ng-readonly="true" value="RM Approval Pending" >
                 </div>
             </div>
-              <div class="form-group col-sm-12" >
+              <div class="form-group col-sm-6" >
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">RM Approval Date :</label>
                 <div class="col-sm-12">
                  <input type="text" ng-readonly="true" ng-model="resapprovaldate">
                 </div>
             </div>
-            <div class="form-group col-sm-12" >
+            <div class="form-group col-sm-6" >
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">HR Status :</label>
                 <div class="col-sm-12" >
                  <input type="text" ng-if="resStatusid > '1' && resStatusid < '5' && resStatusid != '3' " ng-readonly="true" value="Last Working Day Decision Pending" >
@@ -54,19 +53,19 @@
                 <input type="text" ng-if="resStatusid == '3' " ng-readonly="true" value="Resignation Rejected By RM" >
                 </div>
             </div>
-             <div class="form-group col-sm-12" >
+             <div class="form-group col-sm-6" >
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">HR Approval Date :</label>
                 <div class="col-sm-12">
                  <input type="text" ng-readonly="true" ng-model="reshrapprovaldate">
                 </div>
             </div>
-            <div class="form-group col-sm-12" >
+            <div class="form-group col-sm-6" >
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Last Working Date Decided :</label>
                 <div class="col-sm-12">
                  <input type="text" ng-readonly="true" ng-model="reslwddate">
                 </div>
             </div>
-            <div class="form-group col-sm-12" ng-init=noduesstatusinit(resid)>
+            <div class="form-group col-sm-6" ng-init=noduesstatusinit(resid)>
                 <div ng-if="resStatusid > '4' && resStatusid <'7'"> 
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">No Dues Status :</label>
                 <div class="col-sm-12" >
@@ -98,7 +97,7 @@
                 </div>
                 </div>
             </div>
-          <div class="form-group col-sm-12" >
+          <div class="form-group col-sm-6" >
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Exit Interviews Pending :</label>
                 <div class="col-sm-12">
                  <input type="text" ng-if="resStatusid >'6' && resStatusid <'9'" ng-readonly="true" value="Exit Interview Pending">
@@ -108,7 +107,7 @@
                 </div>
             </div>
             
-            <div class="form-group col-sm-12" >
+            <div class="form-group col-sm-6" >
            <div class="form-group col-sm-12" ng-init=getDocUploadedStatus(resid)>
                 <div ng-if="resStatusid > '9' && resStatusid <'11'"> 
                 <label  class="col-sm-10 control-label no-padding-right" style="text-align: left; padding-bottom:5px;">Document Uploading Status :</label>
@@ -144,9 +143,10 @@
             </div>
             <div style="clear:both; height: 10px;"></div>          
             <div style="clear:both; height: 5px;"></div>       
-       </div>
+
                        
     </form>
 </div>
-</body>
-</html>
+
+<!-- </div></div></div> -->
+

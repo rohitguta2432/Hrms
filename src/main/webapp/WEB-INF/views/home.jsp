@@ -47,6 +47,9 @@
 	<script src="resources/libs/ui-bootstrap-tpls-0.14.3.min.js"></script>
 	<script src="resources/libs/loading-bar.min.js"></script>
 	
+	<link rel="stylesheet" href="resources/libs/angular-spinkit.min.css">
+	<script src="resources/libs/angular-spinkit.js"></script>
+	
 	<script src="resources/js/home.js"></script>
 	<script src="resources/js/rmapproval/approval.js"></script>
 	<!-- <script src="resources/js/approvalActionModal.js"></script> -->
@@ -73,8 +76,19 @@
 	<script src="resources/js/managerQuery/queryList.js"></script>
 	<script src="resources/js/exemployee/register.js"></script>
 	<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.js'></script>
+	<style type="text/css">
+		body{
+			overflow-x:hidden;
+		}
+	</style>
+	<style>
+html.md-default-theme, html, body.md-default-theme, body
+{background-color: unset !important; }  
+</style>
 </head>
+<custom-alerts-initiator hide="0" position='top right'></custom-alerts-initiator>
 <body class="no-skin" ng-controller="homeController" ng-init="getLinks()">
+    <hrms-block-loader></hrms-block-loader>
     <div id="navbar" class="navbar navbar-default navbar-collapse h-navbar">
         <script type="text/javascript">
             try { ace.settings.check('navbar', 'fixed') } catch (e) { }
@@ -170,8 +184,6 @@
                 try { ace.settings.check('sidebar', 'collapsed') } catch (e) { }
             </script>
         </div>
-
-
 
         <div class="main-content" ui-view>
             <div class="page-content">

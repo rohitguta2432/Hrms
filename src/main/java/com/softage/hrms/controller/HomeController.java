@@ -1522,6 +1522,7 @@ public class HomeController {
 		return;
 	}
 
+
 	public static String uploadDocumentFTPClient(String file, String empId, byte[] bytes,JSONObject ftpdetails) {
 
 		String ftpHost =(String)ftpdetails.get("host");
@@ -1531,6 +1532,7 @@ public class HomeController {
 		//String ftpHost = "172.25.37.14";
 		//String username = "hrms";
 		//String password = "hrms@123@15";
+
 		FileOutputStream fos = null;
 		String ftpPath = "";
 		FTPSClient ftpClient = new FTPSClient(false);
@@ -1713,10 +1715,8 @@ public class HomeController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		return resignations;
+     	return resignations;
 	}
-
 	@RequestMapping(value = "/insertaccountassets", method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject insertaccountassets(HttpServletRequest request, HttpSession session) {
@@ -1745,8 +1745,7 @@ public class HomeController {
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
-
-		JSONObject insertasserts = new JSONObject();
+	   JSONObject insertasserts = new JSONObject();
 		Date today = new Date();
 		TblAssetsManagement accountasset = new TblAssetsManagement();
 		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);

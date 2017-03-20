@@ -46,7 +46,7 @@ $http({
 			}
 		})
 		.success(function(data) {
-			alert("submitted rm asserts")
+			alert("submitted rm assets")
 			location.reload();
 		}).error(function() {
 			/*alert("errors")*/

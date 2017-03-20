@@ -2,6 +2,11 @@
 <html lang="en">
 <head>
 <title>Exit Interview With Employee</title>
+
+<style>
+html.md-default-theme, html, body.md-default-theme, body
+{background-color: none !important; }  
+</style>
 </head>
 <body class="no-skin">
 	<div class="main-container" id="main-container"
@@ -12,7 +17,8 @@
 			} catch (e) {
 			}
 		</script>
-		<div class="main-content" ng-controller="exitempcontroller" ng-init="init()">
+		<div class="main-content" ng-controller="exitempcontroller"
+			ng-init="init()">
 
 			<div class="page-content">
 				<div class="page-content-area">
@@ -20,7 +26,8 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<div class="row">
+
+							<form name="Exitemp" ng-submit=submit(Exitemp) novalidate>
 								<div class="col-xs-12">
 									<div class="col-xs-12 widget-container-col ui-sortable">
 										<div class="widget-box ui-sortable-handle"
@@ -29,118 +36,133 @@
 												<h5 class="widget-title">EMPLOYEE FEEDBACK</h5>
 
 											</div>
-											
-												<div class="widget-body" style="display: block;">
-													<div class="widget-main form-horizontal">
-													<!-- <div class="clearfix"></div> -->
-													
-													<form name="Exitemp" ng-submit=submit(Exitemp)  novalidate>
 
-<div class="clearfix"></div>
-                                       <div class="form-group row col-sm-8">
-		<label class="col-sm-3 control-label no-padding-right" style="font-size: 13px; font-weight: normal;text-align: left;"
-									for="firstname">Employee name </label>
-															<div class="col-sm-9">
-<input type="text"  class="col-xs-10 col-sm-12" name="firstname" ng-model="empfirstname" ng-disabled="true"/>
-				
-															</div>
-														</div>
+											<div class="widget-body" style="display: block;">
+												<div class="widget-main form-horizontal">
 
-														<div class="form-group col-sm-8">
-															<label class="col-sm-3 control-label no-padding-right" style="font-size: 13px; font-weight: normal;text-align: left;"
-																for="department">SpokeCode </label>
-
-															<div class="col-sm-9">
-<input type="text"  class="col-xs-10 col-sm-12" name="department" ng-model="empdepartment" ng-disabled="true"/>
-	
-															</div>
-														</div>
-<!-- <div class="clearfix"></div> -->
-														<div class="form-group col-sm-8">
-															<label class="col-sm-3 control-label no-padding-right" style="font-size: 13px; font-weight: normal;text-align: left;"
-																for="emplocation">Location </label>
-
-															<div class="col-sm-9">
-				<input type="text"  class="col-xs-10 col-sm-12" name="emplocation" ng-model="Emplocation" ng-disabled="true"/>
-															</div>
-														</div>
-														
-														<!-- <div class="clearfix"></div> -->
-															
-															<div class="form-group col-sm-8">
-															<label class="col-sm-3 control-label no-padding-right" style="font-size: 13px; font-weight: normal;text-align: left;"
-																for="designation">Designation:</label>
-
-															<div class="col-sm-9">
-
-	<input type="text"  class="col-xs-10 col-sm-12" name="designation" ng-model="empdesignation" ng-disabled="true"/>
-															</div>
-														</div>
-
-											<div class="form-group col-sm-8">
-															<label class="col-sm-3 control-label no-padding-right" style="font-size: 13px; font-weight: normal;text-align: left;"
-																for="empcode">Employee Code:</label>
-
-															<div class="col-sm-9">
-							<input type="text"  class="col-xs-10 col-sm-12" name="empcode" ng-model="Employeecode" ng-disabled="true"/>						
-													
-													</div>
-														</div>
-												<div class="clearfix"></div>
-                             <div class="col-xs-12">
-									<div class="col-xs-12 widget-container-col ui-sortable">
-										<div class="widget-box ui-sortable-handle"
-											style="opacity: 1; z-index: 0;">
-											<div class="widget-header">
-												<h5 class="widget-title">YOUR VIEWS ON LEAVING</h5>
-											</div>
-										<div class="widget-body" style="display: block;">
-													<div class="widget-main form-horizontal">													
-													<div class="form-group col-sm-12">
-															<label class="col-sm-3 control-label no-padding-right"
-																>ABOUT THE COMPANY:</label>
-																<div class="col-sm-9">
-															<div ng-repeat="feedback in empquestion">
-														<div ng-if="feedback.qtype=='textarea'">
-														{{feedback.question}}<br>
-					<textarea rows="1" cols="40"  ng-model="feedback.value" ng-minlength="10" ng-required="true"></textarea></div>
-													</div>
-										</div>
-													</div>
-								<div class="clearfix"></div>
-                                                     <div class="form-group col-sm-12">
-														<label class="col-sm-3 control-label no-padding-right">&nbsp;</label>
+													<div class="clearfix"></div>
+														<div class="form-group row col-sm-6">
+														<label class="col-sm-3 control-label no-padding-right"
+															style="font-size: 13px; font-weight: normal; text-align: left;"
+															for="firstname">Employee name </label>
 														<div class="col-sm-9">
-															<input type="submit" ng-disabled="Exitemp.$invalid" class="btn btn-primary"
-																value="submit">
-																</div>
-																
+															<input type="text" class="col-xs-10 col-sm-12"
+																name="firstname" ng-model="empfirstname"
+																ng-disabled="true" />
+
 														</div>
-														<div style="clear:both; height:10px;"></div>												
-													
 													</div>
-													</div>													
-										</form>
-											</div>
-											</div>
-											</div>
-				
-							</div>
-							<!-- /.row -->
-							<!-- PAGE CONTENT ENDS -->
+
+													<div class="form-group col-sm-6">
+														<label class="col-sm-3 control-label no-padding-right"
+															style="font-size: 13px; font-weight: normal; text-align: left;"
+															for="department">SpokeCode </label>
+
+														<div class="col-sm-9">
+															<input type="text" class="col-xs-10 col-sm-12"
+																name="department" ng-model="empdepartment"
+																ng-disabled="true" />
+
+														</div>
+													</div>
+													<!-- <div class="clearfix"></div> -->
+													<div class="form-group col-sm-6">
+														<label class="col-sm-3 control-label no-padding-right"
+															style="font-size: 13px; font-weight: normal; text-align: left;"
+															for="emplocation">Location </label>
+
+														<div class="col-sm-9">
+															<input type="text" class="col-xs-10 col-sm-12"
+																name="emplocation" ng-model="Emplocation"
+																ng-disabled="true" />
+														</div>
+													</div>
+
+													<!-- <div class="clearfix"></div> -->
+
+													<div class="form-group col-sm-6">
+														<label class="col-sm-3 control-label no-padding-right"
+															style="font-size: 13px; font-weight: normal; text-align: left;"
+															for="designation">Designation:</label>
+
+														<div class="col-sm-9">
+
+															<input type="text" class="col-xs-10 col-sm-12"
+																name="designation" ng-model="empdesignation"
+																ng-disabled="true" />
+														</div>
+													</div>
+
+													<div class="form-group col-sm-6">
+														<label class="col-sm-3 control-label no-padding-right"
+															style="font-size: 13px; font-weight: normal; text-align: left;"
+															for="empcode">Employee Code:</label>
+
+														<div class="col-sm-9">
+															<input type="text" class="col-xs-10 col-sm-12"
+																name="empcode" ng-model="Employeecode"
+																ng-disabled="true" />
+
+														</div>
+													</div>
+
+
+												</div>
+
+
+												<div style="clear: both; height: 20px;"></div>
+
+
+												<div class="form-group col-sm-12">
+													<label class="col-sm-3 control-label no-padding-right">ABOUT
+														THE COMPANY:</label>
+
+
+													<div class="col-sm-9">
+														<div ng-repeat="feedback in empquestion">
+															<div ng-if="feedback.qtype=='textarea'">
+																{{feedback.question}}<br>
+																<textarea rows="1" cols="97" ng-model="feedback.value"
+																	ng-minlength="10" ng-required="true"></textarea>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="clearfix"></div>
+												<div class="form-group col-sm-12">
+													<label class="col-sm-3 control-label no-padding-right">&nbsp;</label>
+													<div class="col-sm-9">
+														<input type="submit" ng-disabled="Exitemp.$invalid"
+															class="btn btn-primary" value="submit">
+													</div>
+
+												</div>
+												<div style="clear: both; height: 10px;"></div>
+							</form>
+
+
 						</div>
-						<!-- /.col -->
+
 					</div>
-					<!-- /.row -->
+
+
+
+
+
+
+
 				</div>
-				<!-- /.page-content-area -->
 			</div>
-			<!-- /.page-content -->
+
 		</div>
 
-		<a href="#" id="btn-scroll-up"
-			class="btn-scroll-up btn btn-sm btn-inverse"><i
-			class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
 	</div>
-	</body>
+
+
+
+
+
+
+
+</body>
 </html>

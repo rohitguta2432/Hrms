@@ -112,9 +112,11 @@
 	<script type="text/ng-template" id="nodstats.html">
       <div class="popover-content" ng-if="noduestatus.length>0">
         <div ng-repeat="status in noduestatus">
-			Nodues Pending From:
-             {{status}}
-        </div>
+	         <div class="alert alert-danger">
+                <span class="glyphicon ">Nodues Pending From:
+             {{status}}</span> 
+       </div>
+ </div>
       </div> 
     </script>
 	</div>

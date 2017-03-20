@@ -17,6 +17,8 @@ table tr:nth-child(odd) {
 table tr:nth-child(even) {
 	background-color: #ffffff;
 }
+
+.footer{display:none;}
 </style>
 </head>
 <body class="no-skin">
@@ -33,9 +35,7 @@ table tr:nth-child(even) {
 			<div class="page-content">
 				<div class="page-content-area">
 					<!-- /.page-header -->
-					<div class="row">
-						<div class="col-xs-12">
-							<!-- PAGE CONTENT BEGINS -->
+					
 							<div class="row">
 								<div class="col-xs-12">
 									<div class="col-xs-12 widget-container-col ui-sortable">
@@ -49,12 +49,9 @@ table tr:nth-child(even) {
 												<div class="widget-main form-horizontal">
 													<form name="exitEmp" ng-submit=submit(exitEmp) novalidate>
 
-														<table>
-<div class="center">
-															<tr>
-																<!-- <th>S.No</th> -->
-																<br/>
+														<table class="table">
 
+															<tr>
 																<th>Factors</th>
 																<th>Poor</th>
 																<th>Average</th>
@@ -62,35 +59,54 @@ table tr:nth-child(even) {
 																<th>Good</th>
 																<th>Excellent</th>
 
-														</tr>
-<div>
+															</tr>
 
-		
-				<tr ng-if="feedback.qtype=='radio'" ng-repeat="feedback in empratingquestion">
-															 
-																	
-																		<td>{{feedback.question}}</td>
-										                              	<td><input type="radio"  value="{{feedback.qid}} poor" ng-model="feedback.value" ng-change=getRadioValue(feedback) required="true"></td>
-																		<td><input type="radio" value="{{feedback.qid}} average" ng-model="feedback.value" ng-change=getRadioValue(feedback) required="true"></td>
-																		<td><input type="radio" value="{{feedback.qid}} Above Average" ng-model="feedback.value" ng-change=getRadioValue(feedback) required="true"></td>
-																		<td><input type="radio" value="{{feedback.qid}} Good" ng-model="feedback.value" ng-change=getRadioValue(feedback) required="true"> </td>
-																		<td><input type="radio" value="{{feedback.qid}} Excellent" ng-model="feedback.value" ng-change=getRadioValue(feedback) required="true"></td>
-																	</tr>
-															
-																
-															</div>	
-															</div>
-															</div>
-															</div>
+
+
+															<tr ng-if="feedback.qtype=='radio'"
+																ng-repeat="feedback in empratingquestion">
+
+
+																<td>{{feedback.question}}</td>
+																<td><input type="radio"
+																	value="{{feedback.qid}} poor" ng-model="feedback.value"
+																	ng-change=getRadioValue(feedback) required="true"></td>
+																<td><input type="radio"
+																	value="{{feedback.qid}} average"
+																	ng-model="feedback.value"
+																	ng-change=getRadioValue(feedback) required="true"></td>
+																<td><input type="radio"
+																	value="{{feedback.qid}} Above Average"
+																	ng-model="feedback.value"
+																	ng-change=getRadioValue(feedback) required="true"></td>
+																<td><input type="radio"
+																	value="{{feedback.qid}} Good" ng-model="feedback.value"
+																	ng-change=getRadioValue(feedback) required="true">
+																</td>
+																<td><input type="radio"
+																	value="{{feedback.qid}} Excellent"
+																	ng-model="feedback.value"
+																	ng-change=getRadioValue(feedback) required="true"></td>
+															</tr>
+
+
+
 														</table>
-														
 
 
 
-														<div class="clearfix"></div>
 
-														<div class="center">
-															<input type="submit" class="btn btn-primary" ng-disabled="exitEmp.$invalid" value="submit">
+														<div style="clear:both; height: 0px;"></div>
+
+														<div style="text-align: center">
+
+															
+																<input type="submit" class="btn btn-primary"
+																	ng-disabled="exitEmp.$invalid" value="submit">
+															
+															
+															<div style=" clear:both; height: 20px;"></div>
+															
 														</div>
 													</form>
 												</div>
@@ -103,20 +119,14 @@ table tr:nth-child(even) {
 							</div>
 							<!-- /.row -->
 							<!-- PAGE CONTENT ENDS -->
-						</div>
-						<!-- /.col -->
-					</div>
-					<!-- /.row -->
+						
 				</div>
 				<!-- /.page-content-area -->
 			</div>
 			<!-- /.page-content -->
 		</div>
 		<!-- /.main-content -->
-		<a href="#" id="btn-scroll-up"
-			class="btn-scroll-up btn btn-sm btn-inverse"><i
-			class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
+		
 	</div>
 	<!-- /.main-container -->
-</body>
-</html>
+

@@ -3,84 +3,115 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>HR Approval</title>
+<style>
+
+.label {
+    display: block !important;}
+    
+   .control-label {
+    padding-top: 7px;
+    margin-bottom: 0;
+    text-align: left !important;
+}
+    
+ .modal-title {
+    margin: 0;
+    line-height: 1.42857143;
+    font-size: 16px;
+    font-weight: bold;
+}
+input{width:100%;}
+.form-group {margin:0 5px;}
+
+.ui-datepicker {
+    background-color: #FFF;
+    border: 0px solid rgba(0,0,0,.2);
+</style>
+
 </head>
 <body>
+
+
 	<div class="modal-header">
 		<h3 class="modal-title">Decide Last Working Day</h3>
 	</div>
-	<!-- ng-init="hrApprovalActionInit()" -->
+	
 	<div class="modal-body">
 		<form class="form-horizontal" ng-controller="hrApprovalController"
 			ng-init="hrApprovalActionInit()" name="hrApprovalForm"
 			ng-submit="hrApprovalAction(hrApprovalForm)">
-			<div class="form-group">
-				<div class="form-group col-sm-6">
-					<label class="col-sm-3 control-label no-padding-right">
+			
+				<div class="form-group col-sm-6" style="margin: 0 5px;">
+					<label class="control-label no-padding-right" style="text-align: left; display: block;">
 						Name</label>
-					<div class="col-sm-9">
+					
 						<input type="text" name="firstName" ng-model="emp_name"
-							ng-disabled="true">
-					</div>
+							ng-disabled="true">					
 				</div>
-				<div class="form-group col-sm-6">
-					<label class="col-sm-3 control-label no-padding-right">Employee
+				
+				<div class="form-group col-sm-6"  >
+					<label class="control-label no-padding-right" style="text-align: left; display: block;">
+					Employee
 						Code</label>
-					<div class="col-sm-9">
+					
 						<input type="text" name="empCode" ng-model="empcode"
 							ng-disabled="true">
-					</div>
+					
 				</div>
-				<div class="form-group col-sm-6">
-					<label class="col-sm-3 control-label no-padding-right">Resignation
+				
+				<div class="form-group col-sm-6" style="margin: 0 5px;" >
+					<label class="control-label no-padding-right" style="text-align: left; display: block;">Resignation
 						Date</label>
-					<div class="col-sm-9">
+					
 						<input type="text" name="resDate" ng-model="resigndate"
 							ng-disabled="true">
-					</div>
+					
 				</div>
-				<div class="form-group col-sm-6">
-					<label class="col-sm-3 control-label no-padding-right">Notice
+				<div class="form-group col-sm-6" >
+					<label class="control-label no-padding-right" style="text-align: left; display: block;">Notice
 						Period</label>
-					<div class="col-sm-9">
+					
 						<input type="text" name="notice" ng-model=noticeperiod
 							ng-disabled="true">
-					</div>
+					
 				</div>
-				<div class="form-group col-sm-6">
-					<label class="col-sm-3 control-label no-padding-right">RM
+				<div class="form-group col-sm-6" style="margin: 0 5px;" >
+					<label class="control-label no-padding-right" style="text-align: left; display: block;" >RM
 						Employee Code</label>
-					<div class="col-sm-9">
+					
 						<input type="text" name="rm_empCode" ng-model="rmempcode"
 							ng-disabled="true">
-					</div>
+					
 				</div>
-				<div class="form-group col-sm-6">
-					<label class="col-sm-3 control-label no-padding-right">
+				<div class="form-group col-sm-6" >
+					<label class="control-label no-padding-right" style="text-align: left; display: block;">
 					RM Email</label>
-					<div class="col-sm-9">
+					
 						<input type="text" name="rm_empCode" ng-model="rmemail"
 							ng-disabled="true">
-					</div>
+					
 				</div>
-				<div class="form-group col-sm-6">
-					<label class="col-sm-3 control-label no-padding-right">HR
+				<div class="form-group col-sm-6" style="margin: 0 5px;">
+					<label class="control-label no-padding-right" style="text-align: left; display: block;">HR
 						Comments</label>
-					<div class="col-sm-9">
-						<textarea rows="3" cols="15" name="comments" ng-required="true" ng-model="comments" ng-minlength="10"></textarea>
-					</div>
+					
+						<textarea rows="2" cols="33" name="comments" ng-required="true" ng-model="comments" ng-minlength="10"></textarea>
+					
 				</div>
-				<div class="form-group row col-sm-6">
-					<label class="col-sm-3 control-label no-padding-right">Last Working Day
-						</label>
-					<div class="col-sm-9"  >
-                                    <input type="text"  ng-model="date1" datepicker1 format="yy/mm/dd" mindate="0" class="form-control" id="Text5" ng-required="true" placeholder="Select from date" />
-                                   
-                                </div>
-				</div>
-				<div></div>
-				<input type="submit" value="SUBMIT" ng-disabled="hrApprovalForm.$invalid">
+				<div class="form-group row col-sm-6" >
+					<label class="control-label no-padding-right" style="text-align: left; display: block;">Last Working Day
+						</label>					
+                  <input type="text"  ng-model="date1" datepicker1 format="yy/mm/dd" mindate="0" class="form-control" id="Text5" ng-required="true" placeholder="Select from date" />
+                </div>
+                
+                <div style="clear:both; height:10px;"></div>
+                
+				<div style="text-align:center;">
+				<input type="submit" class="btn btn-primary btn-sm" style="width:100px"  value="SUBMIT" ng-disabled="hrApprovalForm.$invalid">
 			</div>
 		</form>
 	</div>
+
+
 </body>
 </html>

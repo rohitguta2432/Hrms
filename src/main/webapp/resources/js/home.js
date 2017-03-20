@@ -1,5 +1,5 @@
-var application = angular.module('home', [ 'ui.router', 'ui.bootstrap','angular-loading-bar',
-                                           'ngMaterial']);
+var application = angular.module('home', [ 'ui.router', 'ui.bootstrap','angular-loading-bar','cfp.loadingBar',
+                                           'ngMaterial','angular-spinkit']);
 //var domain = 'http://localhost:8080/hrms';
 var domain = '/hrms';
 application.config(function($stateProvider, $urlRouterProvider, cfpLoadingBarProvider) {
@@ -127,10 +127,54 @@ application.controller('homeController', function($scope, $http) {
 					}));*/
 					$scope.pageList = data.pages;
 				}).error(function(data, status, headers, config) {
-					alert('Error');
+					/*alert('Error');*/
 		})
 	}
 });
+
+application.directive('hrmsBlockLoader',function($window,$timeout){
+	return {
+		restrict:'AEC',
+		templateUrl:'resources/js/directives/hrms-spinner.htm',
+		link:function(scope,element,attrs){
+			angular.element(element).css('display','none');
+			angular.element(element).css({'z-index':'2000','background':'white','opacity':'0.5','position':'absolute','height':'100%','width':'100%'});
+			scope.$on('cfpLoadingBar:started',function(event,data){
+				angular.element(element).css('display','block');
+			});
+			
+			scope.$on('cfpLoadingBar:completed',function(event,data){				
+				angular.element(element).css('display','none');		
+			});
+		}
+	}
+});
+
+/*application.directive('customAlertsInitiator',function($mdToast){
+	return{
+	  	restrict:'AEC',
+	    scope:{
+	    	hide:'@',
+	      position:'@'
+	    },
+	    link:function(scope,elem,attrs){
+	    	window.alert = function(message){
+	          var toast = $mdToast.simple()
+	          .content(message)
+	          .action('Ok')
+	          .highlightAction(true);
+
+	          toast._options.position = scope.position;
+	          toast._options.hideDelay = parseInt(scope.hide);
+	          $mdToast.show(toast);
+	          $timeout(function(){
+	        	  return;
+	          },2000)
+	      	}    
+	    }
+	  }
+	});*/
+
 application.directive("datepicker1", function () {
     return {
         restrict: "A",

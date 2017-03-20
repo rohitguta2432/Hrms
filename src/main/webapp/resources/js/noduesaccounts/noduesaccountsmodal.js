@@ -51,10 +51,9 @@ application.controller('noduesaccountsmodalcontroller', function($scope, $http,
 				'Content-Type' : 'application/x-www-form-urlencoded'
 			}
 		}).success(function(data) {
-			alert("submitted account assets")
 			location.reload();
 		}).error(function() {
-			/*alert("errors")*/
+			
 		})
 
 	}
@@ -77,8 +76,12 @@ $scope.reject = function() {
 				+ $scope.rejected_final_status+'&departmentId='+$scope.department_id;
 		/* alert(emp_data) */
 		$http.get(domain + '/rejectempassets?' + emp_data)
-		alert("rejected account assets")
-		location.reload();
+		.then(function(res){
+			alert("rejected account assets")
+			location.reload();
+		},function(err){
+			
+		});		
 }
 
 });

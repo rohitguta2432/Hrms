@@ -1,5 +1,5 @@
 application.controller('noduesitmodaljscontroller', function($rootScope, $scope, $http,
-		$window,$location,$mdDialog) {
+		$window,$location,$mdDialog,$timeout) {
 	var departmentid;
          $http.get(domain + '/getemployeemodalinfo?employee_code='
 							+ $scope.emp_code).success(
@@ -31,6 +31,7 @@ application.controller('noduesitmodaljscontroller', function($rootScope, $scope,
 	$scope.accepted_status = [ 2 ];
 
 	$scope.submit = function(form) {
+	
 		angular.forEach($scope.nodueitassets, function(emp) {
 			if (emp.selected) {
 
@@ -50,6 +51,7 @@ application.controller('noduesitmodaljscontroller', function($rootScope, $scope,
 				'Content-Type' : 'application/x-www-form-urlencoded'
 			}
 		}).success(function(data) {
+			
 			alert("submitted it assets")
 			/*$rootScope.$broadcast("EVT_ACCEPTED",{accepted:true});*/
 		location.reload();
@@ -59,37 +61,29 @@ application.controller('noduesitmodaljscontroller', function($rootScope, $scope,
 	}
 	$scope.reject = function(ev) {
 		
-	angular.forEach($scope.nodueitassets, function(emp) {
-			if (emp.selected) {
-				$scope.selectedItems.push(emp.name);
-			}
-		})
-		angular.forEach($scope.nodueitassets, function(emp) {
-			if (!emp.selected) {
-				$scope.itemnotselected.push(emp.name)
-			}
-		})
-
-	var emp_data = 'comments=' + $scope.empcomments + '&emp_code='
-				+ $scope.emplycode + '&not_received=' + $scope.itemnotselected
-				+ '&received_assets=' + $scope.selectedItems + '&final_status='
-				+ $scope.rejected_final_status+'&departmentId='+$scope.department_id;
-
-		$http.get(domain +'/rejectempassets?'+emp_data)
-		.success(function(data) {
-		/*	$mdDialog.show(
-				      $mdDialog.alert()
-				        .parent(angular.element(document.querySelector('#popupContainer')))
-				        .clickOutsideToClose(true)
-				        .title('Are you Sure')
-				        .textContent('Employee Assets Are Rejected.')
-				        .ariaLabel('Alert Dialog Demo')
-				        .ok('Yes!')
-				        .targetEvent(ev)
-			);*/
-			alert('rejected')
-  location.reload();
-	})
+		 	angular.forEach($scope.nodueitassets, function(emp) {
+					if (emp.selected) {
+						$scope.selectedItems.push(emp.name);
+					}
+				});
+				
+				angular.forEach($scope.nodueitassets, function(emp) {
+					if (!emp.selected) {
+						$scope.itemnotselected.push(emp.name)
+					}
+				});
+		
+				var emp_data = 'comments=' + $scope.empcomments + '&emp_code='
+						+ $scope.emplycode + '&not_received=' + $scope.itemnotselected
+						+ '&received_assets=' + $scope.selectedItems + '&final_status='
+						+ $scope.rejected_final_status+'&departmentId='+$scope.department_id;
+		
+				$http.get(domain +'/rejectempassets?'+emp_data)
+				.success(function(data) {
+					alert('IT assets are rejected');
+						location.reload();
+				});
+		  
 	}
 
 });
