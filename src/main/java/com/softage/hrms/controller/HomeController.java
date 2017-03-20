@@ -1,14 +1,10 @@
 package com.softage.hrms.controller;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.rmi.RemoteException;
 import java.text.DateFormat;
-import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,30 +15,23 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.TimeZone;
 
-import javax.el.ArrayELResolver;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPSClient;
 import org.json.simple.JSONArray;
-import org.apache.axis.transport.mail.MailSender;
-import org.hibernate.loader.custom.Return;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Constants;
-import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -53,30 +42,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.tempuri.ISoftAgeEnterpriseProxy;
-import org.tempuri.SoftAgeEnterpriseServiceLocator;
-import org.w3c.dom.ls.LSInput;
-
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.microsoft.schemas._2003._10.Serialization.Arrays.ArrayOfKeyValueOfstringstringKeyValueOfstringstring;
-import com.softage.hrms.dao.NoDuesDao;
-import com.softage.hrms.model.MstQuestions;
 
 //import com.softage.hrms.model.MailSend;
 
 import com.softage.hrms.model.MstDepartment;
+import com.softage.hrms.model.MstQuestions;
 import com.softage.hrms.model.MstReason;
 import com.softage.hrms.model.MstResignationStatus;
 import com.softage.hrms.model.MstUploadItem;
-import com.softage.hrms.model.TblFeedbacks;
-import com.softage.hrms.model.TblUploadedPath;
 import com.softage.hrms.model.TblAssetsManagement;
 import com.softage.hrms.model.TblExEmpCommunication;
 import com.softage.hrms.model.TblExEmployeeQuery;
 import com.softage.hrms.model.TblFeedbacks;
 import com.softage.hrms.model.TblNoDuesClearence;
+import com.softage.hrms.model.TblUploadedPath;
 import com.softage.hrms.model.TblUserResignation;
 import com.softage.hrms.service.ApprovalService;
 import com.softage.hrms.service.EmployeeDocumentService;
@@ -86,9 +65,6 @@ import com.softage.hrms.service.PageService;
 import com.softage.hrms.service.QueryService;
 import com.softage.hrms.service.ResignationService;
 import com.softage.hrms.service.impl.MailServiceImpl;
-
-import antlr.StringUtils;
-import javassist.compiler.Parser;
 
 /**
  * Handles requests for the application home page.
@@ -1338,8 +1314,9 @@ public class HomeController {
 		HttpSession session = request.getSession();
 		String fileLocation = "D:/CSVFile/";
 		// String empId = "ss0062";
+		JSONObject msgJSON=new JSONObject();
 		String result = null;
-
+		String filePath="";
 		try {
 			JSONArray list = new JSONArray();
 			//int circle_code = (Integer) session.getAttribute("circleid");
@@ -1354,15 +1331,15 @@ public class HomeController {
 			MultipartFile mpf = request.getFile(itr.next());
 			byte[] bytes = mpf.getBytes();
 			String filename = mpf.getOriginalFilename();
-			File file = new File(fileLocation + filename);
+			/*File file = new File(fileLocation + filename);
 			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file));
 			stream.write(bytes);
 			stream.close();
 
 			logger.info("Server File Location=" + file);
-			String FilePath = empCode + "/" + filename;
+			String FilePath = empCode + "/" + filename;*/
 
-			String filePath = uploadDocumentFTPClient(filename, empCode, bytes);
+			filePath = uploadDocumentFTPClient(filename, empCode, bytes);
 			MstUploadItem mstUploadItem = employeeDocumentService.entityById(itemId);
 			TblUserResignation resignation = resignationService.getById(id);
 
@@ -1400,8 +1377,12 @@ public class HomeController {
 			logger.error("", e);
 			e.printStackTrace();
 		}
-
-		return null;
+		if(StringUtils.isNotBlank(filePath)){
+			msgJSON.put("msg", "Successfully uploaded");
+		}else{
+			msgJSON.put("msg", "Unable to upload the file");
+		}
+		return msgJSON;
 
 	}
 

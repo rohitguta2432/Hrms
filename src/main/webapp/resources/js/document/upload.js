@@ -1,5 +1,5 @@
 
-application.controller('documentManagement', ['$scope', '$http','$modal','FileProductUploadService','$location','$rootScope', function ($scope, $http,$modal,FileProductUploadService,$location,$rootScope) {
+application.controller('documentManagement', ['$scope', '$log','$http','$modal','FileProductUploadService','$location','$rootScope', function ($scope, $log, $http,$modal,FileProductUploadService,$location,$rootScope) {
 
 	$scope.Message = '';
 	$scope.FileInvalidMessage = '';
@@ -62,6 +62,8 @@ application.controller('documentManagement', ['$scope', '$http','$modal','FilePr
                 }, function() {
                     $scope.status = 'You decided to keep your debt.';
                 });*/
+				alert(d.data.msg);
+				//$log.info(d);
 				ClearForm();
 
 			}, function (err) {
