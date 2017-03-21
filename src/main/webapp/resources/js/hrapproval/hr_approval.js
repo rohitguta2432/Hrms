@@ -42,7 +42,7 @@ application.controller('hrApprovalController',['$scope','$http','$rootScope','$m
 		.success(function(data,status,config,headers){
 			$scope.finalstatus=data.status;
 			if($scope.finalstatus=='successful'){
-				alert('success');
+				alert('Last working day successfully submitted');
 			}
 			location.reload();
 			//alert($scope.finalstatus);

@@ -20,8 +20,12 @@ application.controller('resignationController',function($scope,$http,$location){
 				//alert('success'+JSON.stringify({data: data}));
 				//alert(data.result);
 				$scope.resignationResult=data.result;
+				if($scope.resignationResult=='successful'){
+					alert('Resignation submitted successfully');
+				}else{
 			   alert($scope.resignationResult);
-				location.reload();
+				}
+			   location.reload();
 			})
 			.error(function(data, status, headers, config){
 				alert('error');

@@ -277,7 +277,6 @@ public class HomeController {
 			String emp_message = "Request for resignation has been raised by you";
 
 			if (jsonObj.get("result").equals("successful")) {
-
 				if((org.apache.commons.lang3.StringUtils.isNotBlank(hr_email)) && (org.apache.commons.lang3.StringUtils.isNotBlank(emp_email)) && 
 						(org.apache.commons.lang3.StringUtils.isNotBlank(emp_email)))
 					{
@@ -390,7 +389,7 @@ public class HomeController {
 				System.out.println("sno" + sid + " ans : " + ans + " ques" + ques);
 			}
 			approvalservice.updateResignationStatus(resignedUser);
-			statusJson.put("status", "Success");
+			statusJson.put("status", "Feedback successfully submitted");
 			String[] keys = { "empcode" };
 			String[] values = { resEmpcode };
 			String[] rmValues = { empcode };
