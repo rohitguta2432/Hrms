@@ -25,7 +25,7 @@ application.controller('exitempcontroller', function($scope, $http,$location) {
 				'Content-Type' : 'application/x-www-form-urlencoded'
 			}
 		}).success(function(data) {
-			alert("submitted emp feedback")
+			alert("Feedbacks are Submitted");
 			location.reload();
 		}).error(function() {
 			/*alert("errors")*/

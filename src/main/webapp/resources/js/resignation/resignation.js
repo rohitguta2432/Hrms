@@ -20,8 +20,7 @@ application.controller('resignationController',function($scope,$http,$location){
 				//alert('success'+JSON.stringify({data: data}));
 				//alert(data.result);
 				$scope.resignationResult=data.result;
-		
-				alert($scope.resignationResult);
+			   alert($scope.resignationResult);
 				location.reload();
 			})
 			.error(function(data, status, headers, config){

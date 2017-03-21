@@ -46,7 +46,7 @@ var emp_data='emp_assets='+$scope.selectedItems+'&comments='+$scope.empcomments+
 		        	'Content-Type':'application/x-www-form-urlencoded'
 		        }
 		    }).success(function(data){
-		       alert("submitted infra assets")
+		       alert("Infra assets has been Received");
 		       location.reload();
 		    }).error(function(){
 		        /*alert("errors")*/
@@ -70,7 +70,7 @@ $scope.reject=function()
 	      +'&departmentId='+$scope.department_id;
 	    	$http.get(domain+'/rejectempassets?'+emp_data)
 		 	 .success(function(data){
-		       alert("rejected infra assets")
+		       alert("Infra assets has been Rejected");
 		      location.reload();		
 		 })
 		}

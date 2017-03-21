@@ -10,17 +10,16 @@ application.controller('noduesitmodaljscontroller', function($rootScope, $scope,
 						$scope.empdesignation = data.designation;
 						$scope.emplocation = data.location;
 
-					/*	getitassets	*/$http.get(domain + '/getassets?employee_code='
+					$http.get(domain + '/getassets?employee_code='
 								+ $scope.emp_code+'&department='+$scope.department_id)
 								.success(
 								function(data, status, headers, config) {
-					/* alert('the data returned is :'+JSON.stringify({data : data}));*/
+				
 									 $scope.nodueitassets = data.assets;
 									 if(data.hasOwnProperty("error")){
 										 $scope.error = data.error;
 									 }
-							/*departmentid=$scope.nodueitassets[0].DepartmentId*/
-								/*alert($scope.department_id)*/
+							
 							
 								})
 
@@ -52,7 +51,7 @@ application.controller('noduesitmodaljscontroller', function($rootScope, $scope,
 			}
 		}).success(function(data) {
 			
-			alert("submitted it assets")
+			alert("IT assets has been Received ")
 			/*$rootScope.$broadcast("EVT_ACCEPTED",{accepted:true});*/
 		location.reload();
 		}).error(function() {
@@ -80,7 +79,7 @@ application.controller('noduesitmodaljscontroller', function($rootScope, $scope,
 		
 				$http.get(domain +'/rejectempassets?'+emp_data)
 				.success(function(data) {
-					alert('IT assets are rejected');
+					alert('IT assets are Rejected');
 						location.reload();
 				});
 		  

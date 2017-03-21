@@ -23,7 +23,7 @@ $http.get(domain + '/empratingfeedback')
 						'Content-Type' : 'application/x-www-form-urlencoded'
 						}
 						}).success(function(data) {
-					   alert("submitted emprating feedback")
+					   alert("Rating feedbacks are submitted");
 					   location.reload();
 					}).error(function() {
 							/* alert("errors") */

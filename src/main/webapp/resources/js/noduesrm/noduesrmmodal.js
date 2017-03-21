@@ -46,7 +46,7 @@ $http({
 			}
 		})
 		.success(function(data) {
-			alert("submitted rm assets")
+			alert("Rm assets has been Received");
 			location.reload();
 		}).error(function() {
 			/*alert("errors")*/
@@ -74,7 +74,7 @@ $http({
 		/*alert(emp_data)*/
 		$http.get(domain + '/rejectrmpassets?' + emp_data)
 		.success(function(data) {
-			alert("rejected rm asserts")
+			alert("Rm assets has been Rejected");
 			location.reload();
 		})
 	}

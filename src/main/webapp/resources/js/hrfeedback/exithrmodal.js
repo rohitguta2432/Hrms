@@ -28,7 +28,7 @@ $http({
         	'Content-Type':'application/x-www-form-urlencoded'
         }
     }).success(function(data){
-       alert("submitted hr feedback")
+       alert("Hr feedbacks has been submitted");
        location.reload();
     }).error(function(){
        /* alert("errors")*/

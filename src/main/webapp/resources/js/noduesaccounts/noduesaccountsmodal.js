@@ -51,6 +51,7 @@ application.controller('noduesaccountsmodalcontroller', function($scope, $http,
 				'Content-Type' : 'application/x-www-form-urlencoded'
 			}
 		}).success(function(data) {
+			alert("Account assets has been Received");
 			location.reload();
 		}).error(function() {
 			
@@ -77,7 +78,7 @@ $scope.reject = function() {
 		/* alert(emp_data) */
 		$http.get(domain + '/rejectempassets?' + emp_data)
 		.then(function(res){
-			alert("rejected account assets")
+			alert("Account assets has been Rejected");
 			location.reload();
 		},function(err){
 			

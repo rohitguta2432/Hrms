@@ -40,7 +40,7 @@ $http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
         	'Content-Type':'application/x-www-form-urlencoded'
         }
     }).success(function(data){
-       alert("submitted hr asserts")
+       alert(" Hr asserts has been Received");
        location.reload();
     }).error(function(){
        /* alert("errors")*/
@@ -67,7 +67,7 @@ var emp_data='comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&not_
 /*alert(emp_data)*/
 $http.get(domain+'/rejectempassets?'+emp_data)
 .success(function(data){
-      alert("rejected hr asserts")
+      alert("Hr asserts has been Rejected");
        location.reload();
 				
 	})
