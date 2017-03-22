@@ -44,6 +44,9 @@ application.controller('hrApprovalController',['$scope','$http','$rootScope','$m
 			if($scope.finalstatus=='successful'){
 				alert('Last working day successfully submitted');
 			}
+			else{
+				alert($scope.finalstatus);
+			}
 			location.reload();
 			//alert($scope.finalstatus);
 		})
