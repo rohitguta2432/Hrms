@@ -127,4 +127,27 @@ public class ExitInterviewDaoImpl implements ExitInterviewDao {
 		}
 		return empfeedback;
 	}
+
+	@Override
+	@Transactional
+	public List<TblFeedbacks> getfeedbacklist(int resignationid, int stageid) {
+		JSONObject liststageid=new JSONObject();
+		Session session=sessionfactory.getCurrentSession(); 
+		JSONObject blankjson=new JSONObject();
+		Set<JSONObject> listarray=new HashSet<JSONObject>();
+		List<TblFeedbacks> empfeedback=null;
+		JSONObject feedbackstatus=null;
+		try {
+			String hql="from TblFeedbacks a where a.tblUserResignation.resignationId=:resignationid and stageId=:stageid";
+			Query query=session.createQuery(hql)
+					.setParameter("resignationid", resignationid).setInteger("stageid", stageid);
+			
+			empfeedback=query.list();
+		
+			} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return empfeedback;
+	
+	}
 		}

@@ -40,7 +40,7 @@ $http.get(domain+'/getemployeemodalinfo?employee_code='+$scope.emp_code)
         	'Content-Type':'application/x-www-form-urlencoded'
         }
     }).success(function(data){
-       alert(" Hr asserts has been Received");
+       alert(" Hr assets has been Received");
        location.reload();
     }).error(function(){
        /* alert("errors")*/

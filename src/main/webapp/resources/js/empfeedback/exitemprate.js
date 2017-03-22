@@ -3,8 +3,9 @@ $http.get(domain + '/empratingfeedback')
 							.success(
 									function(data, status, headers, config) {
 									$scope.empratingquestion = data.empratingfeedbackquestion;
-                                     /* alert($scope.empratingquestion) */
-									})
+									$scope.feedbackstatus=data.hasOwnProperty("feedbackdetails")?true:false;
+									$scope.error="Feedbacks Ratings are submitted";
+                              	})
 					$scope.selectedItems = [];
 					$scope.getRadioValue = function(feedback) {
                     $scope.selectedItems.push(feedback);

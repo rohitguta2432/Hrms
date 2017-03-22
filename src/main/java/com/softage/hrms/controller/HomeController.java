@@ -2807,12 +2807,20 @@ public class HomeController {
 		session = request.getSession();
 		String empcode = (String) session.getAttribute("employeecode");
 		int stageid = 3;
-		String empinfo = "";
-		String employeename = "";
-		String designation = "";
-		String spokename = "";
+		JSONObject empfeedback = new JSONObject();
+		int resignationId=0;
+		String empinfo = null;
+		String employeename = null;
+		String designation = null;
+		String spokename = null;
 		String spokecode = null;
 		int department = 0;
+		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 7);
+		resignationId = resignedUser.getResignationId();
+	List<TblFeedbacks> feedbackanswer = exitinterviewservice.getEmpFeedback(resignationId, stageid);
+	if(!feedbackanswer.isEmpty()){
+	empfeedback.put("feedbackdetails",null);
+	}else{
 		String[] key = { "empcode" };
 		String[] value = { empcode };
 		try {
@@ -2833,7 +2841,7 @@ public class HomeController {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		JSONObject empfeedback = new JSONObject();
+	 
 		try {
 			empfeedback.put("empcode", empcode);
 			empfeedback.put("empname", employeename);
@@ -2843,28 +2851,29 @@ public class HomeController {
 			empfeedback.put("location", spokename);
 			List<JSONObject> listempquestion = exitinterviewservice.listempQuestion(stageid);
 			empfeedback.put("empfeedbackquestion", listempquestion);
+			
+		
 		}
-
-		catch (Exception e) {
+	catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		return empfeedback;
+	}
+	return empfeedback;
 	}
 
 	@RequestMapping(value = "/insertempfeedback", method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject insertempfeedback(@RequestParam("emp_feedback") String feedback, HttpSession session,
 			HttpServletRequest request) {
-		String empname = "";
+		String empname =null;
 		int stageid = 3;
+		int resignationId=0;
 		ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 		session = request.getSession();
 		String userempcode = (String) session.getAttribute("employeecode");
 		try {
 			empname = empdetails.getUserDetail(userempcode).getFirstName();
-
-		} catch (RemoteException e1) {
+	} catch (RemoteException e1) {
 
 			e1.printStackTrace();
 		}
@@ -2887,8 +2896,9 @@ public class HomeController {
 				feedbackemp.setMstQuestions(question);
 				feedbackemp.setTblUserResignation(resignedUser);
 				empanswers = exitinterviewservice.submithrfeedback(feedbackemp);
+			
 			}
-
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -2900,17 +2910,24 @@ public class HomeController {
 	@ResponseBody
 	public JSONObject getempratingfeedback(HttpSession session, HttpServletRequest request) {
 		session = request.getSession();
-		String userempcode = (String) session.getAttribute("employeecode");
+		String empcode = (String) session.getAttribute("employeecode");
 		int roleid = (Integer) session.getAttribute("roleid");
+		int resignationId=0;
 		int stageid = 4;// stage of application employee feedback
 		JSONObject empratingfeedback = new JSONObject();
+		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 7);
+		resignationId = resignedUser.getResignationId();
+	List<TblFeedbacks> feedbackanswer = exitinterviewservice.getEmpFeedback(resignationId, stageid);
+	if(!feedbackanswer.isEmpty()){
+		empratingfeedback.put("feedbackdetails",null);
+	}else{
 		try {
 			List<JSONObject> listempquestion = exitinterviewservice.listempQuestion(stageid);
 			empratingfeedback.put("empratingfeedbackquestion", listempquestion);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+	}
 		return empratingfeedback;
 	}
 

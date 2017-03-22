@@ -17,13 +17,16 @@ html.md-default-theme, html, body.md-default-theme, body
 			} catch (e) {
 			}
 		</script>
+	
 		<div class="main-content" ng-controller="exitempcontroller"
-			ng-init="init()">
-         	<div class="page-content">
-				<div class="page-content-area">
+			ng-init="empfeedback()">
+		   
+		  
+			<div class="page-content">
+				<div class="page-content-area">					 			
 					<!-- /.page-header -->
 					<div class="row">
-						<div class="col-xs-12">
+						<div class="col-xs-12">							
 							<!-- PAGE CONTENT BEGINS -->
 	                       <form name="Exitemp" ng-submit=submit(Exitemp) novalidate>
 								<div class="col-xs-12">
@@ -31,11 +34,11 @@ html.md-default-theme, html, body.md-default-theme, body
 										<div class="widget-box ui-sortable-handle"
 											style="opacity: 1; z-index: 0;">
 											<div class="widget-header">
-												<h5 class="widget-title">EMPLOYEE FEEDBACK</h5>
+												<h5 class="widget-title" >EMPLOYEE FEEDBACK</h5>
 
 											</div>
-
-											<div class="widget-body" style="display: block;">
+											<div class="alert alert-danger" style="margin:2px;" ng-if="feedbackstatus"><Strong>{{error}}</Strong></div>
+											<div class="widget-body" ng-if="!feedbackstatus"  style="display: block;">
 												<div class="widget-main form-horizontal">
 
 													<div class="clearfix"></div>
@@ -109,14 +112,11 @@ html.md-default-theme, html, body.md-default-theme, body
 
 
 												<div style="clear: both; height: 20px;"></div>
-
-
+					
 												<div class="form-group col-sm-12">
 													<label class="col-sm-3 control-label no-padding-right">ABOUT
 														THE COMPANY:</label>
-
-
-													<div class="col-sm-9">
+		<div class="col-sm-9">
 														<div ng-repeat="feedback in empquestion">
 															<div ng-if="feedback.qtype=='textarea'">
 																{{feedback.question}}<br>
@@ -130,8 +130,9 @@ html.md-default-theme, html, body.md-default-theme, body
 												<div class="form-group col-sm-12">
 													<label class="col-sm-3 control-label no-padding-right">&nbsp;</label>
 													<div class="col-sm-9">
-														<input type="submit" ng-disabled="Exitemp.$invalid"
-															class="btn btn-primary" value="submit">
+				<input type="submit" class="btn btn-primary" value="submit" 
+				ng-disabled="Exitemp.$invalid">
+															
 													</div>
 
 												</div>

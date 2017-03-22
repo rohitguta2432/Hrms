@@ -33,5 +33,10 @@ return exitinterviewdao.getEmpQuestions(stageid);
 public List<TblFeedbacks> listempfeedback(int resignationid,int stageid1,int stageid2) {
 return exitinterviewdao.getEmpFeedbackStatus(resignationid, stageid1, stageid2);
 	}
+@Override
+public List<TblFeedbacks> getEmpFeedback(int resignationid, int stageid) {
+	
+	return exitinterviewdao.getfeedbacklist(resignationid, stageid);
+}
 
 }

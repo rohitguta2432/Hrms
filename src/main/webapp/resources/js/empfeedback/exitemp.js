@@ -1,22 +1,27 @@
 application.controller('exitempcontroller', function($scope, $http,$location) {
-	
-	$http.get(domain + '/empfeedback').success(
-			function(data, status, headers, config) {
-		    /* alert('data are found '+ data); */
-				$scope.Employeecode = data.empcode;
+	//page  initialization
+	$scope.empfeedback=function(){
+	$http.get(domain + '/empfeedback')
+	.success(
+			function(data, status, headers, config) 
+			{
+		   	    $scope.Employeecode = data.empcode;
 				$scope.empfirstname = data.empname;
 				$scope.empdepartment = data.spokecode;
 				$scope.empdesignation = data.designation;
 				$scope.Emplocation = data.location;
 				$scope.empquestion = data.empfeedbackquestion;
-				/*alert($scope.empquestion)*/
+				$scope.feedbackstatus=data.hasOwnProperty("feedbackdetails")?true:false;
+				$scope.error="Feedbacks are submitted";
 			})
-	$scope.submit = function(form) {
+	.error(function(data, status, headers, config){
+		alert('error')
+		});
 
-		var emp_data = 'emp_feedback=' + JSON.stringify({
+$scope.submit = function(form) {
+var emp_data = 'emp_feedback=' + JSON.stringify({
 			data : $scope.empquestion
 		});
-		/*alert(emp_data)*/
 		$http({
 			method : 'POST',
 			url : domain + '/insertempfeedback',
@@ -25,11 +30,11 @@ application.controller('exitempcontroller', function($scope, $http,$location) {
 				'Content-Type' : 'application/x-www-form-urlencoded'
 			}
 		}).success(function(data) {
-			alert("Feedbacks are Submitted");
-			location.reload();
+			alert("Feedbacks has been submitted");
+				location.reload();
 		}).error(function() {
-			/*alert("errors")*/
+			
 		})
 	}
-
+	}
 });

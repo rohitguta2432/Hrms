@@ -31,8 +31,7 @@ table tr:nth-child(even) {
 			}
 		</script>
 		<div class="main-content" ng-controller="exitratedJs">
-
-			<div class="page-content">
+	<div class="page-content">
 				<div class="page-content-area">
 					<!-- /.page-header -->
 					
@@ -43,9 +42,9 @@ table tr:nth-child(even) {
 											style="opacity: 1; z-index: 0;">
 											<div class="widget-header">
 												<h5 class="widget-title">Employee Rating Form</h5>
-
-											</div>
-											<div class="widget-body" style="display: block;">
+			</div>
+											<div class="alert alert-danger" style="margin:2px;" ng-if="feedbackstatus"><Strong>{{error}}</Strong></div>
+											<div class="widget-body" ng-if="!feedbackstatus" style="display: block;">
 												<div class="widget-main form-horizontal">
 													<form name="exitEmp" ng-submit=submit(exitEmp) novalidate>
 
