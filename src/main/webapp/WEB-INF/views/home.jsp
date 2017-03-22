@@ -101,7 +101,7 @@ html.md-default-theme, html, body.md-default-theme, body
                 <span class="icon-bar"></span>
             </button>
             <div class="navbar-header pull-left">
-                <a href="index.htm" class="navbar-brand"><small>                  
+                <a  class="navbar-brand"><small>                  
                     <img src="resources/libs/images/hrms_logo_s.png" alt="HRMS" style="height: 50px;" />
                 </small></a>
             </div>
