@@ -67,7 +67,7 @@ var emp_data='comments='+$scope.empcomments+'&emp_code='+$scope.emplycode+'&not_
 /*alert(emp_data)*/
 $http.get(domain+'/rejectempassets?'+emp_data)
 .success(function(data){
-      alert("Hr asserts has been Rejected");
+      alert("Hr asserts has been Pending");
        location.reload();
 				
 	})

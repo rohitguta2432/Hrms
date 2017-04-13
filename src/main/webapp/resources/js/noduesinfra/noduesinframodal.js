@@ -70,7 +70,7 @@ $scope.reject=function()
 	      +'&departmentId='+$scope.department_id;
 	    	$http.get(domain+'/rejectempassets?'+emp_data)
 		 	 .success(function(data){
-		       alert("Infra assets has been Rejected");
+		       alert("Infra assets has been Pending");
 		      location.reload();		
 		 })
 		}

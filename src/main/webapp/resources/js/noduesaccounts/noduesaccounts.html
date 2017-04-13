@@ -14,8 +14,7 @@
 			}
 		</script>
 		<div class="main-content">
-
-			<div class="page-content" ng-controller="noduesaccountscontroller" ng-init="init()">
+	<div class="page-content" ng-controller="noduesaccountscontroller" ng-init="init()">
 				<div class="page-content-area">
 					<!-- /.page-header -->
 					<div class="row">
@@ -28,16 +27,16 @@
 											style="opacity: 1; z-index: 0;">
 											<div class="widget-header">
 												<h5 class="widget-title">NO DUES ACCOUNTS</h5>
-												</div>
-											
-											
+												<div class="input-group" style="margin-top:3px;">
+                            <span class="input-group-addon">Search Employee</span>
+                            <input type="text" name="searchText" id="searchText" placeholder="Search Employee" ng-model="searchEngine" ng-change="searchFields()"   class="form-control">
+                        </div>
+							</div>
 											<div class="widget-body" style="display: block;">
 												<form name="Exit" ng-submit=submit(Exit) novalidate>
 													<div class="widget-main form-horizontal">
 <div class="clearfix"></div>
-  
-  
- <div class="widget-body" style="display: block;">
+<div class="widget-body" style="display: block;">
 												<div class="widget-main">
 													<div class="table-responsive">
 														<table class="table">
@@ -52,7 +51,7 @@
 																	<th>Accept/Reject</th>
 																</tr> 
 															</thead>
-																<tbody ng-repeat="emp in noduesaccountjs" ng-model="emp.empcode">
+																<tbody ng-repeat="emp in noduesaccountjs |filter:searchEngine" ng-model="emp.empcode">
 																<tr>
 																	<td>{{emp.sno}}</td>
 																	<td>{{emp.empcode}}</td>

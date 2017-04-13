@@ -79,7 +79,7 @@ application.controller('noduesitmodaljscontroller', function($rootScope, $scope,
 		
 				$http.get(domain +'/rejectempassets?'+emp_data)
 				.success(function(data) {
-					alert('IT assets are Rejected');
+					alert('IT assets are Pending');
 						location.reload();
 				});
 		  

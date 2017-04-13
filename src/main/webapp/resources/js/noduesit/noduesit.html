@@ -27,10 +27,14 @@
 										<div class="widget-box ui-sortable-handle"
 											style="opacity: 1; z-index: 0;">
 											<div class="widget-header">
-												<h5 class="widget-title">NO DUES IT</h5>
-												</div>
-											
-											
+												
+												 <div class="widget-buttons">
+												 <h5 class="widget-title">NO DUES IT</h5>
+                        <div class="input-group" style="margin-top:3px;">
+                            <span class="input-group-addon">Search Employee</span>
+                            <input type="text" name="searchText" id="searchText" placeholder="Search Employee" ng-model="searchEngine" ng-change="searchFields()"   class="form-control">
+                        </div>
+                    </div></div>
 											<div class="widget-body" style="display: block;">
 												<form name="Exit" ng-submit=submit(Exit) novalidate>
 													<div class="widget-main form-horizontal">
@@ -52,7 +56,7 @@
 																	<th>Accept/Reject</th>
 																</tr>
 															</thead>
-																<tbody ng-repeat="emp in nodueitjs" ng-model="emp.empcode">
+																<tbody ng-repeat="emp in nodueitjs |filter:searchEngine" ng-model="emp.empcode">
 																<tr>
 																	<td>{{emp.sno}}</td>
 																	<td>{{emp.empcode}}</td>

@@ -74,7 +74,7 @@ $http({
 		/*alert(emp_data)*/
 		$http.get(domain + '/rejectrmpassets?' + emp_data)
 		.success(function(data) {
-			alert("Rm assets has been Rejected");
+			alert("Rm assets has been Pending");
 			location.reload();
 		})
 	}

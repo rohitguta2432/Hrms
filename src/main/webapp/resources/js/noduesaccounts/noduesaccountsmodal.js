@@ -78,7 +78,7 @@ $scope.reject = function() {
 		/* alert(emp_data) */
 		$http.get(domain + '/rejectempassets?' + emp_data)
 		.then(function(res){
-			alert("Account assets has been Rejected");
+			alert("Account assets has been Pending");
 			location.reload();
 		},function(err){
 			

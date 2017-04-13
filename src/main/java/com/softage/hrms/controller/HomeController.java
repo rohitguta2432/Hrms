@@ -72,7 +72,6 @@ import com.softage.hrms.service.impl.MailServiceImpl;
  */
 @Controller
 public class HomeController {
-
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	@Autowired
 	private ExitInterviewService exitinterviewservice;
@@ -88,7 +87,6 @@ public class HomeController {
 	private NoDuesService noduesservice;
 	@Autowired
 	private EmployeeDocumentService employeeDocumentService;
-
 	@Autowired
 	private QueryService queryService;
 
@@ -163,7 +161,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/getPages", method = RequestMethod.GET)
 	@ResponseBody
-	public JSONObject getTemplateLinks(HttpServletRequest request, HttpSession session) {
+	public JSONObject getTemplateLinks(HttpServletRequest request, HttpSession session){
 		JSONObject jsobj = new JSONObject();
 		session = request.getSession();
 		try {
@@ -669,7 +667,6 @@ public class HomeController {
 
 		return pendingNoDues;
 	}
-
 	@RequestMapping(value = "/getDocUploadedStatuses", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getDocumentUploadedPending(HttpServletRequest request, HttpSession session) {
@@ -684,6 +681,83 @@ public class HomeController {
 		return notUploadedDocuments;
 	}
 
+	/*
+	 * @RequestMapping(value = "/getnoduesemplist", method = RequestMethod.GET)
+	 * 
+	 * @ResponseBody public JSONObject getnoduesitinformation(HttpServletRequest
+	 * request, HttpSession session) { String stageid =
+	 * request.getParameter("stageid"); String status1 =
+	 * request.getParameter("status"); int status = Integer.valueOf(status1);
+	 * String office_code = null; int count = 1; int departmentid = 0;
+	 * JSONParser parseemp = null; String DepartmentManagerRm = null; String
+	 * NODUESOWNERS = null; JSONObject jsonparse = null; String DepartmentManger
+	 * = null; // session = request.getSession(); DepartmentManger = (String)
+	 * session.getAttribute("employeecode");
+	 * 
+	 * //role id from scannect users int role_id = (Integer)
+	 * session.getAttribute("roleid"); if (role_id == 15) { departmentid = 4; }
+	 * else if (role_id == 16) { departmentid = 5; } else if (role_id == 17) {
+	 * departmentid = 6; } else if (role_id == 18) { departmentid = 3; } else if
+	 * (role_id == 19) { departmentid = 1; } office_code = (String)
+	 * session.getAttribute("officecode"); ArrayList<JSONObject> listinformation
+	 * = new ArrayList<JSONObject>(); JSONObject jsonobject = new JSONObject();
+	 * ISoftAgeEnterpriseProxy emp_prxoy = new ISoftAgeEnterpriseProxy();
+	 * 
+	 * // information based on officecode String[] officekeys = { "OFFICECODE"
+	 * }; String[] officevalues = { office_code }; try { NODUESOWNERS =
+	 * emp_prxoy.enterPriseDataService("EVM", "NODUESOWNERS", officekeys,
+	 * officevalues); parseemp = new JSONParser(); jsonparse = (JSONObject)
+	 * parseemp.parse(NODUESOWNERS); } catch (RemoteException e1) {
+	 * e1.printStackTrace(); } catch (ParseException e) { e.printStackTrace(); }
+	 * String itManager = ((String) jsonparse.get("ItEmpCode")).trim(); String
+	 * accountManager = ((String) jsonparse.get("AccountEmpCode")).trim();
+	 * String hrManager = ((String) jsonparse.get("HrEmpCode")).trim(); String
+	 * infraManager = ((String) jsonparse.get("InfraEmpCode")).trim(); String[]
+	 * key = { "empcode" }; String[] value = { DepartmentManger }; String
+	 * empInfo; try { empInfo = emp_prxoy.enterPriseDataService("EVM",
+	 * "empInfo", key, value);
+	 * 
+	 * JSONParser parser = new JSONParser(); JSONObject servicejson =
+	 * (JSONObject) parser.parse(empInfo); DepartmentManagerRm = (String)
+	 * servicejson.get("ManagerCode");
+	 * 
+	 * } catch (RemoteException e1) { logger.error("departmentMangetRm" +
+	 * e1.getMessage()); e1.printStackTrace(); } catch (Exception e) {
+	 * logger.error("departmentMangetRm" + e.getMessage()); e.printStackTrace();
+	 * } if ((DepartmentManger.equals(itManager)) ||
+	 * (DepartmentManger.equals(accountManager)) ||
+	 * (DepartmentManger.equals(hrManager)) ||
+	 * (DepartmentManger.equals(infraManager))) { List<String> listempcoderesign
+	 * = noduesservice.listrmacceptedempcode(stageid, departmentid, office_code,
+	 * status); try { for (String code : listempcoderesign) { String[] empKey =
+	 * { "empcode" }; String[] empValue = { code }; String employeeInfo =
+	 * emp_prxoy.enterPriseDataService("EVM", "empInfo", empKey, empValue);
+	 * JSONParser parserEmp = new JSONParser(); JSONObject servicejsonemp =
+	 * (JSONObject) parserEmp.parse(employeeInfo); String rmMangerCode =
+	 * (String) servicejsonemp.get("ManagerCode"); String employeename =
+	 * (String) servicejsonemp.get("EmployeeName"); String designation =
+	 * (String) servicejsonemp.get("Designation"); String spokename = (String)
+	 * servicejsonemp.get("SpokeName"); String employeecode = (String)
+	 * servicejsonemp.get("EmployeeCode"); String spokeCode = (String)
+	 * servicejsonemp.get("SpokeCode");
+	 * 
+	 * JSONObject itjson = new JSONObject(); itjson.put("sno", count);
+	 * itjson.put("empcode", code); itjson.put("empname", employeename);
+	 * itjson.put("department", departmentid); itjson.put("designation",
+	 * designation); itjson.put("spokecode", spokeCode); itjson.put("location",
+	 * spokename); listinformation.add(itjson); count++; }
+	 * 
+	 * jsonobject.put("emplist", listinformation);
+	 * 
+	 * } catch (Exception e) { logger.error("", e); } } else {
+	 * System.out.println("Employee Not Exit In OfficeId"); }
+	 * 
+	 * return jsonobject;
+	 * 
+	 * }
+	 * 
+	 */
+
 	@RequestMapping(value = "/getnoduesemplist", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getnoduesitinformation(HttpServletRequest request, HttpSession session) {
@@ -694,11 +768,14 @@ public class HomeController {
 		int count = 1;
 		int departmentid = 0;
 		JSONParser parseemp = null;
+		String DepartmentManagerRm = null;
 		String NODUESOWNERS = null;
 		JSONObject jsonparse = null;
 		String DepartmentManger = null;
 		// session = request.getSession();
 		DepartmentManger = (String) session.getAttribute("employeecode");
+
+		// role id from scannect users
 		int role_id = (Integer) session.getAttribute("roleid");
 		if (role_id == 15) {
 			departmentid = 4;
@@ -719,7 +796,6 @@ public class HomeController {
 		// information based on officecode
 		String[] officekeys = { "OFFICECODE" };
 		String[] officevalues = { office_code };
-
 		try {
 			NODUESOWNERS = emp_prxoy.enterPriseDataService("EVM", "NODUESOWNERS", officekeys, officevalues);
 			parseemp = new JSONParser();
@@ -729,28 +805,12 @@ public class HomeController {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-
 		String itManager = ((String) jsonparse.get("ItEmpCode")).trim();
 		String accountManager = ((String) jsonparse.get("AccountEmpCode")).trim();
 		String hrManager = ((String) jsonparse.get("HrEmpCode")).trim();
 		String infraManager = ((String) jsonparse.get("InfraEmpCode")).trim();
 
-		/*String[] key = { "empcode" };
-		String[] value = { DepartmentManger };
-		String empInfo;
-		try {
-			empInfo = emp_prxoy.enterPriseDataService("EVM", "empInfo", key, value);
-			JSONParser parser = new JSONParser();
-			JSONObject servicejson = (JSONObject) parser.parse(empInfo);
-			String departmentMangerRmEmpCode = (String) servicejson.get("ManagerCode");	
-		} catch (RemoteException e1) {
-			logger.error("departmentMangetRm"+e1.getMessage());
-			e1.printStackTrace();
-		} catch (Exception e) {
-			logger.error("departmentMangetRm"+e.getMessage());
-			e.printStackTrace();
-		}*/
-		if ((DepartmentManger.equals(itManager)) || (DepartmentManger.equalsIgnoreCase(accountManager))
+		if ((DepartmentManger.equals(itManager)) || (DepartmentManger.equals(accountManager))
 				|| (DepartmentManger.equals(hrManager)) || (DepartmentManger.equals(infraManager))) {
 			List<String> listempcoderesign = noduesservice.listrmacceptedempcode(stageid, departmentid, office_code,
 					status);
@@ -786,7 +846,125 @@ public class HomeController {
 				logger.error("", e);
 			}
 		} else {
-			System.out.println("Employee Not Exit In OfficeId");
+			String itDepartmentManagerRm = null;
+			String accountDepartmentManagerRm = null;
+			String hrDepartmentManagerRm = null;
+			String infraDepartmentManagerRm = null;
+
+			String[] officekey1 = { "OFFICECODE" };
+			String[] officevalue2 = { office_code };
+			try {
+				NODUESOWNERS = emp_prxoy.enterPriseDataService("EVM", "NODUESOWNERS", officekey1, officevalue2);
+				parseemp = new JSONParser();
+				jsonparse = (JSONObject) parseemp.parse(NODUESOWNERS);
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+
+			String itManagerinfo = ((String) jsonparse.get("ItEmpCode")).trim();
+			String[] keyit = { "empcode" };
+			String[] valueit = { itManagerinfo };
+			String itempInfo = null;
+			try {
+				itempInfo = emp_prxoy.enterPriseDataService("EVM", "empInfo", keyit, valueit);
+				JSONParser parserit = new JSONParser();
+				JSONObject servicejsonit = (JSONObject) parserit.parse(itempInfo);
+				itDepartmentManagerRm = (String) servicejsonit.get("ManagerCode");
+
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+
+			String accountManagerinfo = ((String) jsonparse.get("AccountEmpCode")).trim();
+			String[] keyaccount = { "empcode" };
+			String[] valueaccount = { accountManagerinfo };
+			String accountempInfo = null;
+			try {
+				itempInfo = emp_prxoy.enterPriseDataService("EVM", "empInfo", keyaccount, valueaccount);
+				JSONParser parseraccount = new JSONParser();
+				JSONObject servicejsonaccount = (JSONObject) parseraccount.parse(accountempInfo);
+				accountDepartmentManagerRm = (String) servicejsonaccount.get("ManagerCode");
+
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+
+			String hrManagerinfo = ((String) jsonparse.get("HrEmpCode")).trim();
+			String[] keyhr = { "empcode" };
+			String[] valuehr = { hrManagerinfo };
+			String hrempInfo = null;
+			try {
+				itempInfo = emp_prxoy.enterPriseDataService("EVM", "empInfo", keyhr, valuehr);
+				JSONParser parserhr = new JSONParser();
+				JSONObject servicejsonhr = (JSONObject) parserhr.parse(accountempInfo);
+				hrDepartmentManagerRm = (String) servicejsonhr.get("ManagerCode");
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+
+			String infraManagerinfo = ((String) jsonparse.get("InfraEmpCode")).trim();
+			String[] keyinfra = { "empcode" };
+			String[] valueinfra = { infraManagerinfo };
+			String infraempInfo = null;
+			try {
+				itempInfo = emp_prxoy.enterPriseDataService("EVM", "empInfo", keyinfra, valueinfra);
+				JSONParser parserinfra = new JSONParser();
+				JSONObject servicejsoninfra = (JSONObject) parserinfra.parse(accountempInfo);
+				infraDepartmentManagerRm = (String) servicejsoninfra.get("ManagerCode");
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+
+			catch (ParseException e) {
+				e.printStackTrace();
+			}
+
+			if ((DepartmentManger.equals(itDepartmentManagerRm))
+					|| (DepartmentManger.equals(accountDepartmentManagerRm))
+					|| (DepartmentManger.equals(hrDepartmentManagerRm))
+					|| (DepartmentManger.equals(infraDepartmentManagerRm))) {
+				List<String> listempcoderesign = noduesservice.listrmacceptedempcode(stageid, departmentid, office_code,
+						status);
+				try {
+					for (String code : listempcoderesign) {
+						String[] empKey = { "empcode" };
+						String[] empValue = { code };
+						String employeeInfo = emp_prxoy.enterPriseDataService("EVM", "empInfo", empKey, empValue);
+						JSONParser parserEmp = new JSONParser();
+						JSONObject servicejsonemp = (JSONObject) parserEmp.parse(employeeInfo);
+						String rmMangerCode = (String) servicejsonemp.get("ManagerCode");
+						String employeename = (String) servicejsonemp.get("EmployeeName");
+						String designation = (String) servicejsonemp.get("Designation");
+						String spokename = (String) servicejsonemp.get("SpokeName");
+						String employeecode = (String) servicejsonemp.get("EmployeeCode");
+						String spokeCode = (String) servicejsonemp.get("SpokeCode");
+
+						JSONObject itjson = new JSONObject();
+						itjson.put("sno", count);
+						itjson.put("empcode", code);
+						itjson.put("empname", employeename);
+						itjson.put("department", departmentid);
+						itjson.put("designation", designation);
+						itjson.put("spokecode", spokeCode);
+						itjson.put("location", spokename);
+						listinformation.add(itjson);
+						count++;
+					}
+
+					jsonobject.put("emplist", listinformation);
+
+				} catch (Exception e) {
+					logger.error("", e);
+				}
+			}
 		}
 		return jsonobject;
 
@@ -2399,11 +2577,8 @@ public class HomeController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		return hranswers;
-
+	return hranswers;
 	}
-
 	@RequestMapping(value = "/employeeQuery", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject employeeQuery(HttpServletRequest request, HttpSession session) {

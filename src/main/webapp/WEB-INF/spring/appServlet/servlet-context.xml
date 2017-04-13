@@ -91,8 +91,7 @@
 	
 	<context:component-scan base-package="com.softage.hrms" />
 	<tx:annotation-driven transaction-manager="transactionManager"/>
-	
-		<beans:bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+	<beans:bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
 	
