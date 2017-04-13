@@ -40,6 +40,7 @@
                                             <i class="ace-icon fa fa-desktop blue"></i>
                                             Login Here
                                         </h4>
+                                        <h6 style="color:red">${msg}</h6>
                                         <div class="space-6"></div>
                                         <c:url var="checkLogin" value="/checkLogin"></c:url>
                                         <form:form method="post" action="${checkLogin}" commandName="loginBean">
@@ -112,7 +113,7 @@
                                                 </label>
 
                                                 <div class="clearfix">
-                                                    <input type="submit" class="width-35 pull-right btn btn-sm btn-primary" value="SUBMIT" required oninvalid="this.setCustomValidity('Enter email')" oninput="setCustomValidity('')" />
+                                                    <input type="submit" class="width-35 pull-right btn btn-sm btn-primary" value="SUBMIT" required oninvalid="this.setCustomValidity('Enter email')" ng-click="resetPassword()" oninput="setCustomValidity('')" />
 <!--                                                     <button class="width-35 pull-right btn btn-sm btn-primary" type="submit" required oninvalid="this.setCustomValidity('Enter email')" oninput="setCustomValidity('')">
                                                         <i class="ace-icon fa fa-lightbulb-o"></i>
                                                         

@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.tempuri.ISoftAgeEnterpriseProxy;
 
 //import com.softage.hrms.model.MailSend;
@@ -620,7 +621,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/checkLogin", method = RequestMethod.POST)
 	public String authenticate(@ModelAttribute("loginBean") TblUserResignation tbluserresignation, Model model,
-			HttpServletRequest request) {
+			HttpServletRequest request,RedirectAttributes redirectAttributes) {
 		String emp_code = tbluserresignation.getExEmpUserid();
 		String password = tbluserresignation.getExEmpPassword();
 		// TblUserResignation ex_emp =
@@ -646,7 +647,9 @@ public class HomeController {
 			return "home";
 
 		} else {
-			model.addAttribute("msg", "Incorrect Username or Password");
+			
+			//model.addAttribute("msg", "Incorrect Username or Password");
+			redirectAttributes.addFlashAttribute("msg", "Incorrect username or password");
 			return "redirect:exEmployeeLogin";
 		}
 	}
