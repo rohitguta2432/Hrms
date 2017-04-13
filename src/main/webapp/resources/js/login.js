@@ -1,3 +1,19 @@
+var loginApp=angular.module('login',[]);
+var domain='/hrms';
+loginApp.controller('loginController',function($scope,$http){
+	$scope.resetPassword=function(){
+		$http.get(domain+'/resetPassword',{
+			params:{
+				email:$scope.personal_email
+			}
+		})
+		.success(function(data,status,headers,config){
+			
+		}).error(function(data,status,headers,config){
+			
+		})
+	};
+});
 application.controller('loginController',function($scope,$http){
 	$scope.loginCheck=function(loginform){
 		$scope.sendPostData=function(){
