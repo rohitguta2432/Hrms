@@ -4,7 +4,8 @@ import java.util.List;
 
 import com.softage.hrms.model.TblUserResignation;
 
-public interface ExExmployeeDao {
+public interface ExEmployeeDao {
 	
 	public List<TblUserResignation> getExEmployeeBean(TblUserResignation resignBean);
+	public TblUserResignation getExEmployeeBeanByEmailID(String email, int status);
 }

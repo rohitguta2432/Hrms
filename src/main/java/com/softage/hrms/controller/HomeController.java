@@ -61,6 +61,7 @@ import com.softage.hrms.model.TblUploadedPath;
 import com.softage.hrms.model.TblUserResignation;
 import com.softage.hrms.service.ApprovalService;
 import com.softage.hrms.service.EmployeeDocumentService;
+import com.softage.hrms.service.ExEmployeeService;
 import com.softage.hrms.service.ExitInterviewService;
 import com.softage.hrms.service.NoDuesService;
 import com.softage.hrms.service.PageService;
@@ -90,7 +91,8 @@ public class HomeController {
 	private EmployeeDocumentService employeeDocumentService;
 	@Autowired
 	private QueryService queryService;
-
+	@Autowired
+	private ExEmployeeService exemployeeservice;
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -3316,8 +3318,24 @@ public class HomeController {
 	@RequestMapping(value="/resetPassword",method=RequestMethod.GET)
 	@ResponseBody
 	public JSONObject sendResetPassword(HttpServletRequest request){
+		JSONObject jsonObject=new JSONObject();
 		String email=(String)request.getParameter("email");
-		return null;
+		String returnedMessage=null;
+		boolean mailExists=exemployeeservice.emailExists(email, 3);
+		if(mailExists){
+			try{
+			String url="http://localhost:8080/hrms/pwdReset"; 
+			String message="Hi, As per your request the link for resetting the password is :"+url;
+			mailService.sendEmail(email, "evm@softageindia.com", "test", message);
+			returnedMessage="Password reset link sent to the specified email";
+			}catch(Exception e){
+				returnedMessage="Error in sending the password link to the specified email";
+			}
+		}else{
+			returnedMessage="Specified email does not exist in our records";
+		}
+		jsonObject.put("messageValue", returnedMessage);
+		return jsonObject;
 	}
 	
 }

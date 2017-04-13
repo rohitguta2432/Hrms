@@ -8,7 +8,7 @@ loginApp.controller('loginController',function($scope,$http){
 			}
 		})
 		.success(function(data,status,headers,config){
-			
+			alert(data.messageValue);
 		}).error(function(data,status,headers,config){
 			
 		})
