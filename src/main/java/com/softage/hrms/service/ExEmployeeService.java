@@ -7,5 +7,6 @@ public interface ExEmployeeService {
 	public boolean emailExists(String email,int status);
 	public String getAppUrlLink();
 	public String saveResetPwdModel(TblResetPassword resetPwd);
+	public boolean checkID(String uniqueID);
 
 }

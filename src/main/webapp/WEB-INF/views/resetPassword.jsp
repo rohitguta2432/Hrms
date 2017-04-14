@@ -1,5 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="java.sql.*"  %>
+<%@ page import="org.tempuri.*" %>
+<%@ page import="org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html ng-app="reset_app">
 <head>
@@ -85,7 +87,7 @@ html.md-default-theme, html, body.md-default-theme, body
 																for="employeeepassword">Employee Password </label>
 															<div class="col-sm-9">
 <input type="password"  class="col-xs-10 col-sm-12" name="user_password"  ng-model="password" placeholder='password' required="true">
-<span ng-show="register.user_password.$dirty && register.user_password.$error.required">Password Required!</span>
+<input type="hidden" ng-model="uniqueID" value="${uniqueID}">
 				</div>
 </div>
 <div class="clearfix"></div>
@@ -95,7 +97,7 @@ html.md-default-theme, html, body.md-default-theme, body
 																for="confirmpassword">confirm password </label>
 															<div class="col-sm-9">
 <input type="password"  class="col-xs-10 col-sm-12" name='user_password'  ng-model="passwordverify" placeholder='confirm password' ng-required="true"/>
-<span ng-show="password !==passwordverify">password mismatch</span>
+
 <!-- <span ng-show="register.user_password.$dirty && register.user_password.$error.required">Password Required!</span> -->
 
 				</div>

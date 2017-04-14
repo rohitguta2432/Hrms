@@ -37,4 +37,14 @@ public class ExEmployeeServiceImpl implements ExEmployeeService {
 		return exemployeedao.saveResetPasswordModel(resetPwd);
 	}
 
+	@Override
+	public boolean checkID(String uniqueID) {
+		TblResetPassword uniqueid=exemployeedao.getUUID(uniqueID);
+		if(uniqueid!=null){
+			return true;
+		}else{
+		return false;
+		}
+	}
+
 }

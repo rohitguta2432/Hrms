@@ -3354,4 +3354,25 @@ public class HomeController {
 		return jsonObject;
 	}
 	
+	@RequestMapping(value="/pwdReset",method=RequestMethod.GET)
+	public String getResetPasswordPage(HttpServletRequest request,Model model){
+		String uid=(String)request.getAttribute("id");
+		model.addAttribute("uniqueID",uid);
+		return "resetPassword";	
+	}
+	
+	@RequestMapping(value="/passwordChange",method=RequestMethod.GET)
+	public JSONObject passwordChange(HttpServletRequest request){
+		String uuid=(String)request.getParameter("uuid");
+		String password=(String)request.getParameter("changedPassword");
+		boolean isUUIDExists=exemployeeservice.checkID(uuid);
+		if(isUUIDExists){
+			
+		}
+		return null;
+	}
+	
+	
+	
+	
 }

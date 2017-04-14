@@ -12,4 +12,5 @@ public interface ExEmployeeDao {
 	public TblUserResignation getExEmployeeBeanByEmailID(String email, int status);
 	public ApplicationLink getAppUrlLink();
 	public String saveResetPasswordModel(TblResetPassword resetPassword);
+	public TblResetPassword getUUID(String UUID);
 }

@@ -68,4 +68,15 @@ public class ExEmployeeDaoImpl implements ExEmployeeDao {
 		return message;
 	}
 
+	@Override
+	@Transactional
+	public TblResetPassword getUUID(String UUID) {
+		Session session=sessionFactory.getCurrentSession();
+		Criteria criteria=session.createCriteria(TblResetPassword.class);
+		criteria.add(Restrictions.eq("userkey",UUID));
+		criteria.setMaxResults(1);
+		TblResetPassword pwdResetModel=(TblResetPassword)criteria.uniqueResult();
+		return pwdResetModel;
+	}
+
 }
