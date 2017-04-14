@@ -22,8 +22,8 @@
 	
 	<beans:property name="host" value="mail.softageindia.com"></beans:property>
 	<beans:property name="port" value="587"></beans:property>
-	<beans:property name="username" value="evm@softageindia.com"></beans:property>
-	<beans:property name="password" value="x23HYrtVZ69"></beans:property>
+	 <beans:property name="username" value="evm@softageindia.com"></beans:property>
+	<beans:property name="password" value="x23HYrtVZ69"></beans:property> 
 	<beans:property name="javaMailProperties">
 	<beans:props>
 	<beans:prop key="mail.transport.protocol">smtp</beans:prop>
@@ -76,6 +76,8 @@
 				<beans:value>com.softage.hrms.model.TblUserResignation</beans:value>
 				<beans:value>com.softage.hrms.model.MstDepartment</beans:value>
 				<beans:value>com.softage.hrms.model.FtpDetails</beans:value>
+				<beans:value>com.softage.hrms.model.TblResetPassword</beans:value>
+				<beans:value>com.softage.hrms.model.ApplicationLink</beans:value>
 				</beans:list>
 		</beans:property>
 	<beans:property name="hibernateProperties">

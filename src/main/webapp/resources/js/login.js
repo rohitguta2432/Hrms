@@ -14,7 +14,7 @@ loginApp.controller('loginController',function($scope,$http){
 		})
 	};
 });
-application.controller('loginController',function($scope,$http){
+/*application.controller('loginController',function($scope,$http){
 	$scope.loginCheck=function(loginform){
 		$scope.sendPostData=function(){
 			var data=$.param({
@@ -30,4 +30,4 @@ application.controller('loginController',function($scope,$http){
 		}
 		$http.post(domain+'/authenticateLogin',data,config)
 	}
-});
+});*/

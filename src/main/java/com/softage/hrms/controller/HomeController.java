@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -57,6 +58,7 @@ import com.softage.hrms.model.TblExEmpCommunication;
 import com.softage.hrms.model.TblExEmployeeQuery;
 import com.softage.hrms.model.TblFeedbacks;
 import com.softage.hrms.model.TblNoDuesClearence;
+import com.softage.hrms.model.TblResetPassword;
 import com.softage.hrms.model.TblUploadedPath;
 import com.softage.hrms.model.TblUserResignation;
 import com.softage.hrms.service.ApprovalService;
@@ -3321,15 +3323,29 @@ public class HomeController {
 		JSONObject jsonObject=new JSONObject();
 		String email=(String)request.getParameter("email");
 		String returnedMessage=null;
-		boolean mailExists=exemployeeservice.emailExists(email, 3);
+		boolean mailExists=exemployeeservice.emailExists(email, 8);
 		if(mailExists){
 			try{
-			String url="http://localhost:8080/hrms/pwdReset"; 
-			String message="Hi, As per your request the link for resetting the password is :"+url;
-			mailService.sendEmail(email, "evm@softageindia.com", "test", message);
-			returnedMessage="Password reset link sent to the specified email";
+			UUID uuid = UUID.randomUUID();
+			String randomUUIDString = uuid.toString();
+			String applicationURL=exemployeeservice.getAppUrlLink();
+			//String url="http://localhost:8080/hrms/pwdReset?id="+randomUUIDString;
+			applicationURL=applicationURL+"?id="+randomUUIDString;
+			TblResetPassword uuid_entry=new TblResetPassword();
+			uuid_entry.setUser_email(email);
+			uuid_entry.setUserkey(randomUUIDString);
+			uuid_entry.setKey_status(1);
+			String saveMessgae=exemployeeservice.saveResetPwdModel(uuid_entry);
+			if(saveMessgae.equals("success")){
+				String message="Hi, As per your request the link for resetting the password is :"+applicationURL;
+				mailService.sendEmail(email, "evm@softageindia.com", "test", message);
+				returnedMessage="Password reset link sent to the specified email";
+			}else{
+				returnedMessage="Unable to generate the email token";
+			}
 			}catch(Exception e){
 				returnedMessage="Error in sending the password link to the specified email";
+				System.out.println(e.getMessage());
 			}
 		}else{
 			returnedMessage="Specified email does not exist in our records";
