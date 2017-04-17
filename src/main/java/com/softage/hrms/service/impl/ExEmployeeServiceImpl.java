@@ -56,8 +56,7 @@ public class ExEmployeeServiceImpl implements ExEmployeeService {
 		String msg=null;
 		if(UUid!=null){
 			String UserEmailId=UUid.getUser_email();
-			TblUserResignation updatedPassword=exemployeedao.UpdatePassword(UserEmailId);
-			 updatedPassword.setExEmpPassword(password);
+			TblUserResignation updatedPassword=exemployeedao.UpdatePassword(UserEmailId,password);
 			msg="success";	
 		}
 		return msg;

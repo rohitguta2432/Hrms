@@ -81,15 +81,16 @@ public class ExEmployeeDaoImpl implements ExEmployeeDao {
 
 	@Override
 	@Transactional
-	public TblUserResignation UpdatePassword(String UserEmail) {
+	public TblUserResignation UpdatePassword(String UserEmail,String password) {
 		TblUserResignation updatepassword=null;
 		Session session=null;
 		try{
 		session=sessionFactory.getCurrentSession();
-	Criteria criteria=session.createCriteria(TblUserResignation.class);
-	criteria.add(Restrictions.eq("UserEmail", UserEmail));
-	criteria.setMaxResults(1);
-	 updatepassword=(TblUserResignation)criteria.uniqueResult();
+	String hql="update TblUserResignation t set t.exEmpPassword=:password where t.exEmpEmail=:UserEmail";
+   int updateEntities=session.createQuery(hql)
+		   .setString("password", password)
+		   .setString("UserEmail", UserEmail)
+		   .executeUpdate();
 	 }catch (Exception e) {
 			e.printStackTrace();
 			}

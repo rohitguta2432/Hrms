@@ -13,5 +13,5 @@ public interface ExEmployeeDao {
 	public ApplicationLink getAppUrlLink();
 	public String saveResetPasswordModel(TblResetPassword resetPassword);
 	public TblResetPassword getUUID(String UUID);
-	public TblUserResignation UpdatePassword(String UserEmail); 
+	public TblUserResignation UpdatePassword(String UserEmail,String password); 
 }
