@@ -1,8 +1,7 @@
 var reset_app=angular.module('resetPassword',[]);
 var domain='/hrms'
-reset_app.controller('resetController',['$scope','$http',function($scope,$http){
+reset_app.controller('resetController',['$rootScope','$scope','$http','$window',function($rootScope, $scope,$http,$window){
 	$scope.submit=function(){
-		alert($scope.passwordverify)
 		if($scope.password!=$scope.passwordverify){
 			alert('Both the provided provided doesnt match');
 		}else if($scope.password==''){
@@ -15,11 +14,12 @@ reset_app.controller('resetController',['$scope','$http',function($scope,$http){
 					uuid : $scope.uniqueID,
 					changedPassword : $scope.password
 				}
-			}).success(function(data,status,headers,config){
+			}).then(function(data,status,headers,config){
 				alert('Password successfully changed,login again to the application');
-			}).error(function(data,status,headers,config){
+				$window.location.href = domain+"/exEmployeeLogin";
+			},function(data,status,headers,config){
 				alert('Error in updating the password');
-			})
+			});
 		}
 	}
 }]);

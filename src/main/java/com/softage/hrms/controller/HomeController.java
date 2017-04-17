@@ -3357,6 +3357,7 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/passwordChange",method=RequestMethod.GET)
+	@ResponseBody
 	public JSONObject passwordChange(HttpServletRequest request){
 		JSONObject jsonObject=new JSONObject();
 		String msg="Password Updated";
@@ -3364,11 +3365,11 @@ public class HomeController {
 		String password=(String)request.getParameter("changedPassword");
 		boolean isUUIDExists=exemployeeservice.checkID(uuid);
 		if(isUUIDExists){
-		String updatePassword=exemployeeservice.saveUpdatedPassword(password, uuid);
-		if(updatePassword.equals("success")){
-			jsonObject.put("msg",msg);
-		}
+			String updatePassword=exemployeeservice.saveUpdatedPassword(password, uuid);
+			if(updatePassword.equals("success")){
+				jsonObject.put("msg",msg);
 			}
+		}
 		return jsonObject;
 	}
 }
