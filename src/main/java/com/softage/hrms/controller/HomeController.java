@@ -3358,12 +3358,17 @@ public class HomeController {
 	
 	@RequestMapping(value="/passwordChange",method=RequestMethod.GET)
 	public JSONObject passwordChange(HttpServletRequest request){
+		JSONObject jsonObject=new JSONObject();
+		String msg="Password Updated";
 		String uuid=(String)request.getParameter("uuid");
 		String password=(String)request.getParameter("changedPassword");
 		boolean isUUIDExists=exemployeeservice.checkID(uuid);
 		if(isUUIDExists){
-			exemployeeservice.saveUpdatedPassword(password, uuid);
+		String updatePassword=exemployeeservice.saveUpdatedPassword(password, uuid);
+		if(updatePassword.equals("success")){
+			jsonObject.put("msg",msg);
+		}
 			}
-		return null;
+		return jsonObject;
 	}
 }
