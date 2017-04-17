@@ -36,11 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -3330,7 +3326,7 @@ public class HomeController {
 			String randomUUIDString = uuid.toString();
 			String applicationURL=exemployeeservice.getAppUrlLink();
 			//String url="http://localhost:8080/hrms/pwdReset?id="+randomUUIDString;
-			applicationURL=applicationURL+"?id="+randomUUIDString;
+			applicationURL=applicationURL+"/"+randomUUIDString;
 			TblResetPassword uuid_entry=new TblResetPassword();
 			uuid_entry.setUser_email(email);
 			uuid_entry.setUserkey(randomUUIDString);
@@ -3354,9 +3350,8 @@ public class HomeController {
 		return jsonObject;
 	}
 	
-	@RequestMapping(value="/pwdReset",method=RequestMethod.GET)
-	public String getResetPasswordPage(HttpServletRequest request,Model model){
-		String uid=(String)request.getAttribute("id");
+	@RequestMapping(value="/pwdReset/{uid}",method=RequestMethod.GET)
+	public String getResetPasswordPage(@PathVariable("uid") String uid,Model model){
 		model.addAttribute("uniqueID",uid);
 		return "resetPassword";	
 	}

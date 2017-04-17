@@ -2,6 +2,7 @@ var reset_app=angular.module('resetPassword',[]);
 var domain='/hrms'
 reset_app.controller('resetController',['$scope','$http',function($scope,$http){
 	$scope.submit=function(){
+		alert($scope.passwordverify)
 		if($scope.password!=$scope.passwordverify){
 			alert('Both the provided provided doesnt match');
 		}else if($scope.password==''){

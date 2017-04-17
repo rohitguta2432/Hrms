@@ -1,1 +1,5 @@
 /target/
+hrms.iml
+/node_modules/
+/.settings/
+.springBeans

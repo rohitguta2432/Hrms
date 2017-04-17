@@ -3,7 +3,7 @@
 <%@ page import="org.tempuri.*" %>
 <%@ page import="org.datacontract.schemas._2004._07.SoftAge_Enterprise_BusinessObject.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html ng-app="reset_app">
+<html ng-app="resetPassword">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -18,9 +18,6 @@
    
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
   <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-  
- 
-
     <!-- ace styles -->
     <link rel="stylesheet" href="resources/libs/css/ace.css" id="main-ace-style" />
     <!-- ace settings handler -->
@@ -51,7 +48,7 @@ html.md-default-theme, html, body.md-default-theme, body
 {background-color: unset !important; }  
 </style>
 </head>
-<body ng-controller="resetController" class="no-skin">
+<body ng-controller="resetController" class="no-skin" >
 	<div class="main-container" id="main-container"
 		style="margin-top: 10px;">
 		<script type="text/javascript">
@@ -60,7 +57,7 @@ html.md-default-theme, html, body.md-default-theme, body
 			} catch (e) {
 			}
 		</script>
-		<div class="main-content" ng-controller="registercontroller">
+		<div class="main-content" >
 
 			<div class="page-content">
 				<div class="page-content-area">
@@ -77,7 +74,7 @@ html.md-default-theme, html, body.md-default-theme, body
 												<h5 class="widget-title">Reset Password</h5>
 
 											</div>
-											<form name="register" ng-submit=submit(register) novalidate>
+											<form name="register" ng-submit="submit()" novalidate>
 												<div class="widget-body" style="display: block;">
 													<div class="widget-main form-horizontal">
 													
@@ -86,7 +83,7 @@ html.md-default-theme, html, body.md-default-theme, body
 <label class="col-sm-3 control-label no-padding-right"
 																for="employeeepassword">Employee Password </label>
 															<div class="col-sm-9">
-<input type="password"  class="col-xs-10 col-sm-12" name="user_password"  ng-model="password" placeholder='password' required="true">
+<input type="password"  class="col-xs-10 col-sm-12" name="user_password" id="employeeepassword"  ng-model="password" placeholder='password' required="true">
 <input type="hidden" ng-model="uniqueID" value="${uniqueID}">
 				</div>
 </div>
@@ -96,7 +93,7 @@ html.md-default-theme, html, body.md-default-theme, body
 															<label class="col-sm-3 control-label no-padding-right"
 																for="confirmpassword">confirm password </label>
 															<div class="col-sm-9">
-<input type="password"  class="col-xs-10 col-sm-12" name='user_password'  ng-model="passwordverify" placeholder='confirm password' ng-required="true"/>
+<input type="password"  class="col-xs-10 col-sm-12" name='user_password'  id="confirmpassword"  ng-model="passwordverify" placeholder='confirm password' ng-required="true"/>
 
 <!-- <span ng-show="register.user_password.$dirty && register.user_password.$error.required">Password Required!</span> -->
 
