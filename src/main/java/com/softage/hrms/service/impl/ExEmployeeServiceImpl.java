@@ -15,6 +15,8 @@ public class ExEmployeeServiceImpl implements ExEmployeeService {
 	@Autowired
 	private ExEmployeeDao exemployeedao;
 	
+
+	
 	@Override
 	public boolean emailExists(String email, int status) {
 		TblUserResignation resingation=exemployeedao.getExEmployeeBeanByEmailID(email, status);
@@ -40,11 +42,25 @@ public class ExEmployeeServiceImpl implements ExEmployeeService {
 	@Override
 	public boolean checkID(String uniqueID) {
 		TblResetPassword uniqueid=exemployeedao.getUUID(uniqueID);
+		
 		if(uniqueid!=null){
 			return true;
 		}else{
 		return false;
 		}
+	}
+
+	@Override
+	public String saveUpdatedPassword(String password,String uuid) {
+		TblResetPassword UUid=exemployeedao.getUUID(uuid);
+		String msg=null;
+		if(UUid!=null){
+			String UserEmailId=UUid.getUser_email();
+			TblUserResignation updatedPassword=exemployeedao.UpdatePassword(UserEmailId);
+			 updatedPassword.setExEmpPassword(password);
+			msg="success";	
+		}
+		return msg;
 	}
 
 }

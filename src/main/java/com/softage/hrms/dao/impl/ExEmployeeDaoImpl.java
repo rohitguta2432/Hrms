@@ -79,4 +79,21 @@ public class ExEmployeeDaoImpl implements ExEmployeeDao {
 		return pwdResetModel;
 	}
 
+	@Override
+	@Transactional
+	public TblUserResignation UpdatePassword(String UserEmail) {
+		TblUserResignation updatepassword=null;
+		Session session=null;
+		try{
+		session=sessionFactory.getCurrentSession();
+	Criteria criteria=session.createCriteria(TblUserResignation.class);
+	criteria.add(Restrictions.eq("UserEmail", UserEmail));
+	criteria.setMaxResults(1);
+	 updatepassword=(TblUserResignation)criteria.uniqueResult();
+	 }catch (Exception e) {
+			e.printStackTrace();
+			}
+		return updatepassword;
+	}
+
 }

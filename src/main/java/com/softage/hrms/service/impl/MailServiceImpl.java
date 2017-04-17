@@ -1,5 +1,7 @@
 package com.softage.hrms.service.impl;
 
+import java.util.Properties;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -12,7 +14,9 @@ public class MailServiceImpl {
 	private MailSender mailSender;
 	
 	public void sendEmail(String toAddress, String fromAddress, String subject, String msgBody) {
-		 
+		String host="localhost";
+		Properties properties=new Properties();
+		properties.setProperty("mail.smtp.host", host);
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setFrom(fromAddress);
 		mailMessage.setTo(toAddress);

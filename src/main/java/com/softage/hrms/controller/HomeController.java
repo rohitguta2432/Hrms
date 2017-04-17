@@ -3362,12 +3362,8 @@ public class HomeController {
 		String password=(String)request.getParameter("changedPassword");
 		boolean isUUIDExists=exemployeeservice.checkID(uuid);
 		if(isUUIDExists){
-			
-		}
+			exemployeeservice.saveUpdatedPassword(password, uuid);
+			}
 		return null;
 	}
-	
-	
-	
-	
 }
