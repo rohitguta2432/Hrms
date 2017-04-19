@@ -6,6 +6,7 @@ import com.softage.hrms.model.TblUserResignation;
 public interface ExEmployeeService {
 	
 	public boolean emailExists(String email,int status);
+	public TblResetPassword resetPasswordModel(String email);
 	public String getAppUrlLink();
 	public String saveResetPwdModel(TblResetPassword resetPwd);
 	public boolean checkID(String uniqueID);

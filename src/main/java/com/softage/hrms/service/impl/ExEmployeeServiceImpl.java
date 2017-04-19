@@ -62,4 +62,9 @@ public class ExEmployeeServiceImpl implements ExEmployeeService {
 		return msg;
 	}
 
+	@Override
+	public TblResetPassword resetPasswordModel(String email) {
+		return exemployeedao.resetPasswordModel(email);
+	}
+
 }

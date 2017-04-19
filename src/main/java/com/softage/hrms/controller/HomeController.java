@@ -3320,6 +3320,7 @@ public class HomeController {
 		String email=(String)request.getParameter("email");
 		String returnedMessage=null;
 		boolean mailExists=exemployeeservice.emailExists(email, 8);
+		TblResetPassword uuid_entry=null;
 		if(mailExists){
 			try{
 			UUID uuid = UUID.randomUUID();
@@ -3327,10 +3328,15 @@ public class HomeController {
 			String applicationURL=exemployeeservice.getAppUrlLink();
 			//String url="http://localhost:8080/hrms/pwdReset?id="+randomUUIDString;
 			applicationURL=applicationURL+"/"+randomUUIDString;
-			TblResetPassword uuid_entry=new TblResetPassword();
+			uuid_entry=exemployeeservice.resetPasswordModel(email);
+			if(uuid_entry==null){
+			uuid_entry=new TblResetPassword();
 			uuid_entry.setUser_email(email);
 			uuid_entry.setUserkey(randomUUIDString);
 			uuid_entry.setKey_status(1);
+			}else{
+				uuid_entry.setUserkey(randomUUIDString);
+			}
 			String saveMessgae=exemployeeservice.saveResetPwdModel(uuid_entry);
 			if(saveMessgae.equals("success")){
 				String message="Hi, As per your request the link for resetting the password is :"+applicationURL;
