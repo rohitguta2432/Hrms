@@ -82,9 +82,15 @@
 		}
 	</style>
 	<style>
-html.md-default-theme, html, body.md-default-theme, body
-{background-color: unset !important; }  
-</style>
+		html.md-default-theme, html, body.md-default-theme, body{
+			background-color: unset !important; 
+		}
+		.custom-notifier{
+			padding: 20px;
+    		font-family: Arial;
+    		font-weight: bold;
+		}  
+	</style>
 </head>
 <custom-alerts-initiator hide="0" position='top right'></custom-alerts-initiator>
 <body class="no-skin" ng-controller="homeController" ng-init="getLinks()">
@@ -106,8 +112,10 @@ html.md-default-theme, html, body.md-default-theme, body
                 </small></a>
             </div>
             <div class="navbar-buttons navbar-header pull-right" role="navigation">
-                <ul class="nav ace-nav">
-                    <li class="light-blue"><a data-toggle="dropdown" href="#" class="dropdown-toggle">
+            	<div ng-if='rolelist==parseInt(50)' class="custom-notifier pull-left">Your Login will Expire on {{userLogin}}</div>
+                <ul class="nav ace-nav pull-right">                
+                    <li class="light-blue">
+                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                         <img class="nav-user-photo" src="resources/libs/images/avatar2.png" alt="user" />
                         <span class="user-info"><small>Welcome,</small> <%= session.getAttribute( "firstname" ) %> </span><i class="ace-icon fa fa-caret-down"></i></a>
                         <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-blue dropdown-caret dropdown-close">

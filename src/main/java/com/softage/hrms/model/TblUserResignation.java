@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 
 /**
@@ -75,6 +76,26 @@ public class TblUserResignation implements java.io.Serializable {
 	private Date hrApprovalDate;
 	private Date hrLwdDate;
 	private String approvedBy;
+	
+	private String lastLogin;
+	@Transient
+	public String getLastLogin() {
+		return lastLogin;
+	}
+
+	public void setLastLogin(String lastLogin) {
+		this.lastLogin = lastLogin;
+	}
+private Long remainingLoginDays;
+@Transient
+	public Long getRemainingLoginDays() {
+	return remainingLoginDays;
+}
+
+public void setRemainingLoginDays(Long remainingLoginDays) {
+	this.remainingLoginDays = remainingLoginDays;
+}
+
 	private Set<TblNoDuesClearence> tblnoduesclearence=new HashSet<TblNoDuesClearence>(0);
 	private Set<TblUploadedPath> tblUploadedPaths = new HashSet<TblUploadedPath>(0);
 	private Set<TblFeedbacks> tblFeedbackses = new HashSet<TblFeedbacks>(0);

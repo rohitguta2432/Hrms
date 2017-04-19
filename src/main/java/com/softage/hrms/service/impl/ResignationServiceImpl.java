@@ -3,7 +3,9 @@ package com.softage.hrms.service.impl;
 import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -274,15 +276,20 @@ public class ResignationServiceImpl implements ResignationService {
 	@Override
 	public TblUserResignation getExEmpResignationUserService(String empcode, String pwd,int status) {
 		TblUserResignation resignation= resignationdao.getExEmpResignationUserService(empcode,pwd ,status);
-		//DateFormat df=new SimpleDateFormat("yyyy/MM/dd");
 		if(resignation!=null){
 		Date lwd=resignation.getHrLwdDate();
-		Date currDate=new Date();
-		long diff=currDate.getTime()-lwd.getTime();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(lwd);
+		calendar.add(Calendar.DAY_OF_MONTH, 180);
+		Date LastLoginDay=calendar.getTime();
+		resignation.setLastLogin(LastLoginDay.toString().substring(0,10));
+	    Date currDate=new Date();
+	   	long diff=currDate.getTime()-lwd.getTime();
 		Long days=TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-		if(!(days<180 && days>=0)){
+		/*if(!(days<180 && days>=0)){
 			resignation=null;
-		}
+		}*/
+		resignation.setRemainingLoginDays(days);
 		}
 		return resignation;
 	}

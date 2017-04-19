@@ -42,6 +42,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.tempuri.ISoftAgeEnterpriseProxy;
 
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonAnyFormatVisitor;
+
 //import com.softage.hrms.model.MailSend;
 
 import com.softage.hrms.model.MstDepartment;
@@ -91,6 +93,7 @@ public class HomeController {
 	private QueryService queryService;
 	@Autowired
 	private ExEmployeeService exemployeeservice;
+
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -162,10 +165,14 @@ public class HomeController {
 
 	@RequestMapping(value = "/getPages", method = RequestMethod.GET)
 	@ResponseBody
-	public JSONObject getTemplateLinks(HttpServletRequest request, HttpSession session){
+	public JSONObject getTemplateLinks(HttpServletRequest request, HttpSession session) {
 		JSONObject jsobj = new JSONObject();
+		List<JSONObject> list = null;
+
 		session = request.getSession();
 		try {
+			list = new ArrayList<JSONObject>();
+			String lastLoginDate = (String) session.getAttribute("lastLoginDate");
 			String empcode = (String) session.getAttribute("employeecode");
 			int roleid = (Integer) session.getAttribute("roleid");
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -176,7 +183,11 @@ public class HomeController {
 			 */
 			// jsobj = pageService.getPagesLink(roleid);NEW METHOD TO BE
 			// MADE,made below this
+			jsobj.put("rolelist", roleid);
+			list.add(jsobj);
 			jsobj = pageService.getPagesBasedOnRoleId(empcode, current_date, roleid);
+			jsobj.put("lastLogin", lastLoginDate);
+			jsobj.put("roleId", list);
 		} catch (Exception e) {
 			logger.error(">>>>>>>>>>>>>>> Exception in getPages in controller" + e.getMessage());
 		}
@@ -620,7 +631,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/checkLogin", method = RequestMethod.POST)
 	public String authenticate(@ModelAttribute("loginBean") TblUserResignation tbluserresignation, Model model,
-			HttpServletRequest request,RedirectAttributes redirectAttributes) {
+			HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		String emp_code = tbluserresignation.getExEmpUserid();
 		String password = tbluserresignation.getExEmpPassword();
 		// TblUserResignation ex_emp =
@@ -640,17 +651,22 @@ public class HomeController {
 			session.setAttribute("exexmpcode", ex_emp.getExEmpUserid());
 			session.setAttribute("exempemail", ex_emp.getExEmpEmail());
 			session.setAttribute("firstname", ex_emp.getExEmpUserid());
-
+			session.setAttribute("lastLoginDate", ex_emp.getLastLogin());
 			session.setAttribute("officeCode", ex_emp.getOfficeId());
 
 			return "home";
 
-		} else {
-			
-			//model.addAttribute("msg", "Incorrect Username or Password");
+		} else if (ex_emp.getRemainingLoginDays() > 180) {
+			redirectAttributes.addFlashAttribute("msg", "Your Login username and  password are Expired");
+			return "redirect:exEmployeeLogin";
+		}
+
+		else {
+			// model.addAttribute("msg", "Incorrect Username or Password");
 			redirectAttributes.addFlashAttribute("msg", "Incorrect username or password");
 			return "redirect:exEmployeeLogin";
 		}
+
 	}
 
 	@RequestMapping(value = "/getNoDuesStatuses", method = RequestMethod.GET)
@@ -668,6 +684,7 @@ public class HomeController {
 
 		return pendingNoDues;
 	}
+
 	@RequestMapping(value = "/getDocUploadedStatuses", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getDocumentUploadedPending(HttpServletRequest request, HttpSession session) {
@@ -2578,8 +2595,9 @@ public class HomeController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	return hranswers;
+		return hranswers;
 	}
+
 	@RequestMapping(value = "/employeeQuery", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject employeeQuery(HttpServletRequest request, HttpSession session) {
@@ -3312,9 +3330,10 @@ public class HomeController {
 		}
 		return empfeedback;
 	}
-	
-	@RequestMapping(value="/resetPassword",method=RequestMethod.GET)
+
+	@RequestMapping(value = "/resetPassword", method = RequestMethod.GET)
 	@ResponseBody
+
 	public JSONObject sendResetPassword(HttpServletRequest request){
 		JSONObject jsonObject=new JSONObject();
 		String email=(String)request.getParameter("email");
@@ -3347,33 +3366,34 @@ public class HomeController {
 			}
 			}catch(Exception e){
 				returnedMessage="Error in sending the password link to the specified email";
+
 				System.out.println(e.getMessage());
 			}
-		}else{
-			returnedMessage="Specified email does not exist in our records";
+		} else {
+			returnedMessage = "Specified email does not exist in our records";
 		}
 		jsonObject.put("messageValue", returnedMessage);
 		return jsonObject;
 	}
-	
-	@RequestMapping(value="/pwdReset/{uid}",method=RequestMethod.GET)
-	public String getResetPasswordPage(@PathVariable("uid") String uid,Model model){
-		model.addAttribute("uniqueID",uid);
-		return "resetPassword";	
+
+	@RequestMapping(value = "/pwdReset/{uid}", method = RequestMethod.GET)
+	public String getResetPasswordPage(@PathVariable("uid") String uid, Model model) {
+		model.addAttribute("uniqueID", uid);
+		return "resetPassword";
 	}
-	
-	@RequestMapping(value="/passwordChange",method=RequestMethod.GET)
+
+	@RequestMapping(value = "/passwordChange", method = RequestMethod.GET)
 	@ResponseBody
-	public JSONObject passwordChange(HttpServletRequest request){
-		JSONObject jsonObject=new JSONObject();
-		String msg="Password Updated";
-		String uuid=(String)request.getParameter("uuid");
-		String password=(String)request.getParameter("changedPassword");
-		boolean isUUIDExists=exemployeeservice.checkID(uuid);
-		if(isUUIDExists){
-			String updatePassword=exemployeeservice.saveUpdatedPassword(password, uuid);
-			if(updatePassword.equals("success")){
-				jsonObject.put("msg",msg);
+	public JSONObject passwordChange(HttpServletRequest request) {
+		JSONObject jsonObject = new JSONObject();
+		String msg = "Password Updated";
+		String uuid = (String) request.getParameter("uuid");
+		String password = (String) request.getParameter("changedPassword");
+		boolean isUUIDExists = exemployeeservice.checkID(uuid);
+		if (isUUIDExists) {
+			String updatePassword = exemployeeservice.saveUpdatedPassword(password, uuid);
+			if (updatePassword.equals("success")) {
+				jsonObject.put("msg", msg);
 			}
 		}
 		return jsonObject;

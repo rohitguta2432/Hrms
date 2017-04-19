@@ -117,7 +117,7 @@ application.config(function($stateProvider, $urlRouterProvider, cfpLoadingBarPro
 
 	});
 });
-application.controller('homeController', function($scope, $http) {
+application.controller('homeController', function($scope, $http,$log) {
 	$scope.getLinks = function() {
 		$http.get(domain + '/getPages').success(
 				
@@ -126,8 +126,12 @@ application.controller('homeController', function($scope, $http) {
 						data : data
 					}));*/
 					$scope.pageList = data.pages;
+					$scope.userLogin=data.lastLogin;
+					$scope.roleId=data.roleId;
+					$log.info($scope.userLogin)
+					$log.info($scope.roleId)
 				}).error(function(data, status, headers, config) {
-					/*alert('Error');*/
+					
 		})
 	}
 });
@@ -190,8 +194,7 @@ application.directive("datepicker1", function () {
                     ngModelCtrl.$setViewValue(dateText);
                 });
             };
-
-            var options = {
+                var options = {
                 dateFormat: scope.format,
                 minDate: parseInt(scope.mindate),
                 // handle jquery date change
