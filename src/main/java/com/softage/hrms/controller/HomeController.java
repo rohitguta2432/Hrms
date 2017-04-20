@@ -633,8 +633,12 @@ public class HomeController {
 		// TblUserResignation ex_emp =
 		// resignationService.getResignationUserService(emp_code, 13);
 		TblUserResignation ex_emp = resignationService.getExEmpResignationUserService(emp_code, password, 9);
-	if (ex_emp.getRemainingLoginDays() > 180) {
-			redirectAttributes.addFlashAttribute("msg", "Your Login username and  password are Expired");
+	if (ex_emp == null ) {
+		redirectAttributes.addFlashAttribute("msg", "Incorrect username or password");
+			return "redirect:exEmployeeLogin";
+		}
+	else if(ex_emp.getRemainingLoginDays() > 180){
+		redirectAttributes.addFlashAttribute("msg", "Your Login username and  password are Expired");
 			return "redirect:exEmployeeLogin";
 		}
 	else if (ex_emp != null) {
@@ -656,10 +660,8 @@ public class HomeController {
 			session.setAttribute("remainingLoginDays", ex_emp.getRemainingLoginDays());
 
 			return "home";
-
-		} 
-
-		else {
+	} 
+	else {
 			// model.addAttribute("msg", "Incorrect Username or Password");
 			redirectAttributes.addFlashAttribute("msg", "Incorrect username or password");
 			return "redirect:exEmployeeLogin";
