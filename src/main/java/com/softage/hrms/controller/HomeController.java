@@ -167,14 +167,12 @@ public class HomeController {
 	@ResponseBody
 	public JSONObject getTemplateLinks(HttpServletRequest request, HttpSession session) {
 		JSONObject jsobj = new JSONObject();
-		List<JSONObject> list = null;
-
 		session = request.getSession();
 		try {
-			list = new ArrayList<JSONObject>();
 			String lastLoginDate = (String) session.getAttribute("lastLoginDate");
 			String empcode = (String) session.getAttribute("employeecode");
 			int roleid = (Integer) session.getAttribute("roleid");
+		    String userRoleId=Integer.toString(roleid).trim();
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date currDatetime = new Date();
 			String current_date = df.format(currDatetime);
@@ -183,12 +181,10 @@ public class HomeController {
 			 */
 			// jsobj = pageService.getPagesLink(roleid);NEW METHOD TO BE
 			// MADE,made below this
-			jsobj.put("rolelist", roleid);
-			list.add(jsobj);
-			jsobj = pageService.getPagesBasedOnRoleId(empcode, current_date, roleid);
+		  	jsobj = pageService.getPagesBasedOnRoleId(empcode, current_date, roleid);
 			jsobj.put("lastLogin", lastLoginDate);
-			jsobj.put("roleId", list);
-		} catch (Exception e) {
+			jsobj.put("roleId", userRoleId);
+			} catch (Exception e) {
 			logger.error(">>>>>>>>>>>>>>> Exception in getPages in controller" + e.getMessage());
 		}
 		return jsobj;
@@ -637,7 +633,11 @@ public class HomeController {
 		// TblUserResignation ex_emp =
 		// resignationService.getResignationUserService(emp_code, 13);
 		TblUserResignation ex_emp = resignationService.getExEmpResignationUserService(emp_code, password, 9);
-		if (ex_emp != null) {
+	if (ex_emp.getRemainingLoginDays() > 180) {
+			redirectAttributes.addFlashAttribute("msg", "Your Login username and  password are Expired");
+			return "redirect:exEmployeeLogin";
+		}
+	else if (ex_emp != null) {
 			HttpSession session = request.getSession();
 			session.setAttribute("resignID", ex_emp.getResignationId());
 			session.setAttribute("employeecode", ex_emp.getEmpCode());
@@ -653,13 +653,11 @@ public class HomeController {
 			session.setAttribute("firstname", ex_emp.getExEmpUserid());
 			session.setAttribute("lastLoginDate", ex_emp.getLastLogin());
 			session.setAttribute("officeCode", ex_emp.getOfficeId());
+			session.setAttribute("remainingLoginDays", ex_emp.getRemainingLoginDays());
 
 			return "home";
 
-		} else if (ex_emp.getRemainingLoginDays() > 180) {
-			redirectAttributes.addFlashAttribute("msg", "Your Login username and  password are Expired");
-			return "redirect:exEmployeeLogin";
-		}
+		} 
 
 		else {
 			// model.addAttribute("msg", "Incorrect Username or Password");
@@ -3333,8 +3331,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/resetPassword", method = RequestMethod.GET)
 	@ResponseBody
-
-	public JSONObject sendResetPassword(HttpServletRequest request){
+        public JSONObject sendResetPassword(HttpServletRequest request){
 		JSONObject jsonObject=new JSONObject();
 		String email=(String)request.getParameter("email");
 		String returnedMessage=null;

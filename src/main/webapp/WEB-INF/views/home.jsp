@@ -112,7 +112,7 @@
                 </small></a>
             </div>
             <div class="navbar-buttons navbar-header pull-right" role="navigation">
-            	<div ng-if='rolelist==parseInt(50)' class="custom-notifier pull-left">Your Login will Expire on {{userLogin}}</div>
+            	<div ng-if="roleId== '50' "  class="custom-notifier pull-left">Your Login will Expire on {{userLogin}}</div>
                 <ul class="nav ace-nav pull-right">                
                     <li class="light-blue">
                      <a data-toggle="dropdown" href="#" class="dropdown-toggle">

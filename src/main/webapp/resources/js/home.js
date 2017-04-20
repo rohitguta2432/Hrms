@@ -130,6 +130,7 @@ application.controller('homeController', function($scope, $http,$log) {
 					$scope.roleId=data.roleId;
 					$log.info($scope.userLogin)
 					$log.info($scope.roleId)
+					
 				}).error(function(data, status, headers, config) {
 					
 		})
