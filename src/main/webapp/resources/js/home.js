@@ -115,7 +115,11 @@ application.config(function($stateProvider, $urlRouterProvider, cfpLoadingBarPro
 		templateUrl:'resources/js/exemployee/register.html',
 		controller:'registercontroller'
 
-	});
+	}).state('Search',{
+		url:'/Search',
+		templateUrl:'resources/js/search/search.html',
+		controller:'searchcontroller'
+	})
 });
 application.controller('homeController', function($scope, $http,$log) {
 	$scope.getLinks = function() {

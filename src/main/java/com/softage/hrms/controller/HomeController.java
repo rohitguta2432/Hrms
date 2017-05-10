@@ -222,7 +222,8 @@ public class HomeController {
 		}
 		return jsob;
 	}
-
+	
+	
 	@RequestMapping(value = "/resignation", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getResignationPage(HttpServletRequest request, HttpSession session) {
@@ -987,7 +988,8 @@ public class HomeController {
 		return jsonobject;
 
 	}
-
+	//@RequestMapping(value = "/getsearch", method = RequestMethod.GET)
+	//@ResponseBody
 	@RequestMapping(value = "/getrmnoduesemplist", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getnoduesrminformation(HttpServletRequest request, HttpSession session) {
@@ -2851,6 +2853,9 @@ public class HomeController {
 		JSONObject resignedUsers = resignationService.getUsersForHrApproval(officeCode, 2);
 		return resignedUsers;
 	}
+	
+	
+
 
 	@RequestMapping(value = "/getHrApprovalFromService", method = RequestMethod.GET)
 	@ResponseBody

@@ -75,6 +75,8 @@
 	<script src="resources/js/query/query.js"></script>
 	<script src="resources/js/managerQuery/queryList.js"></script>
 	<script src="resources/js/exemployee/register.js"></script>
+	<script src="resources/js/search/search.js"></script>
+	
 	<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.js'></script>
 	<style type="text/css">
 		body{
