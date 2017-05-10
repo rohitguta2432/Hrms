@@ -118,7 +118,7 @@ application.config(function($stateProvider, $urlRouterProvider, cfpLoadingBarPro
 	}).state('Search',{
 		url:'/Search',
 		templateUrl:'resources/js/search/search.html',
-		controller:'searchcontroller'
+		controller:'searchController'
 	})
 });
 application.controller('homeController', function($scope, $http,$log) {

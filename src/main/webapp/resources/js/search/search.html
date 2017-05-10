@@ -15,8 +15,7 @@
 			}
 		</script>
 		<div class="main-content">
-
-			<div class="page-content" ng-controller="searchcontroller">
+			<div class="page-content" ng-controller="searchController">
 				<div class="page-content-area">
 					<!-- /.page-header -->
 					<div class="row">
@@ -29,102 +28,87 @@
 											style="opacity: 1; z-index: 0;">
 											<div class="widget-header">
 												<h5 class="widget-title">SEARCH</h5>
-											</div>	
+											</div>
 											<div class="widget-body" style="display: block;">
 												<div class="widget-main form-horizontal">
-											<form  name="search" ng-submit="getdata()" >	
-									<div class="form-group col-sm-6">
+													
+														<div class="form-group col-sm-6">
 															<label class="col-sm-3 control-label no-padding-right"
-																for="empcode">Employee Code  </label>
-                                 <div class="col-sm-9">
-                                 <input type="text"  ng-model="empcode" name="empcode" ng-disabled="true" 
-																	class="col-xs-10 col-sm-12" ng-required="true" ng-minlength="10"/>
-                                 
-                                 </div>
-                                 </div>
-                                 <div class="right">
-                                 
-                                 
-								<input type="submit" class="btn btn-primary btn-sm"  value="Submit"> 
-								
-								   
-								
-                               
-                                 </div>
-                                   </form>
-                                    </div>
-                                 
-                                    </div>
-                                 
-                                    </div>
-                                 	
-                    
-                        
-											
-											
-										
-<div class="clearfix"></div>
-  
-  
- <div class="widget-body" style="display: block;">
-												<div class="widget-main">
-													<div class="table-responsive">
-														<table class="table">
-															<thead>
-																<tr>
-																	<th>S.No</th>
-																	<th>Employee Code</th>
-																	<th>Employee name</th>
-																	<th>SpokeCode</th>
-																	<th>Designation</th>
-																	<th>Location</th>
-																	<th>Accept/Reject</th>
-																</tr>
-															</thead>
-																<tbody ng-repeat="emp in nodueshrtjs |filter:searchEngine" ng-model="emp.empcode">
-																<tr>
-																	<td>{{emp.sno}}</td>
-																	<td>{{emp.empcode}}</td>
-																	<td>{{emp.empname}}</td>
-																	<td>{{emp.spokecode}}</td>
-																	<td>{{emp.designation}}</td>
-																	<td>{{emp.location}}</td>
-																	<td>
-								
-										
-											</td>
-																	<td></td>
-																</tr>
-															</tbody>
-														</table>
-													</div>
-												</div>
-											</div> 
-											
+																for="empcode">Employee Code </label>
+															<div class="col-sm-9">
+																<input type="text" ng-model="empcode" name="empcode"
+																	class="col-xs-10 col-sm-12" ng-required="true"
+																	ng-minlength="6"  ng-maxlength="6"/>
 
 															</div>
 														</div>
-<div class="clearfix"></div>
-<!-- ng-disabled="!count='4'" -->	
+														<div class="right">
 
-													<div class="clearfix"></div>
-
-														
+															<input type="submit" class="btn btn-primary btn-sm"
+																value="Submit" ng-click="getData()">
 														</div>
-													</div>
-												
+												</div>
 											</div>
 										</div>
+										<div class="clearfix"></div>
+										<div class="widget-body" style="display: block;">
+											<div class="widget-main">
+												<div class="table-responsive">
+													<table class="table">
+														<thead>
+															<tr>
+																<th>S.No</th>
+																<th>Employee Code</th>
+																<th>Employee name</th>
+																<th>SpokeCode</th>
+																<th>Designation</th>
+																<th>Location</th>
+																<th>Accept/Reject</th>
+															</tr>
+														</thead>
+														<tbody ng-repeat="emp in nodueshrtjs |filter:searchEngine"
+															ng-model="emp.empcode">
+															<tr>
+																<td>{{emp.sno}}</td>
+																<td>{{emp.empcode}}</td>
+																<td>{{emp.empname}}</td>
+																<td>{{emp.spokecode}}</td>
+																<td>{{emp.designation}}</td>
+																<td>{{emp.location}}</td>
+																<td></td>
+																<td></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+
+
 									</div>
 								</div>
+								<div class="clearfix"></div>
+								<!-- ng-disabled="!count='4'" -->
+
+								<div class="clearfix"></div>
 
 
 							</div>
-							<!-- /.row -->
-							<!-- PAGE CONTENT ENDS -->
-		
-	
-	<!-- /.main-container --><!--   -->
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+	<!-- /.row -->
+	<!-- PAGE CONTENT ENDS -->
+
+
+	<!-- /.main-container -->
+	<!--   -->
 
 
 </body>

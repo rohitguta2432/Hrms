@@ -3402,4 +3402,12 @@ public class HomeController {
 		}
 		return jsonObject;
 	}
+	
+	@RequestMapping(value = "/empSearchInfo", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject empSearchInfo(HttpServletRequest request) {
+		
+		String empCode = request.getParameter("empCode");
+		return null;
+	}
 }
