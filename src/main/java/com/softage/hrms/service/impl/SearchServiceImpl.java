@@ -22,6 +22,7 @@ public class SearchServiceImpl implements SearchService {
 	@Autowired
 	private SearchDao searchDao;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject getDetails(String emp) {
 		
@@ -41,13 +42,13 @@ public class SearchServiceImpl implements SearchService {
 			Date rmApprovalDate=(Date)obj[5];
 			String mstReason=(String)obj[6];
 			String status=(String)obj[7];
-			DateFormat df=new SimpleDateFormat("yyyy/MM/dd");
+			DateFormat df=new SimpleDateFormat("dd-MM-yyyy");
 			String resgndate=df.format(resignationDate);
 			String reldate=df.format(releivingDate);
 			String hrappdate=df.format(hrApprovalDate);
 			String rmappdate=df.format(rmApprovalDate);
-			jsonsearch.put("empcode", empcode);
-			jsonsearch.put("spokecode", spokecode);
+			jsonsearch.put("empCode", empcode.toUpperCase());
+			jsonsearch.put("spokeCode", spokecode);
 			jsonsearch.put("resignationDate", resgndate);
 			jsonsearch.put("releivingDate", reldate);
 			jsonsearch.put("hrApprovalDate", hrappdate);

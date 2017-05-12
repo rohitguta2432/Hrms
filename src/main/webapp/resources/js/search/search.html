@@ -67,16 +67,16 @@
 																<th>Status</th>
 															</tr>
 														</thead>
-														<tbody ng-repeat="emp in nodueshrtjs |filter:searchEngine"
-															ng-model="emp.empcode">
+														<tbody ng-repeat="search in searchList.jsonArray |filter:searchEngine">
 															<tr>
-																<td>{{emp.empcode}}</td>
-																<td>{{emp.empname}}</td>
-																<td>{{emp.spokecode}}</td>
-																<td>{{emp.designation}}</td>
-																<td>{{emp.location}}</td>
-																<td></td>
-																<td></td>
+																<td>{{search.empCode}}</td>
+																<td>{{search.spokeCode}}</td>
+																<td>{{search.resignationDate}}</td>
+																<td>{{search.releivingDate}}</td>
+																<td>{{search.hrApprovalDate}}</td>
+																<td>{{search.rmApprovalDate}}</td>
+																<td>{{search.mstReason}}</td>
+																<td>{{search.status}}</td>
 															</tr>
 														</tbody>
 													</table>
