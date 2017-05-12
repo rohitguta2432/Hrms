@@ -57,19 +57,19 @@
 													<table class="table">
 														<thead>
 															<tr>
-																<th>S.No</th>
 																<th>Employee Code</th>
-																<th>Employee name</th>
-																<th>SpokeCode</th>
-																<th>Designation</th>
-																<th>Location</th>
-																<th>Accept/Reject</th>
+																<th>Spoke Code</th>
+																<th>Resignation Date</th>
+																<th>Relieving Date</th>
+																<th>HR Approval Date</th>
+																<th>RM Approval Date</th>
+																<th>Reason For Leaving</th>
+																<th>Status</th>
 															</tr>
 														</thead>
 														<tbody ng-repeat="emp in nodueshrtjs |filter:searchEngine"
 															ng-model="emp.empcode">
 															<tr>
-																<td>{{emp.sno}}</td>
 																<td>{{emp.empcode}}</td>
 																<td>{{emp.empname}}</td>
 																<td>{{emp.spokecode}}</td>

@@ -152,7 +152,7 @@ public void setRemainingLoginDays(Long remainingLoginDays) {
 	public MstReason getMstReason() {
 		return this.mstReason;
 	}
-
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tblUserResignation")
 	public void setMstReason(MstReason mstReason) {
 		this.mstReason = mstReason;
 	}

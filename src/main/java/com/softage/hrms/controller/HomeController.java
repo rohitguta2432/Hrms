@@ -67,6 +67,7 @@ import com.softage.hrms.service.NoDuesService;
 import com.softage.hrms.service.PageService;
 import com.softage.hrms.service.QueryService;
 import com.softage.hrms.service.ResignationService;
+import com.softage.hrms.service.SearchService;
 import com.softage.hrms.service.impl.MailServiceImpl;
 
 /**
@@ -93,6 +94,8 @@ public class HomeController {
 	private QueryService queryService;
 	@Autowired
 	private ExEmployeeService exemployeeservice;
+	@Autowired
+	private SearchService searchService;
 
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -3406,8 +3409,9 @@ public class HomeController {
 	@RequestMapping(value = "/empSearchInfo", method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject empSearchInfo(HttpServletRequest request) {
-		
+		JSONObject getdata = new JSONObject();
 		String empCode = request.getParameter("empCode");
-		return null;
+		getdata=searchService.getDetails(empCode);
+		return getdata;
 	}
 }
