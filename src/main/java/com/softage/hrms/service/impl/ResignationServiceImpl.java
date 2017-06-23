@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import com.softage.hrms.dao.ResignationDao;
 import com.softage.hrms.model.MstReason;
 import com.softage.hrms.model.MstResignationStatus;
 import com.softage.hrms.model.TblUserResignation;
+import com.softage.hrms.sconnect.service.SconnectUtil;
 //import com.softage.hrms.model.ResignationBean;
 import com.softage.hrms.service.ResignationService;
 
@@ -31,7 +33,8 @@ import com.softage.hrms.service.ResignationService;
 public class ResignationServiceImpl implements ResignationService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ResignationServiceImpl.class);
-	
+	String sconnectServiceServer="http://172.25.37.226";
+	SconnectUtil sconnct=new SconnectUtil();
 	@Autowired
 	private ResignationDao resignationdao;
 
@@ -96,21 +99,33 @@ public class ResignationServiceImpl implements ResignationService {
 		DateFormat df=new SimpleDateFormat("yyyy/MM/dd");
 		List<JSONObject> acceptedResignedList=new ArrayList<JSONObject>();
 		List<TblUserResignation> approvedResignationList= resignationdao.getHrApprovalInitDao(empcode,status,circode);
-		try {
 		for(TblUserResignation resignedUser : approvedResignationList){
 			JSONObject acceptedResignation=new JSONObject();
 			String employee_code=resignedUser.getEmpCode();
-			ISoftAgeEnterpriseProxy emp=new ISoftAgeEnterpriseProxy();
-		
-				String firstname=emp.getUserDetail(employee_code).getFirstName();
-				String lastname=emp.getUserDetail(employee_code).getLastName();
-				String name=firstname+" "+lastname;
+			
+		try {
+			
+		   String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
+					+ "GetEmployeeInfo";
+		    String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+		    String empInfo=getInput.replace("employeeCode", employee_code);
+		    String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+		    JSONParser jsonParser = new JSONParser();
+		    JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
+		    JSONObject jsonObjEvm = new JSONObject(jsonObject); 
+		    JSONObject empinfojson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+		    String name=(String)empinfojson.get("EmployeeName");
+		    int noticePeriod = ((Long) empinfojson.get("NoticePeriod")).intValue();
+		    if(noticePeriod==0)
+			{
+				noticePeriod = 60;
+			}
 				MstReason reason=resignedUser.getMstReason();
 				String reason_for_leaving=reason.getReason();
 				int resignId=resignedUser.getResignationId();
 				String remarks=resignedUser.getComments();
 				//int notice_period=emp.getUserDetail(employee_code).getNoticePeriod(); FROM ESF Service
-				int notice_period=60;
+				//int notice_period=60;
 				Date resDate=resignedUser.getResignationDate();
 				String resignDate=df.format(resDate);
 				String rmempcode=resignedUser.getRmEmpcode();
@@ -121,16 +136,17 @@ public class ResignationServiceImpl implements ResignationService {
 				acceptedResignation.put("empcode", employee_code);
 				acceptedResignation.put("leaving_reason", reason_for_leaving);
 				acceptedResignation.put("remarks", remarks);
-				acceptedResignation.put("noticetime", notice_period);
+				acceptedResignation.put("noticetime", noticePeriod);
 				acceptedResignation.put("resignDate", resignDate);
 				acceptedResignation.put("rm_empcode", rmempcode);
 				acceptedResignation.put("resignId", resignId);
 				acceptedResignation.put("rm_email", rm_email);
 				acceptedResignedList.add(acceptedResignation);
 				count=count+1;
-			} 
-			}catch (RemoteException e) {
-				e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 			}
 			System.out.println(acceptedResignedList);
 			hrapprovaljson.put("empinfo", acceptedResignedList);
@@ -165,16 +181,15 @@ public class ResignationServiceImpl implements ResignationService {
 		DateFormat df=new SimpleDateFormat("yyyy/MM/dd");
 		List<JSONObject> acceptedResignedList=new ArrayList<JSONObject>();
 		for(ArrayList<TblUserResignation> alist : list){
-			try {
 			for(TblUserResignation resignedUser : alist){
 				int count=1;
 				JSONObject acceptedResignation=new JSONObject();
 				String employee_code=resignedUser.getEmpCode();
-				ISoftAgeEnterpriseProxy emp=new ISoftAgeEnterpriseProxy();
+				//ISoftAgeEnterpriseProxy emp=new ISoftAgeEnterpriseProxy();
 			
-					String firstname=emp.getUserDetail(employee_code).getFirstName();
-					String lastname=emp.getUserDetail(employee_code).getLastName();
-					String name=firstname+" "+lastname;
+					//String firstname=emp.getUserDetail(employee_code).getFirstName();
+					//String lastname=emp.getUserDetail(employee_code).getLastName();
+					//String name=firstname+" "+lastname;
 					MstReason reason=resignedUser.getMstReason();
 					String reason_for_leaving=reason.getReason();
 					int resignId=resignedUser.getResignationId();
@@ -183,13 +198,31 @@ public class ResignationServiceImpl implements ResignationService {
 					int notice_period=60;
 					String[] keys={"empcode"};
 					String[] values={employee_code};
-					String empinfostring=emp.enterPriseDataService("EVM", "EmpInfo", keys, values);
-					
+					//String empinfostring=emp.enterPriseDataService("EVM", "EmpInfo", keys, values);
+					String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
+							+ "EnterPriseDataService";
+					SconnectUtil sconnct=new SconnectUtil();
+					String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+					String empinfostring=getInput.replace("employeeCode", employee_code);
+					sconnct.getPostServiceData(evmServiceUrl, getInput);
 					Date resDate=resignedUser.getResignationDate();
 					String resignDate=df.format(resDate);
 					String rmempcode=resignedUser.getRmEmpcode();
+					String getUserDetailServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
+							+ "GetUserDetail/"+employee_code;
+				   String empname = sconnct.getServiceData(getUserDetailServiceUrl).toString();
+				   JSONParser jsonParseremp = new JSONParser();
+			       JSONObject jsonObjectemp;
+				try {
+					jsonObjectemp = (JSONObject) jsonParseremp.parse(empname);
+			
+			       JSONObject jsonObjEmp = new JSONObject(jsonObjectemp); 
+				   String firstname =  (String) jsonObjEmp.get("FirstName");
+				   String lastname =  (String) jsonObjEmp.get("LastName");
+				   String name=firstname+" "+lastname;
+				   String rm_email =  (String) jsonObjEmp.get("email_id");
 					//String rm_email=emp.getUserDetail(rmempcode).getEmail(); FROM ESF SERVICE
-					String rm_email="arpan.mathur@softageindia.com";
+					//String rm_email="arpan.mathur@softageindia.com";
 					acceptedResignation.put("sno", count);
 					acceptedResignation.put("empname", name);
 					acceptedResignation.put("empcode", employee_code);
@@ -202,9 +235,10 @@ public class ResignationServiceImpl implements ResignationService {
 					acceptedResignation.put("rm_email", rm_email);
 					acceptedResignedList.add(acceptedResignation);
 					count=count+1;
-				} 
-				}catch (RemoteException e) {
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
+				}
 				}
 		}
 		hrapprovaljson.put("empinfo", acceptedResignedList);
@@ -228,10 +262,19 @@ public class ResignationServiceImpl implements ResignationService {
 			if(resbean.getMstResignationStatus().getStatusId()>=9){
 			JSONObject resJson=new JSONObject();
 			String empcode=resbean.getEmpCode();
-			ISoftAgeEnterpriseProxy emp=new ISoftAgeEnterpriseProxy();
+			//ISoftAgeEnterpriseProxy emp=new ISoftAgeEnterpriseProxy();
 			try {
-				String fname = emp.getUserDetail(empcode).getFirstName();
-				String lname=emp.getUserDetail(empcode).getLastName();
+				String getUserDetailServiceUrl = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
+						+ "GetUserDetail/"+empcode;
+			String empname = sconnct.getServiceData(getUserDetailServiceUrl).toString();
+			   JSONParser jsonParseremp = new JSONParser();
+		       JSONObject jsonObjectemp = (JSONObject) jsonParseremp.parse(empname);
+		       JSONObject jsonObjEmp = new JSONObject(jsonObjectemp); 
+			   String fname =  (String) jsonObjEmp.get("FirstName");
+			   String lname =  (String) jsonObjEmp.get("LastName");
+				
+				//String fname = emp.getUserDetail(empcode).getFirstName();
+				//String lname=emp.getUserDetail(empcode).getLastName();
 				String name=fname+lname;
 				MstReason reason=resbean.getMstReason();
 				String reason_for_leaving=reason.getReason();
@@ -240,10 +283,20 @@ public class ResignationServiceImpl implements ResignationService {
 				//int notice_period=60;
 				String[] keys={"empcode"};
 				String[] values={empcode};
-				String empinfo=emp.enterPriseDataService("EVM", "EmpInfo", keys, values);
+				//String empinfo=emp.enterPriseDataService("EVM", "EmpInfo", keys, values);
+				String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
+						+ "EnterPriseDataService";
+				SconnectUtil sconnct=new SconnectUtil();
+				String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+				String empInfo=getInput.replace("employeeCode", empcode);
+				sconnct.getPostServiceData(evmServiceUrl, getInput);
 				JSONParser parser=new JSONParser();
-				JSONObject empInformation=(JSONObject)parser.parse(empinfo);
+				JSONObject empInformation=(JSONObject)parser.parse(empInfo);
 				int notice_period=((Long)empInformation.get("NoticePeriod")).intValue();
+				if(notice_period==0)
+				{
+					notice_period = 60;
+				}
 				String rm_email=(String)empInformation.get("ManagerEmail");
 				Date resDate=resbean.getResignationDate();
 				String resignDate=df.format(resDate);
@@ -298,7 +351,7 @@ public class ResignationServiceImpl implements ResignationService {
 		List<JSONObject> resUserslist=new ArrayList<JSONObject>();
 		JSONObject userListJson=new JSONObject();
 		List<TblUserResignation> resuUsers= resignationdao.getUsersForHrApproval(officecode,status);
-		ISoftAgeEnterpriseProxy employee=new ISoftAgeEnterpriseProxy();
+		//ISoftAgeEnterpriseProxy employee=new ISoftAgeEnterpriseProxy();
 		DateFormat df=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		int count=1;
 		try{
@@ -310,14 +363,26 @@ public class ResignationServiceImpl implements ResignationService {
 			String reason_for_leaving=reason.getReason();
 			String remarks=tblUserResignation.getComments();
 			Date resDate=tblUserResignation.getResignationDate();
-			String resignDate=df.format(resDate);
+			String resignDate=df.format(resDate);		
 			int resignId=tblUserResignation.getResignationId();
 			String[] keys={"empcode"};
 			String[] values={empcode};
-			String empinfoString=employee.enterPriseDataService("EVM", "EmpInfo", keys, values);
-			JSONObject empinfoJson=(JSONObject)parser.parse(empinfoString);
+			//String empinfoString=employee.enterPriseDataService("EVM", "EmpInfo", keys, values);
+			String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
+					+ "GetEmployeeInfo";
+			String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+			String empInfo=getInput.replace("employeeCode", empcode);
+			String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+			JSONParser jsonParser = new JSONParser();
+		    jsonObject = (JSONObject) jsonParser.parse(evmData);
+			JSONObject jsonObj = new JSONObject(jsonObject); 
+			JSONObject empinfoJson = (JSONObject) jsonObj.get("GetEmployeeInfoResult");
 			String empname=(String)empinfoJson.get("EmployeeName");
 			int notice_period=((Long)empinfoJson.get("NoticePeriod")).intValue();
+			if(notice_period==0)
+			{
+				notice_period = 60;
+			}
 			String rmempcode=(String)empinfoJson.get("ManagerCode");
 			String rm_email=(String)empinfoJson.get("ManagerEmail");
 			jsonObject.put("sno", count);

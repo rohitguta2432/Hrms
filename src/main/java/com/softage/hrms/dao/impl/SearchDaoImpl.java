@@ -33,8 +33,6 @@ public class SearchDaoImpl implements SearchDao {
 @Transactional
 public JSONObject getDetailsDao(String emp) {
 	Session session=sessionFactory.getCurrentSession();
-	//JSONObject jsonsearch=new JSONObject();
-	//ArrayList<JSONObject> jsonArray=new ArrayList<JSONObject>();
 	JSONObject jsob=new JSONObject();
 	Query query=session.createQuery("select  t.empCode,t.officeId,t.resignationDate,t.releivingDate,t.hrApprovalDate,t.rmApprovalDate,t.mstReason.reason,t.mstResignationStatus.status from  TblUserResignation t where t.empCode= :employeecode");
 	query.setParameter("employeecode",emp);

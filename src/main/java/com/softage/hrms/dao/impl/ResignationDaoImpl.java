@@ -16,6 +16,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,7 @@ import com.softage.hrms.dao.ResignationDao;
 import com.softage.hrms.model.MstReason;
 import com.softage.hrms.model.MstResignationStatus;
 import com.softage.hrms.model.TblUserResignation;
+import com.softage.hrms.sconnect.service.SconnectUtil;
 
 @Repository
 public class ResignationDaoImpl implements ResignationDao {
@@ -36,7 +39,8 @@ public class ResignationDaoImpl implements ResignationDao {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
-
+	String sconnectServiceServer="http://172.25.37.226";
+	SconnectUtil sconnct=new SconnectUtil();
 	@Override
 	@Transactional
 	public JSONObject insertResignationDao(TblUserResignation resignationBean) {
@@ -249,7 +253,7 @@ public class ResignationDaoImpl implements ResignationDao {
 		String last_name=null;
 		String leaving_reason=null;
 		String comments=null;
-		String noticePeriod=null;;
+		//String noticePeriod=null;;
 		Date relievingDate=null;
 		if(setRMs.isEmpty()){
 			return jsob;
@@ -267,17 +271,33 @@ public class ResignationDaoImpl implements ResignationDao {
 			relievingDate=(Date)object[3];
 			DateFormat df=new SimpleDateFormat("yyyy/MM/dd");
 			String reldate=df.format(relievingDate);
-			//Date lwd_date=new Date(reldate);
-			ISoftAgeEnterpriseProxy emp=new ISoftAgeEnterpriseProxy();
-			try {
-				first_name=emp.getUserDetail(emp_code).getFirstName();
-				last_name=emp.getUserDetail(emp_code).getLastName();
-				//noticePeriod=emp.getUserDetail(emp_code).getNoticePeriod();
-				noticePeriod="60";//Using ESF service
-				
-			} catch (RemoteException e) {
-				e.printStackTrace();
-			}	
+			String getUserDetailServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
+					+ "GetUserDetail/"+emp_code;
+		   String empname = sconnct.getServiceData(getUserDetailServiceUrl).toString();
+		   JSONParser jsonParseremp = new JSONParser();
+	       JSONObject jsonObjectemp;
+		try {
+			jsonObjectemp = (JSONObject) jsonParseremp.parse(empname);
+		
+	       JSONObject jsonObjEmp = new JSONObject(jsonObjectemp); 
+		   String firstname =  (String) jsonObjEmp.get("FirstName");
+		   String lastname =  (String) jsonObjEmp.get("LastName");
+		   String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
+					+ "GetEmployeeInfo";
+		    String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+		    String empInfo=getInput.replace("employeeCode", emp_code);
+		    String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+		    JSONParser jsonParser = new JSONParser();
+		    JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
+		    JSONObject jsonObjEvm = new JSONObject(jsonObject); 
+		    JSONObject empinfojson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+           
+		    int noticePeriod = ((Long) empinfojson.get("NoticePeriod")).intValue();
+		    if(noticePeriod==0)
+		 			{
+		 		    	noticePeriod = 60;
+		 			}
+		
 			jsonemp.put("sno", count);
 			jsonemp.put("first_name", first_name);
 			jsonemp.put("last_name", last_name);
@@ -288,7 +308,10 @@ public class ResignationDaoImpl implements ResignationDao {
 			jsonemp.put("releivingDate", reldate);
 			jsonArray.add(jsonemp);
 			count=count+1;
-			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		}
 		}
 		}

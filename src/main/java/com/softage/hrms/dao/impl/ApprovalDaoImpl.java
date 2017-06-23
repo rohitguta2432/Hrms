@@ -15,6 +15,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import com.softage.hrms.dao.ApprovalDao;
 import com.softage.hrms.model.MstQuestions;
 import com.softage.hrms.model.TblFeedbacks;
 import com.softage.hrms.model.TblUserResignation;
+import com.softage.hrms.sconnect.service.SconnectUtil;
 import com.softage.hrms.service.impl.ResignationServiceImpl;
 
 @Repository
@@ -34,7 +37,8 @@ public class ApprovalDaoImpl implements ApprovalDao {
 	
 	@Autowired
 	private SessionFactory sessionfactory;
-
+	String sconnectServiceServer="http://172.25.37.226";
+	SconnectUtil sconnct=new SconnectUtil();
 	@Override
 	@Transactional
 	public JSONObject getApprovalRequestDao(String empcode) {
@@ -48,7 +52,7 @@ public class ApprovalDaoImpl implements ApprovalDao {
 		String last_name=null;
 		String leaving_reason=null;
 		String comments=null;
-		String noticePeriod=null;;
+		//String noticePeriod=null;;
 		Date relievingDate=null;
 		String sql="select res.emp_code,res.comments,r.reason,res.releiving_date from tbl_user_resignation res join mst_reason r on res.leaving_reason=r.reason_id where res.rm_empcode='"+empcode+"' and res.status=1";
 		Query query=session.createSQLQuery(sql);
@@ -61,27 +65,34 @@ public class ApprovalDaoImpl implements ApprovalDao {
 			relievingDate=(Date)object[3];
 			DateFormat df=new SimpleDateFormat("yyyy/MM/dd");
 			String reldate=df.format(relievingDate);
-			//Date lwd_date=new Date(reldate);
-			ISoftAgeEnterpriseProxy emp=new ISoftAgeEnterpriseProxy();
-			try {
-				first_name=emp.getUserDetail(emp_code).getFirstName();
-				last_name=emp.getUserDetail(emp_code).getLastName();
-				//noticePeriod=emp.getUserDetail(emp_code).getNoticePeriod();
-				noticePeriod="60";//Using ESF service
-				
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			String getUserDetailServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
+					+ "GetUserDetail/"+emp_code;
+		   String empname = sconnct.getServiceData(getUserDetailServiceUrl).toString();
+		   JSONParser jsonParseremp = new JSONParser();
+	       JSONObject jsonObjectemp;
+		try {
+			jsonObjectemp = (JSONObject) jsonParseremp.parse(empname);
+		
+	       JSONObject jsonObjEmp = new JSONObject(jsonObjectemp); 
+		   String firstname =  (String) jsonObjEmp.get("FirstName");
+		   String lastname =  (String) jsonObjEmp.get("LastName");
+		  
+		String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
+					+ "GetEmployeeInfo";
+		    String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+		    String empInfo=getInput.replace("employeeCode", emp_code);
+		    String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+		    JSONParser jsonParser = new JSONParser();
+		    JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
+		    JSONObject jsonObjEvm = new JSONObject(jsonObject); 
+		    JSONObject empinfojson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+            
+		    int noticePeriod = ((Long) empinfojson.get("NoticePeriod")).intValue();
+		    if(noticePeriod==0)
+			{
+		    	noticePeriod = 60;
 			}
-			//int len=object.length;
-/*			first_name=(String)object[0];
-			last_name=(String)object[1];
-			leaving_reason=(String)object[2];
-			comments=(String)object[3];
-			noticePeriod=String.valueOf(object[5]);
-			releivingDate=String.valueOf(object[6]);*/
-			
-			
+		
 			jsonemp.put("sno", count);
 			jsonemp.put("first_name", first_name);
 			jsonemp.put("last_name", last_name);
@@ -92,7 +103,10 @@ public class ApprovalDaoImpl implements ApprovalDao {
 			jsonemp.put("releivingDate", reldate);
 			jsonArray.add(jsonemp);
 			count=count+1;
-			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 		}
 		
 		jsob.put("jsonArray", jsonArray);

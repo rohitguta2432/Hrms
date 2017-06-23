@@ -95,6 +95,17 @@
 	</style>
 </head>
 <custom-alerts-initiator hide="0" position='top right'></custom-alerts-initiator>
+
+
+<%
+
+response.setHeader("Pragma", "no-cache");
+response.setHeader("Cache-Control", "no-store");
+response.setHeader("Expires", "0");
+response.setDateHeader("Expires", -1);
+
+
+%>
 <body class="no-skin" ng-controller="homeController" ng-init="getLinks()">
     <hrms-block-loader></hrms-block-loader>
     <div id="navbar" class="navbar navbar-default navbar-collapse h-navbar">
@@ -123,7 +134,7 @@
                         <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-blue dropdown-caret dropdown-close">
                             <li><a href="#" data-toggle="modal" data-target="#myModal1"><i class="ace-icon fa fa-user"></i>Change Password </a></li>
                             <li class="divider"></li>
-                            <li><a href="http://172.25.38.139/S_ConnectQC/Account/Logout"><i class="ace-icon fa fa-power-off"></i>Logout </a></li>
+                            <li><a href="http://172.25.37.226/S_SconnectQC/Account/Logout"><i class="ace-icon fa fa-power-off"></i>Logout </a></li>
                         </ul>
                     </li>
                 </ul>

@@ -89,7 +89,7 @@ html.md-default-theme, html, body.md-default-theme, body
                                                 </label>
                                                 <label class="block clearfix">
                                                     <span class="block input-icon input-icon-right">
-                                                        <form:input type="password" class="form-control" placeholder="Password" oninvalid="this.setCustomValidity('Enter Password')" 
+                                                        <form:input type="password" class="form-control"  placeholder="Password" oninvalid="this.setCustomValidity('Enter Password')" 
                                                         oninput="setCustomValidity('')" path="exEmpPassword"/>
                                                         <i class="ace-icon fa fa-lock"></i>
                                                     </span>

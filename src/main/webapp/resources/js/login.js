@@ -13,7 +13,9 @@ loginApp.controller('loginController',function($scope,$http){
 			
 		})
 	};
+	
 });
+
 /*application.controller('loginController',function($scope,$http){
 	$scope.loginCheck=function(loginform){
 		$scope.sendPostData=function(){

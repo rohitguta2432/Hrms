@@ -95,8 +95,9 @@
                                                     <div class="col-sm-9">
                                                         <input type="password" class="form-control col-xs-10 col-sm-12"
                                                                name="user_password" id="employeeepassword"
-                                                               ng-model="password" placeholder='Enter Password'
+                                                               ng-model="password" ng-pattern="/^[a-zA-Z0-9]*$/" placeholder='Enter Password'
                                                                required="true">
+                                                              
                                                         <input type="hidden" ng-model="uniqueID" ng-init="uniqueID='${uniqueID}'">
                                                     </div>
                                                 </div>
@@ -108,9 +109,10 @@
 
                                                     <div class="col-sm-9">
                                                         <input type="password" class="form-control col-xs-10 col-sm-12"
-                                                               name='user_password' id="confirmpassword"
-                                                               ng-model="passwordverify" placeholder='Confirm Password'
+                                                               name='user_password' id="confirmpassword" 
+                                                               ng-model="passwordverify" ng-pattern="/^[a-zA-Z0-9]*$/" placeholder='Confirm Password'
                                                                ng-required="true"/>
+                                                              
                                                     </div>
                                                 </div>
 
@@ -118,7 +120,7 @@
                                                 <div class="clearfix"></div>
 
                                                 <div class="center layout-padding">
-                                                    <input type="submit" value="Submit" class="btn primary big-btn"
+                                                    <input type="submit" value="Submit" class="btn btn-primary btn-sm"
                                                            ng-disabled="register.$invalid || password!==passwordverify">
                                                     <!-- register.$invalid &&  -->
                                                 </div>

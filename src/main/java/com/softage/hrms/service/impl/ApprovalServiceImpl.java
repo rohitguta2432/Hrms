@@ -20,13 +20,15 @@ import com.softage.hrms.model.MstQuestions;
 import com.softage.hrms.model.MstReason;
 import com.softage.hrms.model.TblFeedbacks;
 import com.softage.hrms.model.TblUserResignation;
+import com.softage.hrms.sconnect.service.SconnectUtil;
 import com.softage.hrms.service.ApprovalService;
 
 @Service
 public class ApprovalServiceImpl implements ApprovalService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ResignationDaoImpl.class);
-	
+	String sconnectServiceServer="http://172.25.37.226";
+	SconnectUtil sconnct=new SconnectUtil();
 	@Autowired
 	private ApprovalDao approvaldao;
 
@@ -75,10 +77,11 @@ public class ApprovalServiceImpl implements ApprovalService {
 		List<TblUserResignation> reslist=approvaldao.getResignedUsersForRm(status);
 		List<JSONObject> jsonArray=new ArrayList<JSONObject>();
 		JSONObject jsob=new JSONObject();
-		ISoftAgeEnterpriseProxy employee=new ISoftAgeEnterpriseProxy();
+		//ISoftAgeEnterpriseProxy employee=new ISoftAgeEnterpriseProxy();
 		JSONParser parser=new JSONParser();
 		int count=1;
 		String rm_rmEmpcode=null;
+	
 		JSONObject rm_empJson=new JSONObject();
 		DateFormat df=new SimpleDateFormat("yyyy/MM/dd");
 		Date relievingDate=null;
@@ -87,12 +90,24 @@ public class ApprovalServiceImpl implements ApprovalService {
 			String resigned_empcode=tblUserResignation.getEmpCode();
 			String[] keys={"empcode"};
 			String[] values={resigned_empcode};
-			String empinfostring=employee.enterPriseDataService("EVM","EmpInfo", keys, values);
-			JSONObject empinfojson=(JSONObject)parser.parse(empinfostring);
+			//String empinfostring=employee.enterPriseDataService("EVM","EmpInfo", keys, values);
+			String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
+					+ "GetEmployeeInfo";
+		    String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+		    String empInfo=getInput.replace("employeeCode", resigned_empcode);
+		    String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+		    JSONParser jsonParser = new JSONParser();
+		    JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
+		    JSONObject jsonObjEvm = new JSONObject(jsonObject); 
+		    JSONObject empinfojson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+
 			String rm_empcode=(String)empinfojson.get("ManagerCode");
 			if(rm_empcode!=null && rm_empcode!=""){
 				String[] rm_value={rm_empcode};
-				String rmempinfo=employee.enterPriseDataService("EVM", "EmpInfo", keys, rm_value);
+				//String rmempinfo=employee.enterPriseDataService("EVM", "EmpInfo", keys, rm_value);
+				String getInput1 = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"rm_value\"]}";
+				String rmempinfo=getInput1.replace("employeeCode", rm_empcode);
+				sconnct.getPostServiceData(evmServiceUrl, getInput1);
 				rm_empJson=(JSONObject)parser.parse(rmempinfo);
 				rm_rmEmpcode=(String)rm_empJson.get("ManagerCode");
 			}
@@ -103,6 +118,10 @@ public class ApprovalServiceImpl implements ApprovalService {
 				String leaving_reason=reasonMast.getReason();
 				String comments=tblUserResignation.getComments();
 				int noticePeriod=((Long)empinfojson.get("NoticePeriod")).intValue();
+				if(noticePeriod==0)
+				{
+					noticePeriod = 60;
+				}
 				relievingDate=tblUserResignation.getReleivingDate();
 				String reldate=df.format(relievingDate);
 				jsonemp.put("sno", count);

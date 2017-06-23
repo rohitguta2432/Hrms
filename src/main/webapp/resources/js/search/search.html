@@ -15,7 +15,7 @@
 			}
 		</script>
 		<div class="main-content">
-			<div class="page-content" ng-controller="searchController">
+			<div class="page-content">
 				<div class="page-content-area">
 					<!-- /.page-header -->
 					<div class="row">
@@ -31,22 +31,22 @@
 											</div>
 											<div class="widget-body" style="display: block;">
 												<div class="widget-main form-horizontal">
-													
+													<form ng-submit="getData()" name="searchForm">
 														<div class="form-group col-sm-6">
 															<label class="col-sm-3 control-label no-padding-right"
 																for="empcode">Employee Code </label>
 															<div class="col-sm-9">
-																<input type="text" ng-model="empcode" name="empcode"
-																	class="col-xs-10 col-sm-12" ng-required="true"
-																	ng-minlength="6"  ng-maxlength="6"/>
-
+																<input type="text" name="empcode" class="col-xs-10 col-sm-12"
+																ng-model="empcode" ng-required="true"
+																	  ng-minlength="6" ng-maxlength="6"/>
 															</div>
 														</div>
 														<div class="right">
 
 															<input type="submit" class="btn btn-primary btn-sm"
-																value="Submit" ng-click="getData()">
+																value="Submit" ng-click="getData()" ng-disabled=searchForm.$invalid>
 														</div>
+														</form>
 												</div>
 											</div>
 										</div>

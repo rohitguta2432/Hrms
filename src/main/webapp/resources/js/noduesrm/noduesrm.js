@@ -7,8 +7,10 @@ var stage=2;
 			$http.get(domain+'/getrmnoduesemplist?status='+status+'&stageid='+stage)
 			.success(function(data,status,headers,config){
 			$scope.noduesrmsystem=data.emplist;
-
-})/*
+			
+/*alert('1');*/
+})
+/*
 		error(function(data,status,headers,config){
 			alert('not found');
 				})*/

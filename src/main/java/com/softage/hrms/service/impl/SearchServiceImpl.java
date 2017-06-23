@@ -29,11 +29,16 @@ public class SearchServiceImpl implements SearchService {
 		ArrayList<JSONObject> jsonArray=new ArrayList<JSONObject>();
 		JSONObject json=new JSONObject();
 		JSONObject jsob=searchDao.getDetailsDao(emp);
+		JSONObject jsonsearch=new JSONObject();
+		String msg="No Record Found";
 		List l=(List) jsob.get("val");
+		if(l.size()>0){
+		
 		Iterator i=l.iterator();
 		while(i.hasNext()){
 			Object[] obj=(Object[])i.next();
-			JSONObject jsonsearch=new JSONObject();
+			
+			msg="Success";
 			String empcode=(String)obj[0];
 			String spokecode=(String)obj[1];
 			Date resignationDate=(Date)obj[2];
@@ -47,6 +52,7 @@ public class SearchServiceImpl implements SearchService {
 			String reldate=df.format(releivingDate);
 			String hrappdate=df.format(hrApprovalDate);
 			String rmappdate=df.format(rmApprovalDate);
+		
 			jsonsearch.put("empCode", empcode.toUpperCase());
 			jsonsearch.put("spokeCode", spokecode);
 			jsonsearch.put("resignationDate", resgndate);
@@ -56,8 +62,16 @@ public class SearchServiceImpl implements SearchService {
 			jsonsearch.put("mstReason", mstReason);
 			jsonsearch.put("status", status);
 			jsonArray.add(jsonsearch);
+		}
+		
 			}
+		else
+		{
+			jsonArray.add(jsonsearch);	
+		}
+		
 		json.put("jsonArray", jsonArray);
+		json.put("msg",msg);
 		return json;
 	}
 	
