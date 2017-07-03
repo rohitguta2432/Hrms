@@ -33,5 +33,6 @@ public interface ResignationDao {
 	public List<TblUserResignation> getResignationModelByCircleID(String officecode);
 	public TblUserResignation getExEmpResignationUserService(String empcode,String password,int status);
 	public List<TblUserResignation> getUsersForHrApproval(String officecode,int status);
+	public String getServiceDetails();
 
 }

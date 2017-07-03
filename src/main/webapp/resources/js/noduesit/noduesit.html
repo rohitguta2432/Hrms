@@ -15,7 +15,8 @@
 		</script>
 		<div class="main-content">
 
-			<div class="page-content" ng-controller="noduesitcontroller" ng-init="init()">
+			<div class="page-content" ng-controller="noduesitcontroller"
+				ng-init="init()">
 				<div class="page-content-area">
 					<!-- /.page-header -->
 					<div class="row">
@@ -27,88 +28,93 @@
 										<div class="widget-box ui-sortable-handle"
 											style="opacity: 1; z-index: 0;">
 											<div class="widget-header">
-												
-												 <div class="widget-buttons">
-												 <h5 class="widget-title">NO DUES IT</h5>
-                        <div class="input-group" style="margin-top:3px;">
-                            <span class="input-group-addon">Search Employee</span>
-                            <input type="text" name="searchText" id="searchText" placeholder="Search Employee" ng-model="searchEngine" ng-change="searchFields()"   class="form-control">
-                        </div>
-                    </div></div>
+
+												<div class="widget-buttons">
+													<h5 class="widget-title">NO DUES IT</h5>
+													<div class="input-group" style="margin-top: 3px;">
+														<span class="input-group-addon">Search Employee</span> <input
+															type="text" name="searchText" id="searchText"
+															placeholder="Search Employee" ng-model="searchEngine"
+															ng-change="searchFields()" class="form-control">
+													</div>
+												</div>
+											</div>
 											<div class="widget-body" style="display: block;">
 												<form name="Exit" ng-submit=submit(Exit) novalidate>
 													<div class="widget-main form-horizontal">
-<div class="clearfix"></div>
-  
-  
- <div class="widget-body" style="display: block;">
-												<div class="widget-main">
-													<div class="table-responsive">
-														<table class="table">
-															<thead>
-																<tr>
-																	<th>S.No</th>
-																	<th>Employee Code</th>
-																	<th>Employee name</th>
-																	<th>SpokeCode</th>
-																	<th>Designation</th>
-																	<th>Location</th>
-																	<th>Accept/Reject</th>
-																</tr>
-															</thead>
-																<tbody ng-repeat="emp in nodueitjs |filter:searchEngine" ng-model="emp.empcode">
-																<tr>
-																	<td>{{emp.sno}}</td>
-																	<td>{{emp.empcode}}</td>
-																	<td>{{emp.empname}}</td>
-																	<td>{{emp.spokecode}}</td>
-																	<td>{{emp.designation}}</td>
-																	<td>{{emp.location}}</td>
-																	<td><button  class="btn btn-primary btn-sm"
-																	 ng-click="EmployeeFeedback(emp.empcode,emp.department)">NODUES 
-																	</button></td>
-																</tr>
-															</tbody>
-														</table>
-													</div>
-												</div>
-											</div> 
-											
+														<div class="clearfix"></div>
 
+
+														<div class="widget-body" style="display: block;">
+															<div class="widget-main">
+																<div class="table-responsive">
+																	<table class="table">
+																		<thead>
+																			<tr>
+																				<th>S.No</th>
+																				<th>Employee Code</th>
+																				<th>Employee name</th>
+																				<th>SpokeCode</th>
+																				<th>Designation</th>
+																				<th>Location</th>
+																				<th>Accept/Reject</th>
+																			</tr>
+																		</thead>
+																		<tbody
+																			ng-repeat="emp in nodueitjs |filter:searchEngine"
+																			ng-model="emp.empcode">
+																			<tr>
+																				<td>{{emp.sno}}</td>
+																				<td>{{emp.empcode}}</td>
+																				<td>{{emp.empname}}</td>
+																				<td>{{emp.spokecode}}</td>
+																				<td>{{emp.designation}}</td>
+																				<td>{{emp.location}}</td>
+																				<td><button class="btn btn-primary btn-sm"
+																						ng-click="EmployeeFeedback(emp.empcode,emp.department)">NODUES
+																					</button></td>
+																			</tr>
+																		</tbody>
+																	</table>
+																</div>
 															</div>
 														</div>
-<div class="clearfix"></div>
 
 
-													<div class="clearfix"></div>
-
-														
-														</div>
 													</div>
-												</form>
 											</div>
+											<div class="clearfix"></div>
+
+
+											<div class="clearfix"></div>
+
+
 										</div>
 									</div>
+									</form>
 								</div>
-
-
 							</div>
-							<!-- /.row -->
-							<!-- PAGE CONTENT ENDS -->
 						</div>
-						<!-- /.col -->
 					</div>
-					<!-- /.row -->
-				</div>
-				<!-- /.page-content-area -->
-			</div>
-			<!-- /.page-content -->
-		</div>
-		<!-- /.main-content -->
 
-		<a href="#" id="btn-scroll-up"
-			class="btn-scroll-up btn btn-sm btn-inverse"><i
-			class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
+
+				</div>
+				<!-- /.row -->
+				<!-- PAGE CONTENT ENDS -->
+			</div>
+			<!-- /.col -->
+		</div>
+		<!-- /.row -->
+	</div>
+	<!-- /.page-content-area -->
+	</div>
+	<!-- /.page-content -->
+	</div>
+	<!-- /.main-content -->
+
+	<a href="#" id="btn-scroll-up"
+		class="btn-scroll-up btn btn-sm btn-inverse"><i
+		class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
 	</div>
 	<!-- /.main-container -->
 

@@ -27,7 +27,7 @@ import com.softage.hrms.service.ApprovalService;
 public class ApprovalServiceImpl implements ApprovalService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ResignationDaoImpl.class);
-	String sconnectServiceServer="http://172.25.37.226";
+	//String sconnectServiceServer="http://172.25.37.226/Eservice/SoftAgeEnterprise.svc/";
 	SconnectUtil sconnct=new SconnectUtil();
 	@Autowired
 	private ApprovalDao approvaldao;
@@ -91,8 +91,8 @@ public class ApprovalServiceImpl implements ApprovalService {
 			String[] keys={"empcode"};
 			String[] values={resigned_empcode};
 			//String empinfostring=employee.enterPriseDataService("EVM","EmpInfo", keys, values);
-			String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-					+ "GetEmployeeInfo";
+			String sconnectServiceServer = approvaldao.getServiceDetails();
+			String evmServiceUrl  = sconnectServiceServer + "GetEmployeeInfo";
 		    String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
 		    String empInfo=getInput.replace("employeeCode", resigned_empcode);
 		    String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();

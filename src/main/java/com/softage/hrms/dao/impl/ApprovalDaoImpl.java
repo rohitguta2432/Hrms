@@ -10,9 +10,12 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -25,6 +28,7 @@ import org.tempuri.ISoftAgeEnterpriseProxy;
 
 import com.softage.hrms.dao.ApprovalDao;
 import com.softage.hrms.model.MstQuestions;
+import com.softage.hrms.model.RestServiceConfig;
 import com.softage.hrms.model.TblFeedbacks;
 import com.softage.hrms.model.TblUserResignation;
 import com.softage.hrms.sconnect.service.SconnectUtil;
@@ -37,7 +41,7 @@ public class ApprovalDaoImpl implements ApprovalDao {
 	
 	@Autowired
 	private SessionFactory sessionfactory;
-	String sconnectServiceServer="http://172.25.37.226";
+	//String sconnectServiceServer="http://172.25.37.226/Eservice/SoftAgeEnterprise.svc/";
 	SconnectUtil sconnct=new SconnectUtil();
 	@Override
 	@Transactional
@@ -65,8 +69,8 @@ public class ApprovalDaoImpl implements ApprovalDao {
 			relievingDate=(Date)object[3];
 			DateFormat df=new SimpleDateFormat("yyyy/MM/dd");
 			String reldate=df.format(relievingDate);
-			String getUserDetailServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-					+ "GetUserDetail/"+emp_code;
+			String sconnectServiceServer = getServiceDetails();
+			String getUserDetailServiceUrl  = sconnectServiceServer + "GetUserDetail/"+emp_code;
 		   String empname = sconnct.getServiceData(getUserDetailServiceUrl).toString();
 		   JSONParser jsonParseremp = new JSONParser();
 	       JSONObject jsonObjectemp;
@@ -77,8 +81,7 @@ public class ApprovalDaoImpl implements ApprovalDao {
 		   String firstname =  (String) jsonObjEmp.get("FirstName");
 		   String lastname =  (String) jsonObjEmp.get("LastName");
 		  
-		String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-					+ "GetEmployeeInfo";
+		String evmServiceUrl  = sconnectServiceServer + "GetEmployeeInfo";
 		    String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
 		    String empInfo=getInput.replace("employeeCode", emp_code);
 		    String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
@@ -208,5 +211,24 @@ public class ApprovalDaoImpl implements ApprovalDao {
 		query.setParameter("statusid", status);
 		List<TblUserResignation> resignation=(List<TblUserResignation>)query.list();
 		return resignation;
+	}
+
+	@Override
+	@Transactional
+	public String getServiceDetails() {
+
+		String serviceServer = null;
+		Long serviceId = (long) 1;
+		try{
+			Session session = sessionfactory.getCurrentSession();
+			Criteria criteria = session.createCriteria(RestServiceConfig.class);
+			criteria.add(Restrictions.eq("id", serviceId));
+			RestServiceConfig serviceInfo = (RestServiceConfig) criteria.uniqueResult();
+			serviceServer = serviceInfo.getServiceUrl();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return serviceServer;
 	}
 }

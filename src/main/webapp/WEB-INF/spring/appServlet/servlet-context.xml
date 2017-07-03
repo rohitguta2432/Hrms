@@ -78,6 +78,7 @@
 				<beans:value>com.softage.hrms.model.FtpDetails</beans:value>
 				<beans:value>com.softage.hrms.model.TblResetPassword</beans:value>
 				<beans:value>com.softage.hrms.model.ApplicationLink</beans:value>
+				<beans:value>com.softage.hrms.model.RestServiceConfig</beans:value>				
 				</beans:list>
 		</beans:property>
 	<beans:property name="hibernateProperties">

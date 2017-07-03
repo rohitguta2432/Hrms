@@ -5,10 +5,6 @@
 <title>Submit Resignation</title>
 
 <script type="text/javascript">
-
-
-
-
 </script>
 </head>
 <body class="no-skin">
@@ -40,15 +36,17 @@
 											<div class="widget-body" style="display: block;">
 												<div class="widget-main form-horizontal">
 
-													<form  name="f1"   accept-charset="UTF-8" enctype="multipart/form-data">
+													<form name="f1" accept-charset="UTF-8"
+														enctype="multipart/form-data">
 
-														<div class="form-group col-sm-12" ng-repeat="item in uploadItems">
-															
-													
-												
+														<div class="form-group col-sm-12"
+															ng-repeat="item in uploadItems">
+
+
+
 															<label class="col-sm-3 control-label no-padding-right"
 																style="margin-top: 10px; font-weight: normal">{{item.name}}</label>
-																
+
 															<div class="col-sm-7" style="margin-top: 8px;">
 																<input type="file" name="file"
 																	onchange="angular.element(this).scope().selectedFileforUpload(this.files)"
@@ -56,32 +54,32 @@
 																	class="error col-md-6"
 																	ng-show="(f1.file.$dirty || IsFormSubmitted) && f1.file.$error.required">File
 																	Required</span> <span class="error col-md-6">{{FileInvalidMessage}}</span>
-																	
+
 															</div>
-															
-															
-	                                                         <div class="col-sm-2" style="margin-top: 10px;">
-															<input type="button" ng-click="SaveFile($event,item.itemId)"  id="{{item.itemId}}" class="btn btn-azure"
+
+
+															<div class="col-sm-2" style="margin-top: 10px;">
+																<input type="button"
+																	ng-click="SaveFile($event,item.itemId)"
+																	id="{{item.itemId}}" class="btn btn-azure"
 																	value="Upload" style="float: left;" />
 
 															</div>
 
 
-													
+
 														</div>
 
 
-														<div style="clear:both; height:20px;"></div>
+														<div style="clear: both; height: 20px;"></div>
 
-														
+
 													</form>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-
-
 							</div>
 							<!-- /.row -->
 							<!-- PAGE CONTENT ENDS -->

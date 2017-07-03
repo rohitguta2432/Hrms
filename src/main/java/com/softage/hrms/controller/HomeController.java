@@ -1,12 +1,8 @@
 package com.softage.hrms.controller;
 
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.StringReader;
-import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,28 +12,18 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.lang.model.element.Element;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.swing.text.Document;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPSClient;
-import org.dom4j.io.SAXReader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -45,20 +31,12 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.tempuri.ISoftAgeEnterpriseProxy;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonAnyFormatVisitor;
-
-//import com.softage.hrms.model.MailSend;
 
 import com.softage.hrms.model.MstDepartment;
 import com.softage.hrms.model.MstQuestions;
@@ -82,12 +60,10 @@ import com.softage.hrms.service.NoDuesService;
 import com.softage.hrms.service.PageService;
 import com.softage.hrms.service.QueryService;
 import com.softage.hrms.service.ResignationService;
+import com.softage.hrms.service.RestServiceCall;
 import com.softage.hrms.service.SearchService;
 import com.softage.hrms.service.impl.MailServiceImpl;
 
-/**
- * Handles requests for the application home page.
- */
 @Controller
 public class HomeController {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
@@ -111,80 +87,54 @@ public class HomeController {
 	private ExEmployeeService exemployeeservice;
 	@Autowired
 	private SearchService searchService;
-	
-	String sconnectServiceServer="http://172.25.37.226";
-	SconnectUtil sconnct=new SconnectUtil();
 
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 */
+	@Autowired
+	private RestServiceCall restService;
+
+	SconnectUtil sconnct = new SconnectUtil();
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(HttpServletRequest request, Locale locale, Model model) {
+	public String home(HttpServletRequest request, Model model, HttpSession session) {
 		logger.info("Welcome to the home page");
 		String first_Name = (String) request.getParameter("firstName");
 		String employee_code = (String) request.getParameter("emp_code");
 		int roleID = Integer.parseInt(request.getParameter("role_id"));
-		// System.out.println("role_id is : " + roleID + " first_name is : " +
-		// first_Name);
 		int userID = Integer.parseInt(request.getParameter("user_id"));
-
-		/*
-		 * int spokeID = Integer.parseInt(request.getParameter("spoke_id")); int
-		 * circleID = Integer.parseInt(request.getParameter("CircleID"));
-		 */
-
 		String officeCode = (String) request.getParameter("ReportingOfficeCode");
-		HttpSession session = request.getSession();
+		session = request.getSession();
 		session.setAttribute("firstname", first_Name);
 		session.setAttribute("employeecode", employee_code);
 		session.setAttribute("roleid", roleID);
 		session.setAttribute("userid", userID);
-
-		/*
-		 * session.setAttribute("spokeid", spokeID);
-		 * session.setAttribute("circleid", circleID);
-		 */session.setAttribute("officecode", officeCode);
-
-		//ISoftAgeEnterpriseProxy i = new ISoftAgeEnterpriseProxy();
-		String empassets = null;
-		String[] keys = { "empcode" };
-		String[] values = { "s42970" };
-		String[] assetValues = { "ss0073" };
-		String[] officekeys = { "OFFICECODE" };
-		String[] officevalues = { officeCode };
+		session.setAttribute("officecode", officeCode);
 		String noduestring = null;
+		String sconnectServiceServer = restService.getServiceDetails();
 
-		//ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 		try {
-		
-			
-			   
 
-			//String empInfo = i.enterPriseDataService("EVM", "EmpInfo", keys, values);
-			String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-					+ "GetEmployeeInfo";
 			String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-			String empInfo=getInput.replace("employeeCode", employee_code);
+			String empInfo = getInput.replace("employeeCode", employee_code);
+			String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
 			String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
 			JSONParser jsonParser = new JSONParser();
 			JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
-			JSONObject jsonObj = new JSONObject(jsonObject); 
+			JSONObject jsonObj = new JSONObject(jsonObject);
 			JSONObject jsonEvm = (JSONObject) jsonObj.get("GetEmployeeInfoResult");
 			boolean IsManager = (Boolean) jsonEvm.get("Is_Manager");
 
 			// String assestInfo = i.enterPriseDataService("Asset", "ASSETINFO",
 			// keys, assetValues);
-			
-			//noduestring = i.enterPriseDataService("EVM", "NODUESOWNERS", officekeys, officevalues);
-			 String noduesServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-						+ "GetNoDuesOwners";
-			 String getInputOfNoDues = " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}";
-			 noduestring=getInputOfNoDues.replace("OFFICEID", officeCode);
-				String noDuesData = sconnct.getPostServiceData(noduesServiceUrl, noduestring).toString();
-				JSONParser noDuesParser = new JSONParser();
-				JSONObject noDuesJsonObject = (JSONObject) noDuesParser.parse(noDuesData);
-				JSONObject jsonObjNoDues = new JSONObject(noDuesJsonObject); 
-				JSONObject  noduesJson = (JSONObject) jsonObjNoDues.get("GetNoDuesOwnersResult");
+
+			// noduestring = i.enterPriseDataService("EVM", "NODUESOWNERS",
+			// officekeys, officevalues);
+			String getInputOfNoDues = " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}";
+			noduestring = getInputOfNoDues.replace("OFFICEID", officeCode);
+			String noduesServiceUrl = sconnectServiceServer + "GetNoDuesOwners";
+			String noDuesData = sconnct.getPostServiceData(noduesServiceUrl, noduestring).toString();
+			JSONParser noDuesParser = new JSONParser();
+			JSONObject noDuesJsonObject = (JSONObject) noDuesParser.parse(noDuesData);
+			JSONObject jsonObjNoDues = new JSONObject(noDuesJsonObject);
+			JSONObject noduesJson = (JSONObject) jsonObjNoDues.get("GetNoDuesOwnersResult");
 			// System.out.println("Asset information string" + assestInfo +
 			// "nodues : " + noduestring);
 			/* System.out.println(jsonObject + "keys " + empInfo); */
@@ -201,6 +151,7 @@ public class HomeController {
 		return "home";
 	}
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getPages", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getTemplateLinks(HttpServletRequest request, HttpSession session) {
@@ -210,7 +161,7 @@ public class HomeController {
 			String lastLoginDate = (String) session.getAttribute("lastLoginDate");
 			String empcode = (String) session.getAttribute("employeecode");
 			int roleid = (Integer) session.getAttribute("roleid");
-		    String userRoleId=Integer.toString(roleid).trim();
+			String userRoleId = Integer.toString(roleid).trim();
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date currDatetime = new Date();
 			String current_date = df.format(currDatetime);
@@ -219,10 +170,10 @@ public class HomeController {
 			 */
 			// jsobj = pageService.getPagesLink(roleid);NEW METHOD TO BE
 			// MADE,made below this
-		  	jsobj = pageService.getPagesBasedOnRoleId(empcode, current_date, roleid);
+			jsobj = pageService.getPagesBasedOnRoleId(empcode, current_date, roleid);
 			jsobj.put("lastLogin", lastLoginDate);
 			jsobj.put("roleId", userRoleId);
-			} catch (Exception e) {
+		} catch (Exception e) {
 			logger.error(">>>>>>>>>>>>>>> Exception in getPages in controller" + e.getMessage());
 		}
 		return jsobj;
@@ -236,25 +187,25 @@ public class HomeController {
 		JSONObject jsonReason = new JSONObject();
 		JSONObject jsob = new JSONObject();
 		JSONObject jsonRelDate = new JSONObject();
-		//ISoftAgeEnterpriseProxy emp_prxoy = new ISoftAgeEnterpriseProxy();
+		// ISoftAgeEnterpriseProxy emp_prxoy = new ISoftAgeEnterpriseProxy();
 		String[] keys = { "empcode" };
 		String[] values = { empcode };
 		try {
-			//String empInfo = emp_prxoy.enterPriseDataService("EVM", "EmpInfo", keys, values);
-			String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-					+ "GetEmployeeInfo";
+			// String empInfo = emp_prxoy.enterPriseDataService("EVM",
+			// "EmpInfo", keys, values);
 			String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-			String empInfo=getInput.replace("employeeCode", empcode);
+			String empInfo = getInput.replace("employeeCode", empcode);
+			String sconnectServiceServer = restService.getServiceDetails();
+			String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
 			String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
 			JSONParser jsonParser = new JSONParser();
 			JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
-			JSONObject jsonObj = new JSONObject(jsonObject); 
+			JSONObject jsonObj = new JSONObject(jsonObject);
 			JSONObject serviceJson = (JSONObject) jsonObj.get("GetEmployeeInfoResult");
 			/* System.out.println(empInfo); */
 			int notice_time = ((Long) serviceJson.get("NoticePeriod")).intValue();
 			// SERVICE TO BE USED ESF
-			if(notice_time==0)
-			{
+			if (notice_time == 0) {
 				notice_time = 60;
 			}
 			// int notice_time = 60;
@@ -271,67 +222,47 @@ public class HomeController {
 		}
 		return jsob;
 	}
-	
-	
+
 	@RequestMapping(value = "/resignation", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getResignationPage(HttpServletRequest request, HttpSession session) {
 		session = request.getSession();
 		String empcode = (String) session.getAttribute("employeecode");
-		// int circleid = (Integer) session.getAttribute("circleid");
 		String office_code = (String) session.getAttribute("officecode");
-		//ISoftAgeEnterpriseProxy emp = new ISoftAgeEnterpriseProxy();
 		TblUserResignation resignation = new TblUserResignation();
 		Date dateobj = new Date();
 		DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		JSONObject jsonObj = new JSONObject(); 
+		JSONObject jsonObj = new JSONObject();
 		try {
-			String re = request.getParameter("emp_reason");
+			// String resignReason = request.getParameter("emp_reason");
 			int reason_for_leaving = Integer.parseInt(request.getParameter("emp_reason"));
-			/*
-			 * System.out.println("date is : " + df.format(dateobj) +
-			 * " office code is : " + office_code); System.out.println(re);
-			 */
 			MstReason reason_mast = resignationService.getReason(reason_for_leaving);
 			MstResignationStatus status_mast = resignationService.getStatus(1);
 			String remarks = request.getParameter("emp_comments");
-			String[] keys = { "empcode" };
-			String[] values = { empcode };
-			String empinfostring = null;
 			String noduestring = null;
-			JSONParser parser = new JSONParser();
-			String[] officekeys = { "OFFICECODE" };
-			String[] officevalues = { office_code };
 			String hr_empcode = null;
-			//empinfostring = emp.enterPriseDataService("EVM", "EmpInfo", keys, values);
-			String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-					+ "GetEmployeeInfo";
 			String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-			String empInfo=getInput.replace("employeeCode", empcode);
+			String empInfo = getInput.replace("employeeCode", empcode);
+			String sconnectServiceServer = restService.getServiceDetails();
+			String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
 			String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
 			JSONParser jsonParser = new JSONParser();
 			JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
-			JSONObject jsonObjEvm = new JSONObject(jsonObject); 
+			JSONObject jsonObjEvm = new JSONObject(jsonObject);
 			JSONObject empinfoJson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
-			//noduestring = emp.enterPriseDataService("EVM", "NODUESOWNERS", officekeys, officevalues);
-			 String noduesServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-						+ "GetNoDuesOwners";
-			 String getInputOfNoDues = " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}";
-			 noduestring=getInputOfNoDues.replace("OFFICEID", office_code);
-			 String noDuesData = sconnct.getPostServiceData(noduesServiceUrl, noduestring).toString();
-			 JSONParser noDuesParser = new JSONParser();
-			 JSONObject noDuesJsonObject = (JSONObject) noDuesParser.parse(noDuesData);
-			 JSONObject jsonObjNoDues = new JSONObject(noDuesJsonObject); 
-			 JSONObject  noduesJson = (JSONObject) jsonObjNoDues.get("GetNoDuesOwnersResult");
-		
-			
-			//empinfoJson = (JSONObject) parser.parse(empinfostring);
-			//noduesJson = (JSONObject) parser.parse(noduestring);
+			String getInputOfNoDues = " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}";
+			noduestring = getInputOfNoDues.replace("OFFICEID", office_code);
+			String noduesServiceUrl = sconnectServiceServer + "GetNoDuesOwners";
+			String noDuesData = sconnct.getPostServiceData(noduesServiceUrl, noduestring).toString();
+			JSONParser noDuesParser = new JSONParser();
+			JSONObject noDuesJsonObject = (JSONObject) noDuesParser.parse(noDuesData);
+			JSONObject jsonObjNoDues = new JSONObject(noDuesJsonObject);
+			JSONObject noduesJson = (JSONObject) jsonObjNoDues.get("GetNoDuesOwnersResult");
 			hr_empcode = (String) noduesJson.get("HrEmpCode");
 			String rm_empcode = (String) empinfoJson.get("ManagerCode");
+			String empName = (String) empinfoJson.get("EmployeeName");
 			int noticeperiod = ((Long) empinfoJson.get("NoticePeriod")).intValue();
-			if(noticeperiod==0)
-			{
+			if (noticeperiod == 0) {
 				noticeperiod = 60;
 			}
 			String submit_date = df.format(dateobj);
@@ -351,22 +282,24 @@ public class HomeController {
 			resignation.setMstResignationStatus(status_mast);
 			// resignation.setCircleId(circleid);
 			resignation.setOfficeId(office_code);
-			// resignation.setApprovedBy(empcode);
 			jsonObj = resignationService.submitResignationService(resignation);
-			String manager_email = (String) empinfoJson.get("ManagerEmail");
-			String hr_email = (String) noduesJson.get("HrEmpEmail");
-			String emp_email = (String) empinfoJson.get("CompanyEmail");
-			String rm_message = "Request for resignatin has been raised by " + empcode + " sent by RM";
-			String hr_message = "Request for resignatin has been raised by " + empcode + " sent by HR";
-			String emp_message = "Request for resignation has been raised by you";
+			String managerMail = (String) empinfoJson.get("ManagerEmail");
+			String hrMail = (String) noduesJson.get("HrEmpEmail");
+			String empMail = (String) empinfoJson.get("CompanyEmail");
+			
+			String resignMsg = "Resignation request for employee" + empcode+ "has been processed hr "
+					+ "and last working day has been set to "+ finalDate +" sent by employee	";	
+
+			String subject = "Employee Resignation";
+			String from = "evm@softageindia.com";
 
 			if (jsonObj.get("result").equals("successful")) {
-				if ((org.apache.commons.lang3.StringUtils.isNotBlank(hr_email))
-						&& (org.apache.commons.lang3.StringUtils.isNotBlank(emp_email))
-						&& (org.apache.commons.lang3.StringUtils.isNotBlank(emp_email))) {
-					mailService.sendEmail(manager_email, "evm@softageindia.com", "test", rm_message);
-					mailService.sendEmail(hr_email, "evm@softageindia.com", "test", hr_message);
-					mailService.sendEmail(emp_email, "evm@softageindia.com", "test", emp_message);
+				if ((org.apache.commons.lang3.StringUtils.isNotBlank(hrMail))
+						&& (org.apache.commons.lang3.StringUtils.isNotBlank(empMail))
+						&& (org.apache.commons.lang3.StringUtils.isNotBlank(empMail))) {
+					mailService.sendEmail(managerMail, from, subject, resignMsg);
+					mailService.sendEmail(hrMail, from, subject, resignMsg);
+					mailService.sendEmail(empMail, from, subject, resignMsg);
 				} else {
 					System.out.println("Resigned employee mail not available");
 				}
@@ -381,7 +314,6 @@ public class HomeController {
 	@RequestMapping(value = "/approvalInitialization", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getApprovalRequests(HttpServletRequest request, HttpSession session) {
-		// String empId="ss0087";
 		session = request.getSession();
 		String empcode = (String) session.getAttribute("employeecode");
 		JSONObject jsonApproval = new JSONObject();
@@ -427,7 +359,7 @@ public class HomeController {
 		int resignStatus = Integer.parseInt(resignAction);
 		JSONObject statusJson = new JSONObject();
 		JSONParser parser = new JSONParser();
-		//ISoftAgeEnterpriseProxy emp = new ISoftAgeEnterpriseProxy();
+		// ISoftAgeEnterpriseProxy emp = new ISoftAgeEnterpriseProxy();
 		JSONObject mailJson = new JSONObject();
 		String empinfo = null;
 		String resOfficeCode = null;
@@ -479,38 +411,45 @@ public class HomeController {
 			String[] rmValues = { empcode };
 			String[] officekeys = { "OFFICECODE" };
 			String[] officevalues = { resOfficeCode };
-			//empinfo = emp.enterPriseDataService("EVM", "EmpInfo", keys, values);
-			String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-					+ "GetEmployeeInfo";
+			// empinfo = emp.enterPriseDataService("EVM", "EmpInfo", keys,
+			// values);
 			String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-			String empInfo=getInput.replace("employeeCode", resEmpcode);
+			String empInfo = getInput.replace("employeeCode", resEmpcode);
+			String sconnectServiceServer = restService.getServiceDetails();
+			String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
 			String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
 			JSONParser jsonParser = new JSONParser();
 			JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
-			JSONObject jsonObjEvm = new JSONObject(jsonObject); 
+			JSONObject jsonObjEvm = new JSONObject(jsonObject);
 			mailJson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
-			//rmEmpinfoString = emp.enterPriseDataService("EVM", "EmpInfo", keys, rmValues);
-			//String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-			//		+ "GetEmployeeInfo";
+			// rmEmpinfoString = emp.enterPriseDataService("EVM", "EmpInfo",
+			// keys, rmValues);
+			// String evmServiceUrl = sconnectServiceServer
+			// +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
+			// + "GetEmployeeInfo";
 			String getInputRm = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"rmValues\":[\"employeeCode\"]}";
-			String empInfoRm=getInputRm.replace("employeeCode", empcode);
+			String empInfoRm = getInputRm.replace("employeeCode", empcode);
+			/*
+			 * String sconnectServiceServer = restService.getServiceDetails();
+			 * String evmServiceUrl = sconnectServiceServer +"GetEmployeeInfo";
+			 */
 			String evmDataRm = sconnct.getPostServiceData(evmServiceUrl, empInfoRm).toString();
 			JSONObject jsonObjectRm = (JSONObject) jsonParser.parse(evmDataRm);
-			JSONObject jsonObjEvmRm = new JSONObject(jsonObjectRm); 
-		    rmEMpinfoJson = (JSONObject) jsonObjEvmRm.get("GetEmployeeInfoResult");
-			//mailJson = (JSONObject) parser.parse(empinfo);
-			//rmEMpinfoJson = (JSONObject) parser.parse(rmEmpinfoString);
-			//noduestring = emp.enterPriseDataService("EVM", "NODUESOWNERS", officekeys, officevalues);
-			String noduesServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-						+ "GetNoDuesOwners";
+			JSONObject jsonObjEvmRm = new JSONObject(jsonObjectRm);
+			rmEMpinfoJson = (JSONObject) jsonObjEvmRm.get("GetEmployeeInfoResult");
+			// mailJson = (JSONObject) parser.parse(empinfo);
+			// rmEMpinfoJson = (JSONObject) parser.parse(rmEmpinfoString);
+			// noduestring = emp.enterPriseDataService("EVM", "NODUESOWNERS",
+			// officekeys, officevalues);
 			String getInputOfNoDues = " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}";
-			noduestring=getInputOfNoDues.replace("OFFICEID", resOfficeCode);
+			noduestring = getInputOfNoDues.replace("OFFICEID", resOfficeCode);
+			String noduesServiceUrl = sconnectServiceServer + "GetNoDuesOwners";
 			String noDuesData = sconnct.getPostServiceData(noduesServiceUrl, noduestring).toString();
 			JSONParser noDuesParser = new JSONParser();
 			JSONObject noDuesJsonObject = (JSONObject) noDuesParser.parse(noDuesData);
-		    JSONObject jsonObjNoDues = new JSONObject(noDuesJsonObject); 
+			JSONObject jsonObjNoDues = new JSONObject(noDuesJsonObject);
 			noduesJson = (JSONObject) jsonObjNoDues.get("GetNoDuesOwnersResult");
-			//noduesJson = (JSONObject) parser.parse(noduestring);
+			// noduesJson = (JSONObject) parser.parse(noduestring);
 			String manager_email = (String) rmEMpinfoJson.get("CompanyEmail");
 			String hr_email = (String) noduesJson.get("HrEmpEmail");
 			String emp_email = (String) mailJson.get("CompanyEmail");
@@ -623,37 +562,38 @@ public class HomeController {
 			lwdCommentStatus = approvalservice.insertHrLwdCommentService(hr_lwd_comment);
 			String messageToEmp = "Hi your last working day has been set to - " + hrappdate;
 			try {
-				//ISoftAgeEnterpriseProxy emp = new ISoftAgeEnterpriseProxy();
+				// ISoftAgeEnterpriseProxy emp = new ISoftAgeEnterpriseProxy();
 				String[] keys = { "empcode" };
 				String[] hrvalues = { hrempcode };
 				String[] empvalues = { empcode };
 				String[] officekeys = { "OFFICECODE" };
 				String[] officevalues = { officeCode };
-				//String noduestring = emp.enterPriseDataService("EVM", "NODUESOWNERS", officekeys, officevalues);
-			String noduesServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-						+ "GetNoDuesOwners";
-			String getInputOfNoDues = " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}";
-		    String	noduestring=getInputOfNoDues.replace("OFFICEID", officeCode);
-			String noDuesData = sconnct.getPostServiceData(noduesServiceUrl, noduestring).toString();
-			JSONParser noDuesParser = new JSONParser();
-			JSONObject noDuesJsonObject = (JSONObject) noDuesParser.parse(noDuesData);
-		    JSONObject jsonObjNoDues = new JSONObject(noDuesJsonObject); 
-		    JSONObject noduesJson = (JSONObject) jsonObjNoDues.get("GetNoDuesOwnersResult");
-				//String empinfoString = emp.enterPriseDataService("EVM", "EmpInfo", keys, empvalues);
-		    String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-					+ "GetEmployeeInfo";
-			String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-			String empInfo=getInput.replace("employeeCode", empcode);
-			String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
-			JSONParser jsonParser = new JSONParser();
-			JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
-			JSONObject jsonObjEvm = new JSONObject(jsonObject); 
-			JSONObject empduesJson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");	
-				
-				//JSONObject empduesJson = new JSONObject();
-				//JSONParser parser = new JSONParser();
-				//noduesjson = (JSONObject) parser.parse(noduestring);
-				//empduesJson = (JSONObject) parser.parse(empinfoString);
+				// String noduestring = emp.enterPriseDataService("EVM",
+				// "NODUESOWNERS", officekeys, officevalues);
+				String getInputOfNoDues = " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}";
+				String noduestring = getInputOfNoDues.replace("OFFICEID", officeCode);
+				String sconnectServiceServer = restService.getServiceDetails();
+				String noduesServiceUrl = sconnectServiceServer + "GetNoDuesOwners";
+				String noDuesData = sconnct.getPostServiceData(noduesServiceUrl, noduestring).toString();
+				JSONParser noDuesParser = new JSONParser();
+				JSONObject noDuesJsonObject = (JSONObject) noDuesParser.parse(noDuesData);
+				JSONObject jsonObjNoDues = new JSONObject(noDuesJsonObject);
+				JSONObject noduesJson = (JSONObject) jsonObjNoDues.get("GetNoDuesOwnersResult");
+				// String empinfoString = emp.enterPriseDataService("EVM",
+				// "EmpInfo", keys, empvalues);
+				String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+				String empInfo = getInput.replace("employeeCode", empcode);
+				String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
+				String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+				JSONParser jsonParser = new JSONParser();
+				JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
+				JSONObject jsonObjEvm = new JSONObject(jsonObject);
+				JSONObject empduesJson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+
+				// JSONObject empduesJson = new JSONObject();
+				// JSONParser parser = new JSONParser();
+				// noduesjson = (JSONObject) parser.parse(noduestring);
+				// empduesJson = (JSONObject) parser.parse(empinfoString);
 				String hr_email = (String) noduesJson.get("HrEmpEmail");
 				String emp_email = (String) empduesJson.get("CompanyEmail");
 				String rm_email = (String) empduesJson.get("ManagerEmail");
@@ -747,15 +687,13 @@ public class HomeController {
 		// TblUserResignation ex_emp =
 		// resignationService.getResignationUserService(emp_code, 13);
 		TblUserResignation ex_emp = resignationService.getExEmpResignationUserService(emp_code, password, 9);
-	if (ex_emp == null ) {
-		redirectAttributes.addFlashAttribute("msg", "Incorrect username or password");
+		if (ex_emp == null) {
+			redirectAttributes.addFlashAttribute("msg", "Incorrect username or password");
 			return "redirect:exEmployeeLogin";
-		}
-	else if(ex_emp.getRemainingLoginDays() > 180){
-		redirectAttributes.addFlashAttribute("msg", "Your Login username and  password are Expired");
+		} else if (ex_emp.getRemainingLoginDays() > 180) {
+			redirectAttributes.addFlashAttribute("msg", "Your Login username and  password are Expired");
 			return "redirect:exEmployeeLogin";
-		}
-	else if (ex_emp != null) {
+		} else if (ex_emp != null) {
 			HttpSession session = request.getSession();
 			session.setAttribute("resignID", ex_emp.getResignationId());
 			session.setAttribute("employeecode", ex_emp.getEmpCode());
@@ -774,8 +712,7 @@ public class HomeController {
 			session.setAttribute("remainingLoginDays", ex_emp.getRemainingLoginDays());
 
 			return "home";
-	} 
-	else {
+		} else {
 			// model.addAttribute("msg", "Incorrect Username or Password");
 			redirectAttributes.addFlashAttribute("msg", "Incorrect username or password");
 			return "redirect:exEmployeeLogin";
@@ -890,6 +827,7 @@ public class HomeController {
 	 * 
 	 */
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getnoduesemplist", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getnoduesitinformation(HttpServletRequest request, HttpSession session) {
@@ -899,13 +837,13 @@ public class HomeController {
 		String office_code = null;
 		int count = 1;
 		int departmentid = 0;
-		String DepartmentManagerRm = null;
+		// String DepartmentManagerRm = null;
 		JSONObject jsonparse = null;
 		String DepartmentManger = null;
-		// session = request.getSession();
 		DepartmentManger = (String) session.getAttribute("employeecode");
+		String sconnectServiceServer = restService.getServiceDetails();
 
-		// role id from scannect users
+		// role id from sconnect users
 		int role_id = (Integer) session.getAttribute("roleid");
 		if (role_id == 15) {
 			departmentid = 4;
@@ -921,26 +859,16 @@ public class HomeController {
 		office_code = (String) session.getAttribute("officecode");
 		ArrayList<JSONObject> listinformation = new ArrayList<JSONObject>();
 		JSONObject jsonobject = new JSONObject();
-		//ISoftAgeEnterpriseProxy emp_prxoy = new ISoftAgeEnterpriseProxy();
-
-		// information based on officecode
-		String[] officekeys = { "OFFICECODE" };
-		String[] officevalues = { office_code };
 		try {
-			//NODUESOWNERS = emp_prxoy.enterPriseDataService("EVM", "NODUESOWNERS", officekeys, officevalues);
-			
-			//parseemp = new JSONParser();
-			//jsonparse = (JSONObject) parseemp.parse(NODUESOWNERS);
-			 String noduesServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-						+ "GetNoDuesOwners";
-			 String getInputOfNoDues = " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}";
-			 String noduestring=getInputOfNoDues.replace("OFFICEID", office_code);
-			 String noDuesData = sconnct.getPostServiceData(noduesServiceUrl, noduestring).toString();
-			 JSONParser noDuesParser = new JSONParser();
-			 JSONObject noDuesJsonObject = (JSONObject) noDuesParser.parse(noDuesData);
-			 JSONObject jsonObjNoDues = new JSONObject(noDuesJsonObject); 
-		     jsonparse = (JSONObject) jsonObjNoDues.get("GetNoDuesOwnersResult");
-			
+			String getInputOfNoDues = " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}";
+			String noduestring = getInputOfNoDues.replace("OFFICEID", office_code);
+			String noduesServiceUrl = sconnectServiceServer + "GetNoDuesOwners";
+			String noDuesData = sconnct.getPostServiceData(noduesServiceUrl, noduestring).toString();
+			JSONParser noDuesParser = new JSONParser();
+			JSONObject noDuesJsonObject = (JSONObject) noDuesParser.parse(noDuesData);
+			JSONObject jsonObjNoDues = new JSONObject(noDuesJsonObject);
+			jsonparse = (JSONObject) jsonObjNoDues.get("GetNoDuesOwnersResult");
+
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -955,25 +883,21 @@ public class HomeController {
 					status);
 			try {
 				for (String code : listempcoderesign) {
-					String[] empKey = { "empcode" };
-					String[] empValue = { code };
-					//String employeeInfo = emp_prxoy.enterPriseDataService("EVM", "empInfo", empKey, empValue);
-					  String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-								+ "GetEmployeeInfo";
-						String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-						String empInfo=getInput.replace("employeeCode", code);
-						String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
-						JSONParser jsonParser = new JSONParser();
-						JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
-						JSONObject jsonObjEvm = new JSONObject(jsonObject); 
-						JSONObject servicejsonemp = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");	
-					//JSONParser parserEmp = new JSONParser();
-					//JSONObject servicejsonemp = (JSONObject) parserEmp.parse(employeeInfo);
-					String rmMangerCode = (String) servicejsonemp.get("ManagerCode");
+					String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+					String empInfo = getInput.replace("employeeCode", code);
+					String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
+					String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+					JSONParser jsonParser = new JSONParser();
+					JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
+					JSONObject jsonObjEvm = new JSONObject(jsonObject);
+					JSONObject servicejsonemp = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+					// String rmMangerCode = (String)
+					// servicejsonemp.get("ManagerCode");
 					String employeename = (String) servicejsonemp.get("EmployeeName");
 					String designation = (String) servicejsonemp.get("Designation");
 					String spokename = (String) servicejsonemp.get("SpokeName");
-					String employeecode = (String) servicejsonemp.get("EmployeeCode");
+					// String employeecode = (String)
+					// servicejsonemp.get("EmployeeCode");
 					String spokeCode = (String) servicejsonemp.get("SpokeCode");
 
 					JSONObject itjson = new JSONObject();
@@ -994,147 +918,110 @@ public class HomeController {
 				logger.error("", e);
 			}
 		} else {
-			String itDepartmentManagerRm = null;
-			String accountDepartmentManagerRm = null;
-			String hrDepartmentManagerRm = null;
-			String infraDepartmentManagerRm = null;
-
-			String[] officekey1 = { "OFFICECODE" };
-			String[] officevalue2 = { office_code };
-			try {
-				//NODUESOWNERS = emp_prxoy.enterPriseDataService("EVM", "NODUESOWNERS", officekey1, officevalue2);
-				//parseemp = new JSONParser();
-				//jsonparse = (JSONObject) parseemp.parse(NODUESOWNERS);
-				 String noduesServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-							+ "GetNoDuesOwners";
-				 String getInputOfNoDues = " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}";
-				 String noduestring=getInputOfNoDues.replace("OFFICEID", office_code);
-				 String noDuesData = sconnct.getPostServiceData(noduesServiceUrl, noduestring).toString();
-				 JSONParser noDuesParser = new JSONParser();
-				 JSONObject noDuesJsonObject = (JSONObject) noDuesParser.parse(noDuesData);
-				 JSONObject jsonObjNoDues = new JSONObject(noDuesJsonObject); 
-			     jsonparse = (JSONObject) jsonObjNoDues.get("GetNoDuesOwnersResult");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
 
 			String itManagerinfo = ((String) jsonparse.get("ItEmpCode")).trim();
-			String[] keyit = { "empcode" };
-			String[] valueit = { itManagerinfo };
-			String itempInfo = null;
-			try {
-				//itempInfo = emp_prxoy.enterPriseDataService("EVM", "empInfo", keyit, valueit);
-				 String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-							+ "GetEmployeeInfo";
-					String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-					String empInfo=getInput.replace("employeeCode", itManagerinfo);
-					String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
-					JSONParser jsonParser = new JSONParser();
-					JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
-					JSONObject jsonObjEvm = new JSONObject(jsonObject); 
-					JSONObject servicejsonit = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
-				//JSONParser parserit = new JSONParser();
-				//JSONObject servicejsonit = (JSONObject) parserit.parse(itempInfo);
-				itDepartmentManagerRm = (String) servicejsonit.get("ManagerCode");
-
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-
 			String accountManagerinfo = ((String) jsonparse.get("AccountEmpCode")).trim();
-			String[] keyaccount = { "empcode" };
-			String[] valueaccount = { accountManagerinfo };
-			String accountempInfo = null;
-			try {
-				//itempInfo = emp_prxoy.enterPriseDataService("EVM", "empInfo", keyaccount, valueaccount);
-				 String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-							+ "GetEmployeeInfo";
-				 String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-				 String empInfo=getInput.replace("employeeCode", itManagerinfo);
-				 String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
-				 JSONParser jsonParser = new JSONParser();
-				 JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
-				 JSONObject jsonObjEvm = new JSONObject(jsonObject); 
-				 JSONObject servicejsonaccount = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
-				 //JSONParser parseraccount = new JSONParser();
-				 //JSONObject servicejsonaccount = (JSONObject) parseraccount.parse(accountempInfo);
-				 accountDepartmentManagerRm = (String) servicejsonaccount.get("ManagerCode");
-
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-
 			String hrManagerinfo = ((String) jsonparse.get("HrEmpCode")).trim();
-			String[] keyhr = { "empcode" };
-			String[] valuehr = { hrManagerinfo };
-			String hrempInfo = null;
-			try {
-				//itempInfo = emp_prxoy.enterPriseDataService("EVM", "empInfo", keyhr, valuehr);
-				 String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-							+ "GetEmployeeInfo";
-				 String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-				 String empInfo=getInput.replace("employeeCode", hrManagerinfo);
-				 String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
-				 JSONParser jsonParser = new JSONParser();
-				 JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
-				 JSONObject jsonObjEvm = new JSONObject(jsonObject); 
-				 JSONObject servicejsonhr = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
-				//JSONParser parserhr = new JSONParser();
-				//JSONObject servicejsonhr = (JSONObject) parserhr.parse(accountempInfo);
-				hrDepartmentManagerRm = (String) servicejsonhr.get("ManagerCode");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-
 			String infraManagerinfo = ((String) jsonparse.get("InfraEmpCode")).trim();
-			String[] keyinfra = { "empcode" };
-			String[] valueinfra = { infraManagerinfo };
-			String infraempInfo = null;
-			try {
-				//itempInfo = emp_prxoy.enterPriseDataService("EVM", "empInfo", keyinfra, valueinfra);
-			 String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-						+ "GetEmployeeInfo";
-			 String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-			 String empInfo=getInput.replace("employeeCode", infraManagerinfo);
-			 String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
-			 JSONParser jsonParser = new JSONParser();
-			 JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
-			 JSONObject jsonObjEvm = new JSONObject(jsonObject); 
-			 JSONObject servicejsoninfra = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
-				//JSONParser parserinfra = new JSONParser();
-				//JSONObject servicejsoninfra = (JSONObject) parserinfra.parse(accountempInfo);
-				infraDepartmentManagerRm = (String) servicejsoninfra.get("ManagerCode");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
 
-			if ((DepartmentManger.equals(itDepartmentManagerRm))
-					|| (DepartmentManger.equals(accountDepartmentManagerRm))
-					|| (DepartmentManger.equals(hrDepartmentManagerRm))
-					|| (DepartmentManger.equals(infraDepartmentManagerRm))) {
+			/*
+			 * String itDepartmentManagerRm = null; String
+			 * accountDepartmentManagerRm = null; String hrDepartmentManagerRm =
+			 * null; String infraDepartmentManagerRm = null; try {
+			 * 
+			 * String getInputOfNoDues =
+			 * " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}"
+			 * ; String noduestring=getInputOfNoDues.replace("OFFICEID",
+			 * office_code); String noduesServiceUrl = sconnectServiceServer
+			 * +"GetNoDuesOwners"; String noDuesData =
+			 * sconnct.getPostServiceData(noduesServiceUrl,
+			 * noduestring).toString(); JSONParser noDuesParser = new
+			 * JSONParser(); JSONObject noDuesJsonObject = (JSONObject)
+			 * noDuesParser.parse(noDuesData); JSONObject jsonObjNoDues = new
+			 * JSONObject(noDuesJsonObject); jsonparse = (JSONObject)
+			 * jsonObjNoDues.get("GetNoDuesOwnersResult"); } catch
+			 * (ParseException e) { e.printStackTrace(); }
+			 * 
+			 * try { String getInput =
+			 * " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}"
+			 * ; String empInfo=getInput.replace("employeeCode", itManagerinfo);
+			 * String evmServiceUrl = sconnectServiceServer +"GetEmployeeInfo";
+			 * String evmData = sconnct.getPostServiceData(evmServiceUrl,
+			 * empInfo).toString(); JSONParser jsonParser = new JSONParser();
+			 * JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
+			 * JSONObject jsonObjEvm = new JSONObject(jsonObject); JSONObject
+			 * servicejsonit = (JSONObject)
+			 * jsonObjEvm.get("GetEmployeeInfoResult"); itDepartmentManagerRm =
+			 * (String) servicejsonit.get("ManagerCode");
+			 * 
+			 * } catch (ParseException e) { e.printStackTrace(); }
+			 * 
+			 * try { String getInput =
+			 * " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}"
+			 * ; String empInfo=getInput.replace("employeeCode",
+			 * accountManagerinfo); String evmServiceUrl = sconnectServiceServer
+			 * +"GetEmployeeInfo"; String evmData =
+			 * sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+			 * JSONParser jsonParser = new JSONParser(); JSONObject jsonObject =
+			 * (JSONObject) jsonParser.parse(evmData); JSONObject jsonObjEvm =
+			 * new JSONObject(jsonObject); JSONObject servicejsonaccount =
+			 * (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+			 * accountDepartmentManagerRm = (String)
+			 * servicejsonaccount.get("ManagerCode");
+			 * 
+			 * } catch (ParseException e) { e.printStackTrace(); }
+			 * 
+			 * try { String getInput =
+			 * " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}"
+			 * ; String empInfo=getInput.replace("employeeCode", hrManagerinfo);
+			 * String evmServiceUrl = sconnectServiceServer +"GetEmployeeInfo";
+			 * String evmData = sconnct.getPostServiceData(evmServiceUrl,
+			 * empInfo).toString(); JSONParser jsonParser = new JSONParser();
+			 * JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
+			 * JSONObject jsonObjEvm = new JSONObject(jsonObject); JSONObject
+			 * servicejsonhr = (JSONObject)
+			 * jsonObjEvm.get("GetEmployeeInfoResult"); hrDepartmentManagerRm =
+			 * (String) servicejsonhr.get("ManagerCode"); } catch
+			 * (ParseException e) { e.printStackTrace(); }
+			 * 
+			 * try { String getInput =
+			 * " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}"
+			 * ; String empInfo=getInput.replace("employeeCode",
+			 * infraManagerinfo); String evmServiceUrl = sconnectServiceServer
+			 * +"GetEmployeeInfo"; String evmData =
+			 * sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+			 * JSONParser jsonParser = new JSONParser(); JSONObject jsonObject =
+			 * (JSONObject) jsonParser.parse(evmData); JSONObject jsonObjEvm =
+			 * new JSONObject(jsonObject); JSONObject servicejsoninfra =
+			 * (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+			 * infraDepartmentManagerRm = (String)
+			 * servicejsoninfra.get("ManagerCode"); } catch (ParseException e) {
+			 * e.printStackTrace(); }
+			 */
+
+			if ((DepartmentManger.equalsIgnoreCase(itManagerinfo))
+					|| (DepartmentManger.equalsIgnoreCase(accountManagerinfo))
+					|| (DepartmentManger.equalsIgnoreCase(hrManagerinfo))
+					|| (DepartmentManger.equalsIgnoreCase(infraManagerinfo))) {
 				List<String> listempcoderesign = noduesservice.listrmacceptedempcode(stageid, departmentid, office_code,
 						status);
 				try {
 					for (String code : listempcoderesign) {
-						String[] empKey = { "empcode" };
-						String[] empValue = { code };
-						//String employeeInfo = emp_prxoy.enterPriseDataService("EVM", "empInfo", empKey, empValue);
-						 String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-									+ "GetEmployeeInfo";
-						 String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-						 String empInfo=getInput.replace("employeeCode", infraManagerinfo);
-						 String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
-						 JSONParser jsonParser = new JSONParser();
-						 JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
-						 JSONObject jsonObjEvm = new JSONObject(jsonObject); 
-						 JSONObject servicejsonemp = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
-						//JSONParser parserEmp = new JSONParser();
-						//JSONObject servicejsonemp = (JSONObject) parserEmp.parse(employeeInfo);
-						String rmMangerCode = (String) servicejsonemp.get("ManagerCode");
+						String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+						String empInfo = getInput.replace("employeeCode", code);
+						String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
+						String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+						JSONParser jsonParser = new JSONParser();
+						JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
+						JSONObject jsonObjEvm = new JSONObject(jsonObject);
+						JSONObject servicejsonemp = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+						// String rmMangerCode = (String)
+						// servicejsonemp.get("ManagerCode");
 						String employeename = (String) servicejsonemp.get("EmployeeName");
 						String designation = (String) servicejsonemp.get("Designation");
 						String spokename = (String) servicejsonemp.get("SpokeName");
-						String employeecode = (String) servicejsonemp.get("EmployeeCode");
+						// String employeecode = (String)
+						// servicejsonemp.get("EmployeeCode");
 						String spokeCode = (String) servicejsonemp.get("SpokeCode");
 
 						JSONObject itjson = new JSONObject();
@@ -1159,8 +1046,9 @@ public class HomeController {
 		return jsonobject;
 
 	}
-	//@RequestMapping(value = "/getsearch", method = RequestMethod.GET)
-	//@ResponseBody
+
+	// @RequestMapping(value = "/getsearch", method = RequestMethod.GET)
+	// @ResponseBody
 	@RequestMapping(value = "/getrmnoduesemplist", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getnoduesrminformation(HttpServletRequest request, HttpSession session) {
@@ -1180,44 +1068,49 @@ public class HomeController {
 			office_code = (String) session.getAttribute("officecode");
 			ArrayList<JSONObject> listinformation = new ArrayList<JSONObject>();
 			jsonobject = new JSONObject();
-			//ISoftAgeEnterpriseProxy emp_prxoy = new ISoftAgeEnterpriseProxy();
+			// ISoftAgeEnterpriseProxy emp_prxoy = new
+			// ISoftAgeEnterpriseProxy();
 			List<String> listempcoderesign = noduesservice.listemprmaccepted(departmentid, status);
 			try {
 				for (String code : listempcoderesign) {
 					String[] key = { "empcode" };
 					String[] value = { code };
-					//String empInfo = emp_prxoy.enterPriseDataService("EVM", "empInfo", key, value);
-					 String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-								+ "GetEmployeeInfo";
-					 String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-					 String empInfo=getInput.replace("employeeCode", code);
-					 String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
-					 JSONParser jsonParser = new JSONParser();
-					 JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
-					 JSONObject jsonObjEvm = new JSONObject(jsonObject); 
-					 JSONObject servicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
-					//JSONParser parser = new JSONParser();
-					//JSONObject servicejson = (JSONObject) parser.parse(empInfo);
+					// String empInfo = emp_prxoy.enterPriseDataService("EVM",
+					// "empInfo", key, value);
+					String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+					String empInfo = getInput.replace("employeeCode", code);
+					String sconnectServiceServer = restService.getServiceDetails();
+					String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
+					String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+					JSONParser jsonParser = new JSONParser();
+					JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
+					JSONObject jsonObjEvm = new JSONObject(jsonObject);
+					JSONObject servicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+					// JSONParser parser = new JSONParser();
+					// JSONObject servicejson = (JSONObject)
+					// parser.parse(empInfo);
 					String rmMangerCode = (String) servicejson.get("ManagerCode");
 					if (rmMangerCode.equalsIgnoreCase(rmEmpCode)) {
 
 						// information based on officecode
 						String[] officekeys = { "OFFICECODE" };
 						String[] officevalues = { office_code };
-						//String NODUESOWNERS = emp_prxoy.enterPriseDataService("EVM", "NODUESOWNERS", officekeys,
-						//		officevalues);
-						
-						//JSONParser parseemp = new JSONParser();
-						//JSONObject jsonparse = (JSONObject) parseemp.parse(NODUESOWNERS);
-					 String noduesServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-								+ "GetNoDuesOwners";
-					 String getInputOfNoDues = " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}";
-					 String noduestring=getInputOfNoDues.replace("OFFICEID", office_code);
-					 String noDuesData = sconnct.getPostServiceData(noduesServiceUrl, noduestring).toString();
-					 JSONParser noDuesParser = new JSONParser();
-					 JSONObject noDuesJsonObject = (JSONObject) noDuesParser.parse(noDuesData);
-					 JSONObject jsonObjNoDues = new JSONObject(noDuesJsonObject); 
-					 JSONObject	 servicejsonNodues = (JSONObject) jsonObjNoDues.get("GetNoDuesOwnersResult");
+						// String NODUESOWNERS =
+						// emp_prxoy.enterPriseDataService("EVM",
+						// "NODUESOWNERS", officekeys,
+						// officevalues);
+
+						// JSONParser parseemp = new JSONParser();
+						// JSONObject jsonparse = (JSONObject)
+						// parseemp.parse(NODUESOWNERS);
+						String getInputOfNoDues = " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}";
+						String noduestring = getInputOfNoDues.replace("OFFICEID", office_code);
+						String noduesServiceUrl = sconnectServiceServer + "GetNoDuesOwners";
+						String noDuesData = sconnct.getPostServiceData(noduesServiceUrl, noduestring).toString();
+						JSONParser noDuesParser = new JSONParser();
+						JSONObject noDuesJsonObject = (JSONObject) noDuesParser.parse(noDuesData);
+						JSONObject jsonObjNoDues = new JSONObject(noDuesJsonObject);
+						JSONObject servicejsonNodues = (JSONObject) jsonObjNoDues.get("GetNoDuesOwnersResult");
 						String employeename = (String) servicejson.get("EmployeeName");
 						String designation = (String) servicejson.get("Designation");
 						String spokename = (String) servicejson.get("SpokeName");
@@ -1251,25 +1144,26 @@ public class HomeController {
 	@RequestMapping(value = "/getemployeemodalinfo", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getemployeeinformation(HttpServletRequest request) {
-		//ISoftAgeEnterpriseProxy emp_prxoy = new ISoftAgeEnterpriseProxy();
+		// ISoftAgeEnterpriseProxy emp_prxoy = new ISoftAgeEnterpriseProxy();
 		String emp_code = request.getParameter("employee_code");
 		JSONObject itassetsmodal = new JSONObject();
 		String[] key = { "empcode" };
 		String[] value = { emp_code };
 
 		try {
-			//empInfo = emp_prxoy.enterPriseDataService("EVM", "empInfo", key, value);
-			//JSONParser parser = new JSONParser();
-		//	JSONObject servicejson = (JSONObject) parser.parse(empInfo);
-			String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-					+ "GetEmployeeInfo";
-		    String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-		    String empInfo=getInput.replace("employeeCode", emp_code);
-		    String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
-		    JSONParser jsonParser = new JSONParser();
-		    JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
-		    JSONObject jsonObjEvm = new JSONObject(jsonObject); 
-		    JSONObject servicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+			// empInfo = emp_prxoy.enterPriseDataService("EVM", "empInfo", key,
+			// value);
+			// JSONParser parser = new JSONParser();
+			// JSONObject servicejson = (JSONObject) parser.parse(empInfo);
+			String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+			String empInfo = getInput.replace("employeeCode", emp_code);
+			String sconnectServiceServer = restService.getServiceDetails();
+			String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
+			String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
+			JSONObject jsonObjEvm = new JSONObject(jsonObject);
+			JSONObject servicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
 			String employeename = (String) servicejson.get("EmployeeName");
 			String designation = (String) servicejson.get("Designation");
 			String spokename = (String) servicejson.get("SpokeName");
@@ -1302,26 +1196,27 @@ public class HomeController {
 		List<String> listvalue = new ArrayList<String>();
 		String[] keys = { "empcode" };
 		String[] value = { empcode };
-		//ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
-		/*try {
-			empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO", keys, value);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}*/
+		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
+		/*
+		 * try { empassets = empdetails.enterPriseDataService("Asset",
+		 * "ASSETINFO", keys, value); } catch (RemoteException e) {
+		 * e.printStackTrace(); }
+		 */
 		try {
-			String assetsServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-					+ "GetAssetDetails";
+
 			String getInputAssets = " {\"Service\": \"Asset\",\"Operation\": \"ASSETINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-			String AssetsInfo=getInputAssets.replace("employeeCode", empcode);
+			String AssetsInfo = getInputAssets.replace("employeeCode", empcode);
+			String sconnectServiceServer = restService.getServiceDetails();
+			String assetsServiceUrl = sconnectServiceServer + "GetAssetDetails";
 			String assetsData = sconnct.getPostServiceData(assetsServiceUrl, AssetsInfo).toString();
 			JSONParser jsonParser = new JSONParser();
 			JSONObject jsonObject = (JSONObject) jsonParser.parse(assetsData);
 			JSONObject hsonService = new JSONObject(jsonObject);
 			JSONArray jsonArray = (JSONArray) hsonService.get("GetAssetDetailsResult");
-			//JSONArray jsonArray = (JSONArray) jsonParser.parse(assetsData);
-			//JSONArray serviceparser = null;
-			//JSONParser parser = new JSONParser();
-			//serviceparser = (JSONArray) parser.parse(empassets);
+			// JSONArray jsonArray = (JSONArray) jsonParser.parse(assetsData);
+			// JSONArray serviceparser = null;
+			// JSONParser parser = new JSONParser();
+			// serviceparser = (JSONArray) parser.parse(empassets);
 			if (!jsonArray.isEmpty()) {
 				for (Object str : jsonArray) {
 					JSONObject jsondata = (JSONObject) str;
@@ -1361,24 +1256,24 @@ public class HomeController {
 		List<String> listvalue = new ArrayList<String>();
 		String[] keys = { "empcode" };
 		String[] value = { empcode };
-		//ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
-		/*try {
-			empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO", keys, value);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}*/
+		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
+		/*
+		 * try { empassets = empdetails.enterPriseDataService("Asset",
+		 * "ASSETINFO", keys, value); } catch (RemoteException e) {
+		 * e.printStackTrace(); }
+		 */
 		try {
-			String assetsServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-					+ "GetAssetDetails";
 			String getInputAssets = " {\"Service\": \"Asset\",\"Operation\": \"ASSETINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-			String AssetsInfo=getInputAssets.replace("employeeCode", empcode);
+			String AssetsInfo = getInputAssets.replace("employeeCode", empcode);
+			String sconnectServiceServer = restService.getServiceDetails();
+			String assetsServiceUrl = sconnectServiceServer + "GetAssetDetails";
 			String assetsData = sconnct.getPostServiceData(assetsServiceUrl, AssetsInfo).toString();
 			JSONParser jsonParser = new JSONParser();
 			JSONObject jsonObject = (JSONObject) jsonParser.parse(assetsData);
 			JSONObject hsonService = new JSONObject(jsonObject);
 			JSONArray jsonArray = (JSONArray) hsonService.get("GetAssetDetailsResult");
-			//JSONArray jsonArray = (JSONArray) jsonParser.parse(assetsData);
-	
+			// JSONArray jsonArray = (JSONArray) jsonParser.parse(assetsData);
+
 			if (!jsonArray.isEmpty()) {
 				for (Object str : jsonArray) {
 					JSONObject jsondata = (JSONObject) str;
@@ -1417,26 +1312,28 @@ public class HomeController {
 		List<String> listvalue = new ArrayList<String>();
 		String[] keys = { "empcode" };
 		String[] value = { empcode };
-		//ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
-	/*	try {
-			empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO", keys, value);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}*/
+		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
+		/*
+		 * try { empassets = empdetails.enterPriseDataService("Asset",
+		 * "ASSETINFO", keys, value); } catch (RemoteException e) {
+		 * e.printStackTrace(); }
+		 */
 		try {
-			/*JSONArray serviceparser = null;
-			JSONParser parser = new JSONParser();
-			serviceparser = (JSONArray) parser.parse(empassets);*/
-			String assetsServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-					+ "GetAssetDetails";
+			/*
+			 * JSONArray serviceparser = null; JSONParser parser = new
+			 * JSONParser(); serviceparser = (JSONArray)
+			 * parser.parse(empassets);
+			 */
 			String getInputAssets = " {\"Service\": \"Asset\",\"Operation\": \"ASSETINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-			String AssetsInfo=getInputAssets.replace("employeeCode", empcode);
+			String AssetsInfo = getInputAssets.replace("employeeCode", empcode);
+			String sconnectServiceServer = restService.getServiceDetails();
+			String assetsServiceUrl = sconnectServiceServer + "GetAssetDetails";
 			String assetsData = sconnct.getPostServiceData(assetsServiceUrl, AssetsInfo).toString();
 			JSONParser jsonParser = new JSONParser();
 			JSONObject jsonObject = (JSONObject) jsonParser.parse(assetsData);
 			JSONObject hsonService = new JSONObject(jsonObject);
 			JSONArray jsonArray = (JSONArray) hsonService.get("GetAssetDetailsResult");
-			//JSONArray jsonArray = (JSONArray) jsonParser.parse(assetsData);
+			// JSONArray jsonArray = (JSONArray) jsonParser.parse(assetsData);
 			if (!jsonArray.isEmpty()) {
 				for (Object str : jsonArray) {
 					JSONObject jsondata = (JSONObject) str;
@@ -1488,19 +1385,21 @@ public class HomeController {
 		String assetsallocateddate = null;
 		String[] key = { "empcode" };
 		String[] value = { empcode };
-		//ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
-		/*try {
-			empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO", key, value);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}*/
-		String assetsServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-				+ "GetAssetDetails";
+		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
+		/*
+		 * try { empassets = empdetails.enterPriseDataService("Asset",
+		 * "ASSETINFO", key, value); } catch (RemoteException e) {
+		 * e.printStackTrace(); }
+		 */
 		String getInputAssets = " {\"Service\": \"Asset\",\"Operation\": \"ASSETINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-		String AssetsInfo=getInputAssets.replace("employeeCode", empcode);
+		String AssetsInfo = getInputAssets.replace("employeeCode", empcode);
+		String sconnectServiceServer = restService.getServiceDetails();
+		String assetsServiceUrl = sconnectServiceServer + "GetAssetDetails";
 		String assetsData = sconnct.getPostServiceData(assetsServiceUrl, AssetsInfo).toString();
-		/*JSONParser jsonParser = new JSONParser();
-		JSONArray jsonArray = (JSONArray) jsonParser.parse(assetsData);*/
+		/*
+		 * JSONParser jsonParser = new JSONParser(); JSONArray jsonArray =
+		 * (JSONArray) jsonParser.parse(assetsData);
+		 */
 		Date today = new Date();
 		TblAssetsManagement itasset = new TblAssetsManagement();
 		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
@@ -1513,7 +1412,7 @@ public class HomeController {
 				JSONObject jsonObject = (JSONObject) parser.parse(assetsData);
 				JSONObject hsonService = new JSONObject(jsonObject);
 				serviceparser = (JSONArray) hsonService.get("GetAssetDetailsResult");
-				//serviceparser = (JSONArray) parser.parse(assetsData);
+				// serviceparser = (JSONArray) parser.parse(assetsData);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -1534,17 +1433,17 @@ public class HomeController {
 							e.printStackTrace();
 						}
 
-						/*try {
-							empdetails.assetDeallocation(empcode, barcodeno, itmanagerempcode);
-						} catch (RemoteException e) {
-							e.printStackTrace();
-						}*/
-						String assetsDeallocateServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-								+ "AssetDeallocation";
+						/*
+						 * try { empdetails.assetDeallocation(empcode,
+						 * barcodeno, itmanagerempcode); } catch
+						 * (RemoteException e) { e.printStackTrace(); }
+						 */
+
 						String getInputAssetsDeallocate = " {\"emp\": \"employeeCode\",\"barcode\": \"BARCODEID\",  \"deallocatedBy\": [\"DEALLOCATEDUSER\"]}";
-						String AssetsInfoDeallocate=getInputAssetsDeallocate.replace("employeeCode", empcode).replace("BARCODEID", barcodeno).replace("DEALLOCATEDUSER", itmanagerempcode);
-					    sconnct.getPostServiceData(assetsServiceUrl, AssetsInfoDeallocate).toString();
-					    
+						String AssetsInfoDeallocate = getInputAssetsDeallocate.replace("employeeCode", empcode)
+								.replace("BARCODEID", barcodeno).replace("DEALLOCATEDUSER", itmanagerempcode);
+						sconnct.getPostServiceData(assetsServiceUrl, AssetsInfoDeallocate).toString();
+
 						itasset.setAssetsIssue(assetssplit);
 						itasset.setCreatedBy("System");
 						itasset.setCreatedOn(today);
@@ -1587,17 +1486,17 @@ public class HomeController {
 		List<String> listvalue = new ArrayList<String>();
 		String[] keys = { "empcode" };
 		String[] value = { empcode };
-		//ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
-		/*try {
-			empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO", keys, value);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}*/
-		
-		String assetsServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-				+ "GetAssetDetails";
+		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
+		/*
+		 * try { empassets = empdetails.enterPriseDataService("Asset",
+		 * "ASSETINFO", keys, value); } catch (RemoteException e) {
+		 * e.printStackTrace(); }
+		 */
+
 		String getInputAssets = " {\"Service\": \"Asset\",\"Operation\": \"ASSETINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-		String AssetsInfo=getInputAssets.replace("employeeCode", empcode);
+		String AssetsInfo = getInputAssets.replace("employeeCode", empcode);
+		String sconnectServiceServer = restService.getServiceDetails();
+		String assetsServiceUrl = sconnectServiceServer + "GetAssetDetails";
 		String assetsData = sconnct.getPostServiceData(assetsServiceUrl, AssetsInfo).toString();
 		try {
 			JSONArray serviceparser = null;
@@ -1605,7 +1504,7 @@ public class HomeController {
 			JSONObject jsonObject = (JSONObject) parser.parse(assetsData);
 			JSONObject hsonService = new JSONObject(jsonObject);
 			serviceparser = (JSONArray) hsonService.get("GetAssetDetailsResult");
-			//serviceparser = (JSONArray) parser.parse(assetsData);
+			// serviceparser = (JSONArray) parser.parse(assetsData);
 			if (!serviceparser.isEmpty()) {
 				for (Object str : serviceparser) {
 					JSONObject jsondata = (JSONObject) str;
@@ -1656,16 +1555,16 @@ public class HomeController {
 		Date date = null;
 		String[] key = { "empcode" };
 		String[] value = { empcode };
-		//ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
-		/*try {
-			empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO", key, value);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}*/
-		String assetsServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-				+ "GetAssetDetails";
+		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
+		/*
+		 * try { empassets = empdetails.enterPriseDataService("Asset",
+		 * "ASSETINFO", key, value); } catch (RemoteException e) {
+		 * e.printStackTrace(); }
+		 */
 		String getInputAssets = " {\"Service\": \"Asset\",\"Operation\": \"ASSETINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-		String AssetsInfo=getInputAssets.replace("employeeCode", empcode);
+		String AssetsInfo = getInputAssets.replace("employeeCode", empcode);
+		String sconnectServiceServer = restService.getServiceDetails();
+		String assetsServiceUrl = sconnectServiceServer + "GetAssetDetails";
 		String assetsData = sconnct.getPostServiceData(assetsServiceUrl, AssetsInfo).toString();
 		JSONObject insertasserts = new JSONObject();
 		Date today = new Date();
@@ -1680,7 +1579,7 @@ public class HomeController {
 				JSONObject jsonObject = (JSONObject) parser.parse(assetsData);
 				JSONObject hsonService = new JSONObject(jsonObject);
 				serviceparser = (JSONArray) hsonService.get("GetAssetDetailsResult");
-				//serviceparser = (JSONArray) parser.parse(assetsData);
+				// serviceparser = (JSONArray) parser.parse(assetsData);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -1701,19 +1600,18 @@ public class HomeController {
 							e.printStackTrace();
 						}
 
-						/*try {
-							empdetails.assetDeallocation(empcode, barcodeno, inframanagerempcode);
-						} catch (RemoteException e) {
-
-							e.printStackTrace();
-						}
-*/
-						String assetsDeallocateServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-								+ "AssetDeallocation";
+						/*
+						 * try { empdetails.assetDeallocation(empcode,
+						 * barcodeno, inframanagerempcode); } catch
+						 * (RemoteException e) {
+						 * 
+						 * e.printStackTrace(); }
+						 */
 						String getInputAssetsDeallocate = " {\"emp\": \"employeeCode\",\"barcode\": \"BARCODEID\",  \"deallocatedBy\": [\"DEALLOCATEDUSER\"]}";
-						String AssetsInfoDeallocate=getInputAssetsDeallocate.replace("employeeCode", empcode).replace("BARCODEID", barcodeno).replace("DEALLOCATEDUSER", inframanagerempcode);
-					    sconnct.getPostServiceData(assetsServiceUrl, AssetsInfoDeallocate).toString();
-						
+						String AssetsInfoDeallocate = getInputAssetsDeallocate.replace("employeeCode", empcode)
+								.replace("BARCODEID", barcodeno).replace("DEALLOCATEDUSER", inframanagerempcode);
+						sconnct.getPostServiceData(assetsServiceUrl, AssetsInfoDeallocate).toString();
+
 						infraasset.setAssetsIssue(assetssplit);
 						infraasset.setCreatedBy("System");
 						infraasset.setCreatedOn(today);
@@ -2215,16 +2113,16 @@ public class HomeController {
 		String assetname = null;
 		String[] key = { "empcode" };
 		String[] value = { empcode };
-		//ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
-	/*	try {
-			empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO", key, value);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}*/
-		String assetsServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-				+ "GetAssetDetails";
+		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
+		/*
+		 * try { empassets = empdetails.enterPriseDataService("Asset",
+		 * "ASSETINFO", key, value); } catch (RemoteException e) {
+		 * e.printStackTrace(); }
+		 */
 		String getInputAssets = " {\"Service\": \"Asset\",\"Operation\": \"ASSETINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-		String AssetsInfo=getInputAssets.replace("employeeCode", empcode);
+		String AssetsInfo = getInputAssets.replace("employeeCode", empcode);
+		String sconnectServiceServer = restService.getServiceDetails();
+		String assetsServiceUrl = sconnectServiceServer + "GetAssetDetails";
 		String assetsData = sconnct.getPostServiceData(assetsServiceUrl, AssetsInfo).toString();
 
 		JSONObject insertasserts = new JSONObject();
@@ -2240,7 +2138,7 @@ public class HomeController {
 				JSONObject jsonObject = (JSONObject) parser.parse(assetsData);
 				JSONObject hsonService = new JSONObject(jsonObject);
 				serviceparser = (JSONArray) hsonService.get("GetAssetDetailsResult");
-				//serviceparser = (JSONArray) parser.parse(assetsData);
+				// serviceparser = (JSONArray) parser.parse(assetsData);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -2261,18 +2159,18 @@ public class HomeController {
 						} catch (java.text.ParseException e) {
 							e.printStackTrace();
 						}
-						/*try {
-							empdetails.assetDeallocation(empcode, barcodeno, accountmanagerempcode);
-						} catch (RemoteException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}*/
-						String assetsDeallocateServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-								+ "AssetDeallocation";
+						/*
+						 * try { empdetails.assetDeallocation(empcode,
+						 * barcodeno, accountmanagerempcode); } catch
+						 * (RemoteException e) { // TODO Auto-generated catch
+						 * block e.printStackTrace(); }
+						 */
+
 						String getInputAssetsDeallocate = " {\"emp\": \"employeeCode\",\"barcode\": \"BARCODEID\",  \"deallocatedBy\": [\"DEALLOCATEDUSER\"]}";
-						String AssetsInfoDeallocate=getInputAssetsDeallocate.replace("employeeCode", empcode).replace("BARCODEID", barcodeno).replace("DEALLOCATEDUSER", accountmanagerempcode);
-					    sconnct.getPostServiceData(assetsServiceUrl, AssetsInfoDeallocate).toString();
-					    
+						String AssetsInfoDeallocate = getInputAssetsDeallocate.replace("employeeCode", empcode)
+								.replace("BARCODEID", barcodeno).replace("DEALLOCATEDUSER", accountmanagerempcode);
+						sconnct.getPostServiceData(assetsServiceUrl, AssetsInfoDeallocate).toString();
+
 						accountasset.setAssetsIssue(assetssplit);
 						accountasset.setCreatedBy("system");
 						accountasset.setCreatedOn(today);
@@ -2316,7 +2214,7 @@ public class HomeController {
 
 		int assetDepartment = Integer.parseInt(departmentId);
 
-		//ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
+		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 		String managercode = null;
 		String sendToemail = null;
 		String barcodeno = null;
@@ -2335,23 +2233,26 @@ public class HomeController {
 		String departmentmanagerempcode = (String) session.getAttribute("employeecode");
 		String[] departmentmanagerkey = { "empcode" };
 		String[] departmentmanagervalue = { departmentmanagerempcode };
-		/*String departmentempInfo = empdetails.enterPriseDataService("EVM", "empInfo", departmentmanagerkey,
-				departmentmanagervalue);
-		JSONParser departmentmanagerparse = new JSONParser();*/
-		String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-				+ "GetEmployeeInfo";
+		/*
+		 * String departmentempInfo = empdetails.enterPriseDataService("EVM",
+		 * "empInfo", departmentmanagerkey, departmentmanagervalue); JSONParser
+		 * departmentmanagerparse = new JSONParser();
+		 */
 		String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-		String empInfo=getInput.replace("employeeCode", departmentmanagerempcode);
+		String empInfo = getInput.replace("employeeCode", departmentmanagerempcode);
+		String sconnectServiceServer = restService.getServiceDetails();
+		String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
 		String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
 		try {
-		JSONParser jsonParser = new JSONParser();
-		JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
-		JSONObject jsonObjEvm = new JSONObject(jsonObject); 
-		JSONObject managerservicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
+			JSONObject jsonObjEvm = new JSONObject(jsonObject);
+			JSONObject managerservicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
 
-			//JSONObject managerservicejson = (JSONObject) departmentmanagerparse.parse(departmentempInfo);
-		String departmentmanagername = (String) managerservicejson.get("EmployeeName");
-		departmentmanageremail = (String) managerservicejson.get("CompanyEmail");
+			// JSONObject managerservicejson = (JSONObject)
+			// departmentmanagerparse.parse(departmentempInfo);
+			String departmentmanagername = (String) managerservicejson.get("EmployeeName");
+			departmentmanageremail = (String) managerservicejson.get("CompanyEmail");
 
 		} catch (ParseException e) {
 
@@ -2360,52 +2261,58 @@ public class HomeController {
 		// Rejected Employee Information
 		String[] empkey = { "empcode" };
 		String[] empvalue = { empcode };
-		/*String empInfo = empdetails.enterPriseDataService("EVM", "empInfo", empkey, empvalue);
-		JSONParser parser = new JSONParser();*/
-	
+		/*
+		 * String empInfo = empdetails.enterPriseDataService("EVM", "empInfo",
+		 * empkey, empvalue); JSONParser parser = new JSONParser();
+		 */
+
 		String getInputemp = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-		String empInfoemp=getInputemp.replace("employeeCode", empcode);
+		String empInfoemp = getInputemp.replace("employeeCode", empcode);
+		/*
+		 * String sconnectServiceServer = restService.getServiceDetails();
+		 * String evmServiceUrl = sconnectServiceServer +"GetEmployeeInfo";
+		 */
 		String evmDataemp = sconnct.getPostServiceData(evmServiceUrl, empInfoemp).toString();
 		try {
-		JSONParser jsonParser = new JSONParser();
-		JSONObject jsonObject = (JSONObject) jsonParser.parse(evmDataemp);
-		JSONObject jsonObjEvm = new JSONObject(jsonObject); 
-		JSONObject servicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
-		
-		//JSONObject servicejson = (JSONObject) parser.parse(empInfo);
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(evmDataemp);
+			JSONObject jsonObjEvm = new JSONObject(jsonObject);
+			JSONObject servicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+
+			// JSONObject servicejson = (JSONObject) parser.parse(empInfo);
 			managercode = (String) servicejson.get("ManagerCode");
 			empemail = (String) servicejson.get("CompanyEmail");
 			manageremail = (String) servicejson.get("ManagerEmail");
 			/*
-			 * long empdepartmentid = (Long)
-			 * servicejson.get("DepartmentID");
+			 * long empdepartmentid = (Long) servicejson.get("DepartmentID");
 			 */
 			sendToemail = managercode + empemail;
 			// information based on officecode
 			String[] officekeys = { "OFFICECODE" };
 			String[] officevalues = { "CORGUR001" };
-			//String NODUESOWNERS = empdetails.enterPriseDataService("EVM", "NODUESOWNERS", officekeys, officevalues);
-			//JSONParser parseemp = new JSONParser();
-			//JSONObject jsonparse = (JSONObject) parseemp.parse(NODUESOWNERS);
-			String noduesServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-					+ "GetNoDuesOwners";
-		 String getInputOfNoDues = " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}";
-		 String noduestring=getInputOfNoDues.replace("OFFICEID", "CORGUR001");
-		 String noDuesData = sconnct.getPostServiceData(noduesServiceUrl, noduestring).toString();
-		 JSONParser noDuesParser = new JSONParser();
-		 JSONObject noDuesJsonObject = (JSONObject) noDuesParser.parse(noDuesData);
-		 JSONObject jsonObjNoDues = new JSONObject(noDuesJsonObject); 
-		 servicejson = (JSONObject) jsonObjNoDues.get("GetNoDuesOwnersResult");
+			// String NODUESOWNERS = empdetails.enterPriseDataService("EVM",
+			// "NODUESOWNERS", officekeys, officevalues);
+			// JSONParser parseemp = new JSONParser();
+			// JSONObject jsonparse = (JSONObject) parseemp.parse(NODUESOWNERS);
+			String getInputOfNoDues = " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}";
+			String noduestring = getInputOfNoDues.replace("OFFICEID", "CORGUR001");
+			String noduesServiceUrl = sconnectServiceServer + "GetNoDuesOwners";
+			String noDuesData = sconnct.getPostServiceData(noduesServiceUrl, noduestring).toString();
+			JSONParser noDuesParser = new JSONParser();
+			JSONObject noDuesJsonObject = (JSONObject) noDuesParser.parse(noDuesData);
+			JSONObject jsonObjNoDues = new JSONObject(noDuesJsonObject);
+			servicejson = (JSONObject) jsonObjNoDues.get("GetNoDuesOwnersResult");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		String[] key = { "empcode" };
 		String[] value = { empcode };
-		//empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO", key, value);
-		String assetsServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-				+ "GetAssetDetails";
+		// empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO",
+		// key, value);
+
 		String getInputAssets = " {\"Service\": \"Asset\",\"Operation\": \"ASSETINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-		String AssetsInfo=getInputAssets.replace("employeeCode", empcode);
+		String AssetsInfo = getInputAssets.replace("employeeCode", empcode);
+		String assetsServiceUrl = sconnectServiceServer + "GetAssetDetails";
 		String assetsData = sconnct.getPostServiceData(assetsServiceUrl, AssetsInfo).toString();
 
 		Date today = new Date();
@@ -2417,10 +2324,10 @@ public class HomeController {
 			JSONParser parser = new JSONParser();
 			try {
 
-           JSONObject jsonObject = (JSONObject) parser.parse(assetsData);
-			JSONObject hsonService = new JSONObject(jsonObject);
-			serviceparser = (JSONArray) hsonService.get("GetAssetDetailsResult");
-			//	serviceparser = (JSONArray) parser.parse(assetsData);
+				JSONObject jsonObject = (JSONObject) parser.parse(assetsData);
+				JSONObject hsonService = new JSONObject(jsonObject);
+				serviceparser = (JSONArray) hsonService.get("GetAssetDetailsResult");
+				// serviceparser = (JSONArray) parser.parse(assetsData);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -2539,7 +2446,7 @@ public class HomeController {
 		String departmentId = request.getParameter("departmentId");
 
 		int assetDepartment = Integer.parseInt(departmentId);
-		//ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
+		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 		String managercode = null;
 		String barcodeno = null;
 		String assetsallocateddate = null;
@@ -2558,22 +2465,23 @@ public class HomeController {
 		String departmentmanagerempcode = (String) session.getAttribute("employeecode");
 		String[] departmentmanagerkey = { "empcode" };
 		String[] departmentmanagervalue = { departmentmanagerempcode };
-		//String departmentempInfo = empdetails.enterPriseDataService("EVM", "empInfo", departmentmanagerkey,
-			//	departmentmanagervalue);
-		//JSONParser departmentmanagerparse = new JSONParser();
-		String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-				+ "GetEmployeeInfo";
+		// String departmentempInfo = empdetails.enterPriseDataService("EVM",
+		// "empInfo", departmentmanagerkey,
+		// departmentmanagervalue);
+		// JSONParser departmentmanagerparse = new JSONParser();
 		String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-		String empInfo=getInput.replace("employeeCode", departmentmanagerempcode);
+		String empInfo = getInput.replace("employeeCode", departmentmanagerempcode);
+		String sconnectServiceServer = restService.getServiceDetails();
+		String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
 		String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
 		try {
-		JSONParser jsonParser = new JSONParser();
-		JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
-		JSONObject jsonObjEvm = new JSONObject(jsonObject); 
-		JSONObject managerservicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
+			JSONObject jsonObjEvm = new JSONObject(jsonObject);
+			JSONObject managerservicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
 
-		
-			//JSONObject managerservicejson = (JSONObject) departmentmanagerparse.parse(departmentempInfo);
+			// JSONObject managerservicejson = (JSONObject)
+			// departmentmanagerparse.parse(departmentempInfo);
 			String departmentmanagername = (String) managerservicejson.get("EmployeeName");
 			departmentmanageremail = (String) managerservicejson.get("CompanyEmail");
 
@@ -2583,15 +2491,15 @@ public class HomeController {
 		// Rejected Employee Information
 		String[] empkey = { "empcode" };
 		String[] empvalue = { empcode };
-	
+
 		String getInputemp = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-		String empInfoemp=getInputemp.replace("employeeCode", empcode);
+		String empInfoemp = getInputemp.replace("employeeCode", empcode);
 		String evmDataemp = sconnct.getPostServiceData(evmServiceUrl, empInfoemp).toString();
 		try {
-		JSONParser jsonParser = new JSONParser();
-		JSONObject jsonObject = (JSONObject) jsonParser.parse(evmDataemp);
-		JSONObject jsonObjEvm = new JSONObject(jsonObject); 
-		JSONObject servicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(evmDataemp);
+			JSONObject jsonObjEvm = new JSONObject(jsonObject);
+			JSONObject servicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
 
 			managercode = (String) servicejson.get("ManagerCode");
 			empemail = (String) servicejson.get("CompanyEmail");
@@ -2602,35 +2510,35 @@ public class HomeController {
 			// information based on officecode
 			String[] officekeys = { "OFFICECODE" };
 			String[] officevalues = { "CORGUR001" };
-			//String NODUESOWNERS = empdetails.enterPriseDataService("EVM", "NODUESOWNERS", officekeys, officevalues);
-			//JSONParser parseemp = new JSONParser();
-			//JSONObject jsonparse = (JSONObject) parseemp.parse(NODUESOWNERS);
-		  String noduesServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-					+ "GetNoDuesOwners";
-		 String getInputOfNoDues = " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}";
-		 String noduestring=getInputOfNoDues.replace("OFFICEID", "CORGUR001");
-		 String noDuesData = sconnct.getPostServiceData(noduesServiceUrl, noduestring).toString();
-		 JSONParser noDuesParser = new JSONParser();
-		 JSONObject noDuesJsonObject = (JSONObject) noDuesParser.parse(noDuesData);
-		 JSONObject jsonObjNoDues = new JSONObject(noDuesJsonObject); 
-		 servicejson = (JSONObject) jsonObjNoDues.get("GetNoDuesOwnersResult");
+			// String NODUESOWNERS = empdetails.enterPriseDataService("EVM",
+			// "NODUESOWNERS", officekeys, officevalues);
+			// JSONParser parseemp = new JSONParser();
+			// JSONObject jsonparse = (JSONObject) parseemp.parse(NODUESOWNERS);
+			String getInputOfNoDues = " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}";
+			String noduestring = getInputOfNoDues.replace("OFFICEID", "CORGUR001");
+			String noduesServiceUrl = sconnectServiceServer + "GetNoDuesOwners";
+			String noDuesData = sconnct.getPostServiceData(noduesServiceUrl, noduestring).toString();
+			JSONParser noDuesParser = new JSONParser();
+			JSONObject noDuesJsonObject = (JSONObject) noDuesParser.parse(noDuesData);
+			JSONObject jsonObjNoDues = new JSONObject(noDuesJsonObject);
+			servicejson = (JSONObject) jsonObjNoDues.get("GetNoDuesOwnersResult");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		String[] key = { "empcode" };
 		String[] value = { empcode };
 
-		/*try {
-			empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO", key, value);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}*/
-		String assetsServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-				+ "GetAssetDetails";
+		/*
+		 * try { empassets = empdetails.enterPriseDataService("Asset",
+		 * "ASSETINFO", key, value); } catch (RemoteException e) {
+		 * e.printStackTrace(); }
+		 */
+
 		String getInputAssets = " {\"Service\": \"Asset\",\"Operation\": \"ASSETINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-		String AssetsInfo=getInputAssets.replace("employeeCode", empcode);
+		String AssetsInfo = getInputAssets.replace("employeeCode", empcode);
+		String assetsServiceUrl = sconnectServiceServer + "GetAssetDetails";
 		String assetsData = sconnct.getPostServiceData(assetsServiceUrl, AssetsInfo).toString();
-		
+
 		Date today = new Date();
 		JSONObject rejectjson = new JSONObject();
 		TblAssetsManagement receiveditem = new TblAssetsManagement();
@@ -2714,18 +2622,18 @@ public class HomeController {
 		Date date = null;
 		String[] key = { "empcode" };
 		String[] value = { empcode };
-	//	ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
-		/*try {
-			empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO", key, value);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}*/
-		String assetsServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-				+ "GetAssetDetails";
+		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
+		/*
+		 * try { empassets = empdetails.enterPriseDataService("Asset",
+		 * "ASSETINFO", key, value); } catch (RemoteException e) {
+		 * e.printStackTrace(); }
+		 */
 		String getInputAssets = " {\"Service\": \"Asset\",\"Operation\": \"ASSETINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-		String AssetsInfo=getInputAssets.replace("employeeCode", empcode);
+		String AssetsInfo = getInputAssets.replace("employeeCode", empcode);
+		String sconnectServiceServer = restService.getServiceDetails();
+		String assetsServiceUrl = sconnectServiceServer + "GetAssetDetails";
 		String assetsData = sconnct.getPostServiceData(assetsServiceUrl, AssetsInfo).toString();
-		
+
 		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
 		resignationId = resignedUser.getResignationId();
 		JSONObject inserthrasserts = new JSONObject();
@@ -2739,7 +2647,7 @@ public class HomeController {
 				JSONObject jsonObject = (JSONObject) parser.parse(assetsData);
 				JSONObject hsonService = new JSONObject(jsonObject);
 				serviceparser = (JSONArray) hsonService.get("GetAssetDetailsResult");
-				//serviceparser = (JSONArray) parser.parse(assetsData);
+				// serviceparser = (JSONArray) parser.parse(assetsData);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -2761,17 +2669,17 @@ public class HomeController {
 							e.printStackTrace();
 						}
 
-						/*try {
-							empdetails.assetDeallocation(empcode, barcodeno, hrmanagerempcode);
-						} catch (RemoteException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}*/
-						String assetsDeallocateServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-								+ "AssetDeallocation";
+						/*
+						 * try { empdetails.assetDeallocation(empcode,
+						 * barcodeno, hrmanagerempcode); } catch
+						 * (RemoteException e) { // TODO Auto-generated catch
+						 * block e.printStackTrace(); }
+						 */
+
 						String getInputAssetsDeallocate = " {\"emp\": \"employeeCode\",\"barcode\": \"BARCODEID\",  \"deallocatedBy\": [\"DEALLOCATEDUSER\"]}";
-						String AssetsInfoDeallocate=getInputAssetsDeallocate.replace("employeeCode", empcode).replace("BARCODEID", barcodeno).replace("DEALLOCATEDUSER", hrmanagerempcode);
-					    sconnct.getPostServiceData(assetsServiceUrl, AssetsInfoDeallocate).toString();
+						String AssetsInfoDeallocate = getInputAssetsDeallocate.replace("employeeCode", empcode)
+								.replace("BARCODEID", barcodeno).replace("DEALLOCATEDUSER", hrmanagerempcode);
+						sconnct.getPostServiceData(assetsServiceUrl, AssetsInfoDeallocate).toString();
 
 						hrasset.setAssetsIssue(assetssplit);
 						hrasset.setCreatedBy("system");
@@ -2820,27 +2728,27 @@ public class HomeController {
 		Date datenull = null;
 		String[] key = { "empcode" };
 		String[] value = { empcode };
-		//ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
-		/*try {
-			empinfo = empdetails.enterPriseDataService("EVM", "empinfo", key, value);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}*/
-		String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-				+ "GetEmployeeInfo";
-	    String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-	    String empInfo=getInput.replace("employeeCode", empcode);
-	    String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
+		/*
+		 * try { empinfo = empdetails.enterPriseDataService("EVM", "empinfo",
+		 * key, value); } catch (RemoteException e) { e.printStackTrace(); }
+		 */
+		String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+		String empInfo = getInput.replace("employeeCode", empcode);
+		String sconnectServiceServer = restService.getServiceDetails();
+		String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
+		String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
 		try {
-	    JSONParser jsonParser = new JSONParser();
-	    JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
-	    JSONObject jsonObjEvm = new JSONObject(jsonObject); 
-	    JSONObject serviceparser = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
-	/*	JSONObject insertitasserts = new JSONObject();
-		JSONParser parser = new JSONParser();
-		JSONObject serviceparser;
-	
-			serviceparser = (JSONObject) parser.parse(empinfo);*/
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
+			JSONObject jsonObjEvm = new JSONObject(jsonObject);
+			JSONObject serviceparser = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+			/*
+			 * JSONObject insertitasserts = new JSONObject(); JSONParser parser
+			 * = new JSONParser(); JSONObject serviceparser;
+			 * 
+			 * serviceparser = (JSONObject) parser.parse(empinfo);
+			 */
 			Long departmentid = (Long) serviceparser.get("DepartmentID");
 			department = departmentid.intValue();
 			String rmmanager = (String) serviceparser.get("EmployeeName");
@@ -2899,23 +2807,24 @@ public class HomeController {
 	@RequestMapping(value = "/inserthrfeedback", method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject inserthrfeedback(@RequestParam("hr_feedback") String feedback,
-			@RequestParam("emp_code") String empcode, HttpSession session, HttpServletRequest request) throws ParseException {
+			@RequestParam("emp_code") String empcode, HttpSession session, HttpServletRequest request)
+			throws ParseException {
 		String empname = "";
 		int stageId = 5;
-		//ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
+		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 		session = request.getSession();
 		String hrempcode = (String) session.getAttribute("employeecode");
 
-			//empname = empdetails.getUserDetail(hrempcode).getFirstName();
-		String getUserDetailServiceUrl = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-				+ "GetUserDetail/"+hrempcode;
-	   empname = sconnct.getServiceData(getUserDetailServiceUrl).toString();
-	   JSONParser jsonParseremp = new JSONParser();
-       JSONObject jsonObjectemp = (JSONObject) jsonParseremp.parse(empname);
-       JSONObject jsonObjEmp = new JSONObject(jsonObjectemp); 
-	   String firstname =  (String) jsonObjEmp.get("FirstName");
-	   String lastname =  (String) jsonObjEmp.get("LastName");
-		   
+		// empname = empdetails.getUserDetail(hrempcode).getFirstName();
+		String sconnectServiceServer = restService.getServiceDetails();
+		String getUserDetailServiceUrl = sconnectServiceServer + "GetUserDetail/" + hrempcode;
+		empname = sconnct.getServiceData(getUserDetailServiceUrl).toString();
+		JSONParser jsonParseremp = new JSONParser();
+		JSONObject jsonObjectemp = (JSONObject) jsonParseremp.parse(empname);
+		JSONObject jsonObjEmp = new JSONObject(jsonObjectemp);
+		String firstname = (String) jsonObjEmp.get("FirstName");
+		String lastname = (String) jsonObjEmp.get("LastName");
+
 		JSONObject hranswers = new JSONObject();
 		try {
 			JSONParser parser = new JSONParser();
@@ -2952,7 +2861,7 @@ public class HomeController {
 		String empName = null;
 		String assingToEmpcode = null;
 		String officecode = null;
-		//JSONParser parser = new JSONParser();
+		// JSONParser parser = new JSONParser();
 		JSONObject jsonObject = new JSONObject();
 		// String rmEmpCode = "ss0078";officeCode
 
@@ -2966,22 +2875,22 @@ public class HomeController {
 			TblUserResignation tblUserResignation = resignationService.getResignationUserService(empcode, 0);
 			// String assingToEmpcode = "ss0078";
 			officecode = (String) session.getAttribute("officeCode");
-			//ISoftAgeEnterpriseProxy emp = new ISoftAgeEnterpriseProxy();
+			// ISoftAgeEnterpriseProxy emp = new ISoftAgeEnterpriseProxy();
 			String[] officekeys = { "OFFICECODE" };
 			String[] officevalues = { officecode };
-			//String noduesString = emp.enterPriseDataService("EVM", "NODUESOWNERS", officekeys, officevalues);
-			
-			//jsonObject = (JSONObject) parser.parse(noduesString);
-			 String noduesServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-						+ "GetNoDuesOwners";
-			 String getInputOfNoDues = " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}";
-			 String noduestring=getInputOfNoDues.replace("OFFICEID", officecode);
-			 String noDuesData = sconnct.getPostServiceData(noduesServiceUrl, noduestring).toString();
-			 JSONParser noDuesParser = new JSONParser();
-			 JSONObject noDuesJsonObject = (JSONObject) noDuesParser.parse(noDuesData);
-			 JSONObject jsonObjNoDues = new JSONObject(noDuesJsonObject); 
-			 jsonObject = (JSONObject) jsonObjNoDues.get("GetNoDuesOwnersResult");
+			// String noduesString = emp.enterPriseDataService("EVM",
+			// "NODUESOWNERS", officekeys, officevalues);
 
+			// jsonObject = (JSONObject) parser.parse(noduesString);
+			String getInputOfNoDues = " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}";
+			String noduestring = getInputOfNoDues.replace("OFFICEID", officecode);
+			String sconnectServiceServer = restService.getServiceDetails();
+			String noduesServiceUrl = sconnectServiceServer + "GetNoDuesOwners";
+			String noDuesData = sconnct.getPostServiceData(noduesServiceUrl, noduestring).toString();
+			JSONParser noDuesParser = new JSONParser();
+			JSONObject noDuesJsonObject = (JSONObject) noDuesParser.parse(noDuesData);
+			JSONObject jsonObjNoDues = new JSONObject(noDuesJsonObject);
+			jsonObject = (JSONObject) jsonObjNoDues.get("GetNoDuesOwnersResult");
 
 			if (departmentId == 3) {
 				assingToEmpcode = (String) jsonObject.get("InfraEmpCode");
@@ -3157,35 +3066,37 @@ public class HomeController {
 			String[] values = { rm };
 			// String rm_rm1 = "ss0053";
 			// String rm_rm2 = "ss0050";
-			//ISoftAgeEnterpriseProxy emp = new ISoftAgeEnterpriseProxy();
+			// ISoftAgeEnterpriseProxy emp = new ISoftAgeEnterpriseProxy();
 			try {
-				//String empinfo = emp.enterPriseDataService("EVM", "EmpInfo", keys, values);
-				String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-						+ "GetEmployeeInfo";
-			    String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-			    String empInfo=getInput.replace("employeeCode", emp_code);
-			    String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
-			    JSONParser jsonParser = new JSONParser();
-			    JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
-			    JSONObject jsonObjEvm = new JSONObject(jsonObject); 
-			    JSONObject serviceJson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+				// String empinfo = emp.enterPriseDataService("EVM", "EmpInfo",
+				// keys, values);
+				String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+				String empInfo = getInput.replace("employeeCode", emp_code);
+				String sconnectServiceServer = restService.getServiceDetails();
+				String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
+				String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+				JSONParser jsonParser = new JSONParser();
+				JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
+				JSONObject jsonObjEvm = new JSONObject(jsonObject);
+				JSONObject serviceJson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
 
-				//JSONParser parser = new JSONParser();
-				//JSONObject serviceJson = (JSONObject) parser.parse(empinfo);
+				// JSONParser parser = new JSONParser();
+				// JSONObject serviceJson = (JSONObject) parser.parse(empinfo);
 				String rm_rm1 = (String) serviceJson.get("ManagerCode");
 				String[] rmkey = { "empcode" };
 				String[] rmvalues = { rm_rm1 };
-				//String rm_empinfo = emp.enterPriseDataService("EVM", "EmpInfo", rmkey, rmvalues);
-			
-			    String getInputRm = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-			    String empInfoRm=getInput.replace("employeeCode", emp_code);
-			    String evmDataRm = sconnct.getPostServiceData(evmServiceUrl, empInfoRm).toString();
-			    JSONParser jsonParserRm = new JSONParser();
-			    JSONObject jsonObjectRm = (JSONObject) jsonParser.parse(evmData);
-			    JSONObject jsonObjEvmRm = new JSONObject(jsonObject); 
-			    JSONObject rm_rmJson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+				// String rm_empinfo = emp.enterPriseDataService("EVM",
+				// "EmpInfo", rmkey, rmvalues);
 
-				//JSONObject rm_rmJson = (JSONObject) parser.parse(rm_empinfo);
+				String getInputRm = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+				String empInfoRm = getInput.replace("employeeCode", emp_code);
+				String evmDataRm = sconnct.getPostServiceData(evmServiceUrl, empInfoRm).toString();
+				JSONParser jsonParserRm = new JSONParser();
+				JSONObject jsonObjectRm = (JSONObject) jsonParser.parse(evmData);
+				JSONObject jsonObjEvmRm = new JSONObject(jsonObject);
+				JSONObject rm_rmJson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+
+				// JSONObject rm_rmJson = (JSONObject) parser.parse(rm_empinfo);
 				String rm_rm2 = (String) rm_rmJson.get("ManagerCode");
 				if ((rm_rm1 == null || rm_rm1 == "") && emp_code.equals(rm)) {
 					to_show.add(rm);
@@ -3229,9 +3140,6 @@ public class HomeController {
 		JSONObject resignedUsers = resignationService.getUsersForHrApproval(officeCode, 2);
 		return resignedUsers;
 	}
-	
-	
-
 
 	@RequestMapping(value = "/getHrApprovalFromService", method = RequestMethod.GET)
 	@ResponseBody
@@ -3244,38 +3152,43 @@ public class HomeController {
 		for (String hr : resignedUsersHrList) {
 			// String hr_hr1 = "ss0073";
 			// String hr_hr2 = "ss0029";
-			//ISoftAgeEnterpriseProxy emp = new ISoftAgeEnterpriseProxy();
+			// ISoftAgeEnterpriseProxy emp = new ISoftAgeEnterpriseProxy();
 			String[] key = { "empcode" };
 			String[] values = { hr };
 			try {
-				/*String empinfo = emp.enterPriseDataService("EVM", "EmpInfo", key, values);
-				JSONParser parser = new JSONParser();
-				JSONObject serviceJson = (JSONObject) parser.parse(empinfo);*/
-				String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-						+ "GetEmployeeInfo";
-			    String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-			    String empInfo=getInput.replace("employeeCode", emp_code);
-			    String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
-			    JSONParser jsonParser = new JSONParser();
-			    JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
-			    JSONObject jsonObjEvm = new JSONObject(jsonObject); 
-			    JSONObject serviceJson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+				/*
+				 * String empinfo = emp.enterPriseDataService("EVM", "EmpInfo",
+				 * key, values); JSONParser parser = new JSONParser();
+				 * JSONObject serviceJson = (JSONObject) parser.parse(empinfo);
+				 */
+				String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+				String empInfo = getInput.replace("employeeCode", emp_code);
+				String sconnectServiceServer = restService.getServiceDetails();
+				String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
+				String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+				JSONParser jsonParser = new JSONParser();
+				JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
+				JSONObject jsonObjEvm = new JSONObject(jsonObject);
+				JSONObject serviceJson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
 
 				String hr_hr1 = (String) serviceJson.get("ManagerCode");
 				String[] hr_key = { "empcode" };
 				String[] hr_values = { hr_hr1 };
-			/*	String hr_empinfo = emp.enterPriseDataService("EVM", "EmpInfo", hr_key, hr_values);
-				JSONObject hr_json = (JSONObject) parser.parse(hr_empinfo);
-				String hr_hr2 = (String) hr_json.get("ManagerCode");*/
-			
-			    String getInputHr = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-			    String empInfoHr=getInput.replace("employeeCode", emp_code);
-			    String evmDataHr = sconnct.getPostServiceData(evmServiceUrl, empInfoHr).toString();
-			    JSONParser jsonParserHr = new JSONParser();
-			    JSONObject jsonObjectHr = (JSONObject) jsonParserHr.parse(evmData);
-			    JSONObject jsonObjEvmHr = new JSONObject(jsonObjectHr); 
-			    JSONObject hr_json = (JSONObject) jsonObjEvmHr.get("GetEmployeeInfoResult");
-			    String hr_hr2 = (String) hr_json.get("ManagerCode");
+				/*
+				 * String hr_empinfo = emp.enterPriseDataService("EVM",
+				 * "EmpInfo", hr_key, hr_values); JSONObject hr_json =
+				 * (JSONObject) parser.parse(hr_empinfo); String hr_hr2 =
+				 * (String) hr_json.get("ManagerCode");
+				 */
+
+				String getInputHr = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+				String empInfoHr = getInput.replace("employeeCode", emp_code);
+				String evmDataHr = sconnct.getPostServiceData(evmServiceUrl, empInfoHr).toString();
+				JSONParser jsonParserHr = new JSONParser();
+				JSONObject jsonObjectHr = (JSONObject) jsonParserHr.parse(evmData);
+				JSONObject jsonObjEvmHr = new JSONObject(jsonObjectHr);
+				JSONObject hr_json = (JSONObject) jsonObjEvmHr.get("GetEmployeeInfoResult");
+				String hr_hr2 = (String) hr_json.get("ManagerCode");
 				if ((hr_hr1 == null || hr_hr1 == "") && emp_code.equals(hr)) {
 					hr_to_show.add(hr);
 				} else if ((hr_hr1 == null && hr_hr1 == "") && !emp_code.equals(hr)) {
@@ -3417,7 +3330,6 @@ public class HomeController {
 	@RequestMapping(value = "/empfeedback", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getempfeedback(HttpSession session, HttpServletRequest request) {
-		//ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 		session = request.getSession();
 		String empcode = (String) session.getAttribute("employeecode");
 		int stageid = 3;
@@ -3435,27 +3347,21 @@ public class HomeController {
 		if (!feedbackanswer.isEmpty()) {
 			empfeedback.put("feedbackdetails", null);
 		} else {
-			String[] key = { "empcode" };
-			String[] value = { empcode };
-		/*	try {
-				empinfo = empdetails.enterPriseDataService("EVM", "empinfo", key, value);
-			} catch (RemoteException e) {
-				e.printStackTrace();
-			}*/
-			String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-					+ "GetEmployeeInfo";
-		    String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-		    String empInfo=getInput.replace("employeeCode", empcode);
-		    String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
-		    try {
-		    JSONParser jsonParser = new JSONParser();
-		    JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
-		    JSONObject jsonObjEvm = new JSONObject(jsonObject); 
-		    JSONObject serviceparser = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
 
-			
-				//JSONParser parser = new JSONParser();
-				//JSONObject serviceparser = (JSONObject) parser.parse(empinfo);
+			String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+			String empInfo = getInput.replace("employeeCode", empcode);
+			String sconnectServiceServer = restService.getServiceDetails();
+			String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
+			String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+			try {
+				JSONParser jsonParser = new JSONParser();
+				JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
+				JSONObject jsonObjEvm = new JSONObject(jsonObject);
+				JSONObject serviceparser = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+
+				// JSONParser parser = new JSONParser();
+				// JSONObject serviceparser = (JSONObject)
+				// parser.parse(empinfo);
 				employeename = (String) serviceparser.get("EmployeeName");
 				designation = (String) serviceparser.get("Designation");
 				spokecode = (String) serviceparser.get("SpokeCode");
@@ -3491,18 +3397,18 @@ public class HomeController {
 		String empname = null;
 		int stageid = 3;
 		int resignationId = 0;
-		//ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
+		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 		session = request.getSession();
 		String userempcode = (String) session.getAttribute("employeecode");
-		//empname = empdetails.getUserDetail(userempcode).getFirstName();
-		String getUserDetailServiceUrl = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-				+ "GetUserDetail/"+userempcode;
-	   empname = sconnct.getServiceData(getUserDetailServiceUrl).toString();
-	   JSONParser jsonParseremp = new JSONParser();
-       JSONObject jsonObjectemp = (JSONObject) jsonParseremp.parse(empname);
-       JSONObject jsonObjEmp = new JSONObject(jsonObjectemp); 
-	   String firstname =  (String) jsonObjEmp.get("FirstName");
-	   String lastname =  (String) jsonObjEmp.get("LastName");
+		// empname = empdetails.getUserDetail(userempcode).getFirstName();
+		String sconnectServiceServer = restService.getServiceDetails();
+		String getUserDetailServiceUrl = sconnectServiceServer + "GetUserDetail/" + userempcode;
+		empname = sconnct.getServiceData(getUserDetailServiceUrl).toString();
+		JSONParser jsonParseremp = new JSONParser();
+		JSONObject jsonObjectemp = (JSONObject) jsonParseremp.parse(empname);
+		JSONObject jsonObjEmp = new JSONObject(jsonObjectemp);
+		String firstname = (String) jsonObjEmp.get("FirstName");
+		String lastname = (String) jsonObjEmp.get("LastName");
 		JSONObject empanswers = new JSONObject();
 		try {
 			JSONParser parser = new JSONParser();
@@ -3563,24 +3469,23 @@ public class HomeController {
 			HttpServletRequest request) throws ParseException {
 		String empname = "";
 		int stageid = 4;
-		//ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
+		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 
 		session = request.getSession();
 		String userempcode = (String) session.getAttribute("employeecode");
-		/*try {
-			empname = empdetails.getUserDetail(userempcode).getFirstName();
-
-		} catch (RemoteException e1) {
-			e1.printStackTrace();
-		}*/
-		String getUserDetailServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-				+ "GetUserDetail/"+userempcode;
-	    empname = sconnct.getServiceData(getUserDetailServiceUrl).toString();
-	   JSONParser jsonParseremp = new JSONParser();
-       JSONObject jsonObjectemp = (JSONObject) jsonParseremp.parse(empname);
-       JSONObject jsonObjEmp = new JSONObject(jsonObjectemp); 
-	   String firstname =  (String) jsonObjEmp.get("FirstName");
-	   String lastname =  (String) jsonObjEmp.get("LastName");
+		/*
+		 * try { empname = empdetails.getUserDetail(userempcode).getFirstName();
+		 * 
+		 * } catch (RemoteException e1) { e1.printStackTrace(); }
+		 */
+		String sconnectServiceServer = restService.getServiceDetails();
+		String getUserDetailServiceUrl = sconnectServiceServer + "GetUserDetail/" + userempcode;
+		empname = sconnct.getServiceData(getUserDetailServiceUrl).toString();
+		JSONParser jsonParseremp = new JSONParser();
+		JSONObject jsonObjectemp = (JSONObject) jsonParseremp.parse(empname);
+		JSONObject jsonObjEmp = new JSONObject(jsonObjectemp);
+		String firstname = (String) jsonObjEmp.get("FirstName");
+		String lastname = (String) jsonObjEmp.get("LastName");
 		JSONObject empratinganswers = new JSONObject();
 		try {
 			JSONParser parser = new JSONParser();
@@ -3621,12 +3526,12 @@ public class HomeController {
 		JSONObject exempregister = new JSONObject();
 		try {
 			TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 9);
-			/* TblUserResignation register=new TblUserResignation(); */
 			resignedUser.setExEmpEmail(email);
 			resignedUser.setExEmpPassword(password);
 			resignedUser.setExEmpUserid(userid);
 			/* register.setComments(" ex employee id"); */
 			approvalservice.updateResignationStatus(resignedUser);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -3670,19 +3575,20 @@ public class HomeController {
 		List<String> listvalue = new ArrayList<String>();
 		String[] keys = { "empcode" };
 		String[] value = { empcode };
-		//ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
-		/*try {
-			empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO", keys, value);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}*/
-		String assetsServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-				+ "GetAssetDetails";
+		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
+		/*
+		 * try { empassets = empdetails.enterPriseDataService("Asset",
+		 * "ASSETINFO", keys, value); } catch (RemoteException e) {
+		 * e.printStackTrace(); }
+		 */
+
 		String getInputAssets = " {\"Service\": \"Asset\",\"Operation\": \"ASSETINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
-		String AssetsInfo=getInputAssets.replace("employeeCode", empcode);
-	    empassets = sconnct.getPostServiceData(assetsServiceUrl, AssetsInfo).toString();
-	    
-	    //if()
+		String AssetsInfo = getInputAssets.replace("employeeCode", empcode);
+		String sconnectServiceServer = restService.getServiceDetails();
+		String assetsServiceUrl = sconnectServiceServer + "GetAssetDetails";
+		empassets = sconnct.getPostServiceData(assetsServiceUrl, AssetsInfo).toString();
+
+		// if()
 		try {
 			JSONArray serviceparser = null;
 			JSONParser parser = new JSONParser();
@@ -3727,7 +3633,7 @@ public class HomeController {
 	@RequestMapping(value = "/empfeedbackquestion", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getempfeedbackq(HttpSession session, HttpServletRequest request) {
-		//ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
+		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
 		int resignationId = 0;
 		String msg = "Employee has not given feedback";
 		JSONObject empfeedback = new JSONObject();
@@ -3764,38 +3670,40 @@ public class HomeController {
 
 	@RequestMapping(value = "/resetPassword", method = RequestMethod.GET)
 	@ResponseBody
-        public JSONObject sendResetPassword(HttpServletRequest request){
-		JSONObject jsonObject=new JSONObject();
-		String email=(String)request.getParameter("email");
-		String returnedMessage=null;
-		boolean mailExists=exemployeeservice.emailExists(email, 8);
-		TblResetPassword uuid_entry=null;
-		if(mailExists){
-			try{
-			UUID uuid = UUID.randomUUID();
-			String randomUUIDString = uuid.toString();
-			String applicationURL=exemployeeservice.getAppUrlLink();
-			//String url="http://localhost:8080/hrms/pwdReset?id="+randomUUIDString;
-			applicationURL=applicationURL+"/"+randomUUIDString;
-			uuid_entry=exemployeeservice.resetPasswordModel(email);
-			if(uuid_entry==null){
-			uuid_entry=new TblResetPassword();
-			uuid_entry.setUser_email(email);
-			uuid_entry.setUserkey(randomUUIDString);
-			uuid_entry.setKey_status(1);
-			}else{
-				uuid_entry.setUserkey(randomUUIDString);
-			}
-			String saveMessgae=exemployeeservice.saveResetPwdModel(uuid_entry);
-			if(saveMessgae.equals("success")){
-				String message="Hi, As per your request the link for resetting the password is :"+applicationURL;
-				mailService.sendEmail(email, "evm@softageindia.com", "test", message);
-				returnedMessage="Password reset link sent to the specified email";
-			}else{
-				returnedMessage="Unable to generate the email token";
-			}
-			}catch(Exception e){
-				returnedMessage="Error in sending the password link to the specified email";
+	public JSONObject sendResetPassword(HttpServletRequest request) {
+		JSONObject jsonObject = new JSONObject();
+		String email = (String) request.getParameter("email");
+		String returnedMessage = null;
+		boolean mailExists = exemployeeservice.emailExists(email, 8);
+		TblResetPassword uuid_entry = null;
+		if (mailExists) {
+			try {
+				UUID uuid = UUID.randomUUID();
+				String randomUUIDString = uuid.toString();
+				String applicationURL = exemployeeservice.getAppUrlLink();
+				// String
+				// url="http://localhost:8080/hrms/pwdReset?id="+randomUUIDString;
+				applicationURL = applicationURL + "/" + randomUUIDString;
+				uuid_entry = exemployeeservice.resetPasswordModel(email);
+				if (uuid_entry == null) {
+					uuid_entry = new TblResetPassword();
+					uuid_entry.setUser_email(email);
+					uuid_entry.setUserkey(randomUUIDString);
+					uuid_entry.setKey_status(1);
+				} else {
+					uuid_entry.setUserkey(randomUUIDString);
+				}
+				String saveMessgae = exemployeeservice.saveResetPwdModel(uuid_entry);
+				if (saveMessgae.equals("success")) {
+					String message = "Hi, As per your request the link for resetting the password is :"
+							+ applicationURL;
+					mailService.sendEmail(email, "evm@softageindia.com", "test", message);
+					returnedMessage = "Password reset link sent to the specified email";
+				} else {
+					returnedMessage = "Unable to generate the email token";
+				}
+			} catch (Exception e) {
+				returnedMessage = "Error in sending the password link to the specified email";
 
 				System.out.println(e.getMessage());
 			}
@@ -3828,13 +3736,13 @@ public class HomeController {
 		}
 		return jsonObject;
 	}
-	
+
 	@RequestMapping(value = "/empSearchInfo", method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject empSearchInfo(HttpServletRequest request) {
 		JSONObject getdata = new JSONObject();
 		String empCode = request.getParameter("empCode");
-		getdata=searchService.getDetails(empCode);
+		getdata = searchService.getDetails(empCode);
 		return getdata;
 	}
 }

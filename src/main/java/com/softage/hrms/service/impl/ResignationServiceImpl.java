@@ -1,9 +1,7 @@
 package com.softage.hrms.service.impl;
 
-import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -18,9 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.tempuri.ISoftAgeEnterpriseProxy;
 
-import com.softage.hrms.controller.HomeController;
 import com.softage.hrms.dao.ResignationDao;
 import com.softage.hrms.model.MstReason;
 import com.softage.hrms.model.MstResignationStatus;
@@ -33,8 +29,9 @@ import com.softage.hrms.service.ResignationService;
 public class ResignationServiceImpl implements ResignationService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ResignationServiceImpl.class);
-	String sconnectServiceServer="http://172.25.37.226";
+	//String sconnectServiceServer="http://172.25.37.226/EserviceBarcodeNew/SoftAgeEnterprise.svc/";
 	SconnectUtil sconnct=new SconnectUtil();
+	
 	@Autowired
 	private ResignationDao resignationdao;
 
@@ -104,9 +101,8 @@ public class ResignationServiceImpl implements ResignationService {
 			String employee_code=resignedUser.getEmpCode();
 			
 		try {
-			
-		   String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-					+ "GetEmployeeInfo";
+			String sconnectServiceServer = resignationdao.getServiceDetails();
+		   String evmServiceUrl  = sconnectServiceServer + "GetEmployeeInfo";
 		    String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
 		    String empInfo=getInput.replace("employeeCode", employee_code);
 		    String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
@@ -196,11 +192,9 @@ public class ResignationServiceImpl implements ResignationService {
 					String remarks=resignedUser.getComments();
 					//int notice_period=emp.getUserDetail(employee_code).getNoticePeriod(); FROM ESF Service
 					int notice_period=60;
-					String[] keys={"empcode"};
-					String[] values={employee_code};
 					//String empinfostring=emp.enterPriseDataService("EVM", "EmpInfo", keys, values);
-					String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-							+ "EnterPriseDataService";
+					String sconnectServiceServer = resignationdao.getServiceDetails();
+					String evmServiceUrl  = sconnectServiceServer + "EnterPriseDataService";
 					SconnectUtil sconnct=new SconnectUtil();
 					String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
 					String empinfostring=getInput.replace("employeeCode", employee_code);
@@ -208,8 +202,7 @@ public class ResignationServiceImpl implements ResignationService {
 					Date resDate=resignedUser.getResignationDate();
 					String resignDate=df.format(resDate);
 					String rmempcode=resignedUser.getRmEmpcode();
-					String getUserDetailServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-							+ "GetUserDetail/"+employee_code;
+					String getUserDetailServiceUrl  = sconnectServiceServer + "GetUserDetail/"+employee_code;
 				   String empname = sconnct.getServiceData(getUserDetailServiceUrl).toString();
 				   JSONParser jsonParseremp = new JSONParser();
 			       JSONObject jsonObjectemp;
@@ -264,34 +257,30 @@ public class ResignationServiceImpl implements ResignationService {
 			String empcode=resbean.getEmpCode();
 			//ISoftAgeEnterpriseProxy emp=new ISoftAgeEnterpriseProxy();
 			try {
-				String getUserDetailServiceUrl = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-						+ "GetUserDetail/"+empcode;
+				String sconnectServiceServer = resignationdao.getServiceDetails();
+				String getUserDetailServiceUrl = sconnectServiceServer + "GetUserDetail/"+empcode;
 			String empname = sconnct.getServiceData(getUserDetailServiceUrl).toString();
 			   JSONParser jsonParseremp = new JSONParser();
 		       JSONObject jsonObjectemp = (JSONObject) jsonParseremp.parse(empname);
 		       JSONObject jsonObjEmp = new JSONObject(jsonObjectemp); 
 			   String fname =  (String) jsonObjEmp.get("FirstName");
-			   String lname =  (String) jsonObjEmp.get("LastName");
-				
-				//String fname = emp.getUserDetail(empcode).getFirstName();
-				//String lname=emp.getUserDetail(empcode).getLastName();
+			   String lname =  (String) jsonObjEmp.get("LastName");		
 				String name=fname+lname;
 				MstReason reason=resbean.getMstReason();
 				String reason_for_leaving=reason.getReason();
 				int resignId=resbean.getResignationId();
 				String remarks=resbean.getComments();
 				//int notice_period=60;
-				String[] keys={"empcode"};
-				String[] values={empcode};
-				//String empinfo=emp.enterPriseDataService("EVM", "EmpInfo", keys, values);
-				String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-						+ "EnterPriseDataService";
+				String evmServiceUrl  = sconnectServiceServer + "GetEmployeeInfo";
 				SconnectUtil sconnct=new SconnectUtil();
 				String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
 				String empInfo=getInput.replace("employeeCode", empcode);
-				sconnct.getPostServiceData(evmServiceUrl, getInput);
+				String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
 				JSONParser parser=new JSONParser();
-				JSONObject empInformation=(JSONObject)parser.parse(empInfo);
+				JSONObject empInfoObj=(JSONObject)parser.parse(evmData);
+				
+				JSONObject jsonObjEvm = new JSONObject(empInfoObj); 
+				JSONObject empInformation = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
 				int notice_period=((Long)empInformation.get("NoticePeriod")).intValue();
 				if(notice_period==0)
 				{
@@ -368,8 +357,8 @@ public class ResignationServiceImpl implements ResignationService {
 			String[] keys={"empcode"};
 			String[] values={empcode};
 			//String empinfoString=employee.enterPriseDataService("EVM", "EmpInfo", keys, values);
-			String evmServiceUrl  = sconnectServiceServer +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-					+ "GetEmployeeInfo";
+			String sconnectServiceServer = resignationdao.getServiceDetails();
+			String evmServiceUrl  = sconnectServiceServer + "GetEmployeeInfo";
 			String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
 			String empInfo=getInput.replace("employeeCode", empcode);
 			String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
