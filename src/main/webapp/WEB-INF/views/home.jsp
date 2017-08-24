@@ -134,7 +134,7 @@ response.setDateHeader("Expires", -1);
                         <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-blue dropdown-caret dropdown-close">
                             <li><a href="#" data-toggle="modal" data-target="#myModal1"><i class="ace-icon fa fa-user"></i>Change Password </a></li>
                             <li class="divider"></li>
-                            <li><a href="http://172.25.37.226/S_SconnectQC/Account/Logout"><i class="ace-icon fa fa-power-off"></i>Logout </a></li>
+                            <li><a href="http://http://172.25.37.226/S_Sconnecttesting/Account/Logout"><i class="ace-icon fa fa-power-off"></i>Logout </a></li>
                         </ul>
                     </li>
                 </ul>

@@ -49,7 +49,7 @@
 	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 	destroy-method="close">
 	<beans:property name="driverClassName" value="com.mysql.jdbc.Driver"></beans:property>
-	<beans:property name="url" value="jdbc:mysql://172.25.37.10:3306/hrms"></beans:property>
+	<beans:property name="url" value="jdbc:mysql://172.25.37.10:3306/hrms_qc"></beans:property>
 	<beans:property name="username" value="root"></beans:property>
 	<beans:property name="password" value="redhat"></beans:property>
 		</beans:bean>

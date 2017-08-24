@@ -237,6 +237,7 @@ public class HomeController {
 			// String resignReason = request.getParameter("emp_reason");
 			int reason_for_leaving = Integer.parseInt(request.getParameter("emp_reason"));
 			MstReason reason_mast = resignationService.getReason(reason_for_leaving);
+			String leave_Reason=reason_mast.getReason();
 			MstResignationStatus status_mast = resignationService.getStatus(1);
 			String remarks = request.getParameter("emp_comments");
 			String noduestring = null;
@@ -286,12 +287,23 @@ public class HomeController {
 			String managerMail = (String) empinfoJson.get("ManagerEmail");
 			String hrMail = (String) noduesJson.get("HrEmpEmail");
 			String empMail = (String) empinfoJson.get("CompanyEmail");
-			
-			String resignMsg = "Resignation request for employee" + empcode+ "has been processed hr "
-					+ "and last working day has been set to "+ finalDate +" sent by employee	";	
-
-			String subject = "Employee Resignation";
-			String from = "evm@softageindia.com";
+			String newline = System.getProperty("line.separator");
+			/*String resignMsg = "Resignation request for employee" + empcode+ "has been processed hr "
+					+ "and last working day has been set to "+ finalDate +" sent by employee	";	*/
+			String resignMsg ="Dear Sir,"+ newline 
+					+ newline
+					+"Due to " +leave_Reason+ " I will not be able  to continue in your esteemed organization and please consider"+ "("+finalDate+")"+" as my last working in the Company."+  newline
+					+ newline
+					+"I will return all the item of the Company and get the ‘No Dues’ form filled/signed "
+					+"from all concerned departments and submit to HR department."
+					+"I will also complete the ‘Exit Interview’ process with the HR person before "
+					+"leaving the Company." + newline
+					+ newline
+					+"Thanks & Regards,"+ newline
+					+empcode +newline
+					+empName;
+			String subject = "Resignation Request";
+			String from = empMail;
 
 			if (jsonObj.get("result").equals("successful")) {
 				if ((org.apache.commons.lang3.StringUtils.isNotBlank(hrMail))
@@ -299,7 +311,7 @@ public class HomeController {
 						&& (org.apache.commons.lang3.StringUtils.isNotBlank(empMail))) {
 					mailService.sendEmail(managerMail, from, subject, resignMsg);
 					mailService.sendEmail(hrMail, from, subject, resignMsg);
-					mailService.sendEmail(empMail, from, subject, resignMsg);
+					//mailService.sendEmail(empMail, from, subject, resignMsg);
 				} else {
 					System.out.println("Resigned employee mail not available");
 				}
@@ -422,25 +434,19 @@ public class HomeController {
 			JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
 			JSONObject jsonObjEvm = new JSONObject(jsonObject);
 			mailJson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
-			// rmEmpinfoString = emp.enterPriseDataService("EVM", "EmpInfo",
-			// keys, rmValues);
-			// String evmServiceUrl = sconnectServiceServer
-			// +"/EserviceBarcodeNew/SoftAgeEnterprise.svc/"
-			// + "GetEmployeeInfo";
-			String getInputRm = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"rmValues\":[\"employeeCode\"]}";
+			String empName = (String) mailJson.get("EmployeeName");
+			String designation = (String) mailJson.get("Designation");
+			String role = (String) mailJson.get("Role");
+			
+			String getInputRm = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
 			String empInfoRm = getInputRm.replace("employeeCode", empcode);
-			/*
-			 * String sconnectServiceServer = restService.getServiceDetails();
-			 * String evmServiceUrl = sconnectServiceServer +"GetEmployeeInfo";
-			 */
+			
 			String evmDataRm = sconnct.getPostServiceData(evmServiceUrl, empInfoRm).toString();
-			JSONObject jsonObjectRm = (JSONObject) jsonParser.parse(evmDataRm);
+			JSONParser jsonParserRm = new JSONParser();
+			JSONObject jsonObjectRm = (JSONObject) jsonParserRm.parse(evmDataRm);
 			JSONObject jsonObjEvmRm = new JSONObject(jsonObjectRm);
-			rmEMpinfoJson = (JSONObject) jsonObjEvmRm.get("GetEmployeeInfoResult");
-			// mailJson = (JSONObject) parser.parse(empinfo);
-			// rmEMpinfoJson = (JSONObject) parser.parse(rmEmpinfoString);
-			// noduestring = emp.enterPriseDataService("EVM", "NODUESOWNERS",
-			// officekeys, officevalues);
+			JSONObject	mailJsonRm = (JSONObject) jsonObjEvmRm.get("GetEmployeeInfoResult");
+		
 			String getInputOfNoDues = " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}";
 			noduestring = getInputOfNoDues.replace("OFFICEID", resOfficeCode);
 			String noduesServiceUrl = sconnectServiceServer + "GetNoDuesOwners";
@@ -449,23 +455,42 @@ public class HomeController {
 			JSONObject noDuesJsonObject = (JSONObject) noDuesParser.parse(noDuesData);
 			JSONObject jsonObjNoDues = new JSONObject(noDuesJsonObject);
 			noduesJson = (JSONObject) jsonObjNoDues.get("GetNoDuesOwnersResult");
+			TblUserResignation resignation = resignationService.getResignationUserService(resEmpcode, resignStatus);
+			Date resignationDate=resignation.getResignationDate();
+			Date relDate=resignation.getReleivingDate();
+			
 			// noduesJson = (JSONObject) parser.parse(noduestring);
-			String manager_email = (String) rmEMpinfoJson.get("CompanyEmail");
+			String manager_email = (String) mailJsonRm.get("CompanyEmail");
+			String rmName = (String) mailJsonRm.get("EmployeeName");
 			String hr_email = (String) noduesJson.get("HrEmpEmail");
 			String emp_email = (String) mailJson.get("CompanyEmail");
-			String rm_message = "Action on request for " + resEmpcode + " has been taken and has been" + action
-					+ " sent by rm";
-			String hr_message = "Action on request for " + resEmpcode + " has been taken and has been" + action
-					+ " sent by hr";
-			String emp_message = "Action on request for " + resEmpcode + " has been taken and has been" + action
-					+ " sent by employee";
+			String departmentName = (String) mailJson.get("Department");
+			String newline = System.getProperty("line.separator");
+			String rm_message = newline+ "Name: "+empName+newline
+					+"Employee Code: "+resEmpcode +newline
+					+"Department: "+departmentName+newline
+					+"Designation: "+designation+newline
+					+"Role: "+role+newline+newline
+			        +" Mr. / Ms. "+empName+","+newline
+					+newline
+			        +"Your resignation dated " + resignationDate + " is hereby accepted. You will be relived from "
+					+ "the service of the Company from the close of working hours of ("+relDate+"). "
+                    +"Before leaving you must return, all Company items with you and go ‘No Dues’ filled "
+                    + "& signed from all concerned departments. You will fill the ‘Exit Interview’ and "
+                    + "submit to concern HR also before leaving the Company."+newline
+                    +newline
+                    +"Thanks & Regards,"+newline
+                    +empcode+newline
+                    +rmName;
+			String from = manager_email;
+            String Subject="Manager Feedback";
 
 			if ((org.apache.commons.lang3.StringUtils.isNotBlank(hr_email))
 					&& (org.apache.commons.lang3.StringUtils.isNotBlank(emp_email))
 					&& (org.apache.commons.lang3.StringUtils.isNotBlank(emp_email))) {
-				mailService.sendEmail(manager_email, "evm@softageindia.com", "test", rm_message);
-				mailService.sendEmail(hr_email, "evm@softageindia.com", "test", hr_message);
-				mailService.sendEmail(emp_email, "evm@softageindia.com", "test", emp_message);
+				//mailService.sendEmail(manager_email, from, Subject, rm_message);
+				mailService.sendEmail(hr_email, from, Subject, rm_message);
+				mailService.sendEmail(emp_email, from, Subject, rm_message);
 			} else {
 				System.out.println("rmInsert Mail not Available");
 			}
@@ -581,15 +606,27 @@ public class HomeController {
 				JSONObject noduesJson = (JSONObject) jsonObjNoDues.get("GetNoDuesOwnersResult");
 				// String empinfoString = emp.enterPriseDataService("EVM",
 				// "EmpInfo", keys, empvalues);
+				String getInputHr = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+				String empInfoHr = getInputHr.replace("employeeCode", hrempcode);
+				String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
+				String evmDataHr = sconnct.getPostServiceData(evmServiceUrl, empInfoHr).toString();
+				JSONParser jsonParserHr = new JSONParser();
+				JSONObject jsonObjectHr = (JSONObject) jsonParserHr.parse(evmDataHr);
+				JSONObject jsonObjEvmHr = new JSONObject(jsonObjectHr);
+				JSONObject empJsonHr = (JSONObject) jsonObjEvmHr.get("GetEmployeeInfoResult");
 				String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
 				String empInfo = getInput.replace("employeeCode", empcode);
-				String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
+				//String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
 				String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
 				JSONParser jsonParser = new JSONParser();
 				JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
 				JSONObject jsonObjEvm = new JSONObject(jsonObject);
 				JSONObject empduesJson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
-
+				String empName = (String) empduesJson.get("EmployeeName");
+				String designation = (String) empduesJson.get("Designation");
+				String role = (String) empduesJson.get("Role");
+				String empNameHr = (String) empJsonHr.get("EmployeeName");
+				String departmentName = (String) empduesJson.get("Department");
 				// JSONObject empduesJson = new JSONObject();
 				// JSONParser parser = new JSONParser();
 				// noduesjson = (JSONObject) parser.parse(noduestring);
@@ -597,21 +634,28 @@ public class HomeController {
 				String hr_email = (String) noduesJson.get("HrEmpEmail");
 				String emp_email = (String) empduesJson.get("CompanyEmail");
 				String rm_email = (String) empduesJson.get("ManagerEmail");
-				String rm_message = "Resignation request for employee" + empcode
-						+ " has been processed by hr and last working day has been set to" + df.format(lwd)
-						+ " sent by rm";
-				String hr_message = "Resignation request for employee" + empcode
-						+ " has been processed by hr and last working day has been set to" + df.format(lwd)
-						+ " sent by hr";
-				String emp_message = "Resignation request for employee" + empcode
-						+ " has been processed hr and last working day has been set to" + df.format(lwd)
-						+ " sent by employee";
+				String newline = System.getProperty("line.separator");
+				String rm_message = newline+ "Name: "+empName+newline
+						+"Employee Code: "+empcode +newline
+						+"Department: "+departmentName+newline
+						+"Designation: "+designation+newline
+						+"Role: "+role+newline+newline
+						+ "Mr / Ms."+empName+","
+                      +"You are hereby informed that your last working day with Company will be from" +newline +"the close of the working hours of ("+lastworkingdate+"). "+newline
+                      +newline
+                      +"Please complete your ‘No Dues’ and ‘Exit Interview’ before leaving the Company."+newline
+                      +newline
+                      +"Thanks & Regards,"+newline
+                      +hrempcode
+                      +empNameHr;
+				String from = hr_email;
+	            String Subject="Last Working Day Confirmation";
 				if ((org.apache.commons.lang3.StringUtils.isNotBlank(hr_email))
 						&& (org.apache.commons.lang3.StringUtils.isNotBlank(emp_email))
 						&& (org.apache.commons.lang3.StringUtils.isNotBlank(rm_email))) {
-					mailService.sendEmail(hr_email, "evm@softageindia.com", "test", rm_message);
-					mailService.sendEmail(emp_email, "evm@softageindia.com", "test", hr_message);
-					mailService.sendEmail(rm_email, "evm@softageindia.com", "test", emp_message);
+					//mailService.sendEmail(hr_email, from, Subject, rm_message);
+					mailService.sendEmail(emp_email, from, Subject, rm_message);
+					mailService.sendEmail(rm_email, from, Subject, rm_message);
 				} else {
 					System.out.println("Submit hr approval mail not Availble");
 				}
@@ -1383,17 +1427,49 @@ public class HomeController {
 		String barcodeno = null;
 		String assetsallocatedby = null;
 		String assetsallocateddate = null;
+		String departmentmanageremail=null;
+		String	empemail=null;
+		String	manageremail =null;
+		JSONObject managerservicejson = null;
+		JSONObject servicejson = null;
 		String[] key = { "empcode" };
 		String[] value = { empcode };
-		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
-		/*
-		 * try { empassets = empdetails.enterPriseDataService("Asset",
-		 * "ASSETINFO", key, value); } catch (RemoteException e) {
-		 * e.printStackTrace(); }
-		 */
+		String departmentmanagerempcode = (String) session.getAttribute("employeecode");
+		String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+		String empInfo = getInput.replace("employeeCode", departmentmanagerempcode);
+		String sconnectServiceServer = restService.getServiceDetails();
+		String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
+		String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+		try {
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
+			JSONObject jsonObjEvm = new JSONObject(jsonObject);
+		    managerservicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+
+		    String getInputemp = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+			String empInfoemp = getInputemp.replace("employeeCode", empcode);
+			String evmDataemp = sconnct.getPostServiceData(evmServiceUrl, empInfoemp).toString();
+		
+				JSONParser jsonParseremp = new JSONParser();
+				JSONObject jsonObjectemp = (JSONObject) jsonParseremp.parse(evmDataemp);
+				JSONObject jsonObjEvmemp = new JSONObject(jsonObjectemp);
+				servicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		departmentmanageremail = (String) managerservicejson.get("CompanyEmail");
+		String departmentmanagername = (String) managerservicejson.get("EmployeeName");
+		String empName = (String) servicejson.get("EmployeeName");
+		String designation = (String) servicejson.get("Designation");
+		String role = (String) servicejson.get("Role");
+		String departmentName = (String) servicejson.get("Department");
+		String	managercode = (String) servicejson.get("ManagerCode");
+		empemail = (String) servicejson.get("CompanyEmail");
+	    manageremail = (String) servicejson.get("ManagerEmail");
 		String getInputAssets = " {\"Service\": \"Asset\",\"Operation\": \"ASSETINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
 		String AssetsInfo = getInputAssets.replace("employeeCode", empcode);
-		String sconnectServiceServer = restService.getServiceDetails();
+		//String sconnectServiceServer = restService.getServiceDetails();
 		String assetsServiceUrl = sconnectServiceServer + "GetAssetDetails";
 		String assetsData = sconnct.getPostServiceData(assetsServiceUrl, AssetsInfo).toString();
 		/*
@@ -1471,6 +1547,28 @@ public class HomeController {
 		noduesclearence.setTbluserresignation(resignedUser);
 
 		noduesservice.updateNoduesClearence(noduesclearence);
+		String newline = System.getProperty("line.separator");
+		String rm_message = newline+ "Name: "+empName+newline
+				+"Employee Code: "+empcode +newline
+				+"Department: "+departmentName+newline
+				+"Designation: "+designation+newline
+				+"Role: "+role+newline+newline
+				+"Remarks: "+comments+newline+newline
+		        +" Mr. / Ms. "+empName+","+newline
+				+newline
+				+""+newline
+				+newline
+				+"Thanks & Regards, "+newline
+				+departmentmanagerempcode+newline
+				+departmentmanagername;
+		if ((org.apache.commons.lang3.StringUtils.isNotBlank(manageremail))
+				&& (org.apache.commons.lang3.StringUtils.isNotBlank(departmentmanageremail))
+				&& (org.apache.commons.lang3.StringUtils.isNotBlank(empemail))) {
+			mailService.sendEmail(manageremail, departmentmanageremail, "NO DUES SUBMITTED FOR IT", rm_message);
+			mailService.sendEmail(empemail, departmentmanageremail, "NO DUES SUBMITTED FOR IT", rm_message);
+		} else {
+			System.out.println("Rejected Employee mail not Availble");
+		}
 		return insertitasserts;
 	}
 
@@ -1552,18 +1650,50 @@ public class HomeController {
 		String empassets = null;
 		String assetsallocatedby = null;
 		String assetsallocateddate = null;
+		String departmentmanageremail=null;
+		String	empemail=null;
+		String	manageremail =null;
+		JSONObject managerservicejson = null;
+		JSONObject servicejson = null;
 		Date date = null;
 		String[] key = { "empcode" };
 		String[] value = { empcode };
-		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
-		/*
-		 * try { empassets = empdetails.enterPriseDataService("Asset",
-		 * "ASSETINFO", key, value); } catch (RemoteException e) {
-		 * e.printStackTrace(); }
-		 */
+		String departmentmanagerempcode = (String) session.getAttribute("employeecode");
+		String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+		String empInfo = getInput.replace("employeeCode", departmentmanagerempcode);
+		String sconnectServiceServer = restService.getServiceDetails();
+		String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
+		String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+		try {
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
+			JSONObject jsonObjEvm = new JSONObject(jsonObject);
+		    managerservicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+
+		    String getInputemp = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+			String empInfoemp = getInputemp.replace("employeeCode", empcode);
+			String evmDataemp = sconnct.getPostServiceData(evmServiceUrl, empInfoemp).toString();
+		
+				JSONParser jsonParseremp = new JSONParser();
+				JSONObject jsonObjectemp = (JSONObject) jsonParseremp.parse(evmDataemp);
+				JSONObject jsonObjEvmemp = new JSONObject(jsonObjectemp);
+				servicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		String empName = (String) servicejson.get("EmployeeName");
+		String designation = (String) servicejson.get("Designation");
+		String role = (String) servicejson.get("Role");
+		String departmentName = (String) servicejson.get("Department");
+		String departmentmanagername = (String) managerservicejson.get("EmployeeName");
+	    departmentmanageremail = (String) managerservicejson.get("CompanyEmail");
+	    String	managercode = (String) servicejson.get("ManagerCode");
+		empemail = (String) servicejson.get("CompanyEmail");
+	    manageremail = (String) servicejson.get("ManagerEmail");
 		String getInputAssets = " {\"Service\": \"Asset\",\"Operation\": \"ASSETINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
 		String AssetsInfo = getInputAssets.replace("employeeCode", empcode);
-		String sconnectServiceServer = restService.getServiceDetails();
+		//String sconnectServiceServer = restService.getServiceDetails();
 		String assetsServiceUrl = sconnectServiceServer + "GetAssetDetails";
 		String assetsData = sconnct.getPostServiceData(assetsServiceUrl, AssetsInfo).toString();
 		JSONObject insertasserts = new JSONObject();
@@ -1637,7 +1767,30 @@ public class HomeController {
 		noduesclearence.setTbluserresignation(resignedUser);
 		noduesclearence.setDepartmentId(assetDepartment);
 		// insertasserts = noduesservice.submitNoduesclearence(nodues);
-		noduesservice.updateNoduesClearence(noduesclearence);
+		String newline = System.getProperty("line.separator");
+		String rm_message = newline+ "Name: "+empName+newline
+				+"Employee Code: "+empcode +newline
+				+"Department: "+departmentName+newline
+				+"Designation: "+designation+newline
+				+"Role: "+role+newline+newline
+				+"Remarks: "+comments+newline+newline
+		        +" Mr. / Ms. "+empName+","+newline
+				+newline
+				+"You are required to get the ‘No Dues’ form filled & signed from all concerned "+newline
+				+"departments on your last date of working and submit to the concerned HR "+newline
+				+"person before leaving the Company."+newline
+				+newline
+				+"Thanks & Regards, "+newline
+				+departmentmanagerempcode+newline
+				+departmentmanagername;
+		if ((org.apache.commons.lang3.StringUtils.isNotBlank(manageremail))
+				&& (org.apache.commons.lang3.StringUtils.isNotBlank(departmentmanageremail))
+				&& (org.apache.commons.lang3.StringUtils.isNotBlank(empemail))) {
+			mailService.sendEmail(manageremail, departmentmanageremail, "NO DUES SUBMITTED FOR INFRA", rm_message);
+			mailService.sendEmail(empemail, departmentmanageremail, "NO DUES SUBMITTED FOR INFRA", rm_message);
+		} else {
+			System.out.println("Rejected Employee mail not Availble");
+		}
 		return insertasserts;
 	}
 
@@ -2109,19 +2262,51 @@ public class HomeController {
 		String assetsallocatedby = null;
 		String assetsallocateddate = null;
 		JSONArray serviceparser = null;
+		String departmentmanageremail=null;
+		String	empemail=null;
+		String	manageremail =null;
+		JSONObject managerservicejson =null;
+		JSONObject servicejson = null;
 		Date date = null;
 		String assetname = null;
 		String[] key = { "empcode" };
 		String[] value = { empcode };
-		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
-		/*
-		 * try { empassets = empdetails.enterPriseDataService("Asset",
-		 * "ASSETINFO", key, value); } catch (RemoteException e) {
-		 * e.printStackTrace(); }
-		 */
+		String departmentmanagerempcode = (String) session.getAttribute("employeecode");
+		String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+		String empInfo = getInput.replace("employeeCode", departmentmanagerempcode);
+		String sconnectServiceServer = restService.getServiceDetails();
+		String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
+		String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+		try {
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
+			JSONObject jsonObjEvm = new JSONObject(jsonObject);
+			managerservicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+
+			String getInputemp = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+			String empInfoemp = getInputemp.replace("employeeCode", empcode);
+			String evmDataemp = sconnct.getPostServiceData(evmServiceUrl, empInfoemp).toString();
+			
+				JSONParser jsonParseremp = new JSONParser();
+				JSONObject jsonObjectemp = (JSONObject) jsonParseremp.parse(evmDataemp);
+				JSONObject jsonObjEvmemp = new JSONObject(jsonObjectemp);
+			    servicejson = (JSONObject) jsonObjEvmemp.get("GetEmployeeInfoResult");
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		String empName = (String) servicejson.get("EmployeeName");
+		String designation = (String) servicejson.get("Designation");
+		String role = (String) servicejson.get("Role");
+		String departmentName = (String) servicejson.get("Department");
+		String	managercode = (String) servicejson.get("ManagerCode");
+		empemail = (String) servicejson.get("CompanyEmail");
+	    manageremail = (String) servicejson.get("ManagerEmail");
+	    String departmentmanagername = (String) managerservicejson.get("EmployeeName");
+        departmentmanageremail = (String) managerservicejson.get("CompanyEmail");
 		String getInputAssets = " {\"Service\": \"Asset\",\"Operation\": \"ASSETINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
 		String AssetsInfo = getInputAssets.replace("employeeCode", empcode);
-		String sconnectServiceServer = restService.getServiceDetails();
+		//String sconnectServiceServer = restService.getServiceDetails();
 		String assetsServiceUrl = sconnectServiceServer + "GetAssetDetails";
 		String assetsData = sconnct.getPostServiceData(assetsServiceUrl, AssetsInfo).toString();
 
@@ -2197,7 +2382,31 @@ public class HomeController {
 		noduesclearence.setDepartmentId(assetDepartment);
 		// insertasserts = noduesservice.submitNoduesclearence(nodues);
 		noduesservice.updateNoduesClearence(noduesclearence);
-
+		
+		String newline = System.getProperty("line.separator");
+		String rm_message = newline+ "Name: "+empName+newline
+				+"Employee Code: "+empcode +newline
+				+"Department: "+departmentName+newline
+				+"Designation: "+designation+newline
+				+"Role: "+role+newline+newline
+				+"Remarks: "+comments+newline+newline
+		        +" Mr. / Ms. "+empName+","+newline
+				+newline
+				+"You are required to get the ‘No Dues’ form filled & signed from all concerned "+newline
+				+"departments on your last date of working and submit to the concerned HR "+newline
+				+"person before leaving the Company."+newline
+				+newline
+				+"Thanks & Regards, "+newline
+				+departmentmanagerempcode+newline
+				+departmentmanagername;
+		if ((org.apache.commons.lang3.StringUtils.isNotBlank(manageremail))
+				&& (org.apache.commons.lang3.StringUtils.isNotBlank(departmentmanageremail))
+				&& (org.apache.commons.lang3.StringUtils.isNotBlank(empemail))) {
+			mailService.sendEmail(manageremail, departmentmanageremail, "NO DUES SUBMITTED FOR ACCOUNT", rm_message);
+			mailService.sendEmail(empemail, departmentmanageremail, "NO DUES SUBMITTED FOR ACCOUNT", rm_message);
+		} else {
+			System.out.println("Rejected Employee mail not Availble");
+		}
 		return insertasserts;
 	}
 
@@ -2222,12 +2431,14 @@ public class HomeController {
 		String assetsallocatedby = null;
 		String assetname = null;
 		JSONArray serviceparser = null;
+		JSONObject servicejson =null;
 		Date date = null;
 		Date date1 = null;
 		String empassets = null;
 		String empemail = null;
 		String manageremail = null;
 		String departmentmanageremail = null;
+		String departmentmanagername = null;
 		session = request.getSession();
 		// Department Manager Information
 		String departmentmanagerempcode = (String) session.getAttribute("employeecode");
@@ -2249,9 +2460,7 @@ public class HomeController {
 			JSONObject jsonObjEvm = new JSONObject(jsonObject);
 			JSONObject managerservicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
 
-			// JSONObject managerservicejson = (JSONObject)
-			// departmentmanagerparse.parse(departmentempInfo);
-			String departmentmanagername = (String) managerservicejson.get("EmployeeName");
+			 departmentmanagername = (String) managerservicejson.get("EmployeeName");
 			departmentmanageremail = (String) managerservicejson.get("CompanyEmail");
 
 		} catch (ParseException e) {
@@ -2261,23 +2470,17 @@ public class HomeController {
 		// Rejected Employee Information
 		String[] empkey = { "empcode" };
 		String[] empvalue = { empcode };
-		/*
-		 * String empInfo = empdetails.enterPriseDataService("EVM", "empInfo",
-		 * empkey, empvalue); JSONParser parser = new JSONParser();
-		 */
+		
 
 		String getInputemp = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
 		String empInfoemp = getInputemp.replace("employeeCode", empcode);
-		/*
-		 * String sconnectServiceServer = restService.getServiceDetails();
-		 * String evmServiceUrl = sconnectServiceServer +"GetEmployeeInfo";
-		 */
+		
 		String evmDataemp = sconnct.getPostServiceData(evmServiceUrl, empInfoemp).toString();
 		try {
 			JSONParser jsonParser = new JSONParser();
 			JSONObject jsonObject = (JSONObject) jsonParser.parse(evmDataemp);
 			JSONObject jsonObjEvm = new JSONObject(jsonObject);
-			JSONObject servicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+			 servicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
 
 			// JSONObject servicejson = (JSONObject) parser.parse(empInfo);
 			managercode = (String) servicejson.get("ManagerCode");
@@ -2294,6 +2497,8 @@ public class HomeController {
 			// "NODUESOWNERS", officekeys, officevalues);
 			// JSONParser parseemp = new JSONParser();
 			// JSONObject jsonparse = (JSONObject) parseemp.parse(NODUESOWNERS);
+			
+
 			String getInputOfNoDues = " {\"Service\": \"EVM\",\"Operation\": \"NODUESOWNERS\",  \"Keys\": [\"OFFICECODE\"],\"Values\":[\"OFFICEID\"]}";
 			String noduestring = getInputOfNoDues.replace("OFFICEID", "CORGUR001");
 			String noduesServiceUrl = sconnectServiceServer + "GetNoDuesOwners";
@@ -2309,7 +2514,10 @@ public class HomeController {
 		String[] value = { empcode };
 		// empassets = empdetails.enterPriseDataService("Asset", "ASSETINFO",
 		// key, value);
-
+		String empName = (String) servicejson.get("EmployeeName");
+		String designation = (String) servicejson.get("Designation");
+		String role = (String) servicejson.get("Role");
+		String departmentName = (String) servicejson.get("Department");
 		String getInputAssets = " {\"Service\": \"Asset\",\"Operation\": \"ASSETINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
 		String AssetsInfo = getInputAssets.replace("employeeCode", empcode);
 		String assetsServiceUrl = sconnectServiceServer + "GetAssetDetails";
@@ -2423,11 +2631,27 @@ public class HomeController {
 		clearence.setTbluserresignation(resignedUser);
 		rejectjson = noduesservice.submitNoduesclearence(clearence);
 
+		String newline = System.getProperty("line.separator");
+		String rm_message = newline+ "Name: "+empName+newline
+				+"Employee Code: "+empcode +newline
+				+"Department: "+departmentName+newline
+				+"Designation: "+designation+newline
+				+"Role: "+role+newline+newline
+				+"Remarks: "+comments+newline+newline
+		        +" Mr. / Ms. "+empName+","+newline
+				+newline
+				+"You are required to get the ‘No Dues’ form filled & signed from all concerned "+newline
+				+"departments on your last date of working and submit to the concerned HR "+newline
+				+"person before leaving the Company."+newline
+				+newline
+				+"Thanks & Regards, "+newline
+				+departmentmanagerempcode+newline
+				+departmentmanagername;
 		if ((org.apache.commons.lang3.StringUtils.isNotBlank(manageremail))
 				&& (org.apache.commons.lang3.StringUtils.isNotBlank(departmentmanageremail))
 				&& (org.apache.commons.lang3.StringUtils.isNotBlank(empemail))) {
-			mailService.sendEmail(manageremail, departmentmanageremail, "NO DUES CLEARENCES", comments);
-			mailService.sendEmail(empemail, departmentmanageremail, "NO DUES CLEARENCES", comments);
+			mailService.sendEmail(manageremail, departmentmanageremail, "NO DUES CLEARANCE ACCOUNT", rm_message);
+			mailService.sendEmail(empemail, departmentmanageremail, "NO DUES CLEARANCE ACCOUNT", rm_message);
 		} else {
 			System.out.println("Rejected Employee mail not Availble");
 		}
@@ -2460,6 +2684,8 @@ public class HomeController {
 		String manageremail = null;
 		String sendTo = null;
 		String departmentmanageremail = null;
+		JSONObject servicejson = null;
+		String departmentmanagername = null;
 		session = request.getSession();
 		// Department Manager Information
 		String departmentmanagerempcode = (String) session.getAttribute("employeecode");
@@ -2482,7 +2708,7 @@ public class HomeController {
 
 			// JSONObject managerservicejson = (JSONObject)
 			// departmentmanagerparse.parse(departmentempInfo);
-			String departmentmanagername = (String) managerservicejson.get("EmployeeName");
+		    departmentmanagername = (String) managerservicejson.get("EmployeeName");
 			departmentmanageremail = (String) managerservicejson.get("CompanyEmail");
 
 		} catch (ParseException e) {
@@ -2499,7 +2725,7 @@ public class HomeController {
 			JSONParser jsonParser = new JSONParser();
 			JSONObject jsonObject = (JSONObject) jsonParser.parse(evmDataemp);
 			JSONObject jsonObjEvm = new JSONObject(jsonObject);
-			JSONObject servicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+			 servicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
 
 			managercode = (String) servicejson.get("ManagerCode");
 			empemail = (String) servicejson.get("CompanyEmail");
@@ -2533,6 +2759,10 @@ public class HomeController {
 		 * "ASSETINFO", key, value); } catch (RemoteException e) {
 		 * e.printStackTrace(); }
 		 */
+		String empName = (String) servicejson.get("EmployeeName");
+		String designation = (String) servicejson.get("Designation");
+		String role = (String) servicejson.get("Role");
+		String departmentName = (String) servicejson.get("Department");
 
 		String getInputAssets = " {\"Service\": \"Asset\",\"Operation\": \"ASSETINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
 		String AssetsInfo = getInputAssets.replace("employeeCode", empcode);
@@ -2589,13 +2819,29 @@ public class HomeController {
 		TblUserResignation resignedUser = resignationService.getResignationUserService(empcode, 5);
 		clearence.setTbluserresignation(resignedUser);
 		rejectjson = noduesservice.submitNoduesclearence(clearence);
+		String newline = System.getProperty("line.separator");
+		String rm_message = newline+ "Name: "+empName+newline
+				+"Employee Code: "+empcode +newline
+				+"Department: "+departmentName+newline
+				+"Designation: "+designation+newline
+				+"Role: "+role+newline+newline
+				+"Remarks: "+comments+newline+newline
+		        +" Mr. / Ms. "+empName+","+newline
+				+newline
+				+"You are required to get the ‘No Dues’ form filled & signed from all concerned "+newline
+				+"departments on your last date of working and submit to the concerned HR "+newline
+				+"person before leaving the Company."+newline
+				+newline
+				+"Thanks & Regards, "+newline
+				+departmentmanagerempcode+newline
+				+departmentmanagername;
 		if ((org.apache.commons.lang3.StringUtils.isNotBlank(manageremail))
 				&& (org.apache.commons.lang3.StringUtils.isNotBlank(departmentmanageremail))
 				&& (org.apache.commons.lang3.StringUtils.isNotBlank(empemail))) {
-			mailService.sendEmail(manageremail, departmentmanageremail, "NO DUES CLEARENCES", comments);
-			mailService.sendEmail(empemail, departmentmanageremail, "NO DUES CLEARENCES", comments);
+			mailService.sendEmail(manageremail, departmentmanageremail, "NO DUES CLEARANCE RM", rm_message);
+			mailService.sendEmail(empemail, departmentmanageremail, "NO DUES CLEARANCE RM", rm_message);
 		} else {
-			System.out.println("Rm Rejected Employee mail not Availble");
+			System.out.println("Rejected Employee mail not Availble");
 		}
 		return rejectjson;
 	}
@@ -2619,18 +2865,50 @@ public class HomeController {
 		String barcodeno = null;
 		String assetsallocatedby = null;
 		String assetsallocateddate = null;
+		String departmentmanageremail=null;
+		String	empemail=null;
+		String	manageremail =null;
+		JSONObject managerservicejson=null;
+		JSONObject servicejson =null;
 		Date date = null;
 		String[] key = { "empcode" };
 		String[] value = { empcode };
-		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
-		/*
-		 * try { empassets = empdetails.enterPriseDataService("Asset",
-		 * "ASSETINFO", key, value); } catch (RemoteException e) {
-		 * e.printStackTrace(); }
-		 */
+		String departmentmanagerempcode = (String) session.getAttribute("employeecode");
+		String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+		String empInfo = getInput.replace("employeeCode", departmentmanagerempcode);
+		String sconnectServiceServer = restService.getServiceDetails();
+		String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
+		String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+		try{
+		JSONParser jsonParser = new JSONParser();
+		JSONObject jsonObjectdept = (JSONObject) jsonParser.parse(evmData);
+		JSONObject jsonObjEvm = new JSONObject(jsonObjectdept);
+		 managerservicejson = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+	    
+	    String getInputemp = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+		String empInfoemp = getInputemp.replace("employeeCode", empcode);
+		String evmDataemp = sconnct.getPostServiceData(evmServiceUrl, empInfoemp).toString();
+		//try {
+			JSONParser jsonParseremp = new JSONParser();
+			JSONObject jsonObjectemp = (JSONObject) jsonParseremp.parse(evmDataemp);
+			JSONObject jsonObjEvmemp = new JSONObject(jsonObjectemp);
+			 servicejson = (JSONObject) jsonObjEvmemp.get("GetEmployeeInfoResult");
+			}catch(ParseException e){
+			e.printStackTrace();
+		}
+		String departmentmanagername = (String) managerservicejson.get("EmployeeName");
+	    departmentmanageremail = (String) managerservicejson.get("CompanyEmail");
+		String	managercode = (String) servicejson.get("ManagerCode");
+		empemail = (String) servicejson.get("CompanyEmail");
+		manageremail = (String) servicejson.get("ManagerEmail");
+		String empName = (String) servicejson.get("EmployeeName");
+		String designation = (String) servicejson.get("Designation");
+		String role = (String) servicejson.get("Role");
+		String departmentName = (String) servicejson.get("Department");
+
 		String getInputAssets = " {\"Service\": \"Asset\",\"Operation\": \"ASSETINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
 		String AssetsInfo = getInputAssets.replace("employeeCode", empcode);
-		String sconnectServiceServer = restService.getServiceDetails();
+	
 		String assetsServiceUrl = sconnectServiceServer + "GetAssetDetails";
 		String assetsData = sconnct.getPostServiceData(assetsServiceUrl, AssetsInfo).toString();
 
@@ -2647,6 +2925,7 @@ public class HomeController {
 				JSONObject jsonObject = (JSONObject) parser.parse(assetsData);
 				JSONObject hsonService = new JSONObject(jsonObject);
 				serviceparser = (JSONArray) hsonService.get("GetAssetDetailsResult");
+				
 				// serviceparser = (JSONArray) parser.parse(assetsData);
 			} catch (ParseException e) {
 				e.printStackTrace();
@@ -2669,12 +2948,7 @@ public class HomeController {
 							e.printStackTrace();
 						}
 
-						/*
-						 * try { empdetails.assetDeallocation(empcode,
-						 * barcodeno, hrmanagerempcode); } catch
-						 * (RemoteException e) { // TODO Auto-generated catch
-						 * block e.printStackTrace(); }
-						 */
+						
 
 						String getInputAssetsDeallocate = " {\"emp\": \"employeeCode\",\"barcode\": \"BARCODEID\",  \"deallocatedBy\": [\"DEALLOCATEDUSER\"]}";
 						String AssetsInfoDeallocate = getInputAssetsDeallocate.replace("employeeCode", empcode)
@@ -2710,7 +2984,30 @@ public class HomeController {
 		MstResignationStatus status_mast = resignationService.getStatus(7);
 		resignedUser.setMstResignationStatus(status_mast);
 		approvalservice.updateResignationStatus(resignedUser);
-
+		String newline = System.getProperty("line.separator");
+		String rm_message = newline+ "Name: "+empName+newline
+				+"Employee Code: "+empcode +newline
+				+"Department: "+departmentName+newline
+				+"Designation: "+designation+newline
+				+"Role: "+role+newline+newline
+				+"Remarks: "+comments+newline+newline
+		        +" Mr. / Ms. "+empName+","+newline
+				+newline
+				+"You are required to get the ‘No Dues’ form filled & signed from all concerned "+newline
+				+"departments on your last date of working and submit to the concerned HR "+newline
+				+"person before leaving the Company."+newline
+				+newline
+				+"Thanks & Regards, "+newline
+				+departmentmanagerempcode+newline
+				+departmentmanagername;
+		if ((org.apache.commons.lang3.StringUtils.isNotBlank(manageremail))
+				&& (org.apache.commons.lang3.StringUtils.isNotBlank(departmentmanageremail))
+				&& (org.apache.commons.lang3.StringUtils.isNotBlank(empemail))) {
+			mailService.sendEmail(manageremail, departmentmanageremail, "NO DUES SUBMITTED FOR HR", rm_message);
+			mailService.sendEmail(empemail, departmentmanageremail, "NO DUES SUBMITTED FOR HR", rm_message);
+		} else {
+			System.out.println("Rejected Employee mail not Availble");
+		}
 		return inserthrasserts;
 	}
 
@@ -2725,14 +3022,15 @@ public class HomeController {
 		int department = 0;
 		String empinfo = null;
 		int resignationId = 0;
+		String departmentmanageremail=null;
+		String	empemail=null;
+		String	manageremail =null;
+		JSONObject deptmanagerservicejson=null;
+		JSONObject servicejson =null;
 		Date datenull = null;
 		String[] key = { "empcode" };
 		String[] value = { empcode };
-		// ISoftAgeEnterpriseProxy empdetails = new ISoftAgeEnterpriseProxy();
-		/*
-		 * try { empinfo = empdetails.enterPriseDataService("EVM", "empinfo",
-		 * key, value); } catch (RemoteException e) { e.printStackTrace(); }
-		 */
+		String departmentmanagerempcode = (String) session.getAttribute("employeecode");
 		String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
 		String empInfo = getInput.replace("employeeCode", empcode);
 		String sconnectServiceServer = restService.getServiceDetails();
@@ -2743,19 +3041,30 @@ public class HomeController {
 			JSONObject jsonObject = (JSONObject) jsonParser.parse(evmData);
 			JSONObject jsonObjEvm = new JSONObject(jsonObject);
 			JSONObject serviceparser = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
-			/*
-			 * JSONObject insertitasserts = new JSONObject(); JSONParser parser
-			 * = new JSONParser(); JSONObject serviceparser;
-			 * 
-			 * serviceparser = (JSONObject) parser.parse(empinfo);
-			 */
+			
 			Long departmentid = (Long) serviceparser.get("DepartmentID");
 			department = departmentid.intValue();
 			String rmmanager = (String) serviceparser.get("EmployeeName");
+			String	managercode = (String) servicejson.get("ManagerCode");
+			empemail = (String) servicejson.get("CompanyEmail");
+			manageremail = (String) servicejson.get("ManagerEmail");
+			String getInputdept = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+			String empInfodept = getInput.replace("employeeCode", departmentmanagerempcode);
+			String evmDatadept = sconnct.getPostServiceData(evmServiceUrl, empInfodept).toString();
+			JSONParser jsonParserdept = new JSONParser();
+			JSONObject jsonObjectdept = (JSONObject) jsonParserdept.parse(evmDatadept);
+			JSONObject jsonObjEvmdept = new JSONObject(jsonObjectdept);
+		    deptmanagerservicejson = (JSONObject) jsonObjEvmdept.get("GetEmployeeInfoResult");
+		    
+		    departmentmanageremail = (String) deptmanagerservicejson.get("CompanyEmail");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-
+		String departmentmanagername = (String) deptmanagerservicejson.get("EmployeeName");
+		String empName = (String) servicejson.get("EmployeeName");
+		String designation = (String) servicejson.get("Designation");
+		String role = (String) servicejson.get("Role");
+		String departmentName = (String) servicejson.get("Department");
 		JSONObject insertrmasserts = new JSONObject();
 		Date today = new Date();
 		TblAssetsManagement rmasset = new TblAssetsManagement();
@@ -2785,6 +3094,30 @@ public class HomeController {
 		noduesclearence.setDepartmentId(1);
 		// insertrmasserts = noduesservice.submitNoduesclearence(nodues);
 		noduesservice.updateNoduesClearence(noduesclearence);
+		String newline = System.getProperty("line.separator");
+		String rm_message = newline+ "Name: "+empName+newline
+				+"Employee Code: "+empcode +newline
+				+"Department: "+departmentName+newline
+				+"Designation: "+designation+newline
+				+"Role: "+role+newline+newline
+				+"Remarks: "+comments+newline+newline
+		        +" Mr. / Ms. "+empName+","+newline
+				+newline
+				+"You are required to get the ‘No Dues’ form filled & signed from all concerned "+newline
+				+"departments on your last date of working and submit to the concerned HR "+newline
+				+"person before leaving the Company."+newline
+				+newline
+				+"Thanks & Regards, "+newline
+				+departmentmanagerempcode+newline
+				+departmentmanagername;
+		if ((org.apache.commons.lang3.StringUtils.isNotBlank(manageremail))
+				&& (org.apache.commons.lang3.StringUtils.isNotBlank(departmentmanageremail))
+				&& (org.apache.commons.lang3.StringUtils.isNotBlank(empemail))) {
+			mailService.sendEmail(manageremail, departmentmanageremail, "NO DUES SUBMITTED FOR RM", rm_message);
+			mailService.sendEmail(empemail, departmentmanageremail, "NO DUES SUBMITTED FOR RM", rm_message);
+		} else {
+			System.out.println("Rejected Employee mail not Availble");
+		}
 		return insertrmasserts;
 	}
 
@@ -2917,7 +3250,38 @@ public class HomeController {
 			employeeQuery.setQueryAssigned(assingToEmpcode);
 
 			int id = queryService.save(employeeQuery);
-
+			String getInput = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+			String empInfo = getInput.replace("employeeCode", assingToEmpcode);
+			//String sconnectServiceServer = restService.getServiceDetails();
+			String evmServiceUrl = sconnectServiceServer + "GetEmployeeInfo";
+			String evmData = sconnct.getPostServiceData(evmServiceUrl, empInfo).toString();
+		
+				JSONParser jsonParser = new JSONParser();
+				JSONObject jsonObjectAssignedEmp = (JSONObject) jsonParser.parse(evmData);
+				JSONObject jsonObjEvm = new JSONObject(jsonObjectAssignedEmp);
+				JSONObject serviceparser = (JSONObject) jsonObjEvm.get("GetEmployeeInfoResult");
+			    String	assingToEmpmail = (String) serviceparser.get("CompanyEmail");
+			    
+				String getInputemp = " {\"Service\": \"EVM\",\"Operation\": \"EMPINFO\",  \"Keys\": [\"EMPCODE\"],\"Values\":[\"employeeCode\"]}";
+				String empInfoemp = getInput.replace("employeeCode", empcode);
+				//String sconnectServiceServer = restService.getServiceDetails();
+				String evmServiceUrlemp = sconnectServiceServer + "GetEmployeeInfo";
+				String evmDataemp = sconnct.getPostServiceData(evmServiceUrlemp, empInfo).toString();
+			
+					JSONParser jsonParseremp = new JSONParser();
+					JSONObject jsonObjectemp = (JSONObject) jsonParseremp.parse(evmData);
+					JSONObject jsonObjEvmemp = new JSONObject(jsonObjectemp);
+					JSONObject serviceparseremp = (JSONObject) jsonObjEvmemp.get("GetEmployeeInfoResult");
+				    String	empmail = (String) serviceparseremp.get("CompanyEmail");
+				    String	empname = (String) serviceparseremp.get("EmployeeName");
+				    String newline = System.getProperty("line.separator");
+               String msg="Dear Sir, " +newline
+            		   +newline
+            		   +queryText+newline
+            		   +newline
+            		   +"Thanks & Regards, "+newline
+            		   +empcode+newline
+            		   +empname;
 			if (id > 0) {
 				TblExEmployeeQuery employeeQuery1 = queryService.getById(id);
 				TblExEmpCommunication empCommunication = new TblExEmpCommunication();
@@ -2927,6 +3291,13 @@ public class HomeController {
 				empCommunication.setQueryText(queryText);
 
 				String result1 = queryService.save(empCommunication);
+				if ((org.apache.commons.lang3.StringUtils.isNotBlank(assingToEmpmail))
+						&& (org.apache.commons.lang3.StringUtils.isNotBlank(empmail))) {
+					mailService.sendEmail(assingToEmpmail, empmail, "Ex-Employee Query", msg);
+					//mailService.sendEmail(empemail, departmentmanageremail, "NO DUES Submitted For RM", queryText);
+				} else {
+					System.out.println("Rejected Employee mail not Availble");
+				}
 
 			}
 
@@ -3697,7 +4068,7 @@ public class HomeController {
 				if (saveMessgae.equals("success")) {
 					String message = "Hi, As per your request the link for resetting the password is :"
 							+ applicationURL;
-					mailService.sendEmail(email, "evm@softageindia.com", "test", message);
+					mailService.sendEmail(email, "evm@softageindia.com", "RESET USER PASSWORD", message);
 					returnedMessage = "Password reset link sent to the specified email";
 				} else {
 					returnedMessage = "Unable to generate the email token";
